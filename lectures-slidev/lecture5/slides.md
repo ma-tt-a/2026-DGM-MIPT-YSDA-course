@@ -552,6 +552,8 @@ $$
 
 In our setting, $W(\pi\|p)=W_1(\pi,p)$, which is the transport cost formulation.
 
+In Lecture 12, minibatch optimal transport pairs noise and data samples for flow matching.
+
 </div>
 
 
@@ -1149,7 +1151,13 @@ class: theorems
 
 <img src="/figs/pr_vs_fid.png" alt="pr vs fid" style="width: 100%; height: 265px; object-fit: contain; margin: 0 auto;" />
 
-<img src="/figs/pr_truncation.png" alt="pr truncation" style="width: 100%; height: 220px; object-fit: contain; margin: 0 auto;" v-click="1" />
+<div v-click="1">
+
+<img src="/figs/pr_truncation.png" alt="pr truncation" style="width: 100%; height: 220px; object-fit: contain; margin: 0 auto;" />
+
+Here, stronger truncation (smaller $\psi$) favors precision over recall.
+
+</div>
 
 
 
