@@ -849,7 +849,7 @@ sourceFrame: "auto: Vector Quantized VAE (VQ-VAE)"
 </div>
 
 ---
-clicks: 2
+clicks: 3
 sourceFrame: "20"
 class: theorems
 ---
@@ -860,36 +860,40 @@ import VectorQuantizationDemo from './components/VectorQuantizationDemo.vue'
 
 # Vector Quantization
 
-Define the codebook (dictionary) space $\{\be_k\}_{k=1}^K$ with $\be_k\in\bbR^L$ and $K$ the number of codebook entries.
+A **codebook** contains $K$ vectors: $\{\be_k\}_{k=1}^K$, with $\be_k\in\bbR^L$.
 
-<div class="block" v-click="1">
-
-## Quantized Representation
-
-A quantized vector $\bz_q\in\bbR^L$, for any $\bz\in\bbR^L$, is defined via nearest-neighbor lookup in the codebook:
+<div v-click="1">
 
 $$
 \bz_q=\bq(\bz)=\be_{k^*},\quad\text{where }k^*=\argmin_k\|\bz-\be_k\|.
 $$
 
 </div>
-<div class="columns" style="grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; margin-top: 8px">
-<div class="block" v-click="2" style="margin: 0">
+<div class="columns" style="grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: center; margin-top: 8px">
+<div>
+<div class="block" v-click="2">
 
-## Quantization Procedure
+## Codebook Collapse
 
-If the encoded tensor has spatial dimensions, quantization is independently applied to each of the $W\times H$ locations.
+Only a small subset of entries is used across the data.
 
-<img src="/figs/fqgan_cnn.png" alt="Feature tensor produced by a convolutional encoder" class="wide-figure" style="height: 175px; margin: 8px 0 0" />
+</div>
+<div class="block" v-click="3">
+
+## Restart an Unused Code
+
+Move it to an encoder output; assignments and Voronoi regions change.
+
+</div>
 </div>
 <div v-click="1">
-<VectorQuantizationDemo />
+<VectorQuantizationDemo :stage="$clicks >= 3 ? 2 : $clicks >= 2 ? 1 : 0" />
 </div>
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2004.02088">Zhao Y. et al. Feature Quantization Improves GAN Training, 2020</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2004.02088">Zhao Y. et al. Feature Quantization Improves GAN Training, 2020.</a> <a href="https://arxiv.org/abs/2309.15505">Mentzer F. et al. Finite Scalar Quantization: VQ-VAE Made Simple, 2023.</a></div>
 
-<!-- Drag the orange point across the irregular Voronoi boundaries. Each latent vector selects its nearest codebook entry. The same lookup is applied independently at every spatial location. Arrow keys move the focused point; Home restores its initial position. -->
+<!-- Click 1: drag one encoder output (arrows/Home after focus). Click 2: a fixed toy dataset uses only two of eight codes. Click 3: restart e_4 at one of the SAME encoder outputs; three codes are now used. This is an illustration, not an optimization run or a guarantee of full codebook utilization. The old position and usage count remain visible in the handout. Unequal frequencies alone are not collapse. Unlike posterior collapse, this is underuse of the dictionary. At the final algorithm, point out that the codebook loss only updates selected entries; the stage-2 prior does not retrain the tokenizer. -->
 
 ---
 clicks: 3
@@ -937,21 +941,16 @@ sourceFrame: "22"
 class: theorems
 ---
 
+<script setup>
+import VqSpatialPath from './components/VqSpatialPath.vue'
+</script>
+
 # Vector Quantized VAE (VQ-VAE): Forward
 
-<div class="block">
+Quantize each of the $M=WH$ vectors using the **same codebook**.
 
-## Deterministic Variational Posterior
+<VqSpatialPath />
 
-
-$$
-q_{\bphi}(c=k^*|\bx)=\begin{cases}
-1,\quad\text{for }k^*=\argmin_k\|\bz_e-\be_k\|;\\
-0,\quad\text{otherwise}.
-\end{cases}
-$$
-
-</div>
 <div class="block" v-click="1">
 
 ## ELBO
@@ -959,22 +958,21 @@ $$
 <div class="math-chain" style="margin: 8px 0; text-align: center">
 <span>
 
-$\displaystyle\cL_{\bphi,\btheta}(\bx)=\bbE_{q_{\bphi}(c|\bx)}\log\pt(\bx|\be_c)-\log K$
+$\displaystyle\cL_{\bphi,\btheta}(\bx)=\bbE_{q_{\bphi}(\bc|\bx)}\log\pt(\bx|\bz_q(\bc))-M\log K$
 
 </span>
 <span v-click="2">
 
-$\displaystyle{}=\log\pt(\bx|\bz_q)-\log K,$
+$\displaystyle{}=\log\pt(\bx|\bz_q)-M\log K.$
 
 </span>
 </div>
-<div v-click="2">
+</div>
+<div v-click="3">
 
-where $\bz_q=\be_{k^*}$, $k^*=\argmin_k\|\bz_e-\be_k\|$.
+The deterministic map and independent uniform training prior give $\KL=M\log K$.
 
 </div>
-</div>
-<img v-click="3" src="/figs/vqvae.png" alt="VQ-VAE forward pass through encoder, nearest codebook entry and decoder" class="wide-figure" style="height: 220px; margin: 10px auto" />
 <div v-click="4">
 
 **Challenge:** The $\argmin$ operation is non-differentiable.
@@ -982,6 +980,8 @@ where $\bz_q=\be_{k^*}$, $k^*=\argmin_k\|\bz_e-\be_k\|$.
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/1711.00937">Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017</a></div>
+
+<!-- At each (i,j), the encoder produces an L-dimensional vector. Quantization stores one index c_ij; codebook lookup gives z_q(c)_ij = e_{c_ij}. Equal colors in the code map and decoder inputs denote equal codebook vectors, not equal channel values. Quantization is pointwise; this does not imply independent code usage across the dataset. The next slide's Jacobian treats the spatial tensors as flattened vectors; straight-through copies each location's gradient. -->
 
 ---
 clicks: 4
@@ -1000,7 +1000,7 @@ import VqGradientPath from './components/VqGradientPath.vue'
 ## ELBO
 
 $$
-\cL_{\bphi,\btheta}(\bx)=\log\pt(\bx|\bz_q)-\log K,\quad\bz_q=\be_{k^*},\;k^*=\argmin_k\|\bz_e-\be_k\|.
+\cL_{\bphi,\btheta}(\bx)=\log\pt(\bx|\bz_q)-M\log K,\quad\bz_{q,m}=\be_{c_m},\quad m=1,\dots,M.
 $$
 
 </div>
@@ -1069,17 +1069,13 @@ class: theorems
 
 # Vector Quantized VAE-2 (VQ-VAE-2)
 
-Spatial codes: $\bc\in\{1,\dots,K\}^{W\times H}$. VQ-VAE-2 combines code maps at multiple resolutions.
-
-$$
-q_{\bphi}(\bc|\bx)=\prod_{i=1}^W\prod_{j=1}^H q(c_{ij}|\bx,\bphi).
-$$
+VQ-VAE-2 combines code maps at **multiple resolutions**.
 
 <div class="block">
 
 ## Sample Diversity: Learned Autoregressive Priors
 
-<img src="/figs/vqvae2_diversity.png" alt="Class-conditional samples from VQ-VAE-2 with learned autoregressive priors, compared with BigGAN deep" class="wide-figure" style="height: 320px; margin: 12px auto" />
+<img src="/figs/vqvae2_diversity.png" alt="Class-conditional samples from VQ-VAE-2 with learned autoregressive priors, compared with BigGAN deep" class="wide-figure" style="height: 390px; margin: 12px auto" />
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/1906.00446">Razavi A., Oord A., Vinyals O. Generating Diverse High-Fidelity Images with VQ-VAE-2, 2019</a></div>

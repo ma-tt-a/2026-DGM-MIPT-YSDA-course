@@ -6,6 +6,27 @@ export const codebook = Object.freeze([
 ].map(Object.freeze))
 export const vqInitialPoint = Object.freeze({ x: -.25, y: .3 })
 
+// A fixed toy dataset, independent of the draggable single-vector example.
+// Its two clusters deliberately use only two of the eight original codes.
+export const vqCollapsePoints = Object.freeze([
+  ...Array.from({ length: 16 }, (_, i) => ({
+    x: -1.48 + (i % 4) * .105, y: -1.03 + Math.floor(i / 4) * .085,
+  })),
+  ...Array.from({ length: 16 }, (_, i) => ({
+    x: -.24 + (i % 4) * .14, y: -.20 + Math.floor(i / 4) * .13,
+  })),
+].map(Object.freeze))
+export const vqRestartIndex = 3
+export const vqRestartPoint = vqCollapsePoints[28]
+export const vqRestartCodebook = Object.freeze(codebook.map((code, i) =>
+  i === vqRestartIndex ? vqRestartPoint : code))
+
+export function codeUsage(points, codes = codebook) {
+  const counts = Array(codes.length).fill(0)
+  for (const point of points) counts[nearestCode(point, codes).index]++
+  return counts
+}
+
 /** Return a zero-based code index; exact ties choose the first code. */
 export function nearestCode(point, codes = codebook) {
   if (!codes.length) throw new RangeError('A codebook must contain at least one entry.')

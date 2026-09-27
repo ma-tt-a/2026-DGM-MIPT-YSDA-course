@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { codebook, vqInitialPoint, nearestCode, voronoiCells, vqBounds } from './vq-demo.mjs'
+import { codebook, vqInitialPoint, nearestCode, voronoiCells, vqBounds, vqCollapsePoints, vqRestartIndex, vqRestartPoint, vqRestartCodebook, codeUsage } from './vq-demo.mjs'
 
 test('Nearest-code assignment switches across a slanted cell boundary and handles ties', () => {
   assert.equal(nearestCode(vqInitialPoint).index, 7)
@@ -52,4 +52,17 @@ test('Clipped Voronoi cells partition the plane with valid nearest-code ownershi
   checkCells(duplicate)
   assert.deepEqual(voronoiCells(duplicate)[1], [])
   assert.equal(nearestCode({ x: -.5, y: 0 }, duplicate).index, 0)
+})
+
+test('A restart activates a previously unused code on the same toy dataset', () => {
+  const before = codeUsage(vqCollapsePoints)
+  const after = codeUsage(vqCollapsePoints, vqRestartCodebook)
+  assert.equal(before.filter(Boolean).length, 2)
+  assert.equal(before[vqRestartIndex], 0)
+  assert.equal(after.filter(Boolean).length, 3)
+  assert.ok(after[vqRestartIndex] > 0)
+  assert.equal(after.reduce((a, b) => a + b, 0), vqCollapsePoints.length)
+  assert.ok(vqCollapsePoints.includes(vqRestartPoint))
+  assert.deepEqual(vqRestartCodebook.filter((_, i) => i !== vqRestartIndex), codebook.filter((_, i) => i !== vqRestartIndex))
+  checkCells(vqRestartCodebook)
 })

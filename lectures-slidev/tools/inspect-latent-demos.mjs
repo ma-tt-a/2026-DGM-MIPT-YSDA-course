@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto'
 import assert from 'node:assert/strict'
 import { lecturePaths, root } from './course.mjs'
 import { priorExamples } from '../lecture4/lib/prior-demo.mjs'
-import { vqInitialPoint, codebook, vqBounds, nearestCode } from '../lecture4/lib/vq-demo.mjs'
+import { vqInitialPoint, codebook, vqBounds, nearestCode, vqCollapsePoints, vqRestartCodebook, codeUsage } from '../lecture4/lib/vq-demo.mjs'
 import { ganPresets, optimalDiscriminator } from '../lecture4/lib/gan-demo.mjs'
 
 const lecture = lecturePaths('4')
@@ -21,7 +21,7 @@ const slides = [
   byTitle('Vector Quantization'),
   byTitle('The Optimal Discriminator Responds to the Densities'),
 ]
-const qa = resolve(root, 'output/qa/lecture4/vq-inline-2026-09-26')
+const qa = process.env.SLIDEV_QA_DIR || resolve(root, 'output/qa/lecture4/latent-demos')
 mkdirSync(qa, { recursive: true })
 const browser = await chromium.launch({ executablePath: process.env.SLIDEV_BROWSER_PATH || '/Applications/Yandex.app/Contents/MacOS/Yandex', headless: true })
 const context = await browser.newContext({ viewport: { width: 1280, height: 720 } })
@@ -43,7 +43,8 @@ const close = (actual, expected, tolerance = 1e-10) => assert.ok(Math.abs(actual
 const dataset = demo => demo.evaluate(element => ({ ...element.dataset }))
 const currentDemo = () => page.locator('[data-demo]:visible')
 async function go(slide, tools = false) {
-  await page.goto(`${base}/${slide.slide}?clicks=${slide.clicks}${tools ? '&tools' : ''}`, { waitUntil: 'networkidle' })
+  const clicks = slide.title === 'Vector Quantization' ? 1 : slide.clicks
+  await page.goto(`${base}/${slide.slide}?clicks=${clicks}${tools ? '&tools' : ''}`, { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
   assert.match(await page.locator('.course-folio:visible').last().innerText(), new RegExp(`/ ${map.length}$`), 'Wrong deck or stale server')
   await currentDemo().waitFor({ state: 'visible' })
@@ -66,6 +67,7 @@ async function snapshot(name) {
 }
 async function checkReturn(slide) {
   const before = await dataset(currentDemo())
+  const targetClicks = Number(new URL(page.url()).searchParams.get('clicks') || 0)
   await page.locator('.slidev-layout:visible h1').click()
   for (const [out, back, neighbor] of [['ArrowDown', 'ArrowUp', slide.slide + 1], ['ArrowUp', 'ArrowDown', slide.slide - 1]]) {
     await page.keyboard.press(out)
@@ -73,7 +75,8 @@ async function checkReturn(slide) {
     await page.keyboard.press(back)
     await page.waitForURL(new RegExp(`/${slide.slide}(?:\\?|$)`))
     const shownClicks = Number(new URL(page.url()).searchParams.get('clicks') || 0)
-    for (let click = shownClicks; click < slide.clicks; click++) await page.keyboard.press('ArrowRight')
+    for (let click = shownClicks; click < targetClicks; click++) await page.keyboard.press('ArrowRight')
+    for (let click = shownClicks; click > targetClicks; click--) await page.keyboard.press('ArrowLeft')
     await currentDemo().waitFor({ state: 'visible' })
     assert.deepEqual(await dataset(currentDemo()), before, `State should survive return from slide ${neighbor}`)
   }
@@ -241,6 +244,38 @@ try {
   data = await dataset(demo)
   close(+data.x, vqInitialPoint.x); close(+data.y, vqInitialPoint.y)
   checks.push('Inline VQ without controls, all codebook entries, fixed regions, corners, handle keyboard and Home, mouse and synthetic pen drag')
+
+  // The cloud is a fixed toy dataset. Restart changes one code, never the data.
+  await page.locator('.slidev-layout:visible h1').click()
+  await page.keyboard.press('ArrowRight')
+  await page.waitForFunction(() => document.querySelector('[data-demo="vector-quantization"][data-stage="1"]'))
+  data = await dataset(demo)
+  assert.equal(data.used, '2')
+  assert.equal(data.usage, codeUsage(vqCollapsePoints).join(','))
+  assert.equal(await demo.locator('[data-encoder-cloud] circle').count(), vqCollapsePoints.length)
+  assert.equal(await demo.locator('[data-encoder-cloud]').evaluate(el => getComputedStyle(el).opacity), '1', 'Cloud must be fully visible, not UnoCSS opacity-1 (1%)')
+  const cloud = await demo.locator('[data-encoder-cloud]').innerHTML()
+  const originalRegions = await demo.locator('[data-voronoi-regions]').innerHTML()
+  assert.equal(await handle.getAttribute('tabindex'), '-1')
+  await snapshot('vq-collapse')
+  await page.keyboard.press('ArrowRight')
+  await page.waitForFunction(() => document.querySelector('[data-demo="vector-quantization"][data-stage="2"]'))
+  data = await dataset(demo)
+  assert.equal(data.used, '3')
+  assert.equal(data.usage, codeUsage(vqCollapsePoints, vqRestartCodebook).join(','))
+  assert.equal(await demo.locator('[data-encoder-cloud]').innerHTML(), cloud)
+  assert.notEqual(await demo.locator('[data-voronoi-regions]').innerHTML(), originalRegions)
+  assert.equal(await demo.locator('[data-restart-path]').evaluate(el => getComputedStyle(el).opacity), '1')
+  await snapshot('vq-restart')
+  await checkReturn(slides[1])
+  await page.keyboard.press('ArrowLeft')
+  assert.equal((await dataset(demo)).used, '2')
+  assert.equal(await demo.locator('[data-voronoi-regions]').innerHTML(), originalRegions)
+  await page.keyboard.press('ArrowLeft')
+  assert.equal((await dataset(demo)).stage, '0')
+  close(+(await dataset(demo)).x, vqInitialPoint.x)
+  close(+(await dataset(demo)).y, vqInitialPoint.y)
+  checks.push('Collapse/restart: same 32 points, 2 to 3 active codes, rebuilt Voronoi cells, old position retained, neighbor and reverse returns, manual state preserved')
 
   demo = await go(slides[2])
   for (const preset of ganPresets) {
