@@ -561,6 +561,63 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
 ---
+clicks: 2
+sourceFrame: "extension: 19"
+class: theorems
+---
+
+# Noise Schedule through Signal-to-Noise Ratio
+
+<div class="columns" style="grid-template-columns:1fr 1fr;gap:36px">
+<div>
+
+## Signal and Noise
+
+$$
+\bx_t={\color{#007f82}\sqrt{\bar{\alpha}_t}}\bx_0+{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}}\bepsilon.
+$$
+
+For $\bepsilon\sim\cN(0,\bI)$, compare squared scales:
+
+$$
+\SNR(t)=\frac{{\color{#007f82}\bar{\alpha}_t}}{{\color{#8854c0}1-\bar{\alpha}_t}}.
+$$
+
+<div v-click="1">
+
+## A Single Noise-Level Coordinate
+
+$$
+\lambda_t=\log\SNR(t),
+\qquad\bar{\alpha}_t=\frac{1}{1+e^{-\lambda_t}}.
+$$
+
+$\lambda_t>0$: signal dominates.<br>
+$\lambda_t=0$: equal signal and noise scales.<br>
+$\lambda_t<0$: noise dominates.
+
+</div>
+</div>
+<div v-click="1">
+
+<img src="/figs/noise-schedules.svg" alt="Log-SNR versus normalized diffusion time: cosine retains more signal than the linear-beta schedule through most intermediate steps." style="width:100%;height:325px;object-fit:contain" />
+
+**Same timestep, different noise level.** The schedule controls how quickly signal is lost.
+
+</div>
+</div>
+
+<div class="takeaway" v-click="2">
+
+**Higher pixel-space resolution:** more noise can help; shifting log-SNR down increases corruption.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2107.00630">Kingma D. et al. Variational Diffusion Models, 2021</a><br><a href="https://arxiv.org/abs/2102.09672">Nichol A., Dhariwal P. Improved Denoising Diffusion Probabilistic Models, 2021</a><br><a href="https://arxiv.org/abs/2301.11093">Hoogeboom E. et al. Simple diffusion: End-to-end diffusion for high resolution images, 2023</a></div>
+
+<!-- Original plot: T=1000; linear beta from 0.0001 to 0.02; cosine alpha-bar with s=0.008 and beta capped at 0.999 (Nichol & Dhariwal, Sec. 3.2). The vertical range is cropped to [-12, 10]; the clean t=0 endpoint has infinite log-SNR. Here alpha_t retains the course definition 1-beta_t, unlike the signal amplitude called alpha_t in VDM. For pixel-space high-resolution diffusion, Simple diffusion shifts log-SNR by 2 log(d_ref/d). -->
+
+---
 clicks: 0
 sourceFrame: "auto: Gaussian Diffusion Model as VAE"
 ---
@@ -1287,6 +1344,7 @@ class: summary
 
 # Summary
 
+- The noise schedule sets the signal-to-noise ratio at each diffusion step.
 - The reverse diffusion process reconstructs data from noise; we approximate its intractable transitions with Gaussian distributions.
 - Conditioning on the clean image gives a tractable Gaussian reverse distribution.
 - Gaussian diffusion is a VAE with a hierarchy of latent variables and a fixed encoder.
