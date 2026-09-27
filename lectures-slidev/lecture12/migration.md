@@ -1,5 +1,22 @@
 # Lecture 12 — Slidev migration
 
+## Tweedie cross-reference for Gaussian probability paths, 2026-09-27
+
+Following the author-requested connection to Lecture 6, slide 32 (`extension: 18`) now recalls **Tweedie's Formula** for a Gaussian path with signal coefficient α_t and noise scale σ_t. The posterior mean of x₁ is (x_t + σ_t² ∇ log p_t(x_t)) / α_t, with α_t > 0 and σ_t > 0 explicitly stated. The formula uses the marginal density; notes distinguish it from the conditional path and exclude singular endpoints. A short explanation links posterior averaging of an affine conditional velocity to the marginal velocity expressed through the score. Efron (2011) is cited alongside the existing flow-matching source.
+
+All original path definitions and later VE/VP derivations are unchanged. The slide remains static; map, Training/Sampling, Summary, sections, incoming Recap and the formulas repeated in L13 and the explicit L12 Recap of draft L14 are unaffected: **59 slides / 103 states**. Beamer and shared infrastructure were not edited.
+
+Source check, production build, both exports and `render-qa.py` passed in the isolated Tweedie task copy (Node 24.19.0); 32 existing tests were run once with L6. Handout 32 and steps 41 were visually reviewed. The other **58 handout pages and 102 states** are pixel-identical to the baseline, and all 59 final states match the handout. Post-export browser inspection covered slides 31–33 (four states), backward steps and returns to 32 from both neighbors; there are no errors, overflows, empty clicks or geometry changes. The generalized formula was compared with L6's additive-noise case and the approved L1:35 typography in browser/PDF at 1280 px. This is scoped QA, not a new full-lecture audit or physical-device test.
+
+QA: `../output/qa/lecture12/tweedie-2026-09-27/`.
+
+Baseline SHA-256 slides.md: `73ae463df13de19951d7372dcb907dce4104f94cc463a56ec2dcf8ec167a4e59`.
+
+- SHA-256 slides.md: `afe436ceac0812bf468d4101198f717ba59082ca965de86c98b749640282a14a`.
+- SHA-256 slide-map.json: `3804315eed322424b375d6a5cbcd73f80f836200616a127c1df70046ebb05b3e`.
+- SHA-256 Lecture12.pdf: `b9a99e6ac0a68a26963a46a2c8d574fa4ee1b77397994ab98b84547e941913b6`.
+- SHA-256 Lecture12-handout.pdf: `cf2f4393ede49e44d4c4abd33afed511adc8bdbba8467e2a628779ea6255798d`.
+
 Status: lecture migration and final artifact QA completed on 2026-09-17. Draft source reconstruction began on 2026-09-16. Final cross-lecture integration and catalog updates were completed on the same date; see the integration record below.
 
 ## Source and scope

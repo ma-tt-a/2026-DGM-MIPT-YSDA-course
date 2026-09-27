@@ -1,5 +1,20 @@
 # Lecture 8: migration to Slidev
 
+## Tweedie cross-reference for noise-to-score conversion, 2026-09-27
+
+As requested alongside the new Lecture 6 derivation, slide 11 (`extension: 18`) now identifies the existing noise-to-score conversion as the identity from **Tweedie's formula (Lecture 6)** at the MSE optimum. This qualification distinguishes the optimal conditional mean from an individual noise realization. The displayed model parameterization and loss, citations, one reveal click, algorithms, neighboring recap interfaces, Summary and sections are unchanged: **34 slides / 76 states**. No new formula or slide was required.
+
+Source check, production build, both exports and `render-qa.py` passed in the isolated Tweedie task copy using Node 24.19.0; the 32 existing tests were run once with L6. Handout 11 and steps 14–15 were visually reviewed; the remaining **33 handout pages and 74 states** are pixel-identical to the baseline. All 34 final reveal states match the handout. Post-export inspection covered slides 10–12 (10 states), backward steps and explicit returns to 11 from both neighbors, with no errors, overflow, empty clicks or geometry changes. The final one-line reference and unchanged Arial/KaTeX typography were checked in browser and PDF against L6 and the saved approved L1:35 references at 1280 px. Shared infrastructure, Beamer and physical-device testing are outside this scoped change.
+
+QA: `../output/qa/lecture8/tweedie-2026-09-27/`.
+
+Baseline SHA-256 slides.md: `4e91f44e9251cdc46c107e0afa12f05e2195c5abd2bae7eead3e4d3cfa6816ba`.
+
+- SHA-256 slides.md: `c45e4aa15c0372e9890f8e4b0f831d040091e03464eab00a1f722441949606f4`.
+- SHA-256 slide-map.json: `a68861a4c5a4f53bf2d993d0a493d51ce5c467dc45c01f673b9baa4a4370d134`.
+- SHA-256 Lecture8.pdf: `41785062262d4fa778115f76b3d672d199b5e0d78c461eba8b34e8b7abb4b34d`.
+- SHA-256 Lecture8-handout.pdf: `b98ddc72631169d57bab693a07b6e6cdb76c505c9f714a238be6b15ea7acbd7f`.
+
 ## Boundary update for the redistribution through Lecture 7, 2026-09-26
 
 The author-approved redistribution moves the ELBO completion, Gaussian diffusion reparametrization, and the final DDPM algorithm to Slidev L7: source frames 9–17, including continuations of frames 10/12/13/14. L8 retains frame 17 as a static `Recap of Previous Lecture`, exactly matching the imported L7 Training/Sampling algorithm. The earlier forward-process and DSM recap frames 2–4 now belong to L6 and are omitted here; the reverse-process/VAE recap frames 5–7 and their continuations remain unchanged. Declared omitted frames are 2/3/4/9–16; frame 17 remains covered by its recap.

@@ -1,0 +1,13 @@
+{
+  "mmd_normal.png": {
+    "source": "https://arxiv.org/abs/2401.09603",
+    "description": "Synthetic distributions with the same mean and covariance, compared by Frechet distance and MMD (Table 2). Copied byte-for-byte from lectures/supplementary/figs/mmd_normal.png.",
+    "sha256": "d72efd174b8f76bf7fa6b8c03c6462d8b7acad5782434ec74fa978f7b91826a4"
+  },
+  "vqgan_reconstructions.jpg": {
+    "source": "https://arxiv.org/abs/2012.09841",
+    "asset_url": "https://arxiv.org/html/2012.09841v3/img/fexperiments/qualcomp/00.jpg",
+    "description": "Esser et al., Taming Transformers, Figure 12, top row. Original JPEG unchanged. The slide viewport shows its first three columns (input, DALL-E discrete VAE f8/8192, VQGAN f8/8192); both f16 columns remain outside the viewport. This is a complete-model comparison, not a loss ablation.",
+    "sha256": "0b4c2723e80a95c7744596761743164335e001130f58d974bc9a3353365bed0d"
+  }
+}

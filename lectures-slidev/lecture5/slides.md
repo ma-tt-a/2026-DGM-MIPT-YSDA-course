@@ -438,6 +438,146 @@ $$
 <!-- Ask where one Gaussian should go. Move its mean and width, then fit forward KL and the two symmetric reverse-KL minima. Forward fitting matches mean and variance; reverse fitting uses numerical minimization. These are properties of this example and restricted family, not universal laws for all models. Reverse-KL minimization is not GAN training; the original JSD illustration remains on the preceding slide. About one to two minutes. The component is reused from the author-approved deferred Lecture 1 demonstration. -->
 
 ---
+clicks: 1
+sourceFrame: "extension: 8"
+class: theorems
+---
+
+# From VQ-VAE to VQGAN
+
+Same **encoder → quantization → decoder**; a new reconstruction objective.
+
+<figure style="width: 720px; margin: 16px auto 12px">
+<img src="/figs/vqgan_reconstructions.jpg" alt="Original paper comparison: input squirrel image, DALL-E discrete VAE reconstruction, and VQGAN reconstruction. Both models use spatial downsampling factor 8 and 8192 codes. VQGAN preserves more realistic fur and stone textures." style="display: block; width: 720px; height: 240px; object-fit: cover; object-position: left top;" />
+<figcaption style="margin-top: 8px; text-align: center">
+
+Same spatial downsampling $f=8$ and codebook size $K=8192$.
+
+</figcaption>
+</figure>
+
+<div class="columns" v-click="1" style="grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 16px">
+<div class="block" style="margin: 0">
+
+## Perceptual Loss
+
+A **fixed pretrained network** $F$ extracts features:
+
+$$
+\cL_{\text{perc}}=\|F(\bx)-F(\hat{\bx})\|_2^2.
+$$
+
+</div>
+<div class="block" style="margin: 0">
+
+## Adversarial Loss
+
+Train discriminator $D$ to separate real and reconstructed **image patches**.
+
+Train the autoencoder to **fool $D$**.
+
+</div>
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2012.09841">Esser P., Rombach R., Ommer B. Taming Transformers for High-Resolution Image Synthesis, 2021. Figure 12.</a></div>
+
+<!--
+The displayed viewport selects the first three columns of the original Figure 12
+(input, DALL-E discrete VAE, VQGAN f8/8192); the source JPEG is unchanged.
+This compares complete models, not an ablation isolating adversarial loss.
+Both codebook and commitment terms remain; perceptual and adversarial objectives
+change how reconstruction quality is learned. Perceptual loss compares features
+of a pretrained network. The patch discriminator learns from real/reconstructed
+images and is needed only during autoencoder training. More realistic textures do
+not guarantee pixelwise fidelity: refer back to the conditional-mean discussion.
+The feature-distance formula is a schematic perceptual objective; the paper uses
+LPIPS with normalized multilayer features and learned weights. F stays frozen
+during autoencoder training; gradients still pass through F to the reconstruction.
+Unlike F, D is updated during training. The next slide separately introduces the
+learned prior used for generation. Moved from Lecture 4 slide 42 by author request.
+-->
+
+---
+clicks: 2
+sourceFrame: "extension: 6"
+class: theorems
+---
+
+# Generative Modeling in Latent Space
+
+First learn a compact representation; then learn to **generate its latent codes**.
+
+<div class="columns" style="grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 24px">
+<div class="block" style="margin: 0">
+
+## Discrete: VQGAN
+
+Quantization gives a map of code indices.
+
+$$
+\bc\in\{1,\dots,K\}^{W\times H}
+$$
+
+<div v-click="1" style="margin-top: 28px">
+
+**Autoregressive prior** over the code map.
+
+$$
+\bc\sim p_{\bpsi}(\bc)\;\longrightarrow\;\bz_q(\bc)\;\longrightarrow\;\hat{\bx}
+$$
+
+Sample codes → lookup → decode.
+
+</div>
+</div>
+<div class="block" style="margin: 0">
+
+## Continuous: KL-Autoencoder
+
+Perceptual + adversarial losses; weak KL.
+
+$$
+\bz\in\bbR^{W\times H\times L}
+$$
+
+<div v-click="1" style="margin-top: 28px">
+
+**Diffusion prior** in the learned latent space.
+
+$$
+\bepsilon\sim\cN(\bzero,\bI)\;\longrightarrow\;\bz\sim p_{\bpsi}(\bz)\;\longrightarrow\;\hat{\bx}
+$$
+
+Denoise in latent space → decode.
+
+</div>
+</div>
+</div>
+
+<div class="takeaway" v-click="2" style="margin-top: 32px">
+
+Both recipes freeze the autoencoder before learning a prior that models its **aggregated posterior**.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2012.09841">Esser P. et al. Taming Transformers for High-Resolution Image Synthesis, 2021.</a><br /><a href="https://arxiv.org/abs/2112.10752">Rombach R. et al. High-Resolution Image Synthesis with Latent Diffusion Models, 2022.</a></div>
+
+<!--
+The continuous example is a KL-regularized autoencoder (the KL-reg
+variant of LDM); the paper also studies VQ-reg. The two columns are examples, not
+an exhaustive discrete/continuous taxonomy or a restriction on prior families.
+Both autoencoders use perceptual/adversarial reconstruction objectives. Weak KL
+encourages proximity to a Gaussian but does not guarantee an exactly Gaussian
+aggregated posterior. The second stage learns the distribution of frozen codes;
+it is not forced by discretization or by a constant KL in the continuous case.
+The diffusion arrow denotes a future multi-step sampling algorithm, not a single
+deterministic layer. No diffusion objective or denoising schedule is introduced.
+Unlike the jointly trained GenFirst example in Lecture 4, these are two-stage recipes.
+Moved from Lecture 4 slide 43 by author request; visible content is unchanged.
+The decoder is deterministic here; z_q(c) includes codebook lookup.
+-->
+
+---
 clicks: 0
 sourceFrame: "auto: Wasserstein Distance"
 ---
@@ -1003,9 +1143,9 @@ $$
 $$
 
 
-- FID is computed in the latent space $\bz$.
-- We use a pretrained image embedder to get latent representations $\bz=\bff(\bx)$.
+- FID uses Inception image embeddings $\bz=\bff(\bx)$.
 - $\bmu_{\text{data}}$, $\bSigma_{\text{data}}$ and $\bmu_{\btheta}$, $\bSigma_{\btheta}$ are statistics of latent representations for samples from $\pd(\bx)$ and $\pt(\bx)$.
+- **FD-DINOv2** uses the same formula with DINOv2 features; the Gaussian approximation remains.
 <div class="block" v-click="1">
 
 ## $\FID(p(\bx),\cN(0,\bI))$
@@ -1016,7 +1156,7 @@ $$
 
 
 
-<div class="source"><a href="https://arxiv.org/abs/2401.09603">Jayasumana S. et al. Rethinking FID: Towards a Better Evaluation Metric for Image Generation, 2024</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2401.09603">Jayasumana S. et al. Rethinking FID: Towards a Better Evaluation Metric for Image Generation, 2024</a><br><a href="https://arxiv.org/abs/2306.04675">Stein G. et al. Exposing Flaws of Generative Model Evaluation Metrics and Their Unfair Treatment of Diffusion Models, 2023</a></div>
 
 ---
 clicks: 1
@@ -1042,13 +1182,101 @@ $$
 
 </div>
 
-<img src="/figs/fid_vs_human_eval.png" alt="fid vs human eval" style="width: 100%; height: 210px; object-fit: contain; margin: 0 auto;" />
+Finite-sample FID is biased, and its value depends on the sample size.
+
+<img src="/figs/fid_vs_human_eval.png" alt="fid vs human eval" style="width: 100%; height: 185px; object-fit: contain; margin: 0 auto;" />
 
 </div>
 
 
 
 <div class="source"><a href="https://arxiv.org/abs/2401.09603">Jayasumana S. et al. Rethinking FID: Towards a Better Evaluation Metric for Image Generation, 2024</a></div>
+
+---
+clicks: 2
+sourceFrame: "extension: 29"
+class: theorems
+---
+
+# Maximum Mean Discrepancy (MMD)
+
+The earlier figure shows that matching means and covariances can miss changes in shape.
+For embedding distributions $P,Q$, compare means of richer nonlinear features $\psi$:
+
+$$
+\bmu_P=\bbE_{\bz\sim P}\psi(\bz),\qquad
+\bmu_Q=\bbE_{\bw\sim Q}\psi(\bw).
+$$
+
+<div class="block" v-click="1">
+
+## Kernel Trick
+
+$$
+k(\ba,\bu)=\langle\psi(\ba),\psi(\bu)\rangle.
+$$
+
+Compute inner products directly, without explicitly constructing $\psi$.
+
+</div>
+
+<div class="block" v-click="2">
+
+## Distance Between Mean Features
+
+Let $\bz,\bz'\sim P$ and $\bw,\bw'\sim Q$ be mutually independent.
+
+$$
+\begin{aligned}
+\MMD_k^2(P,Q)&=\|\bmu_P-\bmu_Q\|^2\\
+&=\langle\bmu_P,\bmu_P\rangle+\langle\bmu_Q,\bmu_Q\rangle-2\langle\bmu_P,\bmu_Q\rangle\\
+&=\underbrace{\bbE k(\bz,\bz')}_{\text{within }P}
++\underbrace{\bbE k(\bw,\bw')}_{\text{within }Q}
+-2\underbrace{\bbE k(\bz,\bw)}_{\text{between }P,Q}.
+\end{aligned}
+$$
+
+</div>
+
+<div class="source"><a href="https://jmlr.org/papers/v13/gretton12a.html">Gretton A. et al. A Kernel Two-Sample Test, 2012</a></div>
+
+<!-- The motivation is the synthetic figure on slide 29, so no separate scalar example is needed. P,Q are distributions of image embeddings z=f(x), not of pixels. psi is a fixed mathematical feature map, not another trained encoder; it may have infinitely many coordinates. Independence gives <E psi(z), E psi(z')> = E <psi(z), psi(z')> = E k(z,z'), and similarly for the other two terms. For a positive-definite kernel, psi maps into its reproducing kernel Hilbert space. The name Maximum Mean Discrepancy comes from the equivalent supremum of E_P h - E_Q h over the RKHS unit ball, ||h|| <= 1; an unrestricted supremum would be unbounded. -->
+
+---
+clicks: 1
+sourceFrame: "extension: 29"
+class: theorems
+---
+
+# CMMD: Comparing CLIP Image Embeddings
+
+**CMMD** = squared MMD on **CLIP image embeddings**.
+
+$$
+\MMD_k^2(P,Q)=\bbE k(\bz,\bz')+\bbE k(\bw,\bw')-2\bbE k(\bz,\bw).
+$$
+
+$$
+k(\bz,\bw)=\exp\!\left(-\frac{\|\bz-\bw\|^2}{2\sigma^2}\right),\qquad \sigma>0.
+$$
+
+One Gaussian kernel already corresponds to infinitely many nonlinear features in $\psi$.
+
+$$
+\MMD_k(P,Q)=0\quad\Longleftrightarrow\quad P=Q.
+$$
+
+<div v-click="1">
+
+<img src="/figs/mmd_normal.png" alt="Distributions with identical means and covariances: Frechet distance stays zero while MMD increases as their shapes diverge." style="width: 100%; height: 210px; object-fit: contain; margin: 8px auto 0;" />
+
+Synthetic example: same means and covariances, different shapes.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2401.09603">Jayasumana S. et al. Rethinking FID: Towards a Better Evaluation Metric for Image Generation, 2024</a></div>
+
+<!-- Oral explanations moved off the slide: CLIP is trained on image-text pairs; CMMD uses only its image encoder. The Gaussian kernel is near 1 for close embeddings and near 0 for distant ones. Estimate the three expectations from average kernel values over independent sample pairs. No Gaussian fit is needed, but the image encoder and bandwidth still affect the score. The Gaussian kernel corresponds to a rich, infinite-dimensional feature map. Equality of embedding distributions does not imply equality of pixel-space image distributions when the encoder is not injective. This figure is the synthetic MMD example from the paper, not CMMD computed on CLIP images. For independent sample sets z_1,...,z_m and w_1,...,w_n, use the unbiased estimator: sum_{i != j} k(z_i,z_j)/(m(m-1)) + sum_{i != j} k(w_i,w_j)/(n(n-1)) - 2 sum_{i,j} k(z_i,w_j)/(mn). Omitting within-set diagonals removes self-pair bias; this finite-sample estimate can be slightly negative even though population MMD squared is nonnegative. Published CMMD uses CLIP ViT-L/14@336px, sigma=10, and multiplies the estimate by 1000. Unlike the later CLIP score, CMMD compares two image sets; it does not directly evaluate each image against its prompt. -->
 
 ---
 clicks: 0
@@ -1305,6 +1533,8 @@ $$
 
 </div>
 
+<div class="source"><a href="https://yann.lecun.org/exdb/publis/pdf/lecun-06.pdf">LeCun Y. et al. A Tutorial on Energy-Based Learning, 2006</a></div>
+
 ---
 clicks: 1
 sourceFrame: "imported: 6:14"
@@ -1348,9 +1578,9 @@ class: summary
 # Summary
 
 - GANs can suffer from mode collapse; KL and Jensen-Shannon measure mismatch differently.
-- Wasserstein distance remains informative for disjoint data and model supports.
-- WGAN estimates Wasserstein distance from samples via Kantorovich-Rubinstein duality; weight clipping constrains the critic's Lipschitz constant.
-- FID is the most popular metric for evaluating implicit generative models.
+- Perceptual and adversarial losses train autoencoders; learned priors model their latents.
+- WGAN uses Kantorovich-Rubinstein duality to estimate a distance informative even for disjoint supports; weight clipping constrains the critic.
+- FID compares Gaussian approximations; CMMD compares distributions of CLIP features using a kernel.
 - Precision-recall measures the balance between sample quality and diversity.
 - CLIP measures text-to-image alignment; human assessment remains the gold standard for generated image quality.
 - Langevin dynamics uses log-density gradients and Gaussian noise to sample from an unnormalized model.

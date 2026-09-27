@@ -287,6 +287,8 @@ $$
 \bs_{\btheta,t}(\bx_t)={\color{#8854c0}-\frac{\bepsilon_{\btheta,t}(\bx_t)}{\sqrt{1-\bar{\alpha}_t}}}=\nabla_{\bx_t}\log\pt(\bx_t).
 $$
 
+This is the noise-to-score identity from **Tweedie's formula (Lecture 6)** at the MSE optimum.
+
 <div v-click="1">
 
 $$

@@ -129,9 +129,19 @@ $$
 \nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)=-\frac{\bx_{\sigma}-\bx}{\sigma^2}=-\frac{\bepsilon}{\sigma}.
 $$
 
-$\bs_{\btheta,\sigma}(\bx_{\sigma})$ attempts to **denoise** a corrupted sample.
+<div class="block">
 
-<div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
+## Tweedie's Formula
+
+From Lecture 6, the MSE-optimal clean-data prediction is
+
+$$
+\bbE_{q(\bx|\bx_\sigma)}[\bx]=\bx_\sigma+\sigma^2\nabla_{\bx_\sigma}\log q(\bx_\sigma).
+$$
+
+</div>
+
+<div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a><br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3325056/">Efron B. Tweedie's Formula and Selection Bias, 2011</a></div>
 
 ---
 clicks: 0

@@ -369,6 +369,8 @@ $$
 
 </div>
 
+<div class="source"><a href="https://yann.lecun.org/exdb/publis/pdf/lecun-06.pdf">LeCun Y. et al. A Tutorial on Energy-Based Learning, 2006</a></div>
+
 ---
 clicks: 1
 sourceFrame: "14"
@@ -865,6 +867,51 @@ $$
 <div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
 
 ---
+clicks: 3
+sourceFrame: "extension: 25"
+class: theorems
+---
+
+# Tweedie's Formula
+
+Let $\bx\sim\pd$, $\bepsilon\sim\cN(0,\bI)$ be independent, with $\bx_\sigma=\bx+\sigma\bepsilon$ and $\sigma>0$.
+
+Using the posterior-mean identity from the previous slide:
+
+$$ {1|all} {at:1}
+\begin{aligned}
+\nabla_{\bx_\sigma}\log q(\bx_\sigma)
+&=\bbE_{q(\bx|\bx_\sigma)}\left[\frac{\bx-\bx_\sigma}{\sigma^2}\right]\\
+&=\frac{\bbE_{q(\bx|\bx_\sigma)}[\bx]-\bx_\sigma}{\sigma^2}.
+\end{aligned}
+$$
+
+<div class="block" v-click="2">
+
+## Tweedie's Formula
+
+$$
+\bbE_{q(\bx|\bx_\sigma)}[\bx]=\bx_\sigma+\sigma^2\nabla_{\bx_\sigma}\log q(\bx_\sigma).
+$$
+
+</div>
+<div v-click="3">
+
+## Noise Prediction
+
+$$
+\bbE[\bepsilon\mid\bx_\sigma]=-\sigma\nabla_{\bx_\sigma}\log q(\bx_\sigma).
+$$
+
+Both conditional means are MSE-optimal predictions given the noisy observation.
+
+</div>
+
+<div class="source"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3325056/">Efron B. Tweedie's Formula and Selection Bias, 2011</a></div>
+
+<!-- Assume finite second moments. The identities use the true marginal score; replacing it by the trained score network gives approximate clean-data and noise predictions. The conditional means need not equal the particular clean sample or noise realization that produced the observation. -->
+
+---
 clicks: 4
 sourceFrame: "26"
 class: theorems
@@ -1341,6 +1388,8 @@ $$
 
 **Note:** Annealed Langevin dynamics applies to diffusion, too.
 
+NCSN with annealed Langevin dynamics is an early score-based generative framework (2019–2020).
+
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/1907.05600">Song Y. et al. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a></div>
@@ -1355,6 +1404,7 @@ class: summary
 
 - Score matching minimizes Fisher divergence to estimate the score function.
 - Denoising score matching makes the score objective estimable using corrupted samples and the known corruption kernel.
+- Tweedie's formula converts the score into MSE-optimal clean-data and noise predictions.
 - Noise-Conditioned Score Networks learn scores at multiple noise levels and sample with annealed Langevin dynamics.
 - The forward Gaussian diffusion process admits a closed-form conditional distribution for any timestep.
 - With a suitable noise schedule, the forward process converges to standard Gaussian noise; denoising score matching also applies to these diffusion marginals.

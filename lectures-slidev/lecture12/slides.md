@@ -828,7 +828,25 @@ $$
 p_t(\bx|\bx_1)=q_{1-t}(\bx|\bx_0=\bx_1)
 $$
 
-<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
+<div class="block">
+
+## Tweedie's Formula
+
+Recall Lecture 6, now with a scaled signal: for $\alpha_t>0$, $\sigma_t>0$,
+
+$$
+p_t(\bx_t|\bx_1)=\cN(\alpha_t\bx_1,\sigma_t^2\bI)
+\quad\Rightarrow\quad
+\bbE[\bx_1\mid\bx_t]=\frac{\bx_t+\sigma_t^2\nabla_{\bx_t}\log p_t(\bx_t)}{\alpha_t}.
+$$
+
+</div>
+
+When the conditional velocity is affine in $\bx_1$, averaging over $\bx_1\mid\bx_t$ expresses the marginal velocity through the score.
+
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3325056/">Efron B. Tweedie's Formula and Selection Bias, 2011</a></div>
+
+<!-- Here alpha_t is the Gaussian path's signal coefficient, e.g. t for the straight path below. The added identity uses the marginal p_t, whereas the path above is conditioned on x_1. The positivity conditions exclude singular endpoints; no Gaussian assumption on the data distribution is required. -->
 
 ---
 clicks: 0
