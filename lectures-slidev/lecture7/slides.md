@@ -711,60 +711,89 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
 ---
-clicks: 2
+clicks: 4
 sourceFrame: "23"
 class: derivation
 ---
 
 # ELBO for Gaussian Diffusion Model
 
+<div class="columns" style="grid-template-columns:3fr 2fr">
+<div>
+
+## Bayes' Rule ($t\geq 2$)
+
 $$
 {\color{teal}q(\bx_t|\bx_{t-1},\bx_0)}=\frac{q(\bx_{t-1}|\bx_t,\bx_0)q(\bx_t|\bx_0)}{q(\bx_{t-1}|\bx_0)}
 $$
 
-<div class="block" v-click="1">
+</div>
+<div>
 
-## Derivation (continued)
+## Markov Property
 
-$$ {1|all} {at:2}
-\begin{aligned}
-\cL_{\bphi,\btheta}(\bx)&=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{p(\bx_T)\prod_{t=1}^T\pt(\bx_{t-1}|\bx_t)}{\prod_{t=1}^T{\color{#8854c0}q(\bx_t|\bx_{t-1})}}\\
-&=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{p(\bx_T)\prod_{t=1}^T\pt(\bx_{t-1}|\bx_t)}{\prod_{t=1}^Tq(\bx_t|\bx_{t-1},{\color{olive}\bx_0})}
-\end{aligned}
+$$
+q(\bx_t|\bx_{t-1},\bx_0)=q(\bx_t|\bx_{t-1})
 $$
 
+</div>
+</div>
+
+<div class="columns" style="grid-template-columns:3fr 2fr;gap:4px 36px;align-items:center">
+<div v-click="1">
+
+$$
+\cL_{\bphi,\btheta}(\bx)=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{p(\bx_T)\prod_{t=1}^T\pt(\bx_{t-1}|\bx_t)}{\prod_{t=1}^Tq(\bx_t|\bx_{t-1},{\color{olive}\bx_0})}
+$$
+
+</div>
+<div v-click="1">
+
+Conditioning on $\bx_0$ leaves the forward transitions unchanged.
+
+</div>
+<div v-click="2">
+
+$$
+\phantom{\cL_{\bphi,\btheta}(\bx)}=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{p(\bx_T)\pt(\bx_0|\bx_1)\prod_{t=2}^T\pt(\bx_{t-1}|\bx_t)}{q(\bx_1|\bx_0)\prod_{t=2}^T{\color{teal}q(\bx_t|\bx_{t-1},\bx_0)}}
+$$
+
+</div>
+<div v-click="2">
+
+Separate the decoder step $t=1$.
+
+</div>
+<div v-click="3">
+
+$$
+\phantom{\cL_{\bphi,\btheta}(\bx)}=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{p(\bx_T)\pt(\bx_0|\bx_1)\prod_{t=2}^T\pt(\bx_{t-1}|\bx_t)}{{\color{#8854c0}q(\bx_1|\bx_0)}\prod_{t=2}^T\frac{q(\bx_{t-1}|\bx_t,\bx_0){\color{#8854c0}q(\bx_t|\bx_0)}}{{\color{#8854c0}q(\bx_{t-1}|\bx_0)}}}
+$$
+
+</div>
+<div v-click="3">
+
+Apply Bayes' rule for each $t\geq 2$.
+
+</div>
+<div v-click="4">
+
+$$
+\phantom{\cL_{\bphi,\btheta}(\bx)}=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{{\color{#8854c0}p(\bx_T)}{\color{olive}\pt(\bx_0|\bx_1)}\prod_{t=2}^T\pt(\bx_{t-1}|\bx_t)}{{\color{#8854c0}q(\bx_T|\bx_0)}\prod_{t=2}^Tq(\bx_{t-1}|\bx_t,\bx_0)}
+$$
+
+</div>
+<div v-click="4">
+
+Intermediate marginals telescope; the $q(\bx_1|\bx_0)$ factor cancels too.
+
+</div>
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
 ---
 clicks: 2
-sourceFrame: "extension: 23"
-class: derivation
----
-
-# ELBO for Gaussian Diffusion Model
-
-<div class="block">
-
-## Derivation (continued)
-
-$$ {1|1-2|all} {at:1}
-\begin{aligned}
-\cL_{\bphi,\btheta}(\bx)&=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{p(\bx_T)\pt(\bx_0|\bx_1)\prod_{t=2}^T\pt(\bx_{t-1}|\bx_t)}{q(\bx_1|\bx_0)\prod_{t=2}^T{\color{teal}q(\bx_t|\bx_{t-1},\bx_0)}}\\
-&=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{p(\bx_T)\pt(\bx_0|\bx_1)\prod_{t=2}^T\pt(\bx_{t-1}|\bx_t)}{{\color{#8854c0}q(\bx_1|\bx_0)}\prod_{t=2}^T\frac{q(\bx_{t-1}|\bx_t,\bx_0){\color{#8854c0}q(\bx_t|\bx_0)}}{{\color{#8854c0}q(\bx_{t-1}|\bx_0)}}}\\
-&=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{{\color{#8854c0}p(\bx_T)}{\color{olive}\pt(\bx_0|\bx_1)}\prod_{t=2}^T\pt(\bx_{t-1}|\bx_t)}{{\color{#8854c0}q(\bx_T|\bx_0)}\prod_{t=2}^Tq(\bx_{t-1}|\bx_t,\bx_0)}
-\end{aligned}
-$$
-
-</div>
-
-<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
-
-<!-- Source frame 23 is split after conditioning the forward factors. No algebraic stage is removed: isolate t=1, substitute Bayes, then telescope. -->
-
----
-clicks: 1
 sourceFrame: "24"
 class: derivation
 ---
@@ -775,57 +804,56 @@ class: derivation
 
 ## Derivation (continued)
 
-$$
-\cL_{\bphi,\btheta}(\bx)=\bbE_{q(\bx_{1:T}|\bx_0)}\log\frac{{\color{#8854c0}p(\bx_T)}{\color{olive}\pt(\bx_0|\bx_1)}\prod_{t=2}^T\pt(\bx_{t-1}|\bx_t)}{{\color{#8854c0}q(\bx_T|\bx_0)}\prod_{t=2}^Tq(\bx_{t-1}|\bx_t,\bx_0)}
-$$
-
-<div v-click="1">
+<div class="columns" style="grid-template-columns:3fr 2fr;gap:4px 36px;align-items:center">
+<div>
 
 $$
 \begin{aligned}
-=\bbE_{{\color{teal}q(\bx_{1:T}|\bx_0)}}\biggl[&\log{\color{olive}\pt(\bx_0|\bx_1)}+\log{\color{#8854c0}\frac{p(\bx_T)}{q(\bx_T|\bx_0)}}\\
+\cL_{\bphi,\btheta}(\bx)=\bbE_{{\color{teal}q(\bx_{1:T}|\bx_0)}}\biggl[&\log{\color{olive}\pt(\bx_0|\bx_1)}+\log{\color{#8854c0}\frac{p(\bx_T)}{q(\bx_T|\bx_0)}}\\
 &+\sum_{t=2}^T\log\left(\frac{\pt(\bx_{t-1}|\bx_t)}{q(\bx_{t-1}|\bx_t,\bx_0)}\right)\biggr]
 \end{aligned}
 $$
 
-</div></div>
+</div>
+<div>
 
-<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
+Expand the logarithm: products become sums.
 
----
-clicks: 1
-sourceFrame: "extension: 24"
-class: derivation
----
-
-# ELBO for Gaussian Diffusion Model
-
-<div class="block">
-
-## Derivation (continued)
-
-$$
-\begin{aligned}
-\cL_{\bphi,\btheta}(\bx)
-&=\bbE_{{\color{teal}q(\bx_1|\bx_0)}}\log\pt(\bx_0|\bx_1)+\bbE_{{\color{teal}q(\bx_T|\bx_0)}}\log\frac{p(\bx_T)}{q(\bx_T|\bx_0)}\\
-&\quad+\sum_{t=2}^T\bbE_{{\color{teal}q(\bx_{t-1},\bx_t|\bx_0)}}\log\left(\frac{\pt(\bx_{t-1}|\bx_t)}{q(\bx_{t-1}|\bx_t,\bx_0)}\right)
-\end{aligned}
-$$
-
+</div>
 <div v-click="1">
 
 $$
 \begin{aligned}
-&=\bbE_{q(\bx_1|\bx_0)}\log\pt(\bx_0|\bx_1)-\KL\bigl(q(\bx_T|\bx_0)\|p(\bx_T)\bigr)\\
+\phantom{\cL_{\bphi,\btheta}(\bx)}&=\bbE_{{\color{teal}q(\bx_1|\bx_0)}}\log\pt(\bx_0|\bx_1)+\bbE_{{\color{teal}q(\bx_T|\bx_0)}}\log\frac{p(\bx_T)}{q(\bx_T|\bx_0)}\\
+&\quad+\sum_{t=2}^T\bbE_{{\color{teal}q(\bx_{t-1},\bx_t|\bx_0)}}\log\left(\frac{\pt(\bx_{t-1}|\bx_t)}{q(\bx_{t-1}|\bx_t,\bx_0)}\right)
+\end{aligned}
+$$
+
+</div>
+<div v-click="1">
+
+Integrate out unused variables. Each term depends on one state or one adjacent pair.
+
+</div>
+<div v-click="2">
+
+$$
+\begin{aligned}
+\phantom{\cL_{\bphi,\btheta}(\bx)}&=\bbE_{q(\bx_1|\bx_0)}\log\pt(\bx_0|\bx_1)-\KL\bigl(q(\bx_T|\bx_0)\|p(\bx_T)\bigr)\\
 &\quad-\sum_{t=2}^T\underbrace{\bbE_{q(\bx_t|\bx_0)}\KL\bigl(q(\bx_{t-1}|\bx_t,\bx_0)\|\pt(\bx_{t-1}|\bx_t)\bigr)}_{\cL_t}
 \end{aligned}
 $$
 
-</div></div>
+</div>
+<div v-click="2">
+
+Use the definition of KL. For each $\bx_t$, average over $q(\bx_{t-1}|\bx_t,\bx_0)$; then average over $q(\bx_t|\bx_0)$.
+
+</div>
+</div>
+</div>
 
 <div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
-
-<!-- Source frame 24 continues with marginalization and the three KL terms. Each bracket, fraction and underbrace remains whole. -->
 
 ---
 clicks: 3
