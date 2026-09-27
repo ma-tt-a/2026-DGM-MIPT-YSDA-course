@@ -1,0 +1,34 @@
+{
+  "sdxl-cfg-3.5.png": {
+    "source": "https://arxiv.org/abs/2410.03941",
+    "description": "Unmodified image from Kasymov et al., AutoLoRA (2024), Fig. 3 top row: baseline CFG 3.5, SDXL with Disney Princess LoRA (weight 0.7), prompt Anna. Caption confirms the same initial noise for all columns. Selected columns 1, 3, 5, 7; not AutoLoRA outputs.",
+    "asset_url": "https://arxiv.org/html/2410.03941v1/images/image_merger_cfg_070/ls0.7_our0.0_cfg3.5/070.png",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "sha256": "e6504521a53afd910d0e47142228686b849e7baa85c52570033d5bd2fd37353b"
+  },
+  "sdxl-cfg-4.5.png": {
+    "source": "https://arxiv.org/abs/2410.03941",
+    "description": "Unmodified image from Kasymov et al., AutoLoRA (2024), Fig. 3 top row: baseline CFG 4.5, SDXL with Disney Princess LoRA (weight 0.7), prompt Anna. Caption confirms the same initial noise for all columns. Selected columns 1, 3, 5, 7; not AutoLoRA outputs.",
+    "asset_url": "https://arxiv.org/html/2410.03941v1/images/image_merger_cfg_070/ls0.7_our0.0_cfg4.5/070.png",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "sha256": "33838db9b37dfb814ea9c3aff6c50a834f056b9f52ed5328776cf3605e3082a2"
+  },
+  "sdxl-cfg-5.5.png": {
+    "source": "https://arxiv.org/abs/2410.03941",
+    "description": "Unmodified image from Kasymov et al., AutoLoRA (2024), Fig. 3 top row: baseline CFG 5.5, SDXL with Disney Princess LoRA (weight 0.7), prompt Anna. Caption confirms the same initial noise for all columns. Selected columns 1, 3, 5, 7; not AutoLoRA outputs.",
+    "asset_url": "https://arxiv.org/html/2410.03941v1/images/image_merger_cfg_070/ls0.7_our0.0_cfg5.5/070.png",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "sha256": "36ddf6dee91d09c8c1ce882e7908df3c103dd69f12207fec30f58a5ca45bdd41"
+  },
+  "sdxl-cfg-6.5.png": {
+    "source": "https://arxiv.org/abs/2410.03941",
+    "description": "Unmodified image from Kasymov et al., AutoLoRA (2024), Fig. 3 top row: baseline CFG 6.5, SDXL with Disney Princess LoRA (weight 0.7), prompt Anna. Caption confirms the same initial noise for all columns. Selected columns 1, 3, 5, 7; not AutoLoRA outputs.",
+    "asset_url": "https://arxiv.org/html/2410.03941v1/images/image_merger_cfg_070/ls0.7_our0.0_cfg6.5/070.png",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "sha256": "ac8509748743880cd4e1c0bd1a5f0630ff8f5b4eada5a7d4b3139a0cb78560b2"
+  }
+}

@@ -509,12 +509,46 @@ class: figure-slide
 
 # Text Guidance
 
-**Prompt:** a stained glass window of a panda eating bamboo<br>
-Left: $\gamma=1$, Right: $\gamma=3$.
+**Prompt:** Anna<br>
+SDXL fine-tuned on Disney princesses. Same initial noise; only $\gamma$ changes.
 
-<img src="/figs/cfg.png" alt="Classifier-free guidance scale one and three for a panda stained glass prompt" style="width:100%;height:370px;object-fit:contain" />
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:26px;text-align:center">
+<div>
 
-<div class="source"><a href="https://arxiv.org/abs/2112.10741">Nichol A., et al. GLIDE: Towards Photorealistic Image Generation and Editing with Text-Guided Diffusion Models, 2022</a></div>
+$\gamma=3.5$
+
+<img src="/figs/sdxl-cfg-3.5.png" alt="Anna generated with SDXL and classifier-free guidance scale 3.5" style="width:100%;aspect-ratio:1;object-fit:contain" />
+</div>
+<div>
+
+$\gamma=4.5$
+
+<img src="/figs/sdxl-cfg-4.5.png" alt="Anna generated from the same initial noise with guidance scale 4.5" style="width:100%;aspect-ratio:1;object-fit:contain" />
+</div>
+<div>
+
+$\gamma=5.5$
+
+<img src="/figs/sdxl-cfg-5.5.png" alt="Anna generated from the same initial noise with guidance scale 5.5" style="width:100%;aspect-ratio:1;object-fit:contain" />
+</div>
+<div>
+
+$\gamma=6.5$
+
+<img src="/figs/sdxl-cfg-6.5.png" alt="Anna generated from the same initial noise with guidance scale 6.5" style="width:100%;aspect-ratio:1;object-fit:contain" />
+</div>
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2410.03941">Kasymov A., et al. AutoLoRA: AutoGuidance Meets Low-Rank Adaptation for Diffusion Models, 2024. Fig. 3, top row (selected columns).</a> <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0.</a></div>
+
+<!--
+Published baseline CFG samples, not the AutoLoRA row: SDXL with Disney Princess
+LoRA, fixed LoRA weight 0.7. The source uses w for the CFG scale; here it is gamma
+to match the lecture. The caption confirms identical initial noise. This single
+seed illustrates changes in appearance, not a measurement of sample diversity.
+Author-approved replacement of the former panda illustration from
+<a href="https://arxiv.org/abs/2112.10741">Nichol A., et al. GLIDE, 2022</a>.
+-->
 
 ---
 clicks: 6
@@ -646,37 +680,10 @@ $$ {1|1-2|all} {at:2}
 \begin{aligned}
 {\color{olive}\nabla_{\bx_t}\log\pt(\bx_t|\by)}&=\nabla_{\bx_t}\log\left(\frac{\pt(\bx_t)p(\by|\bx_t)}{p(\by)}\right)\\
 &={\color{#8854c0}\nabla_{\bx_t}\log\pt(\bx_t)}+\nabla_{\bx_t}\log p(\by|\bx_t)\\
-&={\color{#8854c0}\bs_{\btheta,t}(\bx_t)}+{\color{teal}\nabla_{\bx_t}\log p(\by|\bx_t)}
+&={\color{#8854c0}\bs_{\btheta,t}(\bx_t)}+{\color{teal}\nabla_{\bx_t}\log p(\by|\bx_t)}={\color{olive}\bs_{\btheta,t}(\bx_t,\by)}
 \end{aligned}
 $$
 
-</div>
-
-<div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a></div>
-
----
-clicks: 1
-sourceFrame: "extension: 28"
-class: theorems
----
-
-# Classifier Guidance: Guided Score Function
-
-<div class="block">
-
-## Guided Score Function
-
-$$
-\bs_{\btheta,t}(\bx_t,\by)=\nabla_{\bx_t}\log\pt(\bx_t|\by).
-$$
-
-<div v-click="1">
-
-$$
-{\color{olive}\bs_{\btheta,t}(\bx_t,\by)}={\color{#8854c0}\bs_{\btheta,t}(\bx_t)}+{\color{teal}\nabla_{\bx_t}\log p(\by|\bx_t)}
-$$
-
-</div>
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a></div>

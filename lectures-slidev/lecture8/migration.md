@@ -1,5 +1,111 @@
 # Lecture 8: migration to Slidev
 
+## Text-guidance CFG sweep, 2026-09-27
+
+The author approved retaining slide 19 (the VQ-VAE-2 ostriches) and replacing only
+slide 20's GLIDE panda with a controlled guidance-scale comparison. After source
+research, the author explicitly accepted **SDXL** instead of SD3/Flux. Slide 20
+now shows four unmodified baseline CFG samples from **Kasymov et al., AutoLoRA
+(2024), Fig. 3, top row, columns 1/3/5/7**: prompt `Anna`, guidance scales
+**3.5/4.5/5.5/6.5**, SDXL with Disney Princess LoRA at fixed weight **0.7**. The
+published caption confirms identical initial noise. These are ordinary CFG
+samples, not the paper's AutoLoRA outputs. The paper's `w` is the lecture's
+`gamma`; both use unconditional + scale × (conditional − unconditional).
+
+Local image files retain their original bytes and dimensions. Attribution,
+selected-column disclosure and CC BY 4.0 are visible; exact source URLs and
+SHA-256 hashes are in `public/figs/sources.json`. Speaker notes record the setup,
+the retired GLIDE citation and the limitation that a single seed demonstrates
+appearance changes, not a distribution-level diversity measurement. No claims
+about an optimal guidance scale or high-scale failure are added to this example.
+
+The map and reveals are unchanged: **33 slides / 74 states**, static slide 20.
+Independent scoped source review found no issues. All other slide blocks are
+byte-identical to the baseline; incoming/outgoing Recap, Summary, section schedule
+and artifact catalog require no update. Shared infrastructure and Beamer were
+not edited.
+
+Finalization reused the stopped, isolated copy at
+`/private/tmp/dgm-l8-guidance-20260927/` with refreshed course sources and physically
+separate dependencies. Node 24.19.0 / Slidev 52.19.1: source checks, **41 existing
+tests**, production build and both exports passed. `render-qa.py` checked all
+33 handout pages and 74 reveal pages. At 1280×720, exactly handout page **20** and
+reveal page **31** changed; the other **32 handout pages / 73 states** are
+pixel-identical without masks. Every final reveal state equals its handout page.
+The changed page was visually reviewed at full size in both PDF and browser.
+
+Post-export browser inspection covered slides **19–21 / 9 states**, plus explicit
+returns to slide 20 from both neighbors. No overflow, asset errors, JS/HTTP errors,
+empty clicks or changed reveal geometry were found. Style was compared with the
+approved L1:35 browser capture and current L1:35 handout at 1280×720: Arial 37 px
+headings / 24 px text, 24.96 px KaTeX, 12 px credits and the shared navy/teal palette
+match. The isolated QA server was stopped. This is scoped validation; physical
+devices and a fresh full-lecture browser audit are outside this illustration edit.
+
+QA: `../output/qa/lecture8/cfg-sweep-2026-09-27/`.
+Baseline slides.md SHA-256:
+`9506321cf2df56b8ed71cc76224ff79cd02cbc50bd0195a6f3aa37ac63674133`.
+
+- SHA-256 slides.md: `9cce0cb8960966b69c3542e18f62390409aebb1096e3755c8402b49b85e97d88`.
+- SHA-256 slide-map.json: `af8ada0b619b5e09a635cec46ef1119214627c8e928b2a356b1da386dc85c171`.
+- SHA-256 Lecture8.pdf: `79bda1f5b1a8454f5062d8135c048e73acb1f4e24d50ea2fc4203313a73cd5b4`.
+- SHA-256 Lecture8-handout.pdf: `90c84274cf7b2f6bd73165bed32d87a16a375f0e3115aef4cd79ef80c795567a`.
+
+## Classifier-guidance derivation merge, 2026-09-27
+
+The author approved a narrower course-refresh edit than the original three-slide
+proposal: merge former slides **24–25**, keep Guidance Scale and Distribution
+Sharpening separate, and retain the Training/Sampling Overview. The classifier
+guidance block now has **five slides (23–27)**. In slide 24, the final Bayes-derivation
+row introduces the conditional score `s_{theta,t}(x_t,y)`; the separate
+`extension: 28` repetition is removed. The guided sampling equation, every Bayes
+step, all semantic colors, citation, original block titles and three reveal clicks
+remain. Former slides 26–28 are now 25–27, with byte-identical content.
+
+The map is renumbered to **33 slides / 74 states**. Both merged slides belonged to
+source frame 28, so removing its continuation requires no `mergedSourceFrames`
+declaration. All other source blocks are byte-identical to the baseline. The
+course-refresh item is closed in the agreed scope; no Supplementary transfer or
+further reduction is pending. The former minus-four-minute estimate was not timed.
+
+Scoped source review covered notation, Bayes/score equivalence, source-frame
+coverage, citations and reveals. L9's mirrored definitions and Training/Sampling
+remain consistent. The incoming Recap, Summary, sections, root schedule and Slidev
+catalog are unchanged and remain applicable; catalog artifact paths are unchanged.
+Shared infrastructure, Beamer and `lectures/merged/` were not changed.
+
+Finalization ran in `/private/tmp/dgm-l8-guidance-20260927/` with physically copied
+dependencies, Node 24.19.0 and Slidev 52.19.1. Source checks, the **32 existing tests**,
+production build and both PDF exports passed. The initial sandboxed export could
+not allocate a local port; the export succeeded with local-server permission after
+the final build. Existing project servers were left alone; the isolated QA server
+was stopped after inspection.
+
+`render-qa.py` verified all **33 handout pages / 74 reveal pages**. All 33 final
+states are pixel-identical to their handout pages. Apart from the updated page
+counter, the **32 unaffected handout pages and 70 unaffected states** match the
+baseline exactly (mask: x=1150–1280, y=675–720 at 1280×720). Slide 24's four states
+were visually reviewed at full size in PDF; its final browser state was also
+reviewed. No overlap, clipping or prematurely visible content was found.
+
+Post-export browser inspection covered slides **23–27 / 19 states**: all clicks
+are meaningful, geometry is stable, backward steps match, assets load and no
+overflow or HTTP/JS errors occur. Additional checks confirmed returns to slide 24
+from both neighbors and replay of all four states. Typography was compared at
+1280×720 with the saved approved L1:35 browser reference and the current L1:35 PDF:
+Arial headings (37/24 px, weight 650), KaTeX math (24.96 px), bold vectors and
+parameters, source credits (12 px), navy and teal match the shared style. This was
+a scoped follow-up, not a fresh full-lecture/browser or physical-device audit.
+
+QA: `../output/qa/lecture8/guidance-merge-2026-09-27/`.
+Baseline commit: `61f4ee3d`; baseline slides.md SHA-256:
+`c45e4aa15c0372e9890f8e4b0f831d040091e03464eab00a1f722441949606f4`.
+
+- SHA-256 slides.md: `9506321cf2df56b8ed71cc76224ff79cd02cbc50bd0195a6f3aa37ac63674133`.
+- SHA-256 slide-map.json: `af8ada0b619b5e09a635cec46ef1119214627c8e928b2a356b1da386dc85c171`.
+- SHA-256 Lecture8.pdf: `1f01be4728c1afaa8445bae2f4988aaa2dbd30afbb7bc2c3c9e8dcc3ccc2cf6e`.
+- SHA-256 Lecture8-handout.pdf: `7f08cc5ed2a37013e842a385ba10177148eeb96e0bb17d903baaa7ff29a12686`.
+
 ## Tweedie cross-reference for noise-to-score conversion, 2026-09-27
 
 As requested alongside the new Lecture 6 derivation, slide 11 (`extension: 18`) now identifies the existing noise-to-score conversion as the identity from **Tweedie's formula (Lecture 6)** at the MSE optimum. This qualification distinguishes the optimal conditional mean from an individual noise realization. The displayed model parameterization and loss, citations, one reveal click, algorithms, neighboring recap interfaces, Summary and sections are unchanged: **34 slides / 76 states**. No new formula or slide was required.
