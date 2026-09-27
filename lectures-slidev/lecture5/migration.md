@@ -1,5 +1,18 @@
 # Lecture 5: перенос в Slidev
 
+## Course refresh: preference score как цель оптимизации, 2026-09-27
+
+По запросу автора на слайд **40, CLIP Similarity and Human Preferences**, добавлено одно предложение: “A learned preference score can guide sample selection and model training — but optimizing the score can exploit its flaws.” Отсылки к другой лекции нет. Фраза раскрывается вместе с PickScore прежним кликом; новых слайдов/кликов и изменения шрифтов нет. **47 слайдов / 93 состояния**. Summary, Recap, карта и разделы сохранены; отдельное расширение для этого краткого вывода не требуется.
+
+Source check, production build, оба экспорта и render-qa.py прошли. Проверены оба браузерных состояния 40 и возвраты с соседей: ошибок, переполнений и сдвигов нет. Финальная PDF-страница 40 просмотрена. Все 47 финальных состояний совпали с handout; остальные **46 страниц handout и 91 состояние steps полностью совпали попиксельно** с предыдущими PDF. Общие стили/нотация/логика не менялись; прежние проверки типографики и логики не повторялись. QA: `../output/qa/lecture5/reward-takeaway-2026-09-27/`.
+
+Исходный SHA-256 slides.md: `8939d5b638a749ad841f193ae12a071a818d0f90a623a7fb4cc4695b75558fd0`.
+
+- SHA-256 slides.md: `553c658857d19dab838bdfa17f1b1969900fa222b6e213de467dbe4ad8236dda`.
+- SHA-256 slide-map.json: `68f4cc59b8b991b2b4976ff4019e846f96a46121f1f921b03c6338af97de0cb5`.
+- SHA-256 Lecture5.pdf: `6c4e21684fecd116ea6273bca48b4f03b8608d449e9b8115200845762771ab91`.
+- SHA-256 Lecture5-handout.pdf: `2726874f0a391737d3f9237d756c503d5d893875bd02c286e7b8cc5d1b167c30`.
+
 ## Course refresh: Human Evaluation принят и закрыт, 2026-09-27
 
 Автор принял текущий слайд 43 с иллюстрацией Alice AI ART 2.0 и явно закрыл пункт Human Evaluation. Дополнительный обзор арен/Elo/Bradley–Terry и VBench не входит в согласованный объём; это не оставшаяся работа по данному пункту. Статус отражён в локальном course-refresh report. Предыдущий двухслайдный блок CLIP / preferences / compositionality также принят автором. Исходники слайдов и оба проверенных PDF не менялись; повторная сборка для записи решения не требуется.

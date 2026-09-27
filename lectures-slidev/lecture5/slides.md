@@ -1447,6 +1447,8 @@ Train the score $r_{\btheta}$ to assign higher probability to the human choice.
 
 Other preference models: **[ImageReward](https://arxiv.org/abs/2304.05977)**, **[HPSv2](https://arxiv.org/abs/2306.09341)**.
 
+A learned preference score can guide sample selection and model training — but optimizing the score can exploit its flaws.
+
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2103.00020">Radford A. et al. Learning Transferable Visual Models From Natural Language Supervision, 2021</a><br><a href="https://arxiv.org/abs/2305.01569">Kirstain Y. et al. Pick-a-Pic: An Open Dataset of User Preferences for Text-to-Image Generation, 2023</a></div>
