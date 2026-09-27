@@ -136,33 +136,45 @@ class: theorems
 
 # Recap of Previous Lecture
 
+On a compact data space $\cX$:
+
 <div class="block">
 
-## Theorem 1
+## Dependence on Generator Parameters
 
-Let $\bG_{\btheta}(\bz)$ be (almost) any feedforward neural network, and $p(\bz)$ a prior over $\bz$ such that $\bbE_{p(\bz)}\|\bz\|<\infty$. Then $W(\pd\|\pt)$ is continuous everywhere and differentiable almost everywhere.
-
-</div>
-<div class="block" v-click="1">
-
-## Theorem 2
-
-Let $\pi$ be a distribution on a compact space $\cX$ and let $\{p_t\}_{t=1}^{\infty}$ be a sequence of distributions on $\cX$.
-
-$$
-\begin{aligned}
-\KL(\pi\|p_t)&\rightarrow0\quad(\text{or }\KL(p_t\,\|\,\pi)\rightarrow0) && (1)\\
-\JSD(\pi\|p_t)&\rightarrow0 && (2)\\
-W(\pi\|p_t)&\rightarrow0 && (3)
-\end{aligned}
-$$
-
-As $t\rightarrow\infty$, (1) $\Rightarrow$ (2), and (2) $\Rightarrow$ (3). That is, convergence in Wasserstein distance is a weaker condition than convergence in JSD, which in turn is weaker than convergence in KL.
+For a feedforward generator $\bG_{\btheta}$ with Lipschitz activations and $\bbE_{p(\bz)}\|\bz\|<\infty$, $W(\pd\|\pt)$ is continuous in $\btheta$ and differentiable almost everywhere.
 
 </div>
 
+<div v-click="1">
+
+<div class="block">
+
+## Convergence of Distributions
+
+For a fixed distribution $\pi$ and a sequence $p_t$ on $\cX$, as $t\to\infty$:
+
+$$
+\KL(\pi\|p_t)\to0
+\quad\Longrightarrow\quad\JSD(\pi\|p_t)\to0
+\quad\Longrightarrow\quad W(\pi\|p_t)\to0
+$$
+
+The first implication also holds for $\KL(p_t\|\pi)\to0$; the converses need not hold.
+
+</div>
+
+<div class="takeaway">
+
+**Wasserstein can capture distributions getting closer even when their supports do not overlap.**
+
+</div>
+
+</div>
 
 <div class="source"><a href="https://arxiv.org/abs/1701.07875">Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017</a></div>
+
+<!-- The preceding parallel-lines example in Lecture 5 illustrates both properties. Continuity and almost-everywhere differentiability do not guarantee a nonzero gradient or successful WGAN training. The generator statement uses the feedforward-network corollary in the cited paper; its conditions include standard affine layers and Lipschitz activations. -->
 
 ---
 clicks: 0
