@@ -74,26 +74,34 @@
 \end{frame}
 %=======
 \begin{frame}{Recap of Previous Lecture}
-	\myfootnotewithlink{https://aaronlou.com/blog/2024/discrete-diffusion/}{https://aaronlou.com/blog/2024/discrete-diffusion/}
+	\myfootnote{\href{https://arxiv.org/abs/2502.09992}{Nie S. et al. LLaDA, 2025.} \href{https://arxiv.org/abs/2505.22618}{Wu C. et al. Fast-dLLM, 2025.} \\
+		\href{https://arxiv.org/abs/2412.10193}{Schiff Y. et al. Discrete guidance, 2025.} \href{https://arxiv.org/abs/2503.00307}{Wang G. et al. ReMDM, 2025.}}
+	\begin{columns}[T]
+	\begin{column}{0.48\textwidth}
 	\begin{block}{Continuous state space}
 		\begin{itemize}
 			\item \textbf{Discrete time} $t \in \{0,1,\ldots,T\}$ $\;\Rightarrow\;$ \textbf{DDPM / NCSN}.
 			\item \textbf{Continuous time} $t \in [0,1]$ $\;\Rightarrow\;$ \textbf{Score-based SDE models}.
 		\end{itemize}
 	\end{block}
+	\end{column}
+	\begin{column}{0.48\textwidth}
 	\begin{block}{Discrete state space}
 		\begin{itemize}
 			\item \textbf{Discrete time} $t \in \{0,1,\ldots,T\}$.
 			\item \textbf{Continuous time} $t \in [0,1]$.
 		\end{itemize}
 	\end{block}
-    \begin{block}{Key advantages of discrete diffusion}
+	\end{column}
+	\end{columns}
+	\begin{block}{Potential advantages over left-to-right AR}
 		\begin{itemize}
 			\item Parallel generation
-			\item Flexible infilling
-			\item Robustness
-			\item Unified framework
-        \end{itemize}
+			\item Bidirectional context
+			\item Flexible generation order
+			\item Infilling and controllability
+			\item Iterative refinement (with remasking or corrective updates)
+		\end{itemize}
 	\end{block}
 \end{frame}
 %=======

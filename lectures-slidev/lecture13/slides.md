@@ -170,16 +170,27 @@ class: theorems
 </div>
 <div class="block">
 
-## Key advantages of discrete diffusion
+## Potential advantages over left-to-right AR
+
+<div class="columns">
+<div>
 
 - Parallel generation
-- Flexible infilling
-- Robustness
-- Unified framework
+- Bidirectional context
+- Flexible generation order
+
+</div>
+<div>
+
+- Infilling and controllability
+- Iterative refinement (with remasking or corrective updates)
+
+</div>
+</div>
 
 </div>
 
-<div class="source"><a href="https://aaronlou.com/blog/2024/discrete-diffusion/">https://aaronlou.com/blog/2024/discrete-diffusion/</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2502.09992">Nie S. et al. Large language diffusion models, 2025.</a> <a href="https://arxiv.org/abs/2505.22618">Wu C. et al. Fast-dLLM, 2025.</a><br><a href="https://arxiv.org/abs/2412.10193">Schiff Y. et al. Simple guidance mechanisms for discrete diffusion models, 2025.</a> <a href="https://arxiv.org/abs/2503.00307">Wang G. et al. Remasking discrete diffusion models with inference-time scaling, 2025.</a></div>
 
 ---
 clicks: 0

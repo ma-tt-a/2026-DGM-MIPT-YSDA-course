@@ -86,3 +86,25 @@ The incoming comparison uses the completed Slidev Lecture 12: source SHA-256 `30
 The coordinator visually compared final handout pages **L12 22 / 35 / 48 / 52 / 58 ↔ L13 2 / 4–5 / 8 / 9 / 10**, and final browser captures **L12 35 / 52 ↔ L13 5 / 9**, at 1280×720. Gaussian paths, VE/VP velocities, the transition table, posterior, ELBO and sequence loss retain the common glyphs, sizes, weights, conditioning spacing, colors and source-footer clearance. The corrected plain `|` choice now matches the repeated Lecture 12 expressions. Additional independent PDF review of pages 20 and 34 found clean algorithms and course-overview notation; the source's explicit `\tfrac` on page 34 remains intentional.
 
 The explicitly nonadjacent Lecture 12 recap in draft Lecture 14 was preserved. Catalog and root README integration are complete. Final source/map/assets checks, all 148 strict KaTeX expressions, PDF page counts and recorded hashes pass. Final browser reports/screenshots are preserved in ignored `output/qa/lecture13/`; comparison references are in `output/qa/resume-integration/`. The temporary server was stopped.
+
+
+## Approved advantages revision — 2026-09-27
+
+The author approved replacing the former four-item advantages list with five potential advantages relative to standard left-to-right autoregressive generation: parallel generation, bidirectional context, flexible generation order, infilling and controllability, and iterative refinement when the sampler supports remasking or corrective updates. The exposure-bias claim and the unified-framework item were removed; speed and quality are not asserted as universal guarantees. Source references now cover LLaDA, Fast-dLLM, discrete guidance and ReMDM. Both Beamer and Slidev sources and PDFs were updated as part of this editorial task.
+
+Recap slide 6 (source frame 4) mirrors the Lecture 12 list with concise labels and retains the explicit refinement qualification. It remains static; the advantages use the existing two-column grid to fit without shrinking type. The Beamer recap places the state-space blocks side by side. The map remains 39 slides / 51 states. Lecture 13 body, Summary, draft Lecture 14 recap and section hierarchy are unaffected.
+
+Validation used Node 24.19.0 and an isolated physical copy of the installed project dependencies at `/private/tmp/dgm-diffusion-advantages-20260927`, keeping other tasks’ dev/build state separate. Source/map/macros/assets checks, all 31 existing tests, production build and both Slidev exports pass. Beamer builds with latexmk; the affected frames were visually inspected and have no new overfull-box warnings. Multi-source Beamer references use the existing combined-footnote pattern to avoid overlapping fixed-position footnotes.
+
+Browser inspection of slide 6 passes geometry, source clearance and keyboard departure/return. Page 6 in both PDFs was rendered and visually reviewed. The other 38 handout and 50 reveal pages are pixel-identical to their baseline pages at 1280 × 720.
+
+The reviewed pages retain the shared Lecture 1 heading/body typography, colors and margins; no shared styles, macros or components changed. QA evidence is under ignored `output/qa/diffusion-advantages-20260927/`. Checks cover this editorial change, not a new full-course audit or physical-device test.
+
+Prior Slidev source SHA-256: `246e2f3f1ffefceeb77404b5bfa4fcaeb42f7501387c280421231da191c43b4a`. Updated artifact hashes:
+
+- `slides.md`: `1d250236c9df14bbcbfd80ef6fd353daf83cb63a85c35954407ccb7b285c60fe`
+- `slide-map.json`: `30d3e795937fecae349bdb65e4441ea8e7afef170feec4b1c16b36b3e4c8a00c`
+- `Lecture13.pdf`: `30bdec40d1ff5c7939363cf0ea7d3ccd37e5dc846b7766b38b945849277b8567`
+- `Lecture13-handout.pdf`: `ae6d55e967c2eddb0093182b44510403de9b2e829547a8d7da2371cf2b58855d`
+- Beamer `Lecture13.tex`: `8582f0d9c74d437a33b826854738baa26921e329d50d3adebf083a7fb1aa1230`
+- Beamer `Lecture13.pdf`: `f9f6e99d8a37d2ecb24f96c77512e1cec36f58a5d3c99c96b253dd3c7440e002`

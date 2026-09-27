@@ -563,18 +563,20 @@
 \end{frame}
 %=======
 \begin{frame}{Why Discrete Diffusion Models?}
-	\myfootnotewithlink{https://aaronlou.com/blog/2024/discrete-diffusion/}{https://aaronlou.com/blog/2024/discrete-diffusion/}
-	While autoregressive (AR) models dominate discrete-data domains (e.g., text or sequences), they have fundamental limitations.
+	\myfootnote{\href{https://arxiv.org/abs/2502.09992}{Nie S. et al. LLaDA, 2025.} \href{https://arxiv.org/abs/2505.22618}{Wu C. et al. Fast-dLLM, 2025.} \\
+		\href{https://arxiv.org/abs/2412.10193}{Schiff Y. et al. Discrete guidance, 2025.} \href{https://arxiv.org/abs/2503.00307}{Wang G. et al. ReMDM, 2025.}}
 	\eqpause
-	\begin{block}{Key advantages of discrete diffusion}
+	\begin{block}{Potential advantages over left-to-right autoregressive generation}
 		\begin{itemize}
-			\item \textbf{Parallel generation:} diffusion enables sampling all tokens simultaneously, unlike AR’s strictly left-to-right process. 
+			\item \textbf{Parallel generation:} generate multiple tokens per step, potentially reducing sequential decoding steps.
 			\eqpause
-			\item \textbf{Flexible infilling:}. diffusion can mask arbitrary parts of a sequence and reconstruct them, rather than generating only from prefix to suffix.
-			\eqpause 
-			\item \textbf{Robustness:} diffusion avoids the "exposure bias" caused by teacher forcing in AR training.
+			\item \textbf{Bidirectional context:} use available context on both sides when predicting a token.
 			\eqpause
-			\item \textbf{Unified framework:} diffusion generalizes naturally to discrete domains that do not suit continuous Gaussian noise.
+			\item \textbf{Flexible generation order:} choose which positions to generate next, including confidence-based ordering.
+			\eqpause
+			\item \textbf{Infilling and controllability:} fill arbitrary gaps, preserve specified tokens, and steer sampling with guidance.
+			\eqpause
+			\item \textbf{Iterative refinement:} revisit generated tokens when the sampler supports remasking or corrective updates.
 		\end{itemize}
 	\end{block}
 \end{frame}
@@ -952,7 +954,7 @@
 		\vfill
 		\item Diffusion and score-based models are special cases of the flow matching approach, but use curved trajectories.
 		\vfill
-		\item Diffusion approach has several key advantages over autoregressive approach.
+		\item Discrete diffusion offers parallel generation and flexible conditioning; token revision requires a suitable sampler.
 		\vfill
 		\item Forward discrete diffusion process defines a Markov chain with discrete states; uniform and absorbing transitions make it tractable.
 		\vfill

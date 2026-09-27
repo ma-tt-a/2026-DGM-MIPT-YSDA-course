@@ -1005,29 +1005,28 @@ Let's discuss why we need discrete diffusion models.
 </div>
 
 ---
-clicks: 4
+clicks: 5
 sourceFrame: "24"
 class: theorems
 ---
 
 # Why Discrete Diffusion Models?
 
-While autoregressive (AR) models dominate discrete-data domains (e.g., text or sequences), they have fundamental limitations.
-
 <div class="block" v-click="1">
 
-## Key advantages of discrete diffusion
+## Potential advantages over left-to-right autoregressive generation
 
 <ul>
-<li><strong>Parallel generation:</strong> diffusion enables sampling all tokens simultaneously, unlike AR's strictly left-to-right process.</li>
-<li v-click="2"><strong>Flexible infilling:</strong> diffusion can mask arbitrary parts of a sequence and reconstruct them, rather than generating only from prefix to suffix.</li>
-<li v-click="3"><strong>Robustness:</strong> diffusion avoids the "exposure bias" caused by teacher forcing in AR training.</li>
-<li v-click="4"><strong>Unified framework:</strong> diffusion generalizes naturally to discrete domains that do not suit continuous Gaussian noise.</li>
+<li><strong>Parallel generation:</strong> generate multiple tokens per step, potentially reducing sequential decoding steps.</li>
+<li v-click="2"><strong>Bidirectional context:</strong> use available context on both sides when predicting a token.</li>
+<li v-click="3"><strong>Flexible generation order:</strong> choose which positions to generate next, including confidence-based ordering.</li>
+<li v-click="4"><strong>Infilling and controllability:</strong> fill arbitrary gaps, preserve specified tokens, and steer sampling with guidance.</li>
+<li v-click="5"><strong>Iterative refinement:</strong> revisit generated tokens when the sampler supports remasking or corrective updates.</li>
 </ul>
 
 </div>
 
-<div class="source"><a href="https://aaronlou.com/blog/2024/discrete-diffusion/">https://aaronlou.com/blog/2024/discrete-diffusion/</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2502.09992">Nie S. et al. Large language diffusion models, 2025.</a> <a href="https://arxiv.org/abs/2505.22618">Wu C. et al. Fast-dLLM, 2025.</a><br><a href="https://arxiv.org/abs/2412.10193">Schiff Y. et al. Simple guidance mechanisms for discrete diffusion models, 2025.</a> <a href="https://arxiv.org/abs/2503.00307">Wang G. et al. Remasking discrete diffusion models with inference-time scaling, 2025.</a></div>
 
 ---
 clicks: 0
@@ -1622,7 +1621,7 @@ Diffusion and score-based models are special cases of the flow matching approach
 
 <li>
 
-Diffusion approach has several key advantages over autoregressive approach.
+Discrete diffusion offers parallel generation and flexible conditioning; token revision requires a suitable sampler.
 
 </li>
 
