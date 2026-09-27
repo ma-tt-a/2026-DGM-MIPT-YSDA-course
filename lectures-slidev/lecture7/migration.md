@@ -1,5 +1,15 @@
 # Lecture 7 — перенос в Slidev
 
+## Согласованность Recap и Summary, 2026-09-27
+
+По запросу автора после дневных изменений проверена полная цепочка L2→L3→…→L8; для этой лекции — L6 → Recap L7 и L7 → Recap L8. В L7:4 восстановлены regularity assumptions и независимость DSM constant от theta, явно указанные в текущем доказательстве L6. Tweedie сохранена. Примечание L7:15 и его зеркало L8:2 теперь повторяют sufficiently-small-beta assumption и approximately Gaussian из L7:14. Summary L7: 7 актуальных тезисов, включая SNR; остальные повторяемые уравнения и NCSN/DDPM алгоритмы согласованы.
+
+Проверены notation, источники и хеши повторяемых рисунков, Training/Sampling, Summary L3–7, Outline/README Materials и карты. Установленное постоянное правило проверок перед commit/push записано в AGENTS.md и .codex/project-context.md. Beamer и merged не изменялись; текущая авторская редакция Slidev служит источником для Recap.
+
+Изолированный `finalize` (Node 24.19.0, Slidev 52.19.1): source checks, 41 тест, build и оба PDF прошли; страниц handout/reveals — 44/89. Все изменённые страницы просмотрены при 1280 px; 42 страницы раздатки и 87 состояний попиксельно совпали с предыдущими PDF. Все финальные состояния совпадают с раздаткой, сырых математических delimiters нет. PDF скопированы в проект только после сверки всех render inputs. После экспорта проверены возвраты с обоих соседей, начальное/конечное состояние, формулы, ресурсы и стандартная геометрия. Для изменённых слайдов выполнен инспектор overflow/reverse clicks; стиль в браузере и PDF сопоставлен с L1:35 — Arial 24 px, title 37 px/650, KaTeX 24.96 px. У эталонной L1 отмечен существующий внешний favicon; изменённые лекции внешних запросов не делали.
+
+QA: `/private/tmp/dgm-recap-sync-20260927/lectures-slidev/output/qa/lecture7/`; хеши публикации — `/private/tmp/dgm-recap-sync-20260927/publication7.json`. Проверка scoped по Recap/Summary и связанным формулам; полный аудит лекций и физические устройства повторно не проверялись.
+
 ## Course refresh: noise schedule через SNR, 2026-09-27
 
 По согласованному предложению добавлен **слайд 20** после Distribution Summary

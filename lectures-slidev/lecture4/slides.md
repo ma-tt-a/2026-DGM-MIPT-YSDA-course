@@ -153,7 +153,7 @@ $$
 ## Variational Posterior
 
 $$
-q^*(\bz)=\argmax_q\cL_{q,\btheta^*}(\bx)=\argmin_q\KL(q\|p)=p_{\btheta^*}(\bz|\bx).
+q^*(\bz)=\argmax_q\cL_{q,\btheta^*}(\bx)=\argmin_q\KL(q(\bz)\|p_{\btheta^*}(\bz|\bx))=p_{\btheta^*}(\bz|\bx).
 $$
 
 </div>

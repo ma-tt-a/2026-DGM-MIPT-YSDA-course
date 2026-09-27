@@ -644,7 +644,7 @@ class: theorems
 ## Variational Posterior
 
 $$
-q^*(\bz)=\argmax_q\cL_{q,\btheta^*}(\bx)=\argmin_q\KL(q\|p)=p_{\btheta^*}(\bz|\bx).
+q^*(\bz)=\argmax_q\cL_{q,\btheta^*}(\bx)=\argmin_q\KL(q(\bz)\|p_{\btheta^*}(\bz|\bx))=p_{\btheta^*}(\bz|\bx).
 $$
 
 <div v-click="1">
@@ -1177,7 +1177,7 @@ class: summary
 
 # Summary
 
-- LVMs maximize the variational evidence lower bound (ELBO) to obtain maximum likelihood estimates for the parameters.
+- LVMs maximize the ELBO as a surrogate for log-likelihood; a restricted variational family can leave a nonzero KL gap.
 - Parametric posterior distribution $q_{\bphi}(\bz|\bx)$ makes the method scalable.
 - The reparametrization trick provides unbiased gradients with respect to the variational posterior $q_{\bphi}(\bz|\bx)$.
 - A VAE combines a stochastic encoder $q_{\bphi}(\bz|\bx)$ with a stochastic decoder $\pt(\bx|\bz)$.

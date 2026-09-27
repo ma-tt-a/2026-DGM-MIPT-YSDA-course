@@ -114,6 +114,8 @@ class: theorems
 
 ## Theorem
 
+Under mild regularity conditions, the last term is independent of $\btheta$:
+
 $$
 \begin{aligned}
 &\bbE_{q(\bx_{\sigma})}\bigl\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\bigr\|_2^2\\
@@ -418,7 +420,7 @@ $$
 q(\bx_{t-1}|\bx_t)\approx\pt(\bx_{t-1}|\bx_t)=\cN\bigl(\bmu_{\btheta,t}(\bx_t),\bsigma^2_{\btheta,t}(\bx_t)\bigr)
 $$
 
-<span style="color:gray">Feller's theorem justifies this Gaussian assumption.</span>
+<span style="color:gray">If $\beta_t$ is sufficiently small, $q(\bx_{t-1}|\bx_t)$ is approximately Gaussian.</span>
 
 <div class="source"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">Weng L. What are Diffusion Models?, blog post, 2021</a></div>
 
