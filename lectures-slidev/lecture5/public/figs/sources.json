@@ -21,5 +21,26 @@
     "asset_url": "https://habrastorage.org/r/w1560/getpro/habr/upload_files/f27/918/c8f/f27918c8ff29f920bbeed3c3534a1930.png",
     "description": "Author-selected Alice AI ART 2.0 image-editing evaluation figure from the Yandex article. Original downloaded PNG retained byte-for-byte, including Russian labels. Shows relevance, preservation, and defects with good/bad examples.",
     "sha256": "cd0c5b363b8f3f88424edc09307645fe4ad81a735191ab45b484dec67781ab38"
+  },
+  "evaluation_fidelity.png": {
+    "source": "https://arxiv.org/abs/1511.01844",
+    "description": "Original synthetic teaching illustration generated with built-in imagegen, not copied from the paper. The cited paper is a conceptual reference. An intentionally incorrect six-digit hand illustrates structural failure despite sharpness.",
+    "sha256": "db71f7d2812028715fe5554fd923ac2cdb95f67e942139a8cab08ebb84180983",
+    "asset_kind": "original synthetic teaching illustration",
+    "generation_prompt": "Use case: scientific-educational. Asset: one standalone square photorealistic teaching illustration for a university slide on failure modes of image generation. Show the palm of ONE adult human hand held up against a plain warm light-gray studio background. The picture is sharp and technically polished, with natural skin texture and soft lighting, but the hand has an obvious anatomical error: EXACTLY SIX separated digits in total, consisting of ONE thumb and FIVE long fingers, all clearly visible, with an unnaturally wide palm. No wounds, no injury, no blood, no scars. This is an intentionally synthetic failure case illustrating that sharpness does not imply structural fidelity. Center the hand with comfortable margins, show the whole wrist and fingertips. No text, labels, logos, watermark, frame, extra hands or people. Generate only this one photograph, not a layout or collage."
+  },
+  "evaluation_diversity.png": {
+    "source": "https://arxiv.org/abs/1904.06991",
+    "description": "Original synthetic teaching illustration generated with built-in imagegen, not copied from the paper. The cited paper is a conceptual reference. One dog portrait repeated exactly four times in HTML illustrates extreme mode collapse.",
+    "sha256": "ff9642a410c60b6ce66572b015eb91d78235cfe0050c0449173299bf7fc67135",
+    "asset_kind": "original synthetic teaching illustration",
+    "generation_prompt": "Use case: scientific-educational. Asset: one standalone square photo-like example for a generative-model evaluation lecture. A golden retriever sitting facing the camera in a grassy green park, waist-up portrait with full head and shoulders, soft natural daylight and softly blurred park background. Sharp realistic fur and correct anatomy, centered and attractive simple composition. The lecturer will repeat this exact image in a 2-by-2 grid to illustrate a generator returning the same sample, so make only ONE dog portrait, NOT a collage or grid. No text, letters, numbers, labels, logos or watermarks. This is a synthetic explanatory image, not a real person's photograph."
+  },
+  "evaluation_alignment.png": {
+    "source": "https://arxiv.org/abs/2404.01291",
+    "description": "Original synthetic teaching illustration generated with built-in imagegen, not copied from the paper. The cited paper is a conceptual reference. Two apples contradict the slide condition asking for three apples.",
+    "sha256": "8c047cd063363af4974de959e6535d4daf02d6cd5739fe11053cb2c569ace5e2",
+    "asset_kind": "original synthetic teaching illustration",
+    "generation_prompt": "Use case: scientific-educational. Asset: one standalone square photorealistic illustration for a lecture on prompt-following failures. On a simple round white ceramic plate on a pale neutral tabletop, show EXACTLY TWO clearly separated red apples with natural stems. Both apples must be fully visible, easy to count, and realistic. There must be no other apples or fruit anywhere in the scene, including background or reflections. Soft studio light, high three-quarter camera angle, clean composition, enough margin around the plate. This intentionally contradicts a later slide caption requesting THREE red apples; do not render that caption or any text. No text, labels, border, logos, collage or watermark."
   }
 }

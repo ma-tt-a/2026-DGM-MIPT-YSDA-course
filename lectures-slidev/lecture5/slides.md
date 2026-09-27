@@ -1016,52 +1016,74 @@ sourceFrame: "26"
 class: theorems
 ---
 
-# Evaluation of Likelihood-Free Models
+# What Makes a Good Generator?
 
-<div class="block">
+Likelihood alone does not tell us whether samples are useful for the target task.
 
-## Likelihood-Based Models
-
-- **Train:** fit the model.
-- **Validation:** tune hyperparameters.
-- **Test:** assess generalization by reporting likelihood.
-
-</div>
-
+<div class="columns" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 24px;">
 <div v-click="1">
 
-Not all models have tractable likelihoods (VAE: compare ELBO values; GAN: **???**).
+## Fidelity
+
+Does each sample look plausible?
+
+<img src="/figs/evaluation_fidelity.png" alt="Synthetic failure case: a sharp photograph-like image of a hand with six digits." style="width: 100%; height: 230px; object-fit: contain; margin: 16px auto;" />
+
+Sharp, but anatomically wrong.
 
 </div>
+<div v-click="2">
 
-<div class="block" v-click="2">
+## Coverage & Diversity
 
-## Desirable Properties for Samples
+Does the set cover the data?
 
-<div class="columns">
-<div>
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: 230px; height: 230px; margin: 16px auto;">
+<img src="/figs/evaluation_diversity.png" alt="Synthetic run 1: the same dog portrait." style="width: 111px; height: 111px; object-fit: cover;" />
+<img src="/figs/evaluation_diversity.png" alt="Synthetic run 2: the same dog portrait." style="width: 111px; height: 111px; object-fit: cover;" />
+<img src="/figs/evaluation_diversity.png" alt="Synthetic run 3: the same dog portrait." style="width: 111px; height: 111px; object-fit: cover;" />
+<img src="/figs/evaluation_diversity.png" alt="Synthetic run 4: the same dog portrait." style="width: 111px; height: 111px; object-fit: cover;" />
+</div>
 
-Sharpness
-
-<img src="/figs/sharpness.png" alt="sharpness" style="width: 100%; height: 155px; object-fit: contain; margin: 0 auto;" />
-
+The same output on every run.
 
 </div>
 <div v-click="3">
 
-Diversity
+## Condition Alignment
 
-<img src="/figs/diversity.png" alt="diversity" style="width: 100%; height: 155px; object-fit: contain; margin: 0 auto;" />
+Does it follow the condition?
 
+<img src="/figs/evaluation_alignment.png" alt="Synthetic failure case: exactly two red apples on a white plate although the condition asks for three." style="width: 100%; height: 230px; object-fit: contain; margin: 16px auto;" />
+
+Prompt: “Three red apples.”<br>
+Result: only two.
 
 </div>
 </div>
 
-</div>
+<div class="source">Illustrative failure cases created for this lecture.<br><a href="https://arxiv.org/abs/1511.01844">Theis L. et al. A Note on the Evaluation of Generative Models, 2016</a> · <a href="https://arxiv.org/abs/1904.06991">Kynkäänniemi T. et al. Improved Precision and Recall Metric for Assessing Generative Models, 2019</a><br><a href="https://arxiv.org/abs/2404.01291">Lin Z. et al. Evaluating Text-to-Visual Generation with Image-to-Text Generation, 2024</a></div>
 
-
-
-<div class="source"><a href="https://deepgenerativemodels.github.io">image credit: https://deepgenerativemodels.github.io</a></div>
+<!--
+The author requested replacing the dated Sharpness / Diversity introduction with
+Fidelity / Coverage & Diversity / Condition Alignment, including visual failures.
+The hand, dog, and apples are deliberately created synthetic teaching examples,
+not empirical outputs from an evaluated generator. The dog image is repeated
+exactly in HTML to illustrate extreme mode collapse, not four independent draws.
+Coverage concerns the target distribution: arbitrary variation or noise alone is
+not sufficient. The repeated-dog example assumes a non-degenerate target with
+many valid images. Conditional diversity is assessed for a fixed condition;
+condition alignment is relevant when a condition is given.
+A sharp image can have wrong anatomy; a plausible image can violate its prompt;
+high-quality individual samples do not establish distributional coverage.
+Likelihood remains useful for density estimation and model comparison, but it
+alone does not establish task-specific visual quality or usefulness.
+The three axes are complementary, not mathematically independent or exhaustive.
+Existing downstream slides introduce distributional metrics, precision/recall,
+text-image alignment, preference scores, and human judgments.
+Historical source of the replaced illustrations:
+<a href="https://deepgenerativemodels.github.io">Stanford Deep Generative Models</a>.
+-->
 
 ---
 clicks: 0
