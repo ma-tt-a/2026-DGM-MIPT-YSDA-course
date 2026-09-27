@@ -704,9 +704,9 @@ $$
 <div class="source"><a href="https://yang-song.github.io/blog/2021/score/">Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021</a></div>
 
 ---
-clicks: 4
+clicks: 3
 sourceFrame: "22"
-class: theorems derivation
+class: theorems
 ---
 
 # Denoising Score Matching
@@ -715,11 +715,11 @@ class: theorems derivation
 
 ## Theorem
 
+Under mild regularity conditions, the last term is independent of $\btheta$:
+
 $$
-\begin{aligned}
-&\bbE_{q(\bx_{\sigma})}\underbrace{\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2}_{h(\bx_{\sigma})}\\
-&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta)
-\end{aligned}
+\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta).
 $$
 
 </div>
@@ -727,33 +727,44 @@ $$
 
 ## Proof
 
-$$ {1|all} {at:2}
-\begin{aligned}
-\bbE_{q(\bx_{\sigma})}h(\bx_{\sigma})&=\int{\color{#8854c0}q(\bx_{\sigma})}h(\bx_{\sigma})d\bx_{\sigma}\\
-&=\int\left({\color{#8854c0}\int q(\bx_{\sigma}|\bx)\pd(\bx)d\bx}\right)h(\bx_{\sigma})d\bx_{\sigma}=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}h(\bx_{\sigma})
-\end{aligned}
+For any integrable $h$, marginalize the joint distribution:
+
+$$
+\bbE_{q(\bx_{\sigma})}h(\bx_{\sigma})
+=\int\left({\color{#8854c0}\int q(\bx_{\sigma}|\bx)\pd(\bx)d\bx}\right)h(\bx_{\sigma})d\bx_{\sigma}
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}h(\bx_{\sigma}).
 $$
 
+<div v-click="2">
+
+Expand the squared error:
+
+$$ {1|all} {at:3}
+\begin{gathered}
+\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2\\
+=\bbE_{q(\bx_{\sigma})}\|\bs_{\btheta,\sigma}(\bx_{\sigma})\|_2^2
++\underbrace{\bbE_{q(\bx_{\sigma})}\|\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\|_2^2}_{C_1}
+-2{\color{teal}\bbE_{q(\bx_{\sigma})}\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right]}.
+\end{gathered}
+$$
+
+</div>
 <div v-click="3">
 
-$$ {1|all} {at:4}
-\begin{aligned}
-&\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2\\
-&=\bbE_{q(\bx_{\sigma})}\Bigl[\|\bs_{\btheta,\sigma}(\bx_{\sigma})\|^2+\underbrace{\|\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\|_2^2}_{\text{const}(\btheta)}\\
-&\hspace{5em}-2{\color{teal}\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})}\Bigr]
-\end{aligned}
-$$
+The score-norm term $C_1$ is independent of $\btheta$.
 
 </div>
 </div>
-
 
 <div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
+
+<!-- Compact proof, part 1. Assume the displayed expectations are finite and differentiation/integration may be interchanged. Marginalization applies to any integrable h, including the model squared norm. -->
 
 ---
 clicks: 5
 sourceFrame: "23"
-class: theorems derivation
+mergedSourceFrames: [24]
+class: theorems
 ---
 
 # Denoising Score Matching
@@ -762,88 +773,48 @@ class: theorems derivation
 
 ## Theorem
 
+Under mild regularity conditions, the last term is independent of $\btheta$:
+
 $$
-\begin{aligned}
-&\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2\\
-&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta)
-\end{aligned}
+\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta).
 $$
 
 </div>
-<div class="block">
+<div class="block" v-click="1">
 
 ## Proof (Continued)
 
-$$ {1|1-2|1-3|1-4|1-5|all} {at:1}
-\begin{aligned}
-&\bbE_{q(\bx_{\sigma})}\left[{\color{teal}\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})}\right]\\
-&=\int q(\bx_{\sigma})\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\frac{\nabla_{\bx_{\sigma}}{\color{#8854c0}q(\bx_{\sigma})}}{q(\bx_{\sigma})}\right]d\bx_{\sigma}\\
-&=\int\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\left({\color{#8854c0}\int q(\bx_{\sigma}|\bx)\pd(\bx)d\bx}\right)\right]d\bx_{\sigma}\\
-&=\int\int\pd(\bx)\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{olive}\nabla_{\bx_{\sigma}}q(\bx_{\sigma}|\bx)}\right]d\bx_{\sigma}d\bx\\
-&=\int\int\pd(\bx){\color{olive}q(\bx_{\sigma}|\bx)}\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{olive}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right]d\bx_{\sigma}d\bx\\
-&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left[{\color{teal}\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right]
-\end{aligned}
+Rewrite the mixed term:
+
+$$ {1|1-2|all} {at:2}
+\begin{gathered}
+{\color{teal}\bbE_{q(\bx_{\sigma})}\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right]}
+=\int\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}q(\bx_{\sigma})d\bx_{\sigma}\\
+=\int\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\left({\color{#8854c0}\int q(\bx_{\sigma}|\bx)\pd(\bx)d\bx}\right)d\bx_{\sigma}
+=\int\int\pd(\bx)\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{olive}\nabla_{\bx_{\sigma}}q(\bx_{\sigma}|\bx)}\,d\bx\,d\bx_{\sigma}\\
+={\color{olive}\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}}\left[{\color{teal}\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right].
+\end{gathered}
+$$
+
+<div v-click="4">
+
+Substitute and complete the square:
+
+$$ {1|all} {at:5}
+\begin{gathered}
+\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left[\|\bs_{\btheta,\sigma}(\bx_{\sigma})\|_2^2-2\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right]+C_1\\
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta).
+\end{gathered}
 $$
 
 </div>
-
+</div>
 
 <div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
 
----
-clicks: 3
-sourceFrame: "24"
-class: theorems derivation
----
-
-# Denoising Score Matching
-
-<div class="block">
-
-## Theorem
-
-$$
-\begin{aligned}
-&\bbE_{q(\bx_{\sigma})}\underbrace{\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2}_{h(\bx_{\sigma})}\\
-&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta)
-\end{aligned}
-$$
-
-</div>
-<div class="block">
-
-## Proof (Continued)
-
-$$
-\bbE_{q(\bx_{\sigma})}h(\bx_{\sigma})=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}h(\bx_{\sigma})
-$$
-
-<div v-click="1">
-
-$$
-\begin{aligned}
-&\bbE_{q(\bx_{\sigma})}\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right]\\
-&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right]
-\end{aligned}
-$$
-
-</div>
-<div v-click="2">
-
-$$ {1-3|all} {at:3}
-\begin{aligned}
-&\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2\\
-&={\color{olive}\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}}\Bigl[\|\bs_{\btheta,\sigma}(\bx_{\sigma})\|^2\\
-&\hspace{4em}-2\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\Bigr]+\text{const}(\btheta)\\
-&={\color{olive}\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-{\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right\|_2^2+\text{const}(\btheta)
-\end{aligned}
-$$
-
-</div>
-</div>
-
-
-<div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
+<!-- Compact proof, part 2, incorporates source frame 24. The last mixed-term equality uses grad q = q grad log q and Fubini. const(theta) = C_1 - E_joint ||grad log q(x_sigma | x)||^2, independent of theta. The theorem remains visible on both slides. -->
 
 ---
 clicks: 5
