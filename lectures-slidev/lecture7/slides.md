@@ -392,12 +392,15 @@ $$
 
 ## Theorem (Feller, 1949)
 
-If $\beta_t$ is sufficiently small, $q(\bx_{t-1}|\bx_t)$ is Gaussian <span style="color:gray">(thus, diffusion requires $T\approx1000$ steps for convergence)</span>
+If $\beta_t$ is sufficiently small, $q(\bx_{t-1}|\bx_t)$ is approximately Gaussian.
 
 </div>
+
+The original DDPM used $T=1000$ steps. Faster sampling methods will be discussed later.
+
 <img v-click="1" src="/figs/inverse_distr_1d.png" alt="Reverse distributions for different diffusion step sizes" style="width:100%;height:270px;object-fit:contain" />
 
-<div class="source">Feller W. On the theory of stochastic processes, with particular reference to applications, 1949<br><a href="https://arxiv.org/abs/2112.07804">Xiao Z., Kreis K., Vahdat A. Tackling the generative learning trilemma with denoising diffusion GANs, 2021</a></div>
+<div class="source">Feller W. On the theory of stochastic processes, with particular reference to applications, 1949<br><a href="https://arxiv.org/abs/2006.11239">Ho J. et al. Denoising Diffusion Probabilistic Models, 2020</a><br><a href="https://arxiv.org/abs/2112.07804">Xiao Z., Kreis K., Vahdat A. Tackling the generative learning trilemma with denoising diffusion GANs, 2021</a></div>
 
 ---
 clicks: 0

@@ -236,41 +236,47 @@
   {
     "slide": 40,
     "frame": 33,
-    "title": "CLIP Score",
-    "clicks": 2
+    "title": "CLIP Similarity and Human Preferences",
+    "clicks": 1
   },
   {
     "slide": 41,
+    "frame": "extension: 33",
+    "title": "Does the Image Follow the Prompt?",
+    "clicks": 1
+  },
+  {
+    "slide": 42,
     "frame": "auto: Human Eval",
     "title": "Outline",
     "clicks": 0
   },
   {
-    "slide": 42,
+    "slide": 43,
     "frame": 34,
     "title": "Human Evaluation",
     "clicks": 1
   },
   {
-    "slide": 43,
+    "slide": 44,
     "frame": "auto: Langevin Dynamics",
     "title": "Outline",
     "clicks": 0
   },
   {
-    "slide": 44,
+    "slide": 45,
     "frame": "imported: 6:13",
     "title": "Energy-Based Models",
     "clicks": 2
   },
   {
-    "slide": 45,
+    "slide": 46,
     "frame": "imported: 6:14",
     "title": "Langevin Dynamics",
     "clicks": 1
   },
   {
-    "slide": 46,
+    "slide": 47,
     "frame": 35,
     "title": "Summary",
     "clicks": 0

@@ -9,5 +9,17 @@
     "asset_url": "https://arxiv.org/html/2012.09841v3/img/fexperiments/qualcomp/00.jpg",
     "description": "Esser et al., Taming Transformers, Figure 12, top row. Original JPEG unchanged. The slide viewport shows its first three columns (input, DALL-E discrete VAE f8/8192, VQGAN f8/8192); both f16 columns remain outside the viewport. This is a complete-model comparison, not a loss ablation.",
     "sha256": "0b4c2723e80a95c7744596761743164335e001130f58d974bc9a3353365bed0d"
+  },
+  "prompt_relation.svg": {
+    "source": "https://arxiv.org/abs/2404.01291",
+    "description": "Original explanatory SVG created for Lecture 5 to illustrate the cited paper's motivation about spatial-relation errors. Not copied or traced from the paper. Same red cube and blue sphere with vertical relation reversed. Qualitative schematic only; no measured metric scores.",
+    "sha256": "d1f2be5a2ecd571dd71a24a4e363ad6be013f86d7a2bd767be593ea98ebc0909",
+    "asset_kind": "original explanatory drawing"
+  },
+  "alice_ai_art_2_evaluation.png": {
+    "source": "https://habr.com/ru/companies/yandex/articles/1058630/",
+    "asset_url": "https://habrastorage.org/r/w1560/getpro/habr/upload_files/f27/918/c8f/f27918c8ff29f920bbeed3c3534a1930.png",
+    "description": "Author-selected Alice AI ART 2.0 image-editing evaluation figure from the Yandex article. Original downloaded PNG retained byte-for-byte, including Russian labels. Shows relevance, preservation, and defects with good/bad examples.",
+    "sha256": "cd0c5b363b8f3f88424edc09307645fe4ad81a735191ab45b484dec67781ab38"
   }
 }

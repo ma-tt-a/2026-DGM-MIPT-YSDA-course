@@ -1408,43 +1408,113 @@ sourceFrame: "auto: CLIP Score"
 </div>
 
 ---
-clicks: 2
+clicks: 1
 sourceFrame: "33"
 class: theorems
 ---
 
-# CLIP Score
+# CLIP Similarity and Human Preferences
 
-<div class="columns">
-<div class="block">
-
-## Unconditional Model
-
-<img src="/figs/uncond_model.png" alt="uncond model" style="width: 100%; height: 140px; object-fit: contain; margin: 0 auto;" />
-
-</div>
+Score an image $\bx$ for a text prompt $t$.
 
 <div class="block">
 
-## Conditional Model
+## CLIP: Learn from Image–Caption Pairs
 
-<img src="/figs/cond_model.png" alt="cond model" style="width: 100%; height: 140px; object-fit: contain; margin: 0 auto;" />
+Map images and text into a shared embedding space:
+
+$$
+s_{\text{CLIP}}(\bx,t)=\cos\!\left(\bff_{\text{img}}(\bx),\bff_{\text{text}}(t)\right).
+$$
 
 </div>
 
-
-</div>
 <div v-click="1">
+<div class="block">
 
-We need a way to measure not only the quality of the generated image, but also how well it's aligned with the prompt.
+## PickScore: Learn from Human Choices
+
+Fine-tune CLIP on pairs: for the same prompt, a human prefers $\bx^+$ to $\bx^-$.
+
+$$
+\bbP_{\btheta}(\bx^+\succ\bx^-\mid t)=
+\frac{\exp r_{\btheta}(\bx^+,t)}{\exp r_{\btheta}(\bx^+,t)+\exp r_{\btheta}(\bx^-,t)}.
+$$
+
+Train the score $r_{\btheta}$ to assign higher probability to the human choice.
 
 </div>
 
-<img src="/figs/clip.png" alt="clip" style="width: 100%; height: 220px; object-fit: contain; margin: 0 auto;" v-click="2" />
+Other preference models: **[ImageReward](https://arxiv.org/abs/2304.05977)**, **[HPSv2](https://arxiv.org/abs/2306.09341)**.
 
+</div>
 
+<div class="source"><a href="https://arxiv.org/abs/2103.00020">Radford A. et al. Learning Transferable Visual Models From Natural Language Supervision, 2021</a><br><a href="https://arxiv.org/abs/2305.01569">Kirstain Y. et al. Pick-a-Pic: An Open Dataset of User Preferences for Text-to-Image Generation, 2023</a></div>
 
-<div class="source"><a href="https://arxiv.org/abs/2103.00020">Radford A. et al. Learning transferable visual models from natural language supervision, 2021</a></div>
+<!--
+The displayed CLIP score is cosine similarity, the common text-to-image convention.
+The original captioning CLIPScore additionally clips negative values and multiplies
+by 2.5 (Hessel et al., https://arxiv.org/abs/2104.08718). Such conventions change
+reported scales; do not compare raw scores across implementations.
+PickScore retains CLIP's two encoders and a learned logit scale; r_theta absorbs
+that scale. Fine-tuning changes the supervision from matching image-caption pairs
+to pairwise preferences, not the broad two-encoder architecture. For a strict human
+choice, minimize -log P_theta(x+ preferred to x- | t). Pick-a-Pic also includes ties,
+represented by a target distribution (1/2,1/2) in the two-way cross-entropy.
+A reward-model score predicts preferences in its training population; it is not a
+calibrated absolute image-quality score or a guarantee of prompt correctness.
+ImageReward: https://arxiv.org/abs/2304.05977. HPSv2: https://arxiv.org/abs/2306.09341.
+The earlier unconditional/conditional cartoons and CLIP architecture image are
+replaced by this compact explanation to keep the whole topic to two slides.
+-->
+
+---
+clicks: 1
+sourceFrame: "extension: 33"
+class: theorems
+---
+
+# Does the Image Follow the Prompt?
+
+Prompt $t$: **“A red cube above a blue sphere.”**
+
+<img src="/figs/prompt_relation.svg" alt="Original schematic: the left image has a red cube above a blue sphere; the right image reverses their vertical positions." style="width: 100%; height: 210px; object-fit: contain; margin: 8px auto;" />
+
+Same objects and colors; opposite spatial relation. CLIP similarity can miss this.
+
+<div v-click="1">
+<div class="block">
+
+## VQAScore: Ask a Visual Question
+
+$q(t)$: “Does this image show a red cube above a blue sphere?”
+
+$$
+s_{\text{VQA}}(\bx,t)=p_{\text{VQA}}(\text{Yes}\mid\bx,q(t)).
+$$
+
+</div>
+
+**GenEval / DPG-Bench:** test objects, counts, attributes, and relations across prompts.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2404.01291">Lin Z. et al. Evaluating Text-to-Visual Generation with Image-to-Text Generation, 2024</a><br><a href="https://arxiv.org/abs/2310.11513">Ghosh D. et al. GenEval: An Object-Focused Framework for Evaluating Text-to-Image Alignment, 2023</a><br><a href="https://arxiv.org/abs/2403.05135">Hu X. et al. ELLA: Equip Diffusion Models with LLM for Enhanced Semantic Alignment, 2024 (DPG-Bench)</a></div>
+
+<!--
+Original schematic, not generated samples and not a measured CLIP/VQA experiment.
+No numerical scores or guaranteed ranking are claimed for these two drawings.
+VQAScore uses the model likelihood of the answer "Yes", not a binary generated
+answer and not a calibrated probability that the image is objectively correct.
+The paper's question template is "Does this figure show '{text}'? Please answer
+yes or no." The displayed question is the natural-language instantiation for our
+example; prompt-template choices are part of the evaluation protocol.
+VQAScore asks about the whole prompt. Do not conflate it with decomposing the prompt
+into separate object/relation questions: GenEval uses object-focused checks, while
+DPG-Bench evaluates dense prompts using a dependency-aware question graph.
+Preference and compositional correctness can disagree; no learned evaluator is
+perfect. The next Human Evaluation slide motivates validation with human judgments.
+-->
 
 ---
 clicks: 0
@@ -1470,14 +1540,30 @@ class: theorems
 
 # Human Evaluation
 
+<div class="columns" style="grid-template-columns: 0.72fr 1.28fr; align-items: start; margin-top: 12px;">
+<div>
+
 - No automated metric is perfect.
 - The best way to evaluate generative models is by human assessment.
 - It's important to assess various properties.
-<img src="/figs/yaart_2.5.png" alt="yaart 2.5" style="width: 100%; height: 315px; object-fit: contain; margin: 0 auto;" v-click="1" />
 
+</div>
 
+<img src="/figs/alice_ai_art_2_evaluation.png" alt="Alice AI ART 2.0 image-editing evaluation: good and bad examples for instruction relevance, preservation of unchanged content, and visual defects." style="width: 100%; height: 530px; object-fit: contain; margin: 0 auto;" v-click="1" />
 
-<div class="source"><a href="https://ya.ru/ai/art">YandexART 2.5, 2025</a></div>
+</div>
+
+<div class="source"><a href="https://habr.com/ru/companies/yandex/articles/1058630/">Yandex. Alice AI ART 2.0: A Unified Model for Image Generation and Editing</a></div>
+
+<!--
+The author requested this exact image and article. It illustrates evaluation of
+image editing (I2I): instruction relevance, preservation, and defects. The full
+image is preserved without cropping or translation; its labels are in Russian.
+The article uses human assessors as well as automated reward models / VLM judges;
+this illustration presents evaluation criteria rather than an Arena-style ranking.
+Historical source of the replaced Beamer illustration:
+<a href="https://ya.ru/ai/art">YandexART 2.5</a>.
+-->
 
 ---
 clicks: 0
@@ -1582,5 +1668,5 @@ class: summary
 - WGAN uses Kantorovich-Rubinstein duality to estimate a distance informative even for disjoint supports; weight clipping constrains the critic.
 - FID compares Gaussian approximations; CMMD compares distributions of CLIP features using a kernel.
 - Precision-recall measures the balance between sample quality and diversity.
-- CLIP measures text-to-image alignment; human assessment remains the gold standard for generated image quality.
+- Image–text similarity, human preference, and compositional correctness require different evaluation signals.
 - Langevin dynamics uses log-density gradients and Gaussian noise to sample from an unnormalized model.

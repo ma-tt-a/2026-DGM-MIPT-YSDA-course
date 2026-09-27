@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="210" viewBox="0 0 1100 210" role="img" aria-labelledby="title desc">
+<title id="title">The same objects in different spatial relations</title>
+<desc id="desc">A red cube is above a blue sphere on the left. Their positions are reversed on the right.</desc>
+<defs>
+  <radialGradient id="blue" cx="32%" cy="28%" r="76%"><stop offset="0" stop-color="#8ec5ea"/><stop offset=".6" stop-color="#438cbd"/><stop offset="1" stop-color="#23618e"/></radialGradient>
+  <g id="cube"><path d="M0 -32 L32 -18 L0 -4 L-32 -18 Z" fill="#ec807a"/><path d="M-32 -18 L0 -4 L0 33 L-32 19 Z" fill="#cb494b"/><path d="M0 -4 L32 -18 L32 19 L0 33 Z" fill="#a9373f"/></g>
+  <g id="sphere"><circle r="31" fill="url(#blue)"/></g>
+</defs>
+<rect x="155" y="4" width="340" height="201" rx="8" fill="#f5f8fa" stroke="#ccdce5"/>
+<rect x="605" y="4" width="340" height="201" rx="8" fill="#f5f8fa" stroke="#ccdce5"/>
+<use href="#cube" transform="translate(325 50)"/>
+<use href="#sphere" transform="translate(325 130)"/>
+<use href="#sphere" transform="translate(775 50)"/>
+<use href="#cube" transform="translate(775 130)"/>
+<text x="325" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#00868b">Matches the prompt</text>
+<text x="775" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#a9373f">Wrong relation</text>
+</svg>
