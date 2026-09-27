@@ -764,7 +764,7 @@ $$
 ---
 clicks: 3
 sourceFrame: "18"
-class: derivation theorems
+class: theorems
 ---
 
 # Discrete VAE Latents
@@ -900,7 +900,7 @@ class: theorems
 # Vector Quantized VAE (VQ-VAE)
 
 - The encoder outputs a continuous vector $\bz_e=\NN_{e,\bphi}(\bx)\in\bbR^L$.
-- Quantization deterministically maps $\bz_e$ to its quantized codebook vector $\bz_q$.
+- Quantization **deterministically** maps $\bz_e$ to its quantized codebook vector $\bz_q$.
 - The decoder is conditioned on codebook entries $\be_c$, i.e., via $\pt(\bx|\be_c)$ (instead of $\pt(\bx|c)$).
 
 <div class="block" v-click="1">
@@ -956,7 +956,7 @@ $$
 
 ## ELBO
 
-<div class="math-chain" style="margin: 8px 0">
+<div class="math-chain" style="margin: 8px 0; text-align: center">
 <span>
 
 $\displaystyle\cL_{\bphi,\btheta}(\bx)=\bbE_{q_{\bphi}(c|\bx)}\log\pt(\bx|\be_c)-\log K$
@@ -974,7 +974,7 @@ where $\bz_q=\be_{k^*}$, $k^*=\argmin_k\|\bz_e-\be_k\|$.
 
 </div>
 </div>
-<img v-click="3" src="/figs/vqvae.png" alt="VQ-VAE forward pass through encoder, nearest codebook entry and decoder" class="wide-figure" style="height: 200px; margin: 10px auto" />
+<img v-click="3" src="/figs/vqvae.png" alt="VQ-VAE forward pass through encoder, nearest codebook entry and decoder" class="wide-figure" style="height: 220px; margin: 10px auto" />
 <div v-click="4">
 
 **Challenge:** The $\argmin$ operation is non-differentiable.
@@ -986,7 +986,7 @@ where $\bz_q=\be_{k^*}$, $k^*=\argmin_k\|\bz_e-\be_k\|$.
 ---
 clicks: 4
 sourceFrame: "23"
-class: derivation theorems
+class: theorems
 ---
 
 <script setup>
@@ -1260,14 +1260,14 @@ class: figure-slide
 <TaxonomyDiagram generative-adversarial-network class="taxonomy" />
 
 ---
-clicks: 2
+clicks: 3
 sourceFrame: "28"
 class: theorems
 ---
 
 # Generative Adversarial Networks (GAN)
 
-- The more expressive the discriminator, the closer we get to the optimal $\pt(\bx)$.
+- The more expressive the discriminator $p(y|\bx)$, the closer we get to the optimal $\pt(\bx)$.
 - Standard classifiers are trained by minimizing cross-entropy loss $-\bbE_{\hat p(\bx,y)}\log p(y|\bx)$ with $\hat p(\bx,y)=\frac{1}{2}\bbI_{y=1}\pd(\bx)+\frac{1}{2}\bbI_{y=0}\pt(\bx)$.
 
 <div class="block" v-click="1">
@@ -1288,6 +1288,12 @@ $$
 ## Generative Model
 
 Suppose $\pt(\bx,\bz)=\pt(\bx|\bz)p(\bz)$, where $p(\bz)$ is a base distribution, and $\pt(\bx|\bz)=\delta(\bx-\bG_{\btheta}(\bz))$ is deterministic.
+
+</div>
+
+<div class="takeaway" v-click="3">
+
+**Connection to VAEs:** Both models sample $\bz\sim p(\bz)$. A VAE then samples $\bx\sim\pt(\bx|\bz)$; here, the decoder is **deterministic**: $\bx=\bG_{\btheta}(\bz)$.
 
 </div>
 
@@ -1329,6 +1335,8 @@ $$
 $$
 \min_G\max_D\left[\bbE_{\pd(\bx)}\log D(\bx)+\bbE_{p(\bz)}\log(1-D(\bG(\bz)))\right]
 $$
+
+**The last step is LOTUS** (Law of the Unconscious Statistician): use $\bx=\bG(\bz)$ to rewrite the expectation over $\pt(\bx)$ as an expectation over $p(\bz)$.
 
 </div>
 </div>
@@ -1415,10 +1423,9 @@ class: theorems
 
 ## Proof Continued (Fixed $D=D^*$)
 
-$$ {1-2|1-3|1-4} {at:1}
+$$ {1|1-2|1-3} {at:1}
 \begin{aligned}
-V(G,D^*)&=\bbE_{\pd(\bx)}\log\left(\frac{\pd(\bx)}{\pd(\bx)+\pt(\bx)}\right)\\
-&\quad+\bbE_{\pt(\bx)}\log\left(\frac{\pt(\bx)}{\pd(\bx)+\pt(\bx)}\right)\\
+V(G,D^*)&=\bbE_{\pd(\bx)}\log\left(\frac{\pd(\bx)}{\pd(\bx)+\pt(\bx)}\right)+\bbE_{\pt(\bx)}\log\left(\frac{\pt(\bx)}{\pd(\bx)+\pt(\bx)}\right)\\
 &=\KL\left(\pd(\bx)\,\|\,\frac{\pd(\bx)+\pt(\bx)}2\right)+\KL\left(\pt(\bx)\,\|\,\frac{\pd(\bx)+\pt(\bx)}2\right)-2\log2\\
 &=2\,\JSD(\pd(\bx)\,\|\,\pt(\bx))-2\log2.
 \end{aligned}
@@ -1431,7 +1438,7 @@ $$
 ## Jensen-Shannon Divergence (Symmetric KL Divergence)
 
 $$
-\JSD(\pd(\bx)\|\pt(\bx))=\frac12\left[\KL\left(\pd(\bx)\|{\color{teal}\star}\right)+\KL\left(\pt(\bx)\|{\color{teal}\star}\right)\right]
+\JSD(\pd(\bx)\|\pt(\bx))=\frac12\left[\KL\left(\pd(\bx)\,\|\,{\color{teal}\frac{\pd(\bx)+\pt(\bx)}{2}}\right)+\KL\left(\pt(\bx)\,\|\,{\color{teal}\frac{\pd(\bx)+\pt(\bx)}{2}}\right)\right]
 $$
 
 </div>
@@ -1512,7 +1519,7 @@ $$
 
 </div>
 
-<img src="/figs/gan_1.png" alt="gan 1" style="width: 100%; height: 180px; object-fit: contain; margin: 0 auto;" v-click="1" />
+<img src="/figs/gan_1.png" alt="gan 1" style="width: 100%; height: 230px; object-fit: contain; margin: 0 auto;" v-click="1" />
 
 <div v-click="2">
 
