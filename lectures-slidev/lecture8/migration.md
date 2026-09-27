@@ -1,5 +1,63 @@
 # Lecture 8: migration to Slidev
 
+## Guidance interpretation: minimal clarification, 2026-09-27
+
+The author chose to close the course-refresh interpretation item with two small
+changes to slide 26: the scaled conditional distribution is explicitly described
+**at a fixed noise level**, and the final reveal adds: "Very large gamma can reduce
+diversity and introduce artifacts." The original equations and four clicks remain;
+the practical caveat cites Sadat et al. (ICLR 2025). No predictor-corrector slide or
+required transfer of that detail to another lecture is pending. The lecture remains
+**33 slides / 74 states**. The original refresh timing estimate was not remeasured.
+
+Earlier author decisions are also closed in the local course-refresh report:
+the Summary item was obsolete because the current five bullets already omit
+"DDPMs are quite slow"; velocity-form CFG was moved to the existing L11 task,
+after velocity and flow matching in L9-L10. L8 retains score-form CFG.
+
+The final build includes the independently approved Recap clarification recorded
+below. Baseline source SHA-256 was
+`f53859f543deca2bc88f3d31afea24332eb7447510c337bae07ae9d68a6c386e`;
+the baseline PDFs already contained the Recap change. Relative to that baseline,
+only handout page **26** and reveal pages **52-56** differ at 1280x720; the other
+**32 handout pages / 69 reveal pages** are pixel-identical without masks.
+All 33 final reveal states equal their handout pages. The changed handout and all
+five reveal states were visually reviewed at full size.
+
+Finalization in the isolated `/private/tmp/dgm-l8-guidance-20260927/` installation
+passed source checks, **46 existing tests**, production build and both exports.
+`render-qa.py` checked all 107 PDF pages. Browser checks covered slides
+**2, 25-27 / 12 states**, including reverse clicks and both neighbor returns for
+slide 26; no overflow, raw math, missing resources, JS/HTTP errors or geometry
+changes remained. A transient first-load dev UI capture was repeated after resource
+compilation; the final Recap capture is clean. The L8:26 PDF/browser were compared
+at equal scale with the approved L1:35 PDF/browser references: Arial 37 px titles,
+24 px block headings, 24.96 px KaTeX, 12 px sources and navy/teal colors agree.
+The isolated dev server was stopped after QA. This is scoped visual verification;
+unchanged pages reuse the preceding verified exports.
+
+Before the scoped commit, the current diff contained only the four L8 files;
+neighboring tasks had committed their own work. Independent source review confirmed
+incoming L7 Slidev and outgoing L9 Beamer Recaps, repeated formulas/notation and
+Training/Sampling, five-bullet Summary, Outline, root README and artifact catalog.
+The previously recorded "convex combination" wording remains an inherited editorial
+observation outside this agreed edit. Shared infrastructure, Beamer and merged
+lectures were not changed. Publication required all **40 render inputs** to match
+the isolated build; both delivered PDFs match the verified files byte for byte.
+
+QA: `../output/qa/lecture8/guidance-scope-2026-09-27/`.
+
+- SHA-256 slides.md: `9f31b67ab5f95525950a1c4c0cc65a406c6c0ab44d6588095c6d825e0ce79ed6`.
+- SHA-256 slide-map.json: `af8ada0b619b5e09a635cec46ef1119214627c8e928b2a356b1da386dc85c171`.
+- SHA-256 Lecture8.pdf: `1840de1b5053fc87dc5b0d105750a623b4f902a7a4dc7a3e86e6b37c7f53318c`.
+- SHA-256 Lecture8-handout.pdf: `76f8dd542fc6ea107e6c5ded8e104e3731eca7d404bc1219e3cb1bc78012e00c`.
+
+## Recap synchronization with Lecture 7, 2026-09-27
+
+The author requested a consistency pass after changes to Lectures 3–7. Recap slide 2 now explicitly repeats the sufficiently-small-beta assumption and approximate Gaussian conclusion from L7:14; the same note on L7:15 was synchronized. Other L7→L8 equations, ELBO decomposition and DDPM Training/Sampling already agree. No slide/click/map, Summary or schedule change is needed.
+
+Source checks, finalization (33 handout /74 reveal pages), browser overflow/math/resource checks on slide 2 and returns from both neighbors pass. Exactly handout page 2 and reveal page 2 changed; all other 32/73 pages are pixel-identical to the previous PDFs. All final reveal states equal handout pages. The changed PDF was reviewed at 1280 px; fresh PDFs were copied only after render-input hashes matched the workspace. The common Lecture 1 typography is preserved. QA: `/private/tmp/dgm-recap-sync-20260927/lectures-slidev/output/qa/lecture8/`. This is scoped Recap validation, not a new full lecture audit.
+
 ## Text-guidance CFG sweep, 2026-09-27
 
 The author approved retaining slide 19 (the VQ-VAE-2 ostriches) and replacing only

@@ -59,7 +59,7 @@ q(\bx_{t-1}|\bx_t)&=\frac{q(\bx_t|\bx_{t-1}){\color{#8854c0}q(\bx_{t-1})}}{{\col
 \end{aligned}
 $$
 
-<span style="color:gray">Feller's theorem justifies this Gaussian assumption.</span>
+<span style="color:gray">If $\beta_t$ is sufficiently small, $q(\bx_{t-1}|\bx_t)$ is approximately Gaussian.</span>
 
 </div>
 
@@ -751,7 +751,7 @@ $$
 </div>
 <div class="block" v-click="1">
 
-## Scaled Conditional Distribution
+## Scaled Conditional Distribution at a Fixed Noise Level
 
 $$ {1|1-2|all} {at:2}
 \begin{aligned}
@@ -770,9 +770,11 @@ $$
 \hat p(\by|\bx_t)\propto p(\by|\bx_t)^\gamma.
 $$
 
+Very large $\gamma$ can reduce diversity and introduce artifacts.
+
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a><br><a href="https://arxiv.org/abs/2410.02416">Sadat S. et al. Eliminating Oversaturation and Artifacts of High Guidance Scales in Diffusion Models, 2025</a></div>
 
 ---
 clicks: 1
