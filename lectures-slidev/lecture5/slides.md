@@ -809,14 +809,17 @@ $$
 
 - The discriminator $D$ is replaced by function $f$: in WGAN, it is known as the **critic**, which is *not* a classifier.
 - *“Weight clipping is a clearly terrible way to enforce a Lipschitz constraint.”*
-  - If $c$ is large, optimizing the critic is hard.
-  - If $c$ is small, gradients may vanish.
+  - If $c$ is large, optimizing the critic is hard; if $c$ is small, gradients may vanish.
+
+**Gradient penalty** encourages the critic’s input-gradient norm to stay close to 1 on interpolations between real and generated samples.
+
+**Spectral normalization** controls layer-wise Lipschitz constants by dividing weight matrices by their largest singular values.
 
 </div>
 
 
 
-<div class="source"><a href="https://arxiv.org/abs/1701.07875">Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017</a></div>
+<div class="source"><a href="https://arxiv.org/abs/1701.07875">Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017</a><br><a href="https://arxiv.org/abs/1704.00028">Gulrajani I. et al. Improved Training of Wasserstein GANs, 2017</a><br><a href="https://arxiv.org/abs/1802.05957">Miyato T. et al. Spectral Normalization for Generative Adversarial Networks, 2018</a></div>
 
 ---
 clicks: 0
