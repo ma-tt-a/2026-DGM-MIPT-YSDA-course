@@ -511,7 +511,7 @@ The decoder receives $\bz\sim p(\bz)$, then generates $\bx\sim\pt(\bx|\bz)$.
 <div>
 
 - $q_{\bphi}(\bz|\bx)=\cN(\bmu_{\bphi}(\bx),\bsigma^2_{\bphi}(\bx))$ is unimodal.
-- It is generally believed that the **mismatch between** $p(\bz)$ **and** $\qagg(\bz)$ is the primary explanation for blurry VAE-generated images.
+- A mismatch between the prior and the aggregated posterior can degrade sample quality. Matching these distributions does not by itself eliminate blurriness.
 
 </div>
 <div>
@@ -785,7 +785,7 @@ $$
 </li>
 <li>
 
-Suppose the VAE adopts a discrete latent variable $c$ with prior $p(c)=\Uniform\{1,\dots,K\}$.
+For tokenizer training, fix $p(c)=\Uniform\{1,\dots,K\}$.
 
 </li>
 </ul>
@@ -925,7 +925,7 @@ $$
 </div>
 <div v-click="3">
 
-**Note:** The KL regularizer becomes constant and has no direct effect on the ELBO objective in this case.
+**Constant KL:** The aggregated posterior is not pushed toward the uniform prior. We therefore fit a prior to it in a second stage.
 
 </div>
 
@@ -1022,6 +1022,46 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/1711.00937">Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017</a></div>
 
 ---
+clicks: 2
+sourceFrame: "extension: 25"
+class: theorems
+---
+
+# VQ-VAE: Learning a Prior over Codes
+
+The **tokenizer** (encoder + quantizer) produces $M=WH$ codes: $\bc=(c_1,\dots,c_M)$.
+
+<div class="block">
+
+## Target: Aggregated Posterior (ELBO Surgery)
+
+$$
+p_{\bpsi}(\bc)\approx\qagg(\bc)=\frac{1}{n}\sum_{i=1}^n q_{\bphi}(\bc|\bx_i).
+$$
+
+</div>
+<div class="block" v-click="1">
+
+## Training
+
+1. Fix the trained tokenizer and decoder.
+2. Encode the training images $\bx_i$ into code maps $\bc_i$.
+3. Fit the **autoregressive prior** (Lecture 1) by maximum likelihood:
+
+$$
+\sum_{i=1}^n\log p_{\bpsi}(\bc_i)=\sum_{i=1}^n\sum_{m=1}^M\log p_{\bpsi}(c_{i,m}|c_{i,1},\dots,c_{i,m-1})\rightarrow\max_{\bpsi}.
+$$
+
+</div>
+<div class="takeaway" v-click="2">
+
+$p_{\bpsi}(\bc)$ → **code map** → **codebook lookup** → **decoder** → $\bx$.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/1711.00937">Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017</a></div>
+
+---
 clicks: 0
 sourceFrame: "24"
 class: theorems
@@ -1029,17 +1069,17 @@ class: theorems
 
 # Vector Quantized VAE-2 (VQ-VAE-2)
 
-Extension to the spatial domain: $\bc\in\{1,\dots,K\}^{W\times H}$
+Spatial codes: $\bc\in\{1,\dots,K\}^{W\times H}$. VQ-VAE-2 combines code maps at multiple resolutions.
 
 $$
-q_{\bphi}(\bc|\bx)=\prod_{i=1}^W\prod_{j=1}^H q(c_{ij}|\bx,\bphi);\quad p(\bc)=\prod_{i=1}^W\prod_{j=1}^H\Uniform\{1,\dots,K\}.
+q_{\bphi}(\bc|\bx)=\prod_{i=1}^W\prod_{j=1}^H q(c_{ij}|\bx,\bphi).
 $$
 
 <div class="block">
 
-## Sample Diversity
+## Sample Diversity: Learned Autoregressive Priors
 
-<img src="/figs/vqvae2_diversity.png" alt="Diverse image samples from VQ-VAE-2" class="wide-figure" style="height: 350px; margin: 12px auto" />
+<img src="/figs/vqvae2_diversity.png" alt="Class-conditional samples from VQ-VAE-2 with learned autoregressive priors, compared with BigGAN deep" class="wide-figure" style="height: 320px; margin: 12px auto" />
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/1906.00446">Razavi A., Oord A., Vinyals O. Generating Diverse High-Fidelity Images with VQ-VAE-2, 2019</a></div>
@@ -1052,10 +1092,12 @@ class: theorems
 
 # Vector Quantized VAE (VQ-VAE): Final algorithm
 
-<div class="columns" style="grid-template-columns: 2.7fr 1fr; gap: 26px">
+<div class="columns" style="grid-template-columns: 1.9fr 1fr; gap: 30px">
 <div class="block" style="margin: 0">
 
 ## Training
+
+**Stage 1: tokenizer.**
 
 <ol style="margin: 0">
 <li>
@@ -1065,42 +1107,42 @@ Sample $\bx\sim\pd(\bx)$.
 </li>
 <li>
 
-Compute the encoding $\bz_e=\NN_{e,\bphi}(\bx)$.
+Compute encoder outputs $\bz_{e,m}=\NN_{e,\bphi}(\bx)_m$.
 
 </li>
 <li>
 
-Compute the quantized representation (per spatial location if applicable):
+Compute the quantized representation at each location:
 
 $$
-k^*=\argmin_k\|\bz_e-\be_k\|_2,\quad\bz_q=\be_{k^*}.
-$$
-
-</li>
-<li>
-
-Compute the ELBO:
-
-$$
-\cL_{\bphi,\btheta}(\bx)=\log\pt(\bx|\bz_q)-\log K.
+c_m=\argmin_k\|\bz_{e,m}-\be_k\|_2,\quad\bz_{q,m}=\be_{c_m}.
 $$
 
 </li>
 <li>
 
-Compute total loss with codebook and commitment terms:
+Compute the ELBO with the uniform training prior:
+
+$$
+\cL_{\bphi,\btheta}(\bx)=\log\pt(\bx|\bz_q)-M\log K.
+$$
+
+</li>
+<li>
+
+Compute the loss with codebook and commitment terms:
 
 $$
 \begin{aligned}
-\cL&=-\cL_{\bphi,\btheta}(\bx)+\big\|\sg[\bz_e]-\be_{k^*}\big\|_2^2\\
-&\quad+\beta\big\|\bz_e-\sg[\be_{k^*}]\big\|_2^2.
+\cL&=-\cL_{\bphi,\btheta}(\bx)+\sum\nolimits_{m=1}^M\big\|\sg[\bz_{e,m}]-\be_{c_m}\big\|_2^2\\
+&\quad+\beta\sum\nolimits_{m=1}^M\big\|\bz_{e,m}-\sg[\be_{c_m}]\big\|_2^2.
 \end{aligned}
 $$
 
 </li>
 <li>
 
-Update $\bphi$, $\btheta$ (straight-through estimator for the encoder).
+Update $\bphi$, $\btheta$ and $\{\be_k\}$ (straight-through for $\bphi$).
 
 </li>
 </ol>
@@ -1109,15 +1151,22 @@ Update $\bphi$, $\btheta$ (straight-through estimator for the encoder).
 
 ## Sampling
 
+After **Stage 2: prior training**, fix all parameters.
+
 <ol>
 <li>
 
-Sample $c\sim p(c)$<br>$=\Uniform\{1,\dots,K\}$.
+Sample the code map $\bc\sim p_{\bpsi}(\bc)$ autoregressively.
 
 </li>
 <li>
 
-Sample $\bx\sim\pt(\bx|\be_c)$.
+Compute $\bz_{q,m}=\be_{c_m}$ at each location.
+
+</li>
+<li>
+
+Sample $\bx\sim\pt(\bx|\bz_q)$.
 
 </li>
 </ol>
@@ -1549,12 +1598,12 @@ ELBO surgery gives insights into the prior's influence in VAEs; the optimal prio
 </li>
 <li style="margin: 2px 0">
 
-The mismatch between $p(\bz)$ and $\qagg(\bz)$ is widely regarded as the principal reason for VAE-generated image blurriness.
+With a Gaussian decoder, averaging over distinct inputs that share a latent region can produce blurry outputs even when the prior matches the aggregated posterior.
 
 </li>
 <li style="margin: 2px 0">
 
-Vector quantization provides a way to construct VAEs with discrete latents and deterministic variational posteriors.
+VQ-VAE learns discrete codes; a second stage fits their aggregated posterior with a generative prior.
 
 </li>
 <li style="margin: 2px 0">

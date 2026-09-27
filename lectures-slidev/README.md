@@ -221,7 +221,7 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
   Кнопок и настроек нет; для клавиатуры доступны стрелки и Home на выбранной точке.
 - Слайд 26: путь forward и копирование градиента в straight-through estimator
   раскрываются штатными кликами вместе с существующим выводом.
-- Слайд 37: Gaussian data/model densities и точный оптимальный discriminator;
+- Слайд 38: Gaussian data/model densities и точный оптимальный discriminator;
   ползунок среднего generator, Separated / Overlap / Matched и Reset.
 
 PDF содержит сравнения prior и discriminator и фиксированную схему quantization. Состояние
