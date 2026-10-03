@@ -438,6 +438,247 @@ The sampling procedures differ:
 <div class="source"><a href="https://arxiv.org/abs/2107.00630">Kingma D. et al. Variational Diffusion Models, 2021</a><br><a href="https://arxiv.org/abs/2011.13456">Song Y. et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
 
 ---
+clicks: 2
+sourceFrame: "extension: 21"
+class: theorems
+---
+
+# DDIM: From Noise to Clean Data
+
+**Can we change the sampler without retraining the DDPM network?**
+
+**Keep fixed:** $q(\bx_t\mid\bx_0)$ at every noise level — the same noise-MSE training.
+
+**Change:** the joint $q(\bx_{1:T}\mid\bx_0)$ and its transitions, using a non-Markovian forward process.
+
+At each noise level, the forward process gives:
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon.
+$$
+
+<div v-click="1">
+
+Predict the noise with $\bepsilon_{\btheta,t}(\bx_t)$ and solve for the clean data:
+
+$$
+\hat{\bx}_0=\frac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bepsilon_{\btheta,t}(\bx_t)}{\sqrt{\bar{\alpha}_t}}.
+$$
+
+</div>
+<div v-click="2">
+
+These two estimates exactly reconstruct the current state:
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\hat{\bx}_0
++\sqrt{1-\bar{\alpha}_t}\,\bepsilon_{\btheta,t}(\bx_t).
+$$
+
+**DDIM idea:** keep both estimates fixed for one transition and change only the weights, from $t$ to $s<t$.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2010.02502">Song J., Meng C., Ermon S. Denoising Diffusion Implicit Models, 2021</a></div>
+
+<!--
+Bridge from the preceding comparison: similar training objectives can be paired
+with different sampling procedures. Ask whether the existing DDPM predictor can
+also support a different sampler. This is an explanatory construction, not a new
+Training/Sampling overview; the author explicitly requested removing the repeated
+Training block and the general stochastic family.
+
+Start with the familiar forward marginal. Replacing the unknown noise by the
+network prediction and rearranging gives a clean-data estimate. The network is
+called once: it predicts noise, and the clean estimate follows algebraically.
+The hat denotes an estimate, not the true clean sample. This is the same identity
+as the previously introduced parameterization table, using full coefficients.
+The course keeps alpha_t = 1 - beta_t; the DDIM paper's alpha_t is our alpha_bar_t.
+
+Substituting the clean estimate back exactly reconstructs x_t, even with an
+imperfect predictor. The last sentence introduces the DDIM choice: keep the two
+estimates fixed within one transition and change only their weights to the next
+noise level. This new rule is not an algebraic consequence of the marginal alone.
+Its formal justification uses non-Markovian forward joints with the same Gaussian
+marginals q(x_t | x_0), so the same simple
+noise-MSE training objective can be reused. This does not mean that every sampler
+is valid, or that all weighted ELBOs and finite-capacity optima coincide. The
+paper's variational theorem assumes positive transition noise; deterministic
+DDIM is the zero-noise limit. The main slide now states the distinction between
+fixed marginals and changed paths; the full variational derivation remains here.
+An intuitive zero-noise forward construction uses the same standard Gaussian
+epsilon for every level of a given clean example. Every q(x_t | x_0) stays the
+same, while the joint path changes. Its transitions can depend on x_0 in addition
+to the adjacent state. The generative sampler replaces unknown clean data by an
+estimate and recomputes the estimates each step; it is itself a Markov map.
+This argument motivates the sampler, not exact finite-step marginal preservation
+under a learned predictor. Even an optimal denoiser does not make arbitrary
+coarse finite-step updates exact.
+-->
+
+---
+clicks: 2
+sourceFrame: "extension: 21"
+class: theorems
+---
+
+# DDIM: Same Marginals, Different Transitions
+
+Let $X\sim\cN(0,4)$ and $Z\sim\cN(0,1)$ be independent. Target: $Y\sim\cN(0,1)$.
+
+<div class="columns">
+<div class="block" style="margin:0">
+
+## Stochastic transition
+
+$$
+Y=\frac{X}{4}+\frac{\sqrt{3}}{2}Z.
+$$
+
+Variance: $\displaystyle\frac{4}{16}+\frac{3}{4}=1$.
+
+</div>
+<div class="block" style="margin:0" v-click="1">
+
+## Deterministic transition
+
+$$
+Y=\frac{X}{2}.\vphantom{\frac{\sqrt{3}}{2}}
+$$
+
+Variance: $\displaystyle\frac{4}{4}=1$.
+
+</div>
+</div>
+
+<div v-click="2">
+
+**Both give the same distribution of $Y$, but different joint distributions of $(X,Y)$.**
+
+The deterministic transition gets all its randomness from $X$.
+
+Simply deleting $Z$ from the first rule gives $Y=X/4\sim\cN(0,1/4)$: the wrong variance.
+
+</div>
+
+<div class="source">Illustrative Gaussian example.</div>
+
+<!--
+Original explanatory example, not a formula copied from the DDIM paper.
+Both outputs are zero-mean Gaussian because they are linear combinations of
+independent Gaussians; the displayed variances therefore identify their laws.
+In the stochastic case, conditional on X=x, Y has mean x/4 and variance 3/4.
+In the deterministic case, conditional on X=x, Y=x/2 with zero conditional
+variance. Thus the two transitions have exactly the same chosen input/output
+marginals but different joints. This is a coupling illustration, not a literal
+DDPM/DDIM pair or a proof that finite DDIM steps preserve exact marginals.
+
+The preceding slide concerns marginals conditioned on clean data x_0. In DDIM,
+these are kept fixed while changing the joint over noise levels. This toy strips
+away that conditioning only to make the distinction between marginal laws and
+transitions transparent. Removing the fresh Gaussian term from a transition
+without changing its deterministic term generally does not preserve the target
+law, as the last sentence demonstrates. Return to the explicit DDIM algorithm
+on the next slide: its initial random latent supplies the output variability.
+-->
+
+---
+clicks: 2
+sourceFrame: "extension: 21"
+class: theorems
+---
+
+# DDIM: Deterministic Sampling
+
+<div class="block">
+
+## Sampling (DDIM)
+
+1. Sample $\bx_T\sim\cN(0,\bI)$; choose a grid $T=t_K>\cdots>t_0=0$.
+2. For $k=K,\ldots,1$, set $t=t_k$, $s=t_{k-1}$ and compute:
+
+$$
+\begin{aligned}
+\hat{\bepsilon}&=\bepsilon_{\btheta,t}(\bx_t)
+&&\text{predict noise},\\[8pt]
+\hat{\bx}_0&=\frac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\hat{\bepsilon}}{\sqrt{\bar{\alpha}_t}}
+&&\text{estimate clean data},\\[8pt]
+\bx_s&={\color{teal}\sqrt{\bar{\alpha}_s}}\,\hat{\bx}_0
++{\color{teal}\sqrt{1-\bar{\alpha}_s}}\,\hat{\bepsilon}
+&&\text{update state}.
+\end{aligned}
+$$
+
+3. Return $\bx_0$.
+
+</div>
+<div v-click="1">
+
+**Deterministic limit:** fresh transition noise is zero ($\sigma_{t\to s}=0$); randomness comes from $\bx_T$.
+
+**Original training schedule:** $s<t\Rightarrow\bar{\alpha}_s>\bar{\alpha}_t$: more signal, less noise.
+
+</div>
+<div v-click="2">
+
+**Fewer steps:** choose $K\ll T$; $K$ steps require $K$ network evaluations and no retraining.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2010.02502">Song J., Meng C., Ermon S. Denoising Diffusion Implicit Models, 2021</a></div>
+
+<!--
+The clean-estimate slide motivates the DDIM choice, and the Gaussian example
+illustrates why fixed marginal laws allow different transitions. Here the full
+sampling loop makes the deterministic rule executable. At iteration k, t=t_k is the current level and s=t_{k-1} is the next
+level. The three displayed assignments are ordered: call the noise predictor
+once, use its cached output epsilon_hat to compute xhat_0, then compute x_s.
+Both estimates are local to this iteration and are recomputed at the next k.
+The newly computed x_s is exactly the next iteration's current x_t. At the last
+iteration k=1, s=t_0=0. The teal coefficients mark the change from t to s, while
+the network is evaluated at the current t and x_t, not at the destination s.
+The update is a constructed sampling rule, not just the ancestral DDPM update
+with its random term removed: the deterministic coefficients also change.
+
+Sampling still draws a random output: x_T is random and the fixed sequence of
+DDIM updates maps that random input to x_0. This is the same source of randomness
+as in a normalizing flow or a GAN generator; invertibility is not asserted here.
+Think of an ensemble of initial noise samples: deterministic motion can reshape
+their distribution without adding new random kicks. DDIM chooses different paths
+from stochastic DDPM; it does not reproduce each DDPM reverse conditional by its
+mean. A learned denoiser and a finite grid give an approximate generative model.
+
+The visible sigma_{t->s} denotes the standard deviation of fresh transition noise,
+not the forward marginal noise level sqrt(1-alpha_bar_s). In the general family,
+x_s = sqrt(alpha_bar_s) xhat_0
+    + sqrt(1-alpha_bar_s-sigma_{t->s}^2) epsilon_hat + sigma_{t->s} z.
+Setting sigma=0 gives exactly the displayed deterministic update. The stochastic
+family's interpolation parameter and variance formula remain out of scope.
+
+Indices decrease along the chosen grid. Each selected t is an original training
+noise level. alpha_bar_t = product_{i=1}^t (1-beta_i), with alpha_bar_0=1. Keep the
+original schedule values at selected indices; do not restart or renumber the
+schedule as a new K-step training process. For positive beta, s<t implies
+alpha_bar_s>alpha_bar_t: the signal coefficient grows and the noise coefficient
+shrinks as sampling moves toward clean data. At every step recompute epsilon_theta,t(x_t) and then xhat_0; neither
+estimate is held fixed along the whole trajectory. K counts transitions from
+T=t_K to t_0=0. For example, a predictor trained on T=1000 levels may be used on a
+50-step subset. Fewer steps save computation but can reduce sampling accuracy;
+different grids need not yield identical samples even with the same initial draw.
+At s=0, alpha_bar_0=1, so the final update returns that step's clean estimate.
+One network evaluation per step refers to the unguided denoiser; ordinary CFG
+later uses two denoiser evaluations per step.
+
+The stochastic family and its interpolation parameter are deliberately omitted
+from the teaching slides. Later, deterministic DDIM can be connected to the
+probability-flow ODE after rescaling x_t/sqrt(alpha_bar_t) and using
+sqrt((1-alpha_bar_t)/alpha_bar_t) as the clock. Do not call it exactly the ordinary
+Euler step in the original t coordinate or promise exact finite-step inversion.
+Transition to guidance: we have changed the sampling rule while reusing the
+predictor; next we modify its predictions to steer generation toward a condition.
+-->
+
+---
 clicks: 0
 sourceFrame: "auto: Model Guidance"
 ---
@@ -1171,7 +1412,7 @@ class: summary
 # Summary
 
 - DDPM and NCSN are intimately connected at the objective level.
-- DDPM uses ancestral sampling, while NCSN uses annealed Langevin dynamics.
+- DDPM and NCSN use different samplers; DDIM reuses the DDPM network on a shorter sampling grid.
 - Guidance makes generation controllable through labels or text prompts.
 - Classifier guidance turns an unconditional model into a conditional one by training an auxiliary classifier on noisy data.
 - Classifier-free guidance needs no auxiliary classifier; guidance intervals can improve its quality-diversity trade-off, and distillation reduces evaluations per step.

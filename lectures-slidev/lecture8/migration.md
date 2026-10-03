@@ -1,5 +1,228 @@
 # Lecture 8: migration to Slidev
 
+## DDIM accepted: pre-commit and push verification, 2026-10-03
+
+The author approved the final three-slide DDIM sequence and requested commit/push.
+Scope: all changes since HEAD (DDIM slides 16–18, the sampler Summary takeaway,
+map, demo indices, journal and both PDFs). After fetching origin, there were no
+outgoing commits beyond this work. The course-refresh DDIM item is now closed.
+
+Source review covers L7 body → L8 Recap and L8 → current L9 Recap: Gaussian
+kernels, ELBO, noise/score parameterizations, DDPM Training/Ancestral Sampling,
+classifier guidance and CFG agree with their counterparts. The shared DDPM figure
+is byte-identical. The new clean estimate agrees with the L7 parameterization
+table. No DDIM formula is yet repeated in L10/L11; its later PF-ODE connection
+remains a separate refresh item. The existing concise L9 Recap remains approved.
+Independent notation, algorithm, Summary and schedule/catalog review found no
+blockers; the coordinator completed the cross-lecture comparison. Summary has
+five bullets, sections and Outline agree with Materials, and map/demo indices
+are 41/92 and 28/31/37. Source and shared-macro checks pass.
+
+The current 48 build inputs and all four published source/map/PDF hashes match
+the final verified export below. Its 59 passing tests, PDF and browser evidence
+remain applicable; documentation-only acceptance changes require no rebuild.
+No Beamer or merged material is included. Verification inputs are recorded in
+`../output/qa/lecture8/ddim-gaussian-2026-10-03/release-inputs.json`.
+
+## DDIM Gaussian example and fixed marginals clarified, 2026-10-03
+
+At the author's request, slide 16 now explicitly separates what stays fixed
+(q(x_t|x_0), hence the same noise-MSE training) from what changes (the joint
+forward path and its transitions). New slide 17 illustrates the distinction:
+for independent X~N(0,4) and Z~N(0,1), both X/4 + sqrt(3) Z/2 and X/2 have
+N(0,1) marginals but different joint laws with X. Simply deleting fresh noise
+from the first rule gives the wrong variance. The deterministic rule inherits
+randomness from X. Notes scope this original example as intuition, not a literal
+DDPM/DDIM transition pair or a proof of finite-step marginal preservation.
+The explicit DDIM algorithm follows on slide 18. The author approved this
+three-slide sequence and requested commit/push on 2026-10-03. Map: **41 slides / 92 states**; README demo indices:
+**28/31/37**. Summary remains five bullets; Recaps and section hierarchy unchanged.
+
+Independent source review passed; the final minor wording/layout fixes preserve
+its mathematical content. Isolated finalize passed source checks, **59 tests**,
+build and both exports. PDF comparison leaves **39 mapped handout pages and
+86 mapped reveal pages unchanged**, masking only the changed folio; all handout
+pages exactly match their final reveal states. All changed/new reveal states
+were visually reviewed. Browser checks passed 13 states on slides 15–19 and
+nine states with returns from both neighbors on 16–18, with stable geometry,
+no overflow or errors. Shared course style is unchanged. All **48 build inputs**
+matched before publication; both published PDFs match the isolated outputs byte
+for byte. QA: `../output/qa/lecture8/ddim-gaussian-2026-10-03/`.
+
+- SHA-256 slides.md: `5752d50cd08d0300b44edeb1f59ac66df9d26b604180d9eeef963f7e980344c9`.
+- SHA-256 slide-map.json: `fe8e37fb5f66c9926134a067d1e7d17603dc8c2dbc37149a789b74ebe7df051b`.
+- SHA-256 Lecture8.pdf: `cdbc20a7be350b8a657da910c0cea62a66e03a425f65d34a917a666b3ff3d807`.
+- SHA-256 Lecture8-handout.pdf: `9d792a9668cf453ffce01d1e5ddfcf00fc0b8ecca5686d0ebd1d50c5ff80ef8d`.
+
+## DDIM probability and randomness explanations added, 2026-10-03
+
+The author requested the missing conceptual explanations. Slide 16 now states
+that noise-MSE uses individual q(x_t|x_0) marginals and DDIM preserves them while
+changing the joint forward path to a non-Markovian process. Slide 17 explicitly
+identifies the deterministic limit as zero fresh transition noise and retains
+randomness in the initial x_T. It also states that the original training schedule
+is reused: s<t means more signal and less noise. The explicit algorithm and
+reveal counts are unchanged. Speaker notes connect this to a deterministic
+generator driven by a random latent, distinguish the shared-noise forward joint
+from the learned sampling loop, and explain the zero-sigma specialization without
+claiming exact finite-step marginal preservation. The addition still occupies
+two slides; map **40/89**, Summary and Recaps unchanged.
+
+Independent source review passed. Isolated finalize passed source checks,
+**59 tests**, build and both exports. Render checks passed and every handout page
+matches its final reveal state. Full-page comparison leaves **38 handout and 84
+reveal pages unchanged**. All five changed reveal states were visually reviewed.
+Browser checks passed ten states on slides 15–18 and all six states/neighbor
+returns on 16–17, without overflow, geometry shifts or errors. Shared course
+style is unchanged. All 22 lecture and 26 shared inputs matched the isolated
+build before publishing both verified PDFs byte for byte.
+QA: `../output/qa/lecture8/ddim-intuition-2026-10-03/`.
+
+- SHA-256 slides.md: `c87100bcaaaa1b607f7ffae5527d78f68269f2cb412bcf0efdaba3e880a6c007`.
+- SHA-256 slide-map.json: `f937f5bc6c5c0ae12c30b0b3024ceca3446b93904c34ce20a4c5341dac754bf7`.
+- SHA-256 Lecture8.pdf: `b9932194c23a5cee7404c7242545fc5c9084284e832485416f0d906793ad5b9a`.
+- SHA-256 Lecture8-handout.pdf: `48b81676fc2bb6ff53d33f5e0c87dbd4cf9c737200524cf3bb4c64dcf19aa4ea`.
+
+## DDIM explanation and explicit algorithm separated, 2026-10-03
+
+At the author's request, slide 16 now includes the exact reconstruction identity
+and the DDIM choice to keep both estimates fixed within a transition and change
+their weights. Slide 17 is the full Sampling (DDIM) algorithm: initialize and
+choose a grid; loop k=K,...,1 with t=t_k and s=t_{k-1}; predict and cache noise,
+compute the clean estimate, and update x_s; return x_0. The three assignments
+have matching verbal labels. The entire algorithm is initially visible; clicks
+reveal determinism and reduced evaluation count. No eta or stochastic family is
+introduced. Both slides await author review; Summary and Recaps remain valid.
+
+Independent source review passed. Map stays **40/89**. Isolated finalize passed
+source checks, **59 tests**, build and both exports. All handout pages match their
+final reveal states. Full-page comparison confirms **38 handout and 85 reveal
+pages unchanged**; the only changed states are slide 16 click 2 and all three
+states of slide 17, visually reviewed. Browser checks passed ten states on
+slides 15–18 and all six states/neighbor returns on 16–17, with stable geometry,
+no overflow or errors, and unchanged course typography. All 22 lecture and 26
+shared build inputs matched before publication; both PDFs match the isolated
+outputs byte for byte. QA: `../output/qa/lecture8/ddim-explicit-2026-10-03/`.
+
+- SHA-256 slides.md: `171565a7ab6bd8af1398a408bb0ee0cbabaabbba0d5b42fc7ae544501ab84307`.
+- SHA-256 slide-map.json: `f937f5bc6c5c0ae12c30b0b3024ceca3446b93904c34ce20a4c5341dac754bf7`.
+- SHA-256 Lecture8.pdf: `a436bda13dde5b56c060da983818ee5df534c47190543a5db305f5fad0eca6ae`.
+- SHA-256 Lecture8-handout.pdf: `a707db78b6ad3a54d3df3f63baf0cfaf9519b14a4e03c63a309fcb3b83d1d325`.
+
+## DDIM construction and sampling loop made explicit, 2026-10-03
+
+The author accepted slide 16 but found the transition to the sampler unclear.
+Only slide 17 is revised: the clean/noise estimates first reconstruct the current
+x_t exactly; the DDIM choice then holds these estimates fixed within one
+transition and replaces their weights by those at s<t. The changed coefficients
+are teal. A whole Sampling (DDIM) block specifies initialization, the grid,
+recomputation and update at each transition, and termination at s=0. The final
+sentence explains that a fixed initial draw and grid determine all updates.
+Notes distinguish the identity from the new rule and from simply removing noise
+from ancestral DDPM. Slide 16, Summary, Recaps and all other slides are unchanged.
+The revised slide awaits author review; the map remains **40/89**.
+
+Independent source review passed. Isolated finalize passed source checks,
+**59 tests**, build and both exports. Render checks and all final-state/handout
+comparisons passed. Full-page pixel comparison confirms **39 handout pages and
+86 reveal pages unchanged**; only slide 17's three states differ, all reviewed
+visually. Browser checks passed seven states across slides 16–18, including
+stable geometry and backwards navigation; a separate check passed both neighbor
+returns on slide 17. Shared typography and source clearance remain consistent
+with the previously reviewed Lecture 1 style. All 22 lecture and 26 shared inputs
+matched before publishing; both PDFs match the isolated outputs byte for byte.
+QA: `../output/qa/lecture8/ddim-sampler-2026-10-03/`.
+
+- SHA-256 slides.md: `73fa074c8a5e1c3577daebae10e3275bb88a30ba76abd13b3e2d3672a7d858c8`.
+- SHA-256 slide-map.json: `0a10d193c9cf7506c087c9e3cb86b1ad56ce2a58e6ded48ab475547c46d3de63`.
+- SHA-256 Lecture8.pdf: `5c61436b2df2a2afd6006581c0b241fc63b8b9c519016b381a945af28a9c42be`.
+- SHA-256 Lecture8-handout.pdf: `b15835f3ce6a9c5a839e1342a6675dd20d0bb67eb08628b4b7490f103e837368`.
+
+## DDIM narrative simplified after author feedback, 2026-10-03
+
+The author found the unexplained eta and general stochastic transition too dense
+and approved a two-slide narrative rewrite. Slide 16 now starts with the familiar
+forward decomposition and obtains the clean-data estimate by substituting the
+predicted noise. Slide 17 introduces deterministic DDIM as a construction that
+reuses the two estimates at a lower noise level, followed by a short sampling grid
+and three consequences: determinism, fewer evaluations and no retraining.
+The repeated Training block and the stochastic-family formulas are removed.
+Notes distinguish the algebraic clean estimate from the new sampling rule,
+explain recomputation at every step, and provide the transition to guidance.
+Both slides retain the DDIM paper as their sole source and two clicks each.
+This supersedes the first draft below; the revised layout awaits author review.
+
+Only slides 16–17 and their map titles changed. The five-bullet Summary,
+L9 Recap, section hierarchy and README indices remain consistent without edits.
+Independent source review passed. Map remains **40 slides / 89 states**.
+Isolated finalize passed source checks, **59 tests**, build and both exports.
+Render checks passed; all 40 handout pages equal their final reveal states.
+Full-page pixel comparison with the first DDIM draft confirms **38 handout and
+83 reveal pages unchanged**, without masking. All six changed PDF states were
+visually reviewed. Browser checks passed ten states on slides 15–18, plus
+both neighbor returns for each new slide. No overflow, empty clicks, geometry
+changes, math errors or failed resources were found. Shared Lecture 1 typography
+is preserved: 37px headings, 24px body, 24.96px math and 12px sources.
+
+All 22 lecture inputs and 26 shared inputs matched the isolated build before
+publication; both PDFs match its verified outputs byte for byte.
+QA: `../output/qa/lecture8/ddim-story-2026-10-03/`.
+
+- SHA-256 slides.md: `fd49c0c18ee2d10a1e9437b05739eeadde689fe6685b398c59895b630ee1e30d`.
+- SHA-256 slide-map.json: `0f153748b066b4da90a376f40744a1aaccde12335bd623b6d1a80170124de2f7`.
+- SHA-256 Lecture8.pdf: `803e6e14198945af39f0bee4037b3df95830029260880a5e9b5c68f484666016`.
+- SHA-256 Lecture8-handout.pdf: `178fe9210ac3a8ab3b6ea0615d16e8ed2d83dad7a5fd1a708a26f725e6784fd5`.
+
+## DDIM: two slides for author review, 2026-10-03
+
+The author requested two slides for review. Slides **16–17**, immediately after
+the DDPM/NCSN comparison, introduce deterministic DDIM with the existing trained
+noise predictor, then a shorter sampling grid and the stochasticity parameter
+eta. Both extend source frame 21 and have two clicks. The Sampling block reveals
+as a whole. The eta=1 connection is explicitly restricted to adjacent indices
+and DDPM variance tilde beta_t. Speaker notes explain the common training
+marginals, recomputed clean estimates, transition noise, evaluation counts and
+the later rescaled-state/time connection to PF-ODE. The non-Markovian derivation
+stays in notes; no new a/b aliases or ODE prerequisites are introduced.
+Song, Meng & Ermon, DDIM (ICLR 2021), is the sole reference on each slide.
+
+Summary remains five bullets, with DDIM included in the sampler takeaway.
+Independent source review passed notation, formulas, Training/Sampling,
+L7→L8→L9 continuity and Summary coverage. Recaps and the section hierarchy need
+no changes. README demo indices are now 27/30/36. Map: **40 slides / 89 states**.
+The optional-detail decisions below remain closed. Final author approval of the
+new slides is pending; this entry records implementation and verification.
+
+Isolated finalize passed source checks, **59 tests**, build and both PDF exports.
+Render checks passed. All 40 handout pages equal their final reveal states.
+Masking only the folio, **37 unaffected handout pages and 82 reveal pages** match
+the baseline; the only changed old slide is Summary. All six new PDF states and
+Summary were visually reviewed. Browser inspection passed 11 states across
+slides 15–18 and 40; the two new slides also passed all six states, backward
+navigation, returns from both neighbors, stable geometry and source-link checks.
+The final layout aligns the second slide's columns and avoids orphaned text.
+Comparison with approved Lecture 1 PDF/browser references confirms shared
+typography: Arial 37px headings, 24px body, 24.96px math and 12px sources.
+
+Before publication, all 22 lecture inputs and 26 shared inputs matched the
+verified isolated build. Both published PDFs are byte-identical to those outputs.
+No other lecture, Beamer source or merged PDF was edited for this addition.
+QA: `../output/qa/lecture8/ddim-2026-10-03/`.
+
+- SHA-256 slides.md: `5d84cefa0b23c982740723ec0e10f28ff764c6b8830b3c48f13e3e0b1dabc910`.
+- SHA-256 slide-map.json: `662ecc6b0defad819b7e9da287db37da3977572eb66b1972bea73c612f860c4a`.
+- SHA-256 Lecture8.pdf: `6588971ffb2268aa47e25c447de3c008361d6a9a19c6fd5cfe5f6dbb4e024d3a`.
+- SHA-256 Lecture8-handout.pdf: `a3416761713e446688bc7d23124894c2db5f37c3fc490f504ca7425ae14d7459`.
+
+## Optional parameterization details declined, 2026-10-03
+
+The author agreed to close learned reverse variance and the weighted-ELBO /
+Gaussian-data-augmentation interpretation as optional additions that will not
+be included in the main lecture. No mandatory transfer to another lecture or
+Supplementary is planned. The L7 parameterization table remains the agreed core.
+DDIM is the next item for discussion; its slide implementation is not yet approved.
+This is an editorial-status update only; sources and PDFs are unchanged.
+
 ## Pre-commit and push verification, 2026-10-03
 
 The author requested committing all Lecture 8 work, including the parameterization
