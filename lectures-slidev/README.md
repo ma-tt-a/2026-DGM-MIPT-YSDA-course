@@ -293,3 +293,28 @@ PDF содержит сравнения prior и discriminator; схема quant
 в `npm run test:demos` и `finalize`). Браузерные сценарии:
 `node tools/inspect-score-demos.mjs` при работающей Lecture 6.
 Проверенные сценарии и ограничения: [журнал Lecture 6](lecture6/migration.md).
+
+## Интерактивная Lecture 7
+
+- Слайд 17: известное / неизвестное чистое значение в точном двухточечном примере.
+  Unknown x₀ / Known x₀, выбор x₀ = −2 / 2, ползунок шумного наблюдения и Reset.
+  Видны posterior weights, смесь обратных kernels и Gaussian при известном x₀.
+- Слайд 19: общий timestep для linear-beta / cosine schedules; график log-SNR
+  и две версии одной кодом нарисованной цифры с одним фиксированным Gaussian noise.
+  Ползунок t = 1…1000, Reset к t = 500. Цветовая шкала изображения фиксирована.
+- Слайды 21–22: нативные схемы forward encoder и reverse decoder / latent prior;
+  подсветка синхронизирована с обычными кликами. Та же цепочка на слайде 27
+  связывает reconstruction / prior matching / denoising со слагаемыми ELBO.
+- Слайд 34: три связанные скалярные оценки при фиксированных xₜ и t.
+  Выбор выхода сети (clean data / noise / reverse mean) сохраняет все значения;
+  движение любой ручки выбирает соответствующий выход и пересчитывает остальные.
+  Цветные формулы показывают точные преобразования; Reset возвращает noise = 0.5.
+
+PDF показывает обе известные clean values вместе с неизвестной смесью, сравнение
+schedules при t = 500 и три эквивалентные оценки с noise = 0.5. Состояния контролов
+сохраняются при уходе и возврате. Управлять в выводимом на экран окне;
+синхронизация presenter/viewer не реализована. Ресурсы работают без внешней сети.
+
+Численные проверки: `node --test tools/test-diffusion-demos.mjs` (включены в
+`test:demos` и `finalize`). Браузер: `node tools/inspect-diffusion-demos.mjs`.
+Подробности: [журнал Lecture 7](lecture7/migration.md).
