@@ -1,0 +1,13 @@
+.l9-demo .l9-controls { margin: 12px 0 14px; gap: 10px; }
+.l9-demo label { display: flex; align-items: center; gap: 10px; }
+.l9-demo input { width: 180px; min-height: 44px; accent-color: #007f82; }
+.l9-demo output { font-variant-numeric: tabular-nums; min-width: 45px; }
+.l9-demo .l9-formula { text-align: center; min-height: 36px; }
+.l9-demo .l9-legend { display: flex; justify-content: center; gap: 26px; font-size: 18px; margin: 6px 0; }
+.l9-demo svg { display: block; width: 100%; }
+.l9-demo svg text { font: 18px Arial; fill: #587083; }
+.l9-demo .l9-heading { text-align: center; color: #17324d; font-weight: 650; margin-bottom: 6px; }
+.l9-demo .l9-stats { display: flex; justify-content: space-around; font-variant-numeric: tabular-nums; margin-top: 5px; }
+.l9-demo .demo-takeaway { margin-top: 14px; }
+.l9-demo .demo-note { margin-top: 9px; text-align: center; }
+.l9-demo .l9-print-label { text-align: center; color: #587083; margin: 14px 0 20px; }
