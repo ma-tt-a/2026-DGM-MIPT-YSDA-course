@@ -415,3 +415,7 @@ network setup were not available and are not certified. The pointer/browser chec
 establishes only the tested local annotation behavior. No new demo or presenter/viewer
 component-state synchronization was introduced. Temporary QA archives are separate
 from the delivered course files. No commit was requested or created.
+
+## Равномерные интервалы Summary, 2026-10-03
+
+По запросу автора общий `class: summary` использует вертикальный flex-список с `justify-content: space-between`, аналог `\vfill` между пунктами. Размер шрифта и содержание сохранены; в L4 удалены локальные margin. Проверены Summary всех 14 лекций в браузере и обоих PDF: одинаковые промежутки, отсутствие переполнений, совпадение handout и финального состояния. Для этой лекции: **33 слайдов / 74 состояний**; source check, web build и оба экспорта прошли с Node 24.19.0 в изолированной копии. Все тексты PDF сохранены, остальные страницы попиксельно совпадают с контрольной версией. Это проверка оформления Summary; полный содержательный аудит не повторялся. QA: `../output/qa/summary-spacing-2026-10-03/`.

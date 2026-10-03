@@ -84,7 +84,10 @@
 .derivation .katex-display > .katex { text-align: left; }
 .slidev-layout .takeaway { margin: 16px 0; padding: 12px 18px; border-left: 4px solid var(--teal); background: #eaf5f4; }
 .slidev-layout .takeaway p { margin: 0; }
-.summary li { margin: 16px 0; }
+.slidev-layout.summary { display: flex; flex-direction: column; }
+.slidev-layout.summary > h1 { flex-shrink: 0; }
+.slidev-layout.summary > ul { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 7px; margin: 0; }
+.slidev-layout.summary > ul > li { flex-shrink: 0; margin: 0; }
 /* Native KaTeX line ranges normally dim future rows. Course reveals hide them. */
 .slidev-layout .slidev-katex-wrapper .mord.dishonored { opacity: 0 !important; pointer-events: none; }
 .slidev-layout .slidev-vclick-hidden { opacity: 0 !important; pointer-events: none; }

@@ -1587,32 +1587,32 @@ class: summary
 # Summary
 
 <ul>
-<li style="margin: 2px 0">
+<li>
 
 ELBO surgery gives insights into the prior's influence in VAEs; the optimal prior is the aggregated variational posterior.
 
 </li>
-<li style="margin: 2px 0">
+<li>
 
 With a Gaussian decoder, averaging over distinct inputs that share a latent region can produce blurry outputs even when the prior matches the aggregated posterior.
 
 </li>
-<li style="margin: 2px 0">
+<li>
 
 VQ-VAE learns discrete codes; a second stage fits their aggregated posterior with a generative prior.
 
 </li>
-<li style="margin: 2px 0">
+<li>
 
 The straight-through gradient estimator allows gradients to pass as if quantization were an identity operation during backpropagation.
 
 </li>
-<li style="margin: 2px 0">
+<li>
 
 Likelihood is not always a suitable metric for evaluating generative models; likelihood-free learning motivates the use of discriminative models to match distributions.
 
 </li>
-<li style="margin: 2px 0">
+<li>
 
 GANs optimize the Jensen-Shannon divergence in theory; training alternates generator and discriminator updates to match the data distribution.
 

@@ -187,3 +187,7 @@ synchronization is not claimed; no new widget was introduced.
 ## Final course integration — 2026-09-17
 
 The final catalog integration is complete: the Slidev README links the editable source, both reviewed PDFs and this journal for all Lectures 1–14; the root README now points to the full catalog. The existing Materials hierarchy and schedule comment wrapper were preserved. Final main-workspace checks passed for the source/map/assets, all 194 strict KaTeX expressions, PDF page counts and the artifact hashes recorded above. This documentation-only integration did not change the reviewed lecture source or PDF bytes.
+
+## Равномерные интервалы Summary, 2026-10-03
+
+По запросу автора общий `class: summary` использует вертикальный flex-список с `justify-content: space-between`, аналог `\vfill` между пунктами. Размер шрифта и содержание сохранены; в L4 удалены локальные margin. Проверены Summary всех 14 лекций в браузере и обоих PDF: одинаковые промежутки, отсутствие переполнений, совпадение handout и финального состояния. Для этой лекции: **38 слайдов / 77 состояний**; source check, web build и оба экспорта прошли с Node 24.19.0 в изолированной копии. Все тексты PDF сохранены, остальные страницы попиксельно совпадают с контрольной версией. Это проверка оформления Summary; полный содержательный аудит не повторялся. QA: `../output/qa/summary-spacing-2026-10-03/`.
