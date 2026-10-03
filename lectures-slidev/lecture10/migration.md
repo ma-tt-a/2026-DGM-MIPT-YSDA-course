@@ -168,3 +168,36 @@ The final catalog integration is complete: the Slidev README links the editable 
 ## Равномерные интервалы Summary, 2026-10-03
 
 По запросу автора общий `class: summary` использует вертикальный flex-список с `justify-content: space-between`, аналог `\vfill` между пунктами. Размер шрифта и содержание сохранены; в L4 удалены локальные margin. Проверены Summary всех 14 лекций в браузере и обоих PDF: одинаковые промежутки, отсутствие переполнений, совпадение handout и финального состояния. Для этой лекции: **46 слайдов / 106 состояний**; source check, web build и оба экспорта прошли с Node 24.19.0 в изолированной копии. Все тексты PDF сохранены, остальные страницы попиксельно совпадают с контрольной версией. Это проверка оформления Summary; полный содержательный аудит не повторялся. QA: `../output/qa/summary-spacing-2026-10-03/`.
+
+
+## Course refresh: CNF training → Flow Matching, 2026-10-03
+
+На слайдах **42–43** исправлено назначение adjoint: это вычисление градиентов через решение ODE, а не прямое решение continuity equation. Удалена безусловная характеристика «unstable and unscalable». Пояснено, что FM обучает velocity регрессией без model ODE solves / trace. Соответствующий пункт Summary (46) обновлён без изменения числа пунктов. Source map и reveals сохранены. Итог: **46 слайдов / 106 состояний**.
+
+`finalize` в изолированной копии прошёл: 60 тестов, source/map checks, strict math parsing, web build и оба PDF. Все изменённые страницы и состояния просмотрены; browser inspector проверил целевые слайды, reveals и отсутствие overflow/math/resource errors. Отдельно проверен возврат с соседнего слайда к финальному состоянию. Новый слайд L9 визуально сопоставлен с утверждённым стилем L1; shared theme не менялся.
+
+Из 152 страниц двух PDF 144 совпадают попиксельно; восемь изменённых страниц относятся только к слайдам 42–43 и Summary.
+
+Проверены затронутые зависимости: формулы L9 и incoming Recap L10 сохранены; новое объяснение обучения раскрыто в body L10, body L10 42–43 и Recap L11 9–10 согласованы. Body L11 и outgoing Recap L12 не затронуты. Section hierarchy / расписание не менялись; каталог и source maps согласованы. Это проверка текущей правки, не новый полный аудит лекций. Beamer и `lectures/merged/` не менялись.
+
+QA: `../output/qa/cnf-training-2026-10-03/`. Перед публикацией проверено побайтовое совпадение slides/map/components/lib/public и shared theme с экспортированной копией. Актуальные SHA-256:
+
+- `slides.md`: `abc06a43e1f5dd369172052fdd68495ec28ea0cab1d036f4bd4b457b78dc907f`.
+- `slide-map.json`: `34e48739c96fc140d135b3ebd296f284fab146f05e97afcc1380d4ed6009c06e`.
+- `Lecture10.pdf`: `5a6303b970131b738eb49d57c7028211f723302976e1a60fc4152a25774e51be`.
+- `Lecture10-handout.pdf`: `da06644cfdf0b8e16c7cf3a6c64f43480aa0c17cd898cd9bb84a98def5547f6f`.
+
+## Course refresh: exact identity vs numerical likelihood, 2026-10-03
+
+По согласованию автора на слайде **22** заголовок блока заменён на “Log-likelihood via the probability-flow ODE”. Под сохранённой формулой добавлено: “Exact change-of-variables identity; numerical evaluation uses an ODE solver and, optionally, Hutchinson's trace estimator.” Добавлена ссылка FFJORD. Формулировка в Summary **46** согласована: “log-likelihood evaluation” вместо неоговорённых “exact log-likelihoods”. Структура, формулы, два раскрытия, source map и общий стиль сохранены: **46 слайдов / 106 состояний**.
+
+Проверки перед коммитом: `finalize 10` — 59 тестов, source/map/macros, web build, оба PDF; `render-qa.py 10` — 46/106 страниц. В изолированной копии использованы локальные зависимости: первоначальный экспорт со ссылкой на внешние node_modules отклонён из-за недоступных математических шрифтов. Финальный экспорт полностью проверен попиксельно относительно предыдущей просмотренной версии: 146 страниц совпадают; изменены только handout 22/46 и steps 44/45/46/106. Все новые состояния просмотрены крупно, handout совпадает с последним reveal. Browser inspector: слайды 22/42/43/46, 10 состояний, стабильная геометрия и обратные шаги, нет overflow, math/resource errors. Проверен возврат с соседнего слайда для 22/42/43. Общая тема не изменена; неизменённые формулы и их шрифты совпадают с предыдущим проверенным экспортом.
+
+Содержательная проверка охватила L9 body → L10 Recap, L10 body → L11 Recap, Summary L10/L11 (6/5 пунктов), повторные формулы и Training/Sampling, Outline/README и source maps. L10 42–43 и L11 9–10 дословно согласованы в пояснениях CNF/adjoint/FM; уточнение likelihood согласуется с L9 27. Body L11 → Recap L12 не затронут; ранее записанные проверки L11 переиспользованы после проверки хешей исходника, карты и обоих PDF. Незавершённая DDIM-редакция L8 и её README-нумерация рассмотрены как контекст diff, но исключены из этого коммита; её разделы и Recap L9 не требуют изменений из-за текущей правки. Source checks L8/L9/L11/L12 прошли. Beamer и `lectures/merged/` не менялись.
+
+QA: `../output/qa/likelihood-2026-10-03/`. Перед публикацией проверено побайтовое соответствие исходника, карты, assets, зависимостей package/lock и shared theme экспортированной копии. Актуальные SHA-256:
+
+- `slides.md`: `31c732f4278e6757f10864fce36e1c1011170f377391594f786f36474e9648bb`.
+- `slide-map.json`: `34e48739c96fc140d135b3ebd296f284fab146f05e97afcc1380d4ed6009c06e`.
+- `Lecture10.pdf`: `42776e5f560883a2095bc2eb9422b21c3ccf057c5b92d40faefdba0e0740110f`.
+- `Lecture10-handout.pdf`: `563c2535b79ce7bffc3e8a83ec30935bac53d560354b43eff979b8f69d449dc2`.

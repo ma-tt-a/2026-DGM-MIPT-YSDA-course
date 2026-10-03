@@ -895,13 +895,15 @@ Each terminal $\bx(T)$ produces a unique trajectory back to data space.
 
 <div class="block" v-click="1">
 
-## Exact log-likelihood (instantaneous change of variables)
+## Log-likelihood via the probability-flow ODE
 
 <div v-click="1">
 
 $$
 \log p_0(\bx(0)) = \log p_T(\bx(T)) + \int_0^T \tr\left(\frac{\partial \bv(\bx(t), t)}{\partial \bx(t)}\right) dt
 $$
+
+Exact change-of-variables identity; numerical evaluation uses an ODE solver and, optionally, Hutchinson's trace estimator.
 
 </div>
 
@@ -929,7 +931,7 @@ Smooth interpolation in latent space between two samples.
 
 </ul>
 
-<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q., et al. Neural Ordinary Differential Equations, 2018</a></div>
+<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q., et al. Neural Ordinary Differential Equations, 2018</a><br><a href="https://arxiv.org/abs/1810.01367">Grathwohl W. et al. FFJORD: Free-form Continuous Dynamics for Scalable Reversible Generative Models, 2018</a></div>
 
 ---
 clicks: 2
@@ -1857,13 +1859,13 @@ $$
 
 <li v-click="2">
 
-It's hard to solve the continuity equation directly due to the trace term.
+Likelihood-based CNF training requires ODE solves and Jacobian trace evaluations.
 
 </li>
 
 <li v-click="2">
 
-There's a method (the adjoint method) that solves this equation directly, but it's unstable and unscalable.
+The adjoint method computes gradients through the ODE solution; repeated solves can be costly.
 
 </li>
 
@@ -1899,7 +1901,7 @@ Knowing the vector field $\bv (\bx, t)$, the KFP (or continuity) equation allows
 
 <li>
 
-Flow matching provides scalable approach to Neural ODEs.
+Flow matching fits velocities by regression, without model ODE solves or trace evaluations during training.
 
 </li>
 
@@ -2059,7 +2061,7 @@ Score matching (NCSN) and diffusion models (DDPM) are discretizations of SDEs (v
 
 <li>
 
-Every SDE admits a corresponding probability flow ODE that follows the same probability path $p_t(\bx)$, yielding deterministic invertible sampling and exact log-likelihoods via the instantaneous change of variables.
+Every SDE admits a corresponding probability flow ODE that follows the same probability path $p_t(\bx)$, yielding deterministic invertible sampling and log-likelihood evaluation via the instantaneous change of variables.
 
 </li>
 
@@ -2083,7 +2085,7 @@ The continuous-time score matching objective generalizes DDPM and NCSN; for affi
 
 <li>
 
-Flow matching fits the vector field $\bv(\bx, t)$ directly, an alternative parametrization of the same continuous-time generative dynamics.
+Flow matching trains the velocity field by regression, avoiding model ODE solves and trace evaluations during training.
 
 </li>
 
