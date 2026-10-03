@@ -689,6 +689,26 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a></div>
 
 ---
+clicks: 0
+sourceFrame: "extension: 28"
+class: interactive-slide
+---
+
+<script setup>
+import GuidanceGeometryDemo from './components/GuidanceGeometryDemo.vue'
+</script>
+
+# Classifier Guidance: Which Way Does It Push?
+
+Four Gaussian components, two classes, one fixed noise level.
+
+<GuidanceGeometryDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a></div>
+
+<!-- Original analytic toy example. Exact analytic mixture scores. The classifier contribution is gamma times the log-posterior gradient. All three arrows share one display scale, fixed at the current observation across gamma in [0, 7] and both classes. Drag bounds keep vectors in the plot. No particle dynamics or trained network is simulated. PDF fixes the observation, class B and gamma = 3. -->
+
+---
 clicks: 3
 sourceFrame: "29"
 class: theorems
@@ -775,6 +795,28 @@ Very large $\gamma$ can reduce diversity and introduce artifacts.
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a><br><a href="https://arxiv.org/abs/2410.02416">Sadat S. et al. Eliminating Oversaturation and Artifacts of High Guidance Scales in Diffusion Models, 2025</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 30"
+class: interactive-slide
+---
+
+<script setup>
+import GuidanceDensityDemo from './components/GuidanceDensityDemo.vue'
+</script>
+
+# Guidance Scale Changes the Density
+
+$$
+q_\gamma(x_t|y)\propto q(x_t)\,p(y|x_t)^\gamma\qquad\text{at a fixed noise level.}
+$$
+
+<GuidanceDensityDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a></div>
+
+<!-- Original analytic toy example. This is a one-dimensional version of the toy, with the same Gaussian component x-means and weights as the preceding geometry. Its classifier uses only the scalar observation. Tilting this marginal is not claimed to equal marginalizing the guided two-dimensional distribution. The normalizing constant is computed numerically on [-5, 5]. This fixed-level identity does not identify the final distribution of the complete guided sampler. PDF shows gamma = 0, 1, 3, 7 for class B. -->
 
 ---
 clicks: 1
@@ -917,7 +959,7 @@ Train an unguided score function model $\bs_{\btheta,t}(\bx_t)$.
 Train a guided score function model $\bs_{\btheta,t}(\bx_t,\by)$.
 
 </li>
-<li v-click="3">Use their convex combination at inference.</li>
+<li v-click="3">Use their affine combination at inference.</li>
 </ul>
 </div>
 <div class="block" v-click="3">
@@ -936,6 +978,28 @@ How to avoid training two separate score function models?
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2207.12598">Ho J., Salimans T. Classifier-Free Diffusion Guidance, 2022</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 33"
+class: interactive-slide
+---
+
+<script setup>
+import CfgExtrapolationDemo from './components/CfgExtrapolationDemo.vue'
+</script>
+
+# CFG: Interpolation and Extrapolation
+
+$$
+\bs^\gamma_{\btheta,t}=\bs_{\btheta,t}(\bx_t,\varnothing)+\gamma\bigl(\bs_{\btheta,t}(\bx_t,\by)-\bs_{\btheta,t}(\bx_t,\varnothing)\bigr)
+$$
+
+<CfgExtrapolationDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2207.12598">Ho J., Salimans T. Classifier-Free Diffusion Guidance, 2022</a></div>
+
+<!-- Original analytic toy example. Scores are evaluated at one fixed observation of the same analytic two-dimensional toy; vectors use a common fixed display scale. Gamma = 0 selects unconditional, gamma = 1 selects conditional, 0 < gamma < 1 interpolates, gamma > 1 extrapolates. PDF simultaneously shows gamma = 0, 1, 3. This is score-space geometry, not a sampling trajectory. -->
 
 ---
 clicks: 1
@@ -972,6 +1036,133 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2506.02070">Holderrieth P., Erives E. An Introduction to Flow Matching and Diffusion Models, 2025</a></div>
 
 ---
+clicks: 1
+sourceFrame: "extension: 34"
+class: theorems
+---
+
+# Classifier-Free Guidance: Guidance Interval
+
+Apply extra guidance only at intermediate noise levels.
+
+<img src="/figs/guidance-interval-figure2.png" alt="Figure 2 from Kynkäänniemi et al.: the conditional density has two modes; guidance everywhere loses one, while limiting guidance to a noise interval preserves both." style="width:100%;height:310px;object-fit:contain;margin:14px 0" />
+
+<div v-click="1">
+
+**Toy example ($\gamma=6$):** guidance everywhere drops a mode; limiting the interval restores both.
+
+Outside the interval, $\gamma_t=1$: **conditioning remains**. Sampling runs **right to left** ($\sigma\downarrow$).
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2404.07724">Kynkäänniemi T. et al. Applying Guidance in a Limited Interval Improves Sample and Distribution Quality in Diffusion Models, 2024. Fig. 2.</a></div>
+
+<!--
+Figure 2 from PDF v1, page 3: all panels and their original labels are preserved.
+The paper uses sigma for the noise level, decreasing during sampling. Panel (a)
+shows the unconditional and conditional densities; (b) guides everywhere, losing
+one mode; (c) disables guidance at high noise and recovers both modes; (d) also
+turns it off at low noise with little effect in this toy example. These interval
+endpoints are illustrative, not a universal prescription. Select the interval for
+the model and sampler. gamma_t=1 preserves conditional sampling; gamma_t=0 would
+instead select the unconditional model in the preceding CFG convention.
+-->
+
+---
+clicks: 3
+sourceFrame: "extension: 34"
+class: theorems
+---
+
+# Classifier-Free Guidance: Guidance Distillation
+
+Learn the guided prediction in a single model evaluation.
+
+<div style="display:grid;grid-template-columns:1fr 100px 1fr;gap:20px;align-items:center;margin:14px 0">
+<div class="block" style="margin:0">
+
+## Teacher: two evaluations
+
+$$
+\bs_{\btheta,t}(\bx_t,\varnothing),\quad\bs_{\btheta,t}(\bx_t,\by)
+$$
+
+Combine predictions using $\gamma$.
+
+</div>
+<div v-click="1" style="text-align:center">
+
+distill
+
+$$
+\longrightarrow
+$$
+
+</div>
+<div class="block" v-click="1" style="margin:0">
+
+## Student: one evaluation
+
+$$
+\bs_{\bphi,t}(\bx_t,\by,\gamma)
+$$
+
+Pass $\gamma$ as an extra input.
+
+</div>
+</div>
+
+<div v-click="1">
+
+$$
+\bs_{\bphi,t}(\bx_t,\by,\gamma)\approx
+(1-\gamma)\bs_{\btheta,t}(\bx_t,\varnothing)+\gamma\bs_{\btheta,t}(\bx_t,\by)
+$$
+
+</div>
+
+<div class="block" v-click="2">
+
+## Training
+
+1. Sample $(\bx_0,\by)\sim\pd$, $t\sim\Uniform\{1,\ldots,T\}$, $\gamma\sim\Uniform[\gamma_{\min},\gamma_{\max}]$.
+2. Sample $\bx_t\sim q(\bx_t|\bx_0)$ and compute the **fixed teacher target** $\bs^\gamma_{\btheta,t}(\bx_t,\by)$.
+3. Update only $\bphi$ to minimize $\cL=\|\bs_{\bphi,t}(\bx_t,\by,\gamma)-\bs^\gamma_{\btheta,t}(\bx_t,\by)\|_2^2$.
+
+</div>
+
+<div class="block" v-click="3">
+
+## Sampling
+
+1. Evaluate the student once per step; keep the sampler and step count. Used in **FLUX.2 [dev]**.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2210.03142">Meng C. et al. On Distillation of Guided Diffusion Models, 2023.</a><br><a href="https://huggingface.co/black-forest-labs/FLUX.2-dev">Black Forest Labs. FLUX.2 [dev] model card: guidance distillation.</a></div>
+
+<!--
+This slide covers guidance distillation only: the first stage of Meng et al.,
+before their separate progressive distillation of sampling steps. The teacher
+parameters theta are fixed; only the student parameters phi are trained. Sample
+guidance strengths from a chosen training range; no arbitrary extrapolation claim.
+Initialize the student from the teacher and add a guidance-scale embedding
+(the paper uses Fourier features, incorporated similarly to the time embedding).
+The forward distribution in step 2 is the existing DDPM Gaussian: x_t =
+sqrt(alpha_bar_t) x_0 + sqrt(1-alpha_bar_t) epsilon, epsilon ~ N(0, I).
+The teacher target is a constant for the update: theta is frozen and only phi is optimized.
+The displayed score MSE is a simple version of the matching objective. The paper
+uses time-weighted x_0 regression; translating that exact objective to score
+space additionally rescales each squared error by a time-dependent weight.
+We illustrate the teacher/student matching principle, not its exact weighting.
+Its guidance
+convention is conditional + w * (conditional - unconditional), so gamma = 1 + w.
+The two teacher predictions can be batched, but still require two denoiser
+evaluations. The model card confirms FLUX.2 [dev] uses guidance distillation;
+this does not assert that its proprietary training recipe is identical to Meng's.
+-->
+
+---
 clicks: 0
 sourceFrame: "35"
 class: summary
@@ -983,4 +1174,4 @@ class: summary
 - DDPM uses ancestral sampling, while NCSN uses annealed Langevin dynamics.
 - Guidance makes generation controllable through labels or text prompts.
 - Classifier guidance turns an unconditional model into a conditional one by training an auxiliary classifier on noisy data.
-- Classifier-free guidance removes the need for an auxiliary classifier.
+- Classifier-free guidance needs no auxiliary classifier; guidance intervals can improve its quality-diversity trade-off, and distillation reduces evaluations per step.

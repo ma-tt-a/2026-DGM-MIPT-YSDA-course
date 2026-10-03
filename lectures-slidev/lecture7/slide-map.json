@@ -205,36 +205,42 @@
   },
   {
     "slide": 35,
+    "frame": "extension: imported: 8:13",
+    "title": "Diffusion Parameterizations",
+    "clicks": 2
+  },
+  {
+    "slide": 36,
     "frame": "imported: 8:14",
     "title": "Reparametrization of DDPM",
     "clicks": 2
   },
   {
-    "slide": 36,
+    "slide": 37,
     "frame": "auto: Denoising Diffusion Probabilistic Model (DDPM)",
     "title": "Outline",
     "clicks": 0
   },
   {
-    "slide": 37,
+    "slide": 38,
     "frame": "imported: 8:15",
     "title": "Generative Models Taxonomy",
     "clicks": 0
   },
   {
-    "slide": 38,
+    "slide": 39,
     "frame": "imported: 8:16",
     "title": "Denoising Diffusion Probabilistic Model (DDPM)",
     "clicks": 2
   },
   {
-    "slide": 39,
+    "slide": 40,
     "frame": "imported: 8:17",
     "title": "Denoising Diffusion Probabilistic Model (DDPM)",
     "clicks": 1
   },
   {
-    "slide": 40,
+    "slide": 41,
     "frame": 26,
     "title": "Summary",
     "clicks": 0

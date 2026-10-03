@@ -1,5 +1,49 @@
 # Lecture 7 — перенос в Slidev
 
+## Parameterization table moved to Lecture 7, 2026-10-03
+
+The author requested removal of the explicit Lecture 7 reference and a/b
+abbreviations, and suggested moving the table to the preceding lecture.
+The table is now **L7 slide 35**, after the linked clean/noise/mean demo (34)
+and before the simplified objective (36). All coefficients use the established
+sqrt(alpha_bar_t), sqrt(1-alpha_bar_t) notation, with full fractions and no font
+reduction. No visible lecture cross-reference remains. Notes retain the
+conditional/marginal-score and angular-v/ODE-velocity distinctions. L8 no longer
+contains the table; its noise-to-score derivation and DDPM/NCSN objectives are
+adjacent again. This supersedes the initial placement recorded in L8's journal.
+
+L7 Summary replaces its sixth bullet with the broader parameterization/loss
+weighting takeaway (seven bullets total); L8 restores the previous first bullet
+(five total). Independent source review confirms that L6 and Recap L7 already
+supply Gaussian score, DSM and Tweedie: no forward dependency is introduced.
+Recaps L7/L8/L9, training/sampling, existing demos, section hierarchies and
+README/catalog remain consistent without edits. Maps: **L7 41 slides / 94 states;
+L8 38 / 83**. No Beamer or merged files were changed.
+
+Both isolated finalizations passed source checks, 54 existing tests, build and
+both exports; render-qa.py passed for both decks. A concurrent change only added
+six dynamics tests to package.json and the finalize test list; the exact diff
+was checked, the new tests passed separately, and no render/build/export input
+changed. Both original and integrated manifests are retained in QA.
+
+Every final reveal state equals its handout page. Masking only the folio area
+(1190,675)-(1280,720), all unaffected pages match the saved baseline: L7
+**39 handout / 90 reveal pages**, L8 **37 / 82**. The table's three PDF states and
+both Summaries were visually reviewed. Browser checks pass for L7 slides
+34–36,41 (8 states) and L8 slides 11,12,38 (7 states), including reversals,
+both neighbor returns, overflow, math, references, resources and errors.
+The table retains the approved course typography: Arial 37px headings, 24px
+body, 23px table, 24.96px paragraph math and 12px sources. Shared style and
+existing demos are unchanged. All lecture/shared inputs were hash-checked before
+publication; all four PDFs match the verified isolated outputs byte for byte.
+
+QA: `../output/qa/lecture7/parameterizations-move-2026-10-03/`.
+
+- SHA-256 slides.md: `b8b69e91aa7f6cd0057cc0225b709f9c7b625e22b5110989a7011c358a03e55a`.
+- SHA-256 slide-map.json: `082ae81b2a1b7d099c3e1b332148f584f2e1f0e404bc90c3d2b426e0287e8007`.
+- SHA-256 Lecture7.pdf: `19c8f43ccef0995c2f17b24bea3f58e3fb330de0cf0c5a99dbde0e0e71378e36`.
+- SHA-256 Lecture7-handout.pdf: `bffb3950916a9595a40cf26a621e0ced3d0ed8a32f041a899ffd5679aa99a925`.
+
 ## Проверка перед коммитом и push, 2026-10-03
 
 Проверен весь diff Lecture 7 относительно 2c4de1d7, включая компоновку,

@@ -1202,6 +1202,65 @@ class: interactive-slide
 
 ---
 clicks: 2
+sourceFrame: "extension: imported: 8:13"
+class: theorems
+---
+
+# Diffusion Parameterizations
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon.
+$$
+
+<div v-click="1">
+
+| Network output at $\bx_t$ | Regression target | Clean-data estimate |
+| --- | --- | --- |
+| Noise $\bepsilon_{\btheta,t}$ | $\bepsilon$ | $\dfrac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bepsilon_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
+| Clean data $\hat{\bx}_{\btheta,t}$ | $\bx_0$ | $\hat{\bx}_{\btheta,t}$ |
+| Score $\bs_{\btheta,t}$ | $-\dfrac{\bepsilon}{\sqrt{1-\bar{\alpha}_t}}$ | $\dfrac{\bx_t+(1-\bar{\alpha}_t)\,\bs_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
+| $v$-prediction $\bv_{\btheta,t}$ | $\sqrt{\bar{\alpha}_t}\,\bepsilon-\sqrt{1-\bar{\alpha}_t}\,\bx_0$ | $\sqrt{\bar{\alpha}_t}\,\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bv_{\btheta,t}$ |
+
+</div>
+<div class="block" v-click="2">
+
+**Convertible predictions; different losses.** Plain MSE assigns different weights to different noise levels.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2202.00512">Salimans T., Ho J. Progressive Distillation for Fast Sampling of Diffusion Models, 2022</a></div>
+
+<!--
+Continue the preceding clean/noise/reverse-mean conversion demo. All outputs are
+evaluated at the same noisy input x_t and time t. Assume 0 < alpha_bar_t < 1
+for mutual conversion; endpoint limits need separate treatment. The displayed
+coefficients use the established DDPM notation without additional abbreviations.
+
+The targets are computable from a training pair (x_0, epsilon). In particular,
+-epsilon/sqrt(1-alpha_bar_t) is the conditional score of q(x_t | x_0), not an
+accessible marginal score label. As established by denoising score matching in
+Lecture 6 and recalled at the start, MSE regression averages this target
+conditional on x_t, yielding the marginal score at the population optimum.
+Tweedie's identity gives the clean estimate in the score row. Lecture 8 will
+derive the corresponding DDPM/DSM objective connection in detail.
+
+The v inverse uses alpha_bar_t + (1-alpha_bar_t) = 1; also epsilon_hat =
+sqrt(1-alpha_bar_t) x_t + sqrt(alpha_bar_t) v_theta. For equivalent predictions,
+squared epsilon error = alpha_bar_t/(1-alpha_bar_t) times squared clean error,
+while squared v error = 1/(1-alpha_bar_t) times squared clean error. Thus plain
+MSEs in different parameterizations are different training objectives; matching
+time-dependent weights makes them equivalent. The next slide fixes the noise
+parameterization and drops its ELBO coefficient to define the DDPM simple loss.
+
+For the fixed-pair path x(phi) = cos(phi) x_0 + sin(phi) epsilon,
+the v target equals dx/dphi. It is not automatically dx/dt for an arbitrary
+clock: a time schedule adds dphi/dt. This distinguishes v-prediction from the
+ODE velocity in Lecture 9; flow matching remains in Lecture 11.
+See Salimans & Ho, Section 4 and Appendix D.
+-->
+
+---
+clicks: 2
 sourceFrame: "imported: 8:14"
 class: theorems
 ---
@@ -1357,5 +1416,5 @@ class: summary
 - Conditioning on the clean image gives a tractable Gaussian reverse distribution.
 - Gaussian diffusion is a VAE with a hierarchy of latent variables and a fixed encoder.
 - Its ELBO decomposes into reconstruction, prior matching, and denoising terms; Gaussian denoising terms reduce to squared error.
-- Reparametrizing the reverse mean turns denoising into prediction of the noise injected by the forward process.
+- The reverse mean can be parameterized through clean data, noise, score or $v$; plain MSE induces different noise-level weights.
 - DDPM combines a simplified noise-prediction objective with ancestral sampling.
