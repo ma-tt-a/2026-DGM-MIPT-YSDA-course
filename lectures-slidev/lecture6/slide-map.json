@@ -216,58 +216,40 @@
     "slide": 36,
     "frame": "imported: 7:10",
     "title": "Forward Gaussian Diffusion Process",
-    "clicks": 2
-  },
-  {
-    "slide": 37,
-    "frame": "extension: imported: 7:10",
-    "title": "Forward Gaussian Diffusion Process",
-    "clicks": 1
-  },
-  {
-    "slide": 38,
-    "frame": "imported: 7:11",
-    "title": "Forward Gaussian Diffusion Process",
-    "clicks": 1
-  },
-  {
-    "slide": 39,
-    "frame": "extension: imported: 7:11",
-    "title": "Forward Gaussian Diffusion Process",
     "clicks": 4
   },
   {
-    "slide": 40,
+    "slide": 37,
+    "frame": "imported: 7:11",
+    "title": "Forward Gaussian Diffusion Process",
+    "clicks": 6
+  },
+  {
+    "slide": 38,
     "frame": "imported: 7:12",
     "title": "Forward Gaussian Diffusion Process",
     "clicks": 0
   },
   {
-    "slide": 41,
+    "slide": 39,
     "frame": "extension: imported: 7:12",
     "title": "Forward Gaussian Diffusion Process",
     "clicks": 2
   },
   {
-    "slide": 42,
+    "slide": 40,
     "frame": "imported: 7:13",
     "title": "Forward Gaussian Diffusion Process",
     "clicks": 2
   },
   {
-    "slide": 43,
+    "slide": 41,
     "frame": "imported: 7:14",
     "title": "Denoising Score Matching",
-    "clicks": 1
+    "clicks": 3
   },
   {
-    "slide": 44,
-    "frame": "extension: imported: 7:14",
-    "title": "Denoising Score Matching",
-    "clicks": 1
-  },
-  {
-    "slide": 45,
+    "slide": 42,
     "frame": 31,
     "title": "Summary",
     "clicks": 0

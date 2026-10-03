@@ -1176,7 +1176,7 @@ sourceFrame: "imported: 7:9"
 <TaxonomyDiagram class="taxonomy" denoising-diffusion alt="Generative models taxonomy with DDPM highlighted" />
 
 ---
-clicks: 2
+clicks: 4
 sourceFrame: "imported: 7:10"
 class: theorems
 ---
@@ -1206,17 +1206,7 @@ $$
 
 </div>
 
-<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
-
-<!-- The final comparison from Lecture 7 source frame 10 continues on the next slide. The original pause before the expansion becomes the slide boundary. -->
-
----
-clicks: 1
-sourceFrame: "extension: imported: 7:10"
-class: theorems
----
-
-# Forward Gaussian Diffusion Process
+<div v-click="3">
 
 $$
 \begin{aligned}
@@ -1226,7 +1216,8 @@ $$
 \end{aligned}
 $$
 
-<div v-click="1">
+</div>
+<div v-click="4">
 
 - ${\color{#8854c0}\beta_t=\eta}$
 - ${\color{teal}\nabla_{\bx_{t-1}}\log\pt(\bx_{t-1})=-\bx_{t-1}=\nabla_{\bx_{t-1}}\log\cN(0,\bI)}$
@@ -1236,7 +1227,7 @@ $$
 <div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
 
 ---
-clicks: 1
+clicks: 6
 sourceFrame: "imported: 7:11"
 class: theorems
 ---
@@ -1260,25 +1251,11 @@ $$
 q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\,\bx_0,(1-\bar{\alpha}_t)\bI)
 $$
 
-</div>
-
-<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
-
----
-clicks: 4
-sourceFrame: "extension: imported: 7:11"
-class: derivation
----
-
-# Forward Gaussian Diffusion Process
-
-<div class="block">
-
-## Statement 1 (continued)
+<div v-click="2">
 
 Thus, samples at any timestep $t$ can be generated directly from $\bx_0$
 
-$$ {1|1-2|1-3|1-4|all} {at:1}
+$$ {1|1-2|1-3|1-4|all} {at:3}
 \begin{aligned}
 \bx_t&=\sqrt{\alpha_t}{\color{teal}\bx_{t-1}}+\sqrt{1-\alpha_t}\bepsilon_t\\
 &=\sqrt{\alpha_t}({\color{teal}\sqrt{\alpha_{t-1}}\bx_{t-2}+\sqrt{1-\alpha_{t-1}}\bepsilon_{t-1}})+\sqrt{1-\alpha_t}\bepsilon_t\\
@@ -1289,10 +1266,11 @@ $$ {1|1-2|1-3|1-4|all} {at:1}
 $$
 
 </div>
+</div>
 
 <div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
 
-<!-- Four cumulative rows preserve the four nextonslide stages of Lecture 7 source frame 11. The pause before the derivation becomes the slide boundary. -->
+<!-- The statement and its derivation share a slide. Click 2 replaces the former slide boundary; four further clicks reveal the cumulative derivation rows. -->
 
 ---
 clicks: 0
@@ -1365,14 +1343,15 @@ class: theorems
 
 **Diffusion** describes the migration of particles from regions of high density to those of low density.
 
-<img src="/figs/diffusion_over_time.png" alt="Diffusion over time" style="width:100%;height:155px;object-fit:contain" />
-
+<div class="columns balanced">
+<img src="/figs/diffusion_over_time.png" alt="Diffusion over time" style="width:100%;height:340px;object-fit:contain" />
 <div v-click="1">
 
 1. $\bx_0=\bx\sim\pd(\bx)$
-2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$, $\bepsilon_t\sim\cN(0,\bI)$, $t\geq1$
+2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$,<br>$\bepsilon_t\sim\cN(0,\bI)$, $t\geq1$
 3. After $T\gg1$ steps: $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$
 
+</div>
 </div>
 <div v-click="2">
 
@@ -1384,7 +1363,7 @@ Our goal now becomes inverting this diffusion.
 <div class="source"><a href="https://ayandas.me/blog-tut/2021/12/04/diffusion-prob-models.html">Das A. An Introduction to Diffusion Probabilistic Models, blog post, 2021</a></div>
 
 ---
-clicks: 1
+clicks: 3
 sourceFrame: "imported: 7:14"
 class: theorems
 ---
@@ -1416,17 +1395,7 @@ $$
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/1907.05600">Song Y. et al. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a></div>
-
----
-clicks: 1
-sourceFrame: "extension: imported: 7:14"
-class: theorems
----
-
-# Denoising Score Matching
-
-<div class="block">
+<div class="block" v-click="2">
 
 ## Theorem (Denoising Score Matching)
 
@@ -1438,7 +1407,7 @@ $$
 $$
 
 </div>
-<div v-click="1">
+<div v-click="3">
 
 **Note:** Annealed Langevin dynamics applies to diffusion, too.
 
