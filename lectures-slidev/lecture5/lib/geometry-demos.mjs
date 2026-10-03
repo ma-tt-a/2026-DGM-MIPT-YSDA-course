@@ -3,41 +3,7 @@ export function supportDistances(theta) {
   return { wasserstein: Math.abs(theta), jsd: theta === 0 ? 0 : Math.log(2), kl: theta === 0 ? 0 : Infinity }
 }
 
-export const prK = 3
-export const prPresets = [
-  { id: 'matched', label: 'Matched' },
-  { id: 'missing', label: 'Missing mode' },
-  { id: 'outliers', label: 'Extra outliers' },
-]
-export const realPoints = [-1.35, 1.35].flatMap(cx =>
-  [-.3, 0, .3].flatMap(y => [-.3, 0, .3].map(x => ({ x: cx + x, y }))))
-export function generatedPoints(preset = 'matched', shift = 0) {
-  const matched = realPoints.map(p => ({ x: p.x + .045, y: p.y + .035 }))
-  const points = preset === 'missing'
-    ? realPoints.slice(0, 9).flatMap(p => [-1, 1].map(sign => ({ x: p.x + sign * .045, y: p.y + sign * .035 })))
-    : preset === 'outliers' ? [...matched, ...matched.map(p => ({ x: p.x, y: p.y + 1.2 }))] : matched
-  return points.map(p => ({ x: p.x + shift, y: p.y }))
-}
-const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y)
-export function knnRadii(points, k = prK) {
-  if (!Number.isInteger(k) || k < 1 || k >= points.length) throw new RangeError('k must be between 1 and n - 1')
-  return points.map((p, i) => points.filter((_, j) => i !== j).map(q => distance(p, q)).sort((a, b) => a - b)[k - 1])
-}
-export function membership(queries, reference, k = prK) {
-  const radii = knnRadii(reference, k)
-  return queries.map(p => reference.some((q, i) => distance(p, q) <= radii[i] + 1e-12))
-}
-export function precisionRecall(real, generated, k = prK) {
-  const precisionMask = membership(generated, real, k), recallMask = membership(real, generated, k)
-  return {
-    precisionMask, recallMask,
-    precisionCount: precisionMask.filter(Boolean).length, recallCount: recallMask.filter(Boolean).length,
-    precision: precisionMask.filter(Boolean).length / generated.length,
-    recall: recallMask.filter(Boolean).length / real.length,
-  }
-}
-
-export const langevinConfig = { mean: 1.5, sigma: .7, eta: .04, particles: 192, maxSteps: 1200, seed: 52147 }
+export const langevinConfig = { mean: 1.5, sigma: .7, eta: .04, particles: 192, maxSteps: 600, printSteps: 300, seed: 52147 }
 // Two isotropic Gaussians, with an exact, stable score evaluated in data space.
 export function logLangevinDensity(x, y = 0) {
   const { mean: a, sigma } = langevinConfig, variance = sigma ** 2
@@ -84,7 +50,7 @@ export function advanceLangevin(state, noise = true, steps = 1) {
   }
   return state
 }
-export function langevinSnapshot(noise, steps = 600) {
+export function langevinSnapshot(noise, steps = langevinConfig.printSteps) {
   return advanceLangevin(initialLangevin(), noise, steps)
 }
 export function xHistogram(points) {

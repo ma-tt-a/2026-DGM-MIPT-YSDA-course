@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { chromium } from 'playwright-chromium'
 import { lecturePaths, root } from './course.mjs'
-import { initialLangevin, advanceLangevin } from '../lecture5/lib/geometry-demos.mjs'
+import { initialLangevin, advanceLangevin, langevinConfig } from '../lecture5/lib/geometry-demos.mjs'
 
 const lecture = lecturePaths(5), map = JSON.parse(readFileSync(lecture.map, 'utf8'))
 const base = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
@@ -67,7 +67,7 @@ async function penClick(button) {
     for (const type of ['mousePressed', 'mouseReleased']) await cdp.send('Input.dispatchMouseEvent', { type, x: box.x + box.width / 2, y: box.y + box.height / 2, button: 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: 1, pointerType: 'pen' })
   } finally { await cdp.detach() }
 }
-const support = slideByFrame(20), pr = slideByFrame(31), langevin = slideByFrame('extension: imported: 6:14')
+const support = slideByFrame(20), langevin = slideByFrame('extension: imported: 6:14')
 try {
   // Warm the deck before deep links, so stock navigation styles/fonts are loaded.
   await page.goto(`${base}/1`, { waitUntil: 'networkidle' })
@@ -87,15 +87,6 @@ try {
   assert.equal(+(await data()).theta, 1.5)
   checks.push('Inline support displacement, exact match, negative displacement, keyboard isolation and Reset')
 
-  await go(pr)
-  assert.equal(await demo().locator('button,input').count(), 0)
-  assert.equal(+(await data()).precision, 1); assert.equal(+(await data()).recall, .5)
-  assert.equal(await demo().locator('svg').count(), 2)
-  assert.equal(await demo().locator('.panel').count(), 2)
-  await snapshot('pr-inline-two-directions')
-  await returnTo(pr)
-  checks.push('Inline static PR: two counting directions on the original formula slide, without controls')
-
   await go(langevin)
   const initial = await data()
   await snapshot('langevin-initial')
@@ -111,7 +102,7 @@ try {
     await demo().getByRole('button', { name: noise ? 'Noise on' : 'Noise off', exact: true }).click()
     await demo().getByRole('button', { name: 'Reset', exact: true }).click()
     await demo().getByRole('button', { name: 'Run', exact: true }).click()
-    await page.waitForFunction(() => Number(document.querySelector('[data-demo="langevin"]')?.getAttribute('data-step')) >= 600)
+    await page.waitForFunction(() => Number(document.querySelector('[data-demo="langevin"]')?.getAttribute('data-step')) >= 300)
     await demo().getByRole('button', { name: 'Pause', exact: true }).click()
     const paused = await data()
     assert.equal(paused.running, 'false'); assert.equal(paused.noise, String(noise))
@@ -127,6 +118,16 @@ try {
   assert.equal((await data()).x, initial.x); assert.equal((await data()).y, initial.y)
   await demo().getByRole('button', { name: 'Noise off', exact: true }).click()
   checks.push('Langevin exact step, both live simulations, Pause, navigation stop and reproducible Reset')
+  await demo().getByRole('button', { name: 'Run', exact: true }).click()
+  await page.waitForFunction(limit => Number(document.querySelector('[data-demo="langevin"]')?.getAttribute('data-step')) === limit, langevinConfig.maxSteps)
+  assert.equal((await data()).running, 'false')
+  assert.equal(await demo().getByRole('button', { name: 'Run', exact: true }).isDisabled(), true)
+  assert.equal(await demo().getByRole('button', { name: 'Step', exact: true }).isDisabled(), true)
+  await snapshot('langevin-finished-600')
+  await demo().getByRole('button', { name: 'Reset', exact: true }).click()
+  assert.equal(+(await data()).step, 0)
+  assert.equal(await demo().getByRole('button', { name: 'Run', exact: true }).isEnabled(), true)
+  checks.push('Langevin stops at 600 steps; Run/Step disable and Reset restores controls')
 
   for (const [slide, button] of [[support, 'Match'], [langevin, 'Noise on']]) {
     await go(slide, true)
@@ -149,7 +150,7 @@ try {
     await toolbar.getByRole('button', { name: 'Pen', exact: true }).click()
   }
   checks.push('Controls work with pen active; plots accept annotations; synthetic strokes undone')
-  for (const slide of [support, pr, langevin]) {
+  for (const slide of [support, langevin]) {
     await page.goto(`${base}/${slide.slide}?print&clicks=${slide.clicks}`, { waitUntil: 'networkidle' })
     await page.evaluate(() => document.fonts.ready)
     assert.equal(await demo().locator('button,input').count(), 0)
