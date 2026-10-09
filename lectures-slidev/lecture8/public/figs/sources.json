@@ -30,5 +30,12 @@
     "license": "CC BY 4.0",
     "license_url": "https://creativecommons.org/licenses/by/4.0/",
     "sha256": "ac8509748743880cd4e1c0bd1a5f0630ff8f5b4eada5a7d4b3139a0cb78560b2"
+  },
+  "guidance-interval-figure2.png": {
+    "source": "https://arxiv.org/abs/2404.07724",
+    "description": "Kynkäänniemi et al. (2024), Figure 2, all four panels (a)-(d) and their original labels. Extracted from PDF v1 page 3, with no changes to the figure. Surrounding prose caption excluded and paraphrased on the slide. Rasterized at 432 dpi from crop [104,69,507,176] in 72-point page coordinates measured from the top left.",
+    "asset_url": "https://arxiv.org/pdf/2404.07724v1",
+    "source_pdf_sha256": "da759e2221efb747f58a0f31cbf04c2d17dd87d237a172446cddd65244fd1c88",
+    "sha256": "5430a34d6df6d608c436a22017765b9f7b013788b0a357101868892cde5ad86f"
   }
 }

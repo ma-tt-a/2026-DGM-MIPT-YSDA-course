@@ -100,7 +100,7 @@ class: theorems
 
 
 
-<div class="source"><a href="https://arxiv.org/abs/1505.05770">Rezende D. J., Mohamed S. Variational Inference with Normalizing Flows, 2015</a></div>
+<div class="source"><a href="https://arxiv.org/abs/1505.05770">Rezende D. J., Mohamed S. Variational Inference with Normalizing Flows, 2015</a><br><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The principles of diffusion models, 2025.</a></div>
 
 ---
 clicks: 0
@@ -164,15 +164,15 @@ class: theorems
 
 # Recap of Previous Lecture
 
-<img src="/figs/vqvae.png" alt="vqvae" style="width: 100%; height: 135px; object-fit: contain; margin: 0 auto;" />
+Quantize each of the $M=WH$ encoder vectors using the **same codebook**; the code map is $\bc=(c_1,\dots,c_M)$, with $\bz_{q,m}=\be_{c_m}$.
 
 <div class="block">
 
 ## Deterministic Variational Posterior
 
 $$
-q_{\bphi}(c=k^*|\bx)=\begin{cases}
-1,&\text{for }k^*=\argmin_k\|\bz_e-\be_k\|;\\
+q_{\bphi}(c_m=k|\bx)=\begin{cases}
+1,&\text{for }k=\argmin_j\|\bz_{e,m}-\be_j\|;\\
 0,&\text{otherwise.}
 \end{cases}
 $$
@@ -184,7 +184,7 @@ $$
 ## ELBO
 
 $$
-\cL_{\bphi,\btheta}(\bx)=\bbE_{q_{\bphi}(c|\bx)}\log\pt(\bx|\be_c)-\log K=\log\pt(\bx|\bz_q)-\log K.
+\cL_{\bphi,\btheta}(\bx)=\bbE_{q_{\bphi}(\bc|\bx)}\log\pt(\bx|\bz_q(\bc))-M\log K=\log\pt(\bx|\bz_q)-M\log K.
 $$
 
 </div>
@@ -198,6 +198,8 @@ $$
 $$
 
 </div>
+
+The independent uniform prior is used during tokenizer training. Then fix the tokenizer and decoder, and fit an autoregressive prior $p_{\bpsi}(\bc)$ to the aggregated posterior $\qagg(\bc)$.
 
 
 
@@ -413,13 +415,23 @@ $$
 \JSD(\pi\,\|\,p)=\frac12\Bigl[\KL\Bigl(\pi(\bx)\,\|\,\frac{\pi(\bx)+p(\bx)}2\Bigr)+\KL\Bigl(p(\bx)\,\|\,\frac{\pi(\bx)+p(\bx)}2\Bigr)\Bigr]
 $$
 
-<img src="/figs/JSD.png" alt="JSD" style="width: 100%; height: 225px; object-fit: contain; margin: 0 auto;" v-click="1" />
+<div v-click="1" style="margin-top: 28px">
+
+- **Forward KL** averages over data; **reverse KL** averages over model samples.
+- **JSD** compares both distributions to their equally weighted mixture.
+
+<div class="takeaway" style="margin-top: 24px">
+
+Next: fit one Gaussian with the two KL directions.
+
+</div>
+</div>
 
 </div>
 
 
 
-<!-- The original JSD illustration is retained. The forward/reverse KL illustrations are replaced by the approved interactive example on the continuation slide; reverse-KL fitting is not GAN training. -->
+<!-- The author requested a decision on redundant illustrations. All three original raster fits are omitted here: definitions and the averaging distributions introduce the following interactive KL comparison. No JSD fit is claimed by the KL demo; reverse-KL fitting is not GAN training. -->
 
 ---
 clicks: 0
@@ -435,7 +447,7 @@ $$
 
 <KLDemo />
 
-<!-- Ask where one Gaussian should go. Move its mean and width, then fit forward KL and the two symmetric reverse-KL minima. Forward fitting matches mean and variance; reverse fitting uses numerical minimization. These are properties of this example and restricted family, not universal laws for all models. Reverse-KL minimization is not GAN training; the original JSD illustration remains on the preceding slide. About one to two minutes. The component is reused from the author-approved deferred Lecture 1 demonstration. -->
+<!-- Ask where one Gaussian should go. Move its mean and width, then fit forward KL and the two symmetric reverse-KL minima. Forward fitting matches mean and variance; reverse fitting uses numerical minimization. These are properties of this example and restricted family, not universal laws for all models. Reverse-KL minimization is not GAN training; the preceding slide defines JSD separately from the two KL objectives. About one to two minutes. The component is reused from the author-approved deferred Lecture 1 demonstration. -->
 
 ---
 clicks: 1
@@ -703,7 +715,7 @@ In Lecture 12, minibatch optimal transport pairs noise and data samples for flow
 ---
 clicks: 4
 sourceFrame: "20"
-class: theorems
+class: theorems interactive-slide
 ---
 
 # Wasserstein Distance vs KL vs JSD
@@ -719,7 +731,9 @@ $$
 
 
 </div>
-<img src="/figs/w_kl_jsd.png" alt="w kl jsd" style="width: 100%; height: 155px; object-fit: contain; margin: 0 auto;" />
+<SupportDistanceDemo />
+
+<!-- Move the model support with theta while revealing the original derivation below. Match sets theta to exactly zero; Reset restores 1.5. The measures are uniform on line segments, without smoothing. Static PDF uses theta = 1.5; the zero case and all distances remain in the original formulas. -->
 
 
 </div>
@@ -1379,7 +1393,7 @@ $$
 
 </div>
 
-<img src="/figs/pr_k_nearest.png" alt="pr k nearest" style="width: 100%; height: 160px; object-fit: contain; margin: 0 auto;" v-click="3" />
+<img src="/figs/pr_k_nearest.png" alt="Precision and recall from nearest-neighbor manifolds" style="width: 100%; height: 160px; object-fit: contain; margin: 0 auto;" v-click="3" />
 
 <div v-click="4">
 
@@ -1678,6 +1692,24 @@ $$
 
 
 <div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The principles of diffusion models, 2025.</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: imported: 6:14"
+class: interactive-slide
+---
+
+# Langevin Dynamics: Why Add Noise?
+
+$$
+\pt(\bx)=\tfrac12\cN(\bmu_-,0.7^2\bI)+\tfrac12\cN(\bmu_+,0.7^2\bI),\qquad\bmu_\pm=(\pm1.5,0),\quad\eta=0.04.
+$$
+
+<LangevinDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The Principles of Diffusion Models, 2025</a></div>
+
+<!-- Exact score of an equally weighted two-component isotropic Gaussian mixture; no learned network. Step uses x <- x + eta/2 * score(x) + sqrt(eta) * epsilon with independent standard normal noise in both coordinates, matching the preceding formula. Start with Noise off and run: particles approach the two density modes. Turn Noise on (same initial particles and seed), run, and compare the x_1 histogram against its exact marginal. This finite unadjusted Langevin simulation is approximate; fixed nonzero eta generally biases the invariant distribution, and finite time/particles create further error. Contours are exact density level sets; arrow lengths are compressed for readability but directions are those of the score. Particles are never clipped or reflected; counts outside the visible field/histogram are disclosed. PDF compares deterministic runs after 300 steps. Each run is capped at 600 steps. Run pauses when leaving the slide, while coordinates and RNG state persist. -->
 
 ---
 clicks: 0

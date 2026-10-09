@@ -479,7 +479,7 @@ $$
 
 ## Residual Flows
 
-Let's consider the flow $\bff_{\btheta}(\bx,t)=\bx+\bv_{\btheta}(\bx,t)$:
+Here $\bff_{\btheta}$ is the NF **bijection**, $\bv_{\btheta}$ is the **velocity** (vector field):
 
 $$
 \bx_{t+1}=\bff_{\btheta}(\bx_t,t)=\bx_t+\bv_{\btheta}(\bx_t,t)
@@ -487,14 +487,19 @@ $$
 
 <div v-click="2">
 
-- This transformation is invertible by the Banach fixed point theorem if $\bv_{\btheta}$ is contractive, i.e. with Lipschitz constant $<1$.
-- Here $\bff_{\btheta}$ is the NF **bijection**, $\bv_{\btheta}$ is the **velocity** (vector field).
-- The update $\bx_{t+1}-\bx_t=\bv_{\btheta}(\bx_t,t)$ is a **finite-difference** approximation of a derivative.
+Given $\by=\bff_{\btheta}(\bx,t)$, recover $\bx$ by **fixed-point iteration**:
+
+$$
+\bx=\by-\bv_{\btheta}(\bx,t),\qquad
+\bx^{(k+1)}=\by-\bv_{\btheta}(\bx^{(k)},t).
+$$
+
+If $\bv_{\btheta}$ has Lipschitz constant $L<1$ in $\bx$, the iteration is contractive. **Banach's theorem** guarantees a unique solution for every $\by$, so $\bff_{\btheta}$ is invertible.
 
 </div>
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/1906.02735">Chen R. T. Q. et al. Residual Flows for Invertible Generative Modeling, 2019</a></div>
+<div class="source"><a href="https://arxiv.org/abs/1811.00995">Behrmann J. et al. Invertible Residual Networks, 2019</a><br><a href="https://arxiv.org/abs/1906.02735">Chen R. T. Q. et al. Residual Flows for Invertible Generative Modeling, 2019</a></div>
 
 ---
 clicks: 2
@@ -504,7 +509,7 @@ class: theorems
 
 # Towards Continuous-Time Normalizing Flows
 
-Residual dynamics $\bx_{t+1}=\bx_t+\bv_{\btheta}(\bx_t,t)$ is an Euler step with $h=1$:
+A residual step $\bx(t+h)=\bx(t)+h\,\bv_{\btheta}(\bx(t),t)$ is invertible if $hL<1$:
 
 $$
 \frac{\bx(t+h)-\bx(t)}{h}=\bv_{\btheta}(\bx(t),t)
@@ -531,99 +536,67 @@ $$
 </div>
 <div v-click="2">
 
-Here, $\bv_{\btheta}:\bbR^m\times[t_0,t_1]\rightarrow\bbR^m$ is a **velocity vector field**.
+The **velocity field** $\bv_{\btheta}:\bbR^m\times[t_0,t_1]\rightarrow\bbR^m$ need not be contractive or invertible. Under suitable regularity conditions, **uniqueness of ODE solutions guarantees an invertible flow**.
 
 </div>
 
+<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a></div>
+
 ---
-clicks: 1
+clicks: 2
 sourceFrame: "14"
 class: theorems
 ---
 
-# Ordinary Differential Equations (ODEs)
+# ODEs, Flows and Numerical Solutions
+
+<div class="block">
+
+## Ordinary Differential Equation
 
 $$
-\begin{aligned}
-\frac{d\bx(t)}{dt}&=\bv_{\btheta}(\bx(t),t);\quad\text{with initial condition }\bx(t_0)=\bx_0.\\
-\bx(t_1)&=\int_{t_0}^{t_1}\bv_{\btheta}(\bx(t),t)\,dt+\bx_0
-\end{aligned}
+\frac{d\bx(t)}{dt}=\bv_{\btheta}(\bx(t),t),\qquad\bx(t_0)=\bx_0.
 $$
+
+</div>
 
 <div class="block" v-click="1">
 
 ## Flow
 
-Let call **the flow** $\bpsi:\bbR^m\times[t_0,t_1]\rightarrow\bbR^m$ the solution of ODE:
+The **flow** $\bpsi:\bbR^m\times[t_0,t_1]\rightarrow\bbR^m$ maps the initial point to its position at time $t$: $\bx(t)=\bpsi_t(\bx_0)$.
 
 $$
-\frac{d\bpsi_t(\bx_0)}{dt}=\bv_{\btheta}(\bpsi_t(\bx_0),t);\quad\text{with initial condition }\bpsi_0(\bx_0)=\bx_0.
+\frac{d\bpsi_t(\bx_0)}{dt}=\bv_{\btheta}(\bpsi_t(\bx_0),t),\qquad\bpsi_{t_0}(\bx_0)=\bx_0.
 $$
-
-</div>
-
----
-clicks: 2
-sourceFrame: "extension: 14"
-class: theorems
----
-
-# Ordinary Differential Equations (ODEs)
-
-<div class="block">
-
-## Numerical Solution of ODEs
-
-<div class="math-chain">
-<span>
-
-$\displaystyle\bpsi_t(\bx_0)=\int_{t_0}^{t}\bv_{\btheta}(\bx(s),s)\,ds+\bx_0$
-
-</span>
-<span v-click="1">
-
-$\displaystyle\;\approx{\color{teal}\ODESolve_v(\bx_0,\btheta,t_0,t)}.$
-
-</span>
-</div>
-
-
-<div v-click="2">
-
-Here, we require the numerical routine $\ODESolve_v(\bx_0,\btheta,t_0,t)$.
-
-</div>
-
-</div>
-
----
-clicks: 2
-sourceFrame: "15"
-class: theorems
----
-
-# Numerical Solution of ODEs
-
-<div class="math-chain">
-<span>
-
-$\displaystyle\bpsi_t(\bx_0)=\int_{t_0}^{t}\bv_{\btheta}(\bx(s),s)\,ds+\bx_0$
-
-</span>
-<span v-click="1">
-
-$\displaystyle\;\approx{\color{teal}\ODESolve_v(\bx_0,\btheta,t_0,t)}.$
-
-</span>
-</div>
-
-<div v-click="1">
-
-$\ODESolve_v(\bx_0,\btheta,t_0,t)$ consists of sequence of iterative update steps.
 
 </div>
 
 <div class="block" v-click="2">
+
+## Numerical Solution
+
+$$
+\bpsi_t(\bx_0)=\bx_0+\int_{t_0}^{t}\bv_{\btheta}(\bx(s),s)\,ds
+\approx\ODESolve_v(\bx_0,\btheta,t_0,t).
+$$
+
+A numerical solver approximates the flow by a sequence of **finite steps**.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a></div>
+
+---
+clicks: 1
+sourceFrame: "15"
+class: theorems
+---
+
+# Numerical Solution of ODEs: Euler
+
+<div class="columns">
+<div class="block">
 
 ## Euler Update Step
 
@@ -635,36 +608,71 @@ $$
 \bx(t+h)=\bx(t)+h\cdot\bv_{\btheta}(\bx(t),t)
 $$
 
+Freeze the current velocity over the step: **one field evaluation**.
+
+</div>
+<EulerStepPlot />
+</div>
+
+<div class="block" v-click="1">
+
+## One-Step Error
+
+For a smooth field, Taylor expansion from the **exact starting point** gives
+
+$$
+\bx(t+h)=\bx(t)+h\,\bv_{\btheta}(\bx(t),t)+\cO(h^2).
+$$
+
+Euler drops the higher-order terms: the **local error is $\cO(h^2)$**.
 
 </div>
 
-<div class="source"><a href="https://en.wikipedia.org/wiki/Heun's_method">Image credit: https://en.wikipedia.org/wiki/Heun's_method</a></div>
+<div class="source"><a href="https://en.wikipedia.org/wiki/Euler_method">Euler method; original one-step illustration</a><br><a href="https://fncbook.com/rk/">Driscoll T. A., Braun R. J. Fundamentals of Numerical Computation: Runge–Kutta methods</a></div>
 
 ---
 clicks: 0
 sourceFrame: "extension: 15"
+class: interactive-slide
+---
+
+# Numerical Solution of ODEs: Euler and Heun
+
+<OdeSolverDemo />
+
+<div class="source"><a href="https://en.wikipedia.org/wiki/Heun's_method">Heun's method; original rotation example</a></div>
+
+---
+clicks: 1
+sourceFrame: "extension: 15"
 class: theorems
 ---
 
-# Numerical Solution of ODEs
+# ODE Solvers: Accuracy and Cost
 
-<img src="/figs/heun_method.jpg" alt="Euler and Heun update steps" style="width:100%;height:260px;object-fit:contain" />
-
-<div class="block">
-
-## Heun's Update Step
+For a sufficiently smooth velocity field on a fixed interval $[0,T]$:
 
 $$
-\bx'(t+h)=\bx(t)+h\cdot\bv_{\btheta}(\bx(t),t)
+\|\widehat{\bx}_N-\bx(T)\|=\cO(h^p),\qquad h=T/N.
 $$
 
-$$
-\bx(t+h)=\bx(t)+\frac{h}{2}\cdot\left(\bv_{\btheta}(\bx(t),t)+\bv_{\btheta}(\bx'(t+h),t+h)\right)
-$$
+This is the **global error** after $N$ steps.
+
+| Method | Global error | Velocity evaluations / step |
+|---|---|---|
+| Euler | $\cO(h)$ | 1 |
+| Heun | $\cO(h^2)$ | 2 |
+| RK4 | $\cO(h^4)$ | 4 |
+
+<div v-click="1">
+
+- **One-step error** from an exact starting point is $\cO(h^{p+1})$.
+- For small $h$, halving the step roughly reduces global error by **2 / 4 / 16**, but doubles the number of steps.
+- Compare computational cost by **NFE**: the number of velocity-network evaluations.
 
 </div>
 
-<div class="source"><a href="https://en.wikipedia.org/wiki/Heun's_method">Image credit: https://en.wikipedia.org/wiki/Heun's_method</a></div>
+<div class="source"><a href="https://fncbook.com/rk/">Driscoll T. A., Braun R. J. Fundamentals of Numerical Computation: Runge–Kutta methods</a></div>
 
 ---
 clicks: 0
@@ -823,7 +831,7 @@ $$
 
 <div v-click="1">
 
-This result states: given $\bx_0=\bx(0)$, the solution to the continuity equation gives the density $p_1(\bx(1))$.
+Integrating gives the density **along the trajectory**:
 
 <div class="block">
 
@@ -839,12 +847,94 @@ $$
 
 <div v-click="2">
 
-- This provides the density **along the trajectory**.
-- However, <span style="color:teal">the latter term</span> is difficult to estimate efficiently.
+**Hutchinson's trace estimator:**
+
+$$
+\tr(\bJ)=\bbE_{\bepsilon\sim\cN(0,\bI)}[\bepsilon^T\bJ\bepsilon],\qquad
+\bJ=\frac{\partial\bv(\bx(t),t)}{\partial\bx(t)}.
+$$
+
+- One noise vector gives an **unbiased trace estimate** via autodiff, without forming the full Jacobian.
+- **Exact identity; approximate computation** using an ODE solver and a stochastic trace estimate.
 
 </div>
 
+<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a><br><a href="https://arxiv.org/abs/1810.01367">Grathwohl W. et al. FFJORD: Free-form Continuous Dynamics for Scalable Reversible Generative Models, 2018</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 20"
+class: interactive-slide
+---
+
+# Divergence: Where Does the Density Go?
+
+<DivergenceDemo />
+
 <div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a></div>
+
+---
+clicks: 2
+sourceFrame: "extension: 20"
+class: theorems
+---
+
+# CNF: Training and Sampling
+
+Fix $p_0=\cN(0,\bI)$ and learn $\bv_{\btheta}$; the endpoint density is $p_1=\pt$.
+
+<div class="block" v-click="1">
+
+## Training
+
+<ol>
+<li>
+
+Sample $\bx\sim\pd$. Solve the ODE **backward**, from $\bx(1)=\bx$ to $\bx(0)$.
+
+</li>
+<li>
+
+Compute the negative log-likelihood along this trajectory:
+
+$$
+\cL=-\log\pt(\bx)=-\log p_0(\bx(0))+\int_0^1\tr\left(\frac{\partial\bv_{\btheta}(\bx(t),t)}{\partial\bx(t)}\right)\,dt.
+$$
+
+</li>
+<li>
+
+Update $\btheta\leftarrow\btheta-\eta\nabla_{\btheta}\cL$; differentiate through the ODE, e.g., via the **adjoint method**.
+
+</li>
+</ol>
+
+</div>
+
+<div class="block" v-click="2">
+
+## Sampling
+
+<ol>
+<li>
+
+Sample $\bx(0)\sim p_0$.
+
+</li>
+<li>
+
+Solve the ODE **forward** and return the endpoint:
+
+$$
+\bx(1)=\ODESolve_v(\bx(0),\btheta,t_0=0,t_1=1)\sim\pt.
+$$
+
+</li>
+</ol>
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a><br><a href="https://arxiv.org/abs/1810.01367">Grathwohl W. et al. FFJORD: Free-form Continuous Dynamics for Scalable Reversible Generative Models, 2018</a></div>
 
 ---
 clicks: 0
@@ -962,7 +1052,7 @@ $$
 $$
 
 - Brownian paths are continuous but a.s. **nowhere differentiable** $\Rightarrow$ Fundamental Theorem of Calculus fails.
-- Instead, SDEs require **Itô calculus** (e.g., Itô's lemma).
+- **Itô's lemma** is the stochastic counterpart of the chain rule; we will not need its explicit form here.
 - Expressions $d\bx$, $dt$, $d\bw$ are **formal shorthand** for infinitesimal increments.
 
 </div>
@@ -1223,13 +1313,25 @@ We (partially) explained, why Langevin dynamics is working.
 
 ---
 clicks: 0
+sourceFrame: "extension: 29"
+class: interactive-slide
+---
+
+# Langevin: Moving Particles, Stationary Density
+
+<StationaryLangevinDemo />
+
+<div class="source"><a href="https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf">Welling M. Bayesian Learning via Stochastic Gradient Langevin Dynamics, 2011</a></div>
+
+---
+clicks: 0
 sourceFrame: "30"
 class: summary
 ---
 
 # Summary
 
-- Continuous-time normalizing flows leverage neural ODEs to define continuous-time trajectories $\bx(t)$, relaxing many constraints of discrete-time flows.
+- CNFs define invertible transformations via neural ODEs; likelihood-based training requires ODE solves, trace evaluations and gradients through the solver.
 - If $\bx_0$ is a random variable, this yields a **probability path** $p_t(\bx)$ as time evolves. The continuity equation describes the evolution of $\log p(\bx,t)$ over time.
 - An SDE defines a stochastic process with drift and diffusion terms; ODEs are a special case of SDEs.
 - The KFP equation describes the probability dynamics of an SDE.

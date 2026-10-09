@@ -1,5 +1,265 @@
 # Lecture 7 — перенос в Slidev
 
+## Parameterization table moved to Lecture 7, 2026-10-03
+
+The author requested removal of the explicit Lecture 7 reference and a/b
+abbreviations, and suggested moving the table to the preceding lecture.
+The table is now **L7 slide 35**, after the linked clean/noise/mean demo (34)
+and before the simplified objective (36). All coefficients use the established
+sqrt(alpha_bar_t), sqrt(1-alpha_bar_t) notation, with full fractions and no font
+reduction. No visible lecture cross-reference remains. Notes retain the
+conditional/marginal-score and angular-v/ODE-velocity distinctions. L8 no longer
+contains the table; its noise-to-score derivation and DDPM/NCSN objectives are
+adjacent again. This supersedes the initial placement recorded in L8's journal.
+
+L7 Summary replaces its sixth bullet with the broader parameterization/loss
+weighting takeaway (seven bullets total); L8 restores the previous first bullet
+(five total). Independent source review confirms that L6 and Recap L7 already
+supply Gaussian score, DSM and Tweedie: no forward dependency is introduced.
+Recaps L7/L8/L9, training/sampling, existing demos, section hierarchies and
+README/catalog remain consistent without edits. Maps: **L7 41 slides / 94 states;
+L8 38 / 83**. No Beamer or merged files were changed.
+
+Both isolated finalizations passed source checks, 54 existing tests, build and
+both exports; render-qa.py passed for both decks. A concurrent change only added
+six dynamics tests to package.json and the finalize test list; the exact diff
+was checked, the new tests passed separately, and no render/build/export input
+changed. Both original and integrated manifests are retained in QA.
+
+Every final reveal state equals its handout page. Masking only the folio area
+(1190,675)-(1280,720), all unaffected pages match the saved baseline: L7
+**39 handout / 90 reveal pages**, L8 **37 / 82**. The table's three PDF states and
+both Summaries were visually reviewed. Browser checks pass for L7 slides
+34–36,41 (8 states) and L8 slides 11,12,38 (7 states), including reversals,
+both neighbor returns, overflow, math, references, resources and errors.
+The table retains the approved course typography: Arial 37px headings, 24px
+body, 23px table, 24.96px paragraph math and 12px sources. Shared style and
+existing demos are unchanged. All lecture/shared inputs were hash-checked before
+publication; all four PDFs match the verified isolated outputs byte for byte.
+
+QA: `../output/qa/lecture7/parameterizations-move-2026-10-03/`.
+
+- SHA-256 slides.md: `b8b69e91aa7f6cd0057cc0225b709f9c7b625e22b5110989a7011c358a03e55a`.
+- SHA-256 slide-map.json: `082ae81b2a1b7d099c3e1b332148f584f2e1f0e404bc90c3d2b426e0287e8007`.
+- SHA-256 Lecture7.pdf: `19c8f43ccef0995c2f17b24bea3f58e3fb330de0cf0c5a99dbde0e0e71378e36`.
+- SHA-256 Lecture7-handout.pdf: `bffb3950916a9595a40cf26a621e0ced3d0ed8a32f041a899ffd5679aa99a925`.
+
+## Проверка перед коммитом и push, 2026-10-03
+
+Проверен весь diff Lecture 7 относительно 2c4de1d7, включая компоновку,
+новые компоненты и текущую версию слайда 34. Независимые проверки подтвердили
+согласованность L6 → Recap L7 и L7 → Recap L8, повторённых определений и формул,
+Training/Sampling, семи тезисов Summary, пяти разделов Outline/README и карты
+40 / 91. Recap L8 совпадает в HEAD и рабочем дереве; коммит L7 не зависит
+от параллельных изменений guidance в L8.
+
+В staged-составе зарегистрированы только diffusion tests: **49 тестов прошли**.
+Предыдущие 54 теста finalize включали ещё 5 параллельных guidance tests L8.
+Source check и diff check прошли. Хеши источников, компонентов и обоих PDF
+соответствуют последней проверенной сборке ниже; browser/PDF evidence повторно
+использовано без изменения render inputs. Новая полная пересборка не требовалась.
+В коммит включены только L7, её инструменты и соответствующие части общих файлов.
+
+## Три связанные параметризации на слайде 34, 2026-10-03
+
+По одобренному автором переосмыслению демо: исходная цель — показать выбор выхода
+сети и взаимно однозначные преобразования, а не сопоставление targets / errors.
+Новый слайд **One Prediction, Three Parameterizations** заменяет прежний 2D plot.
+
+- Один скалярный coordinate при фиксированных xₜ = 1, αₜ = 0.6 и ᾱₜ = 0.39.
+  Три связанные ручки: clean estimate, noise estimate, reverse mean. Выбор
+  Network output сохраняет все значения и меняет только выделение / стрелки.
+  Движение любой ручки выбирает соответствующий выход и пересчитывает остальные.
+- Нет true targets, Exact target, loss или KL. Все величины — предсказания.
+  Цвета clean / noise / mean сохранены в значениях и двух conversion identities.
+  Скалярная нотация явно оговорена; преобразования применяются покоординатно.
+- Диапазоны трёх ручек получены из одного интервала noise ∈ [−2, 2];
+  независимого clipping нет. Непрерывный HTML input использует step=any.
+  Reset и PDF фиксируют noise = 0.5; PDF сохраняет все значения, направления
+  пересчёта и формулы. Заголовок синхронизирован с картой; по-прежнему 40 / 91.
+- Численные проверки дополнены round trips из каждой параметризации,
+  независимой проверкой conditioned mean и соответствием всех диапазонов.
+  Source check, **54 теста** текущего finalize, build и обе PDF-версии прошли.
+- Browser QA: **28 состояний**; переключения без изменения значений, управление
+  каждым ползунком, края Home / End, клавиатура без перелистывания, возврат с обоих
+  соседей, Reset, offline. Synthetic pen проверен на всех трёх ручках при
+  включённых annotations и на Reset. Геометрия слайда 34 проверена отдельно.
+- Независимые source reviews подтвердили математику, нотацию и соответствие
+  соседним слайдам 33 / 35. Изменения Summary, исходящего Recap L8 и расписания
+  не требуются; входящий Recap не затрагивался. Это узкая проверка замены демо.
+- В итоговых PDF изменились только handout page 34 и reveal page 80.
+  Остальные страницы попиксельно совпадают с предыдущей проверенной редакцией;
+  все 40 финальных состояний равны раздатке. Новый слайд просмотрен крупно.
+  Перед публикацией PDF сверены 52 render inputs с рабочим проектом.
+  Общая тема, соседние слайды, Beamer и merged не менялись.
+
+QA: /private/tmp/dgm-l7-parameterization-20261003/ и
+lectures-slidev/output/qa/lecture7/visual-demos/. Настоящее перо / проектор и
+presenter-viewer sync эта проверка не сертифицирует.
+
+- slides.md: bd912add8fd6c3b49afc5146be7c688fbe50f36cfc98eeea1cb7ccb043b34286.
+- NoisePredictionDemo.vue: 1a698f7ae50678e0c15918239e896759955902bea899ae0d2fe01dbf9f9dd648.
+- Lecture7.pdf: 2beb642c1275237c4afdd4d5faea0e00ea3eece97636831130e6c97f2df98bd2.
+- Lecture7-handout.pdf: ccec34c8225ea3862a857469a36f9c2834c37e565e838a1c79275f102c08808c.
+
+## Числитель и структура списка, 2026-10-03
+
+По повторному замечанию автора:
+
+- 16: оба Gaussian factors в числителе собраны в одну строку без gathered; определения tilde mu и tilde beta целиком окрашены в teal / purple и выделены отдельными рамками. Математическое значение и три раскрытия сохранены.
+- 27: First / Second / Third идут одним вертикальным списком. Условие для x₁ включено в первый пункт; две константные плотности стоят рядом под вторым. Три раскрытия и вся ELBO chain сохранены.
+
+Браузер: оба слайда, 8 состояний, без overflow, пустых кликов, ошибок математики и reflow; возвраты по кликам совпадают. Изолированный finalize прошёл: 48 тестов, production build, оба PDF (40 / 91). Все изменённые PDF-состояния просмотрены крупно; 40 финальных состояний совпадают с раздаткой. Сравнение с предыдущими PDF дополнительно выявило актуальные параллельные изменения демо на 17 / 21 / 34: они сохранены и также просмотрены. Перед копированием PDF render inputs сверены с рабочим проектом. Общие шрифты и тема не менялись.
+
+QA: `/private/tmp/dgm-l7-layout2-20261003/project/lectures-slidev/output/qa/lecture7/refine-*.png`; build log — `/private/tmp/dgm-l7-layout2-20261003/refine-finalize.log`.
+
+- `slides.md`: `cb1d66028a30ee11f3455f6d1ce73e50b7a5a85169051cd740b69445baccb8a0`.
+- `Lecture7.pdf`: `2c5736f7d225f9defc378fbfbaf7d33f8bfa62fd3ae37f7094877ed9fc041f15`.
+- `Lecture7-handout.pdf`: `aca8a4e4d780e05497f8c945acd74429e90f85aca311ee905f6ba70fa8be521d`.
+
+
+## Точечные правки визуализаций, 2026-10-03
+
+- 17: убрана плавающая подпись `density`; название распределения над графиком сохранено.
+- 21: убрана дополнительная стрелка после `add noise`; направление задают стрелки самой цепочки.
+- 34: символы clean data / noise / reverse mean во всех формулах окрашены соответственно в teal / purple / orange, как точки и таблица. Коэффициенты и noisy observation остаются нейтральными.
+- Поиск ссылок во всех Slidev-лекциях и поиск дублей по SHA-256 подтвердили: `diffusion_pgm_forward.png` и `diffusion_pgm_reverse.png` больше не используются. Их единственные копии в Slidev — неиспользуемые исходные assets лекции 7. DDPM.png и diffusion_objective.png — другие схемы; эта точечная правка их не меняет.
+- Проверены 20 browser-состояний демо, управление, Reset, возврат на слайд, offline и synthetic pen; отдельно — геометрия и раскрытия 17 / 21 / 34. Source check, 48 тестов, build и оба PDF прошли в изолированной копии. В этой сборке изменены только PDF-страницы 17 / 21 / 34; все 40 финальных состояний совпали с раздаткой. Изменённые страницы просмотрены крупно. Итоговая общая сборка включает параллельные правки 16 / 27; дополнительно подтверждено попиксельное совпадение 17 / 21 / 34 в обоих итоговых PDF с просмотренной редакцией и совпадение render inputs с рабочими файлами.
+
+## Повторные замечания по компоновке и конец показа, 2026-10-03
+
+Номера относятся к текущей редакции после параллельного добавления демо:
+**40 слайдов / 91 состояние**. Новые демо и нативные схемы сохранены.
+
+- 8: убрана добавленная forward-chain картинка из Recap и её дополнительная ссылка Das; исходный текст и источник Sohl-Dickstein сохранены.
+- 12 / 14 / 15: общий DDPM.png имеет одинаковый контейнер 245 px / contain.
+- 15: reverse sampling step снова одной строкой; ширины колонок 0.85 / 1.15 дают место без уменьшения шрифта.
+- 16: tilde mu выделена teal, tilde beta — общим purple; определения и Gaussian kernel используют одинаковое выделение.
+- 27: decoder formula целиком одной строкой, пояснения распределены по колонкам; нативная ELBO chain занимает 140 px.
+- 29: два Gaussian arguments в KL соединены на одной строке; squared-error результат остаётся отдельной строкой derivation. Reveal metadata согласованы.
+- 32: длинная подстановка reverse mean соединена на одной строке; упрощённый результат остаётся следующей строкой derivation. KL на этом слайде тоже помещается целиком.
+- 39 / 40: в исходнике Training/Sampling и Summary присутствовали. Старый dev-сервер 3037 показывал несогласованные страницы при правильном footer 40. После завершения параллельной задачи перезапущен только этот сервер на Node 24.19.0: раздел 5 на 36, Training/Sampling на 39, Summary на 40. Переходы 36→37→38→39→40 и 40→39 подтверждены клавиатурой.
+
+Проверки в физически изолированной копии
+`/private/tmp/dgm-l7-layout2-20261003/project/lectures-slidev`:
+
+- Source check: 40 / 91 и 87 общих макросов; **48 тестов**, production build и оба PDF прошли.
+- Просмотрены все **40 + 91 страниц** PDF на контактных листах и изменённые страницы крупно. Все 40 финальных состояний попиксельно равны раздатке; сырых math delimiters нет.
+- Полный browser inspect: **40 / 91**, стабильная геометрия и обратные раскрытия, без overflow, пустых кликов, KaTeX/HTTP errors и отсутствующих изображений. На перезапущенном 3037 повторно проверены последние пять слайдов и сквозная навигация; JS errors нет.
+- Перед публикацией сверены 46 render inputs с текущим рабочим проектом. Общая тема, размер математического шрифта, значение формул, Beamer и merged в этой правке не менялись. QA — `output/qa/lecture7/` в изолированной копии; это проверка компоновки, не новый полный семантический аудит курса.
+
+Хеши опубликованной редакции:
+
+- `slides.md`: `e156b28066e91c9c1451b1d98045ad220f77429c09857b39aedb7e2f4b4c9625`.
+- `slide-map.json`: `b247ee0f713723c86bf99acebe0764bdb85ca8f92609b3b7b67709129a5c7845`.
+- `Lecture7.pdf`: `7a191fd585e850dc67238045da7cbc1592e77a0e8126720721d74c264ab3b4e5`.
+- `Lecture7-handout.pdf`: `88c02df9d82db422e104887af08dabf8796fd5256417b7696bb98bffd47b101c`.
+
+
+## Интерактивные визуализации, 2026-10-03
+
+По выбору автора реализованы пункты 2–5 предложения. Демо про малый обратный
+Gaussian step не добавлялось. Сохранены текущие параллельные правки компоновки;
+итоговая карта: **40 слайдов / 91 состояние**.
+
+- 17 (`extension: 18`): точное двухточечное clean-data distribution, x₀ = −2 / 2
+  с равными prior probabilities. Unknown / Known, выбор чистого значения, xₜ slider,
+  posterior weights, неизвестный reverse mixture и известный Gaussian kernel.
+  alpha_t=0.6, alpha_bar_(t−1)=0.65. В PDF показаны смесь и обе conditionals.
+  Вычислимость здесь обеспечена конечным toy distribution; это не claim для реальных данных.
+- 19 (`extension: 19`): общий timestep linear-beta / cosine, подвижные точки log-SNR
+  и два noisy изображения одной кодом нарисованной цифры. Один seed Gaussian noise,
+  фиксированная шкала отображения; t=1…1000, Reset=500. Schedules сохраняют прежние
+  T=1000, beta=0.0001…0.02 и cosine offset=0.008 / cap=0.999. Формулы SNR/lambda,
+  интерпретация и замечание о pixel-space resolution сохранены. PDF сравнивает t=500.
+- 21–22 (`20`, `21`): нативные forward/reverse схемы вместо растровых PGM.
+  Выделены x₀, latent trajectory z, fixed encoder, decoder и полный latent prior.
+  Формулы факторизации и исходные раскрытия сохранены. На 27 (`25`) эта цепочка
+  связывает reconstruction / prior matching / denoising с полным ELBO; финальная
+  компоновка включает параллельную авторскую правку поясняющих формул.
+- 34 (`extension: imported: 8:13`): фиксированный двумерный training pair, slider
+  noise-prediction error и согласованные clean estimate / reverse mean. Exact target
+  совмещает все пары; PDF оставляет targets/predictions рядом. Явно различаются
+  известный training target и возможность сети восстановить конкретный sampled noise.
+
+Логика и состояние локальны в lecture7/lib; DemoPanel и KaTeX adapter общие.
+Новых зависимостей, изменений общей темы, Beamer или merged в этой задаче нет.
+README содержит управление и ограничения; карта обновлена.
+
+Проверки:
+
+- Независимый lecture-audit source review: точные Bayes conditionals/mixture,
+  schedules, связи ошибок, нотация, оба Recap L6→L7→L8, семь Summary bullets,
+  пять разделов и README. Новых противоречий нет; интерфейсы сохранены.
+- Пять новых численных тестов проверяют Bayes identity и интегральную нормировку,
+  posterior mixture, schedules/log-SNR, общий noise и три параметризации. Они включены
+  в test:demos/finalize. Итог: **48 тестов**, source check, production build, оба PDF.
+- Node 24.19.0 / Slidev 52.19.1, изолированная физическая копия
+  `/private/tmp/dgm-l7-visuals-20261003/lectures-slidev`. После поздних параллельных
+  правок слайдов 8/14/15/16/27/29 повторены check, build, export и scoped browser/PDF QA.
+  Серверы других задач не останавливались.
+- `inspect-diffusion-demos.mjs`: **20 визуальных состояний**, оба clean values,
+  slider boundaries, keyboard без перелистывания, возвраты с обоих соседей, Reset,
+  Exact target, offline, controls при включённом пере и synthetic pen Reset.
+- `inspect.mjs`: изменённые слайды и соседи, затем последние правки компоновки
+  (два запуска: 38 и 18 состояний, с пересечением). Геометрия и обратные клики
+  стабильны; пустых кликов, ошибок KaTeX, HTTP и пропавших изображений нет.
+- Просмотрены все 40 + 91 страниц на контактных листах, изменённые слайды крупно;
+  последние шесть изменений просмотрены повторно. Все 40 финальных состояний
+  попиксельно равны раздатке, сырых math delimiters нет. Статические demo states
+  содержательны в обоих PDF.
+- Основная типографика L7:27 сопоставлена с утверждённой L1:35 в PDF и браузере:
+  Arial h1 37 px / 650, KaTeX 24.96 px, общие цвета и шрифты. Браузерный QA:
+  `output/qa/lecture7/visual-demos/`; PDF QA/логи — во временной копии. Все render
+  inputs сверены перед публикацией; хеши — `/private/tmp/dgm-l7-visuals-20261003/publication.json`.
+
+Состояния сохраняются при навигации; presenter/viewer sync не реализована.
+Физическое перо и проектор не проверялись.
+
+## Компоновка по замечаниям автора, 2026-10-03
+
+Номера ниже относятся к редакции из 44 слайдов до этой правки.
+
+- 2: рисунок score matching / Langevin увеличен с 205 до 250 px.
+- 3: свободное место заняла существующая иллюстрация Gaussian perturbation из этой лекции; её источник Song указан вместе с Vincent.
+- 7–8: Training и Sampling объединены; Sampling раскрывается целым блоком. 9: добавлена существующая схема forward Markov chain с источником Das.
+- 10: рисунок diffusion over time увеличен с 155 до 260 px.
+- 13: схема DDPM увеличена с 155 до 245 px; Forward / Reverse размещены рядом под ней.
+- 15: схема увеличена с 205 до 340 px. 16: та же схема стоит над двумя колонками целых процессов; длинный reverse step перенесён после плюса, примечание оформлено общим takeaway.
+- 17–18: reverse kernels, Gaussian product и его параметры объединены; убраны повторный подзаголовок и служебное “Here”. 19: три группы распределены по высоте без изменения текста и формул.
+- 29: схема diffusion objective увеличена с 205 до 320 px. 30–31: выбор дисперсии и переход Gaussian KL к squared error объединены.
+- 34–35, 36–37, 38–39: три связанные пары репараметризации объединены. Уникальные промежуточные строки сохраняются в PDF с раскрытиями; новые блоки раскрываются после прежних.
+
+Итог: **38 логических слайдов / 89 состояний**. Все 64 блока display math побайтно сохранены без click metadata; inline reverse step лишь перенесён на две строки. Источники, алгоритмы, Summary и все Outline сохранены. Содержание incoming/outgoing Recap не менялось, поэтому эта правка не требует обновления L6/L8 или корневого расписания. Карта обновлена; ссылки каталога по-прежнему актуальны. Общая тема, макросы, Beamer и merged не изменялись.
+
+Проверки выполнялись в изолированной копии `/private/tmp/dgm-l7-layout-20261003/project/lectures-slidev` с физически отдельным node_modules, Node 24.19.0 / Slidev 52.19.1. Существующий сервер на 3037 не останавливался; собственный dev использовал 13037, сравнение L1 — 13031. Dev останавливался перед build/export.
+
+- Штатный finalize: source check, **43 существующих теста**, production build и оба PDF прошли. Source check повторён в рабочем проекте; 87 общих макросов и карта согласованы.
+- render-qa: **38 + 89 страниц**, сырых delimiters нет. Просмотрены все 127 страниц в контактных листах; плотные объединённые слайды 7, 12, 16, 28, 31–33 проверены при 1280 px в PDF и браузере. Переполнений/наложений нет. Все 38 финальных состояний попиксельно равны раздатке; 23 неизменённых слайда совпадают с прежним PDF вне folio.
+- Браузерная проверка всех 38 слайдов / 89 состояний: геометрия и обратные раскрытия стабильны, пустых кликов, ошибок KaTeX и отсутствующих рисунков нет. После первоначальной проверки исправлены границы 2, 3, 12, 16; эти четыре повторно прошли штатный inspect.mjs без overflow.
+- Дополнительный сценарий для 15 переработанных слайдов: 60 возвратов к начальному/конечному состоянию с обоих соседей прошли, ошибок JS нет. Доказательство — `layout-reentry-style.json`.
+- Стиль сопоставлен с утверждённой L1:35 в PDF и браузере при одинаковой ширине 1280 px: navy/teal, Arial 24 px, h1 37 px / 650, KaTeX 24.96 px, ожидания, KL, bold vectors и параметры сохраняют общее оформление.
+
+QA: `/private/tmp/dgm-l7-layout-20261003/project/lectures-slidev/output/qa/lecture7/`. Проверка scoped по компоновке и сохранности содержания; полный семантический аудит курса и физические устройства повторно не проверялись.
+
+Хеши итоговой редакции:
+
+- `slides.md`: `c51aff9605798e70a290498825d7488bb4ea259ff54cd49c986ad7d7aeac883e`.
+- `slide-map.json`: `4f83d18d1d17fae48d0427cd506abbcfec23eba50d4731cfae363176973b9370`.
+- `Lecture7.pdf`: `26a46fc4fa5d2c8d0febacfc3d92cc4caacfd1a8748f3bce23704a3cb38711b3`.
+- `Lecture7-handout.pdf`: `dfa5c63123af0355910955492f862647836ac3282afea5b51e74d4d6132ae562`.
+
+
+## Согласованность Recap и Summary, 2026-09-27
+
+По запросу автора после дневных изменений проверена полная цепочка L2→L3→…→L8; для этой лекции — L6 → Recap L7 и L7 → Recap L8. В L7:4 восстановлены regularity assumptions и независимость DSM constant от theta, явно указанные в текущем доказательстве L6. Tweedie сохранена. Примечание L7:15 и его зеркало L8:2 теперь повторяют sufficiently-small-beta assumption и approximately Gaussian из L7:14. Summary L7: 7 актуальных тезисов, включая SNR; остальные повторяемые уравнения и NCSN/DDPM алгоритмы согласованы.
+
+Проверены notation, источники и хеши повторяемых рисунков, Training/Sampling, Summary L3–7, Outline/README Materials и карты. Установленное постоянное правило проверок перед commit/push записано в AGENTS.md и .codex/project-context.md. Beamer и merged не изменялись; текущая авторская редакция Slidev служит источником для Recap.
+
+Изолированный `finalize` (Node 24.19.0, Slidev 52.19.1): source checks, 41 тест, build и оба PDF прошли; страниц handout/reveals — 44/89. Все изменённые страницы просмотрены при 1280 px; 42 страницы раздатки и 87 состояний попиксельно совпали с предыдущими PDF. Все финальные состояния совпадают с раздаткой, сырых математических delimiters нет. PDF скопированы в проект только после сверки всех render inputs. После экспорта проверены возвраты с обоих соседей, начальное/конечное состояние, формулы, ресурсы и стандартная геометрия. Для изменённых слайдов выполнен инспектор overflow/reverse clicks; стиль в браузере и PDF сопоставлен с L1:35 — Arial 24 px, title 37 px/650, KaTeX 24.96 px. У эталонной L1 отмечен существующий внешний favicon; изменённые лекции внешних запросов не делали.
+
+QA: `/private/tmp/dgm-recap-sync-20260927/lectures-slidev/output/qa/lecture7/`; хеши публикации — `/private/tmp/dgm-recap-sync-20260927/publication7.json`. Проверка scoped по Recap/Summary и связанным формулам; полный аудит лекций и физические устройства повторно не проверялись.
+
 ## Course refresh: noise schedule через SNR, 2026-09-27
 
 По согласованному предложению добавлен **слайд 20** после Distribution Summary
@@ -294,3 +554,7 @@ SHA-256 текущей редакции: slides.md `a3b0b70473af1cc38592adb2abf5
 | `pitfalls.jpg` | `5e207ee7995d479ecc50eb8d40d442692597a9edaedbe915a3e50fb24e196ec4` |
 | `single_noise.jpg` | `e7e3f02c506c222d42c123a6677efaf8ec6e89dc07bf0ee7daa91b7aa5b66878` |
 | `smld.jpg` | `6ec30b4e08ba128585917926cdef4c7474bd3dd7e5d9f2c83554bcf6b98150cc` |
+
+## Равномерные интервалы Summary, 2026-10-03
+
+По запросу автора общий `class: summary` использует вертикальный flex-список с `justify-content: space-between`, аналог `\vfill` между пунктами. Размер шрифта и содержание сохранены; в L4 удалены локальные margin. Проверены Summary всех 14 лекций в браузере и обоих PDF: одинаковые промежутки, отсутствие переполнений, совпадение handout и финального состояния. Для этой лекции: **40 слайдов / 91 состояний**; source check, web build и оба экспорта прошли с Node 24.19.0 в изолированной копии. Все тексты PDF сохранены, остальные страницы попиксельно совпадают с контрольной версией. Это проверка оформления Summary; полный содержательный аудит не повторялся. QA: `../output/qa/summary-spacing-2026-10-03/`.

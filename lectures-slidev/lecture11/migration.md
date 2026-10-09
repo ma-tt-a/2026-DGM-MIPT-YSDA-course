@@ -96,3 +96,25 @@ The outgoing comparison now uses the final Slidev Lecture 12 (`slides.md` SHA-25
 The coordinator compared final handout pages **L11 21 / 28 / 31 / 34 ↔ L12 5 / 10 / 12 / 16** at 1280×720 and final browser captures **L11 34 ↔ L12 16**. Shared heading/body styles, vector and parameter glyphs, Gaussian/expectation/solver notation, semantic colors and footer clearance agree; the documented recap continuations retain the complete formulas. Five common recap images were checked byte-for-byte. Evidence is in ignored `output/qa/resume-integration/reference-captures/`, `recap-assets.json`, and `output/qa/lecture12/`.
 
 The Slidev catalog and root README integration are complete. The final main-workspace source check, all 144 strict KaTeX expressions, both PDF page counts and the recorded hashes pass; the lecture's reviewed source and PDF bytes are unchanged.
+
+## Равномерные интервалы Summary, 2026-10-03
+
+По запросу автора общий `class: summary` использует вертикальный flex-список с `justify-content: space-between`, аналог `\vfill` между пунктами. Размер шрифта и содержание сохранены; в L4 удалены локальные margin. Проверены Summary всех 14 лекций в браузере и обоих PDF: одинаковые промежутки, отсутствие переполнений, совпадение handout и финального состояния. Для этой лекции: **36 слайдов / 80 состояний**; source check, web build и оба экспорта прошли с Node 24.19.0 в изолированной копии. Все тексты PDF сохранены, остальные страницы попиксельно совпадают с контрольной версией. Это проверка оформления Summary; полный содержательный аудит не повторялся. QA: `../output/qa/summary-spacing-2026-10-03/`.
+
+
+## Course refresh: CNF training → Flow Matching, 2026-10-03
+
+Recap **9–10** синхронизирован дословно с исправленными формулировками L10 42–43 о likelihood-based CNF training, adjoint и Flow Matching. Добавлена ссылка на Neural ODE. Source map, reveals, body и Summary сохранены. Итог: **36 слайдов / 80 состояний**.
+
+`finalize` в изолированной копии прошёл: 60 тестов, source/map checks, strict math parsing, web build и оба PDF. Все изменённые страницы и состояния просмотрены; browser inspector проверил целевые слайды, reveals и отсутствие overflow/math/resource errors. Отдельно проверен возврат с соседнего слайда к финальному состоянию. Новый слайд L9 визуально сопоставлен с утверждённым стилем L1; shared theme не менялся.
+
+Из 116 страниц двух PDF 112 совпадают попиксельно; изменены только слайды 9–10 в обоих PDF.
+
+Проверены затронутые зависимости: формулы L9 и incoming Recap L10 сохранены; новое объяснение обучения раскрыто в body L10, body L10 42–43 и Recap L11 9–10 согласованы. Body L11 и outgoing Recap L12 не затронуты. Section hierarchy / расписание не менялись; каталог и source maps согласованы. Это проверка текущей правки, не новый полный аудит лекций. Beamer и `lectures/merged/` не менялись.
+
+QA: `../output/qa/cnf-training-2026-10-03/`. Перед публикацией проверено побайтовое совпадение slides/map/components/lib/public и shared theme с экспортированной копией. Актуальные SHA-256:
+
+- `slides.md`: `543b8336356e16e950e9a33319f06a73c47c54d65a5d330e64cf741d14e9ab3d`.
+- `slide-map.json`: `91fef77d722831c6e27b2f61a7bd893ee92b8239201bcd8e7ccf0f4234b12ba6`.
+- `Lecture11.pdf`: `e0ab10bdc81f70591a3d810383324ea06d2ed26dc357218957e4821d3ad26ba0`.
+- `Lecture11-handout.pdf`: `f0d7d092113301ae8215981a00b3e4985740f864243ee569ebe95a51e5a8b396`.

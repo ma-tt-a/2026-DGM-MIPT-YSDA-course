@@ -230,27 +230,31 @@ class: theorems
 
 ## Frechet Inception Distance (FID)
 
-For normal distributions $\pd(\bx_1)=\cN(\bmu_{\text{data}},\bSigma_{\text{data}})$, $p(\bx_2)=\cN(\bmu_{\btheta},\bSigma_{\btheta})$:
+Use Inception image embeddings $\bz=\bff(\bx)$; compare Gaussian approximations of their distributions:
 
 $$
 \begin{aligned}
-\FID(\pd,\pt)&=W_2^2(\pd\|\pt)=\inf_{\gamma\in\Gamma(\pd,\pt)}\bbE_{(\bx_1,\bx_2)\sim\gamma}\|\bx_1-\bx_2\|^2\\
-&=\|\bmu_{\text{data}}-\bmu_{\btheta}\|^2\\
-&\quad+\tr\left[\bSigma_{\text{data}}+\bSigma_{\btheta}-2\left(\bSigma_{\text{data}}^{1/2}\bSigma_{\btheta}\bSigma_{\text{data}}^{1/2}\right)^{1/2}\right]
+\FID(\pd,\pt)&=\|\bmu_{\text{data}}-\bmu_{\btheta}\|^2\\
+&\quad+\tr\left[\bSigma_{\text{data}}+\bSigma_{\btheta}-2\left(\bSigma_{\text{data}}^{1/2}\bSigma_{\btheta}\bSigma_{\text{data}}^{1/2}\right)^{1/2}\right].
 \end{aligned}
 $$
+
+FID depends on the feature network, Gaussian approximation and sample size; it may not correlate with human evaluation.
 
 </div>
 <div class="block">
 
-## Drawbacks
+## CMMD: Comparing CLIP Image Embeddings
 
-- Depends on the pretrained classification network.
-- Uses the normality assumption.
-- May not correlate with human evaluation.
+For CLIP image-embedding distributions $P,Q$, use a Gaussian kernel $k$:
+
+$$
+\MMD_k^2(P,Q)=\bbE k(\bz,\bz')+\bbE k(\bw,\bw')-2\bbE k(\bz,\bw).
+$$
+
+Here $\bz,\bz'\sim P$ and $\bw,\bw'\sim Q$ are mutually independent. This compares more than means and covariances.
 
 </div>
-
 
 <div class="source"><a href="https://arxiv.org/abs/1706.08500">Heusel M. et al. GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium, 2017</a><br><a href="https://arxiv.org/abs/2401.09603">Jayasumana S. et al. Rethinking FID: Towards a Better Evaluation Metric for Image Generation, 2024</a></div>
 
@@ -290,29 +294,37 @@ class: theorems
 
 # Recap of Previous Lecture
 
-<div class="columns">
+Score an image $\bx$ for a text prompt $t$.
+
 <div class="block">
 
-## Unconditional Model
+## CLIP: Learn from Image–Caption Pairs
 
-<img src="/figs/uncond_model.png" alt="Unconditional image model" style="height: 150px; width: 100%; object-fit: contain;" />
+$$
+s_{\text{CLIP}}(\bx,t)=\cos\!\left(\bff_{\text{img}}(\bx),\bff_{\text{text}}(t)\right).
+$$
 
 </div>
 <div class="block">
 
-## Conditional Model
+## PickScore: Learn from Human Choices
 
-<img src="/figs/cond_model.png" alt="Image model conditioned on a prompt" style="height: 150px; width: 100%; object-fit: contain;" />
+For the same prompt, a human prefers $\bx^+$ to $\bx^-$:
+
+$$
+\bbP_{\btheta}(\bx^+\succ\bx^-\mid t)=
+\frac{\exp r_{\btheta}(\bx^+,t)}{\exp r_{\btheta}(\bx^+,t)+\exp r_{\btheta}(\bx^-,t)}.
+$$
+
+Train the score $r_{\btheta}$ to assign higher probability to the human choice.
 
 </div>
-</div>
 
-We need a way to measure not only the quality of the generated image, but also how well it's aligned with the prompt.
+**VQAScore / GenEval / DPG-Bench:** evaluate compositional correctness; CLIP similarity can miss counts, attributes and relations.
 
-<img src="/figs/clip.png" alt="CLIP measures image and text alignment" style="height: 230px; width: 100%; object-fit: contain;" />
+A learned preference score can guide sample selection and model training — but optimizing the score can exploit its flaws.
 
-
-<div class="source"><a href="https://arxiv.org/abs/2103.00020">Radford A. et al. Learning transferable visual models from natural language supervision, 2021</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2103.00020">Radford A. et al. Learning Transferable Visual Models From Natural Language Supervision, 2021</a><br><a href="https://arxiv.org/abs/2305.01569">Kirstain Y. et al. Pick-a-Pic: An Open Dataset of User Preferences for Text-to-Image Generation, 2023</a><br><a href="https://arxiv.org/abs/2404.01291">Lin Z. et al. Evaluating Text-to-Visual Generation with Image-to-Text Generation, 2024</a><br><a href="https://arxiv.org/abs/2310.11513">Ghosh D. et al. GenEval, 2023</a> · <a href="https://arxiv.org/abs/2403.05135">Hu X. et al. ELLA (DPG-Bench), 2024</a></div>
 
 ---
 clicks: 0
@@ -322,14 +334,30 @@ class: theorems
 
 # Recap of Previous Lecture
 
+<div class="columns" style="grid-template-columns: 0.72fr 1.28fr; align-items: start; margin-top: 12px;">
+<div>
+
 - No automated metric is perfect.
 - The best way to evaluate generative models is by human assessment.
 - It's important to assess various properties.
 
-<img src="/figs/yaart_2.5.png" alt="YandexART 2.5 human assessment across multiple properties" style="height: 330px; width: 100%; object-fit: contain;" />
+</div>
 
+<img src="/figs/alice_ai_art_2_evaluation.png" alt="Alice AI ART 2.0 image-editing evaluation: good and bad examples for instruction relevance, preservation of unchanged content, and visual defects." style="width: 100%; height: 530px; object-fit: contain; margin: 0 auto;" />
 
-<div class="source"><a href="https://ya.ru/ai/art">YandexART 2.5, 2025</a></div>
+</div>
+
+<div class="source"><a href="https://habr.com/ru/companies/yandex/articles/1058630/">Yandex. Alice AI ART 2.0: A Unified Model for Image Generation and Editing</a></div>
+
+<!--
+The author requested this exact image and article. It illustrates evaluation of
+image editing (I2I): instruction relevance, preservation, and defects. The full
+image is preserved without cropping or translation; its labels are in Russian.
+The article uses human assessors as well as automated reward models / VLM judges;
+this illustration presents evaluation criteria rather than an Arena-style ranking.
+Historical source of the replaced Beamer illustration:
+<a href="https://ya.ru/ai/art">YandexART 2.5</a>.
+-->
 
 ---
 clicks: 2
@@ -912,6 +940,26 @@ Both conditional means are MSE-optimal predictions given the noisy observation.
 <!-- Assume finite second moments. The identities use the true marginal score; replacing it by the trained score network gives approximate clean-data and noise predictions. The conditional means need not equal the particular clean sample or noise realization that produced the observation. -->
 
 ---
+clicks: 3
+sourceFrame: "extension: 25"
+class: theorems interactive-slide
+---
+
+<script setup>
+import TweedieDemo from './components/TweedieDemo.vue'
+</script>
+
+# From Conditional Scores to Denoising
+
+Toy data: three equally likely clean points $\bx_i$, with $\bx_\sigma=\bx+\sigma\bepsilon$, $\bepsilon\sim\cN(0,\bI)$ and $\sigma=1$.
+
+<TweedieDemo :stage="$clicks" />
+
+<div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a><br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3325056/">Efron B. Tweedie's Formula and Selection Bias, 2011</a></div>
+
+<!-- Original analytic toy example. The clean prior is uniform on three atoms; the Gaussian-corrupted marginal is smooth. At sigma = 1 the displayed conditional-score vectors end at the clean points, and the marginal-score vector ends at the posterior mean. Clicks: conditional scores → posterior weights → marginal score → Tweedie. The arrows are exact, not estimates from a trained model. -->
+
+---
 clicks: 4
 sourceFrame: "26"
 class: theorems
@@ -1128,7 +1176,7 @@ sourceFrame: "imported: 7:9"
 <TaxonomyDiagram class="taxonomy" denoising-diffusion alt="Generative models taxonomy with DDPM highlighted" />
 
 ---
-clicks: 2
+clicks: 4
 sourceFrame: "imported: 7:10"
 class: theorems
 ---
@@ -1158,17 +1206,7 @@ $$
 
 </div>
 
-<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
-
-<!-- The final comparison from Lecture 7 source frame 10 continues on the next slide. The original pause before the expansion becomes the slide boundary. -->
-
----
-clicks: 1
-sourceFrame: "extension: imported: 7:10"
-class: theorems
----
-
-# Forward Gaussian Diffusion Process
+<div v-click="3">
 
 $$
 \begin{aligned}
@@ -1178,7 +1216,8 @@ $$
 \end{aligned}
 $$
 
-<div v-click="1">
+</div>
+<div v-click="4">
 
 - ${\color{#8854c0}\beta_t=\eta}$
 - ${\color{teal}\nabla_{\bx_{t-1}}\log\pt(\bx_{t-1})=-\bx_{t-1}=\nabla_{\bx_{t-1}}\log\cN(0,\bI)}$
@@ -1188,7 +1227,7 @@ $$
 <div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
 
 ---
-clicks: 1
+clicks: 6
 sourceFrame: "imported: 7:11"
 class: theorems
 ---
@@ -1212,25 +1251,11 @@ $$
 q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\,\bx_0,(1-\bar{\alpha}_t)\bI)
 $$
 
-</div>
-
-<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
-
----
-clicks: 4
-sourceFrame: "extension: imported: 7:11"
-class: derivation
----
-
-# Forward Gaussian Diffusion Process
-
-<div class="block">
-
-## Statement 1 (continued)
+<div v-click="2">
 
 Thus, samples at any timestep $t$ can be generated directly from $\bx_0$
 
-$$ {1|1-2|1-3|1-4|all} {at:1}
+$$ {1|1-2|1-3|1-4|all} {at:3}
 \begin{aligned}
 \bx_t&=\sqrt{\alpha_t}{\color{teal}\bx_{t-1}}+\sqrt{1-\alpha_t}\bepsilon_t\\
 &=\sqrt{\alpha_t}({\color{teal}\sqrt{\alpha_{t-1}}\bx_{t-2}+\sqrt{1-\alpha_{t-1}}\bepsilon_{t-1}})+\sqrt{1-\alpha_t}\bepsilon_t\\
@@ -1241,16 +1266,21 @@ $$ {1|1-2|1-3|1-4|all} {at:1}
 $$
 
 </div>
+</div>
 
 <div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
 
-<!-- Four cumulative rows preserve the four nextonslide stages of Lecture 7 source frame 11. The pause before the derivation becomes the slide boundary. -->
+<!-- The statement and its derivation share a slide. Click 2 replaces the former slide boundary; four further clicks reveal the cumulative derivation rows. -->
 
 ---
 clicks: 0
 sourceFrame: "imported: 7:12"
-class: theorems
+class: theorems interactive-slide
 ---
+
+<script setup>
+import ForwardDiffusionDemo from './components/ForwardDiffusionDemo.vue'
+</script>
 
 # Forward Gaussian Diffusion Process
 
@@ -1261,9 +1291,11 @@ q(\bx_t|\bx_0)&=\cN\left(\sqrt{\bar{\alpha}_t}\bx_0,(1-\bar{\alpha}_t)\bI\right)
 \end{aligned}
 $$
 
-<img src="/figs/conditional_diffusion.png" alt="Conditional diffusion from an image to noise" class="wide-figure" />
+<ForwardDiffusionDemo />
 
 <div class="source"><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a></div>
+
+<!-- Original analytic 1D illustration replacing the source image. The plots show marginals, not conditional kernels or a sample trajectory. Each initial Gaussian component has mean scaled by sqrt(alpha_bar_t) and variance alpha_bar_t * 0.35^2 + 1 - alpha_bar_t. beta_t = 0.01; the PDF compares t = 0, 75, 250, 1000. -->
 
 ---
 clicks: 2
@@ -1311,14 +1343,15 @@ class: theorems
 
 **Diffusion** describes the migration of particles from regions of high density to those of low density.
 
-<img src="/figs/diffusion_over_time.png" alt="Diffusion over time" style="width:100%;height:155px;object-fit:contain" />
-
+<div class="columns balanced">
+<img src="/figs/diffusion_over_time.png" alt="Diffusion over time" style="width:100%;height:340px;object-fit:contain" />
 <div v-click="1">
 
 1. $\bx_0=\bx\sim\pd(\bx)$
-2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$, $\bepsilon_t\sim\cN(0,\bI)$, $t\geq1$
+2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$,<br>$\bepsilon_t\sim\cN(0,\bI)$, $t\geq1$
 3. After $T\gg1$ steps: $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$
 
+</div>
 </div>
 <div v-click="2">
 
@@ -1330,7 +1363,7 @@ Our goal now becomes inverting this diffusion.
 <div class="source"><a href="https://ayandas.me/blog-tut/2021/12/04/diffusion-prob-models.html">Das A. An Introduction to Diffusion Probabilistic Models, blog post, 2021</a></div>
 
 ---
-clicks: 1
+clicks: 3
 sourceFrame: "imported: 7:14"
 class: theorems
 ---
@@ -1362,17 +1395,7 @@ $$
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/1907.05600">Song Y. et al. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a></div>
-
----
-clicks: 1
-sourceFrame: "extension: imported: 7:14"
-class: theorems
----
-
-# Denoising Score Matching
-
-<div class="block">
+<div class="block" v-click="2">
 
 ## Theorem (Denoising Score Matching)
 
@@ -1384,7 +1407,7 @@ $$
 $$
 
 </div>
-<div v-click="1">
+<div v-click="3">
 
 **Note:** Annealed Langevin dynamics applies to diffusion, too.
 

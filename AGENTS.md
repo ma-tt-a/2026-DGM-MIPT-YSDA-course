@@ -12,5 +12,6 @@ For every Beamer-to-Slidev migration, read [lectures-slidev/MIGRATION.md](lectur
 
 - Do not touch, rebuild or sync `lectures/merged/` unless explicitly requested.
 - An explicit request to commit authorizes the commit within the requested scope; do not ask for another confirmation. Review the resulting diff before committing. Do not add agent attribution to commit messages or PR descriptions.
+- Before every commit and push, check the affected lectures and their dependent course material: incoming/outgoing Recaps, Summary, repeated definitions/formulas and Training/Sampling, Outline/README schedule, source maps and exported PDFs. Include staged, unstaged and outgoing committed changes when determining scope; rerun affected checks after fixes. Follow the durable pre-commit/push checklist in `.codex/project-context.md`; do not treat a successful build as a semantic consistency check.
 - Keep lecture content in English; Russian is welcome in chat and internal notes.
 - User instructions for the current task take precedence over skill recommendations. A request to audit is report-only; an explicit request to apply a specified fix already authorizes that fix. Ask only about unresolved editorial choices or missing facts.

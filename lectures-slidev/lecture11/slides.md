@@ -282,10 +282,10 @@ $$
 
 </div>
 
-- It's hard to solve the continuity equation directly due to the trace term.
-- There's a method (the adjoint method) that solves this equation directly, but it's unstable and unscalable.
+- Likelihood-based CNF training requires ODE solves and Jacobian trace evaluations.
+- The adjoint method computes gradients through the ODE solution; repeated solves can be costly.
 
-<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
+<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a><br><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
 
 ---
 clicks: 0
@@ -303,7 +303,7 @@ $$
 \bbE_{t\sim U[0,1]}\bbE_{\bx\sim p_t(\bx)}\left\|\bv(\bx,t)-\bv_{\btheta}(\bx,t)\right\|^2\rightarrow\min_{\btheta}
 $$
 
-Flow matching is a scalable approach to Neural ODEs.
+Flow matching fits velocities by regression, without model ODE solves or trace evaluations during training.
 
 </div>
 
