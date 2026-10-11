@@ -190,6 +190,17 @@ Summary update as a **holistic revision**, not a simple addition: re-read all ex
 
 ### Recap frames (start of the next lecture)
 
+- Show every recap slide in full immediately, with no gradual reveals, including
+  Training/Sampling blocks. In Slidev use `clicks: 0` and no reveal directives;
+  in Beamer omit overlay/reveal commands. This overrides the general animation
+  rules in §4–§5 for Recap. Author decision, 2026-10-11.
+- Keep recap updates local: prefer adding a missing result to an existing slide
+  on the same topic. Add a slide only when there is no readable space or the
+  addition would mix distinct topics. Do not shrink fonts, compress formulas, or
+  broadly reorganize existing recaps to meet an arbitrary count; no numeric cap
+  is imposed. Recaps summarize results, not full proofs/examples. Author decision,
+  2026-10-11.
+
 Every lecture except Lecture 1 opens with several `\begin{frame}{Recap of
 Previous Lecture}` frames. These are **not** independent — they reproduce
 specific blocks, equations, and figures from the previous lecture, often
@@ -213,9 +224,9 @@ Rules for recap edits:
   you've already updated the obvious matches, the recap may need
   re-prioritization (different blocks emphasized, different number of recap
   frames, different ordering).
-- The recap inherits all the slide-style rules from §3–§4: `\myfootnotewithlink`
-  to the original paper, `\nextonslide`/`\eqpause` for animation, `%=======`
-  separators. Recap frames typically use `\begin{block}{...}` boxes more
+- The recap inherits the slide-style rules from §3, including `\myfootnotewithlink`
+  to the original paper and `%=======` separators, but uses no animation.
+  Recap frames typically use `\begin{block}{...}` boxes more
   heavily than body frames — keep this style.
 
 ## 10. Language

@@ -23,7 +23,9 @@ macro inventory. Shared definitions themselves are not raw-notation violations.
 - Check local figure paths and existence; use the format-specific asset conventions.
 - Existing Training/Sampling blocks keep canonical titles (optional algorithm name),
   ordered steps, imperative verbs, sentence punctuation, course loss/parameter
-  notation, and whole-block reveals. Check changed steps against CLAUDE.md §5.
+  notation, and whole-block reveals outside Recap. Recap slides are fully visible
+  on entry, including Training/Sampling: no overlays or reveal directives; Slidev
+  frontmatter and map both use `clicks: 0`. Check changed steps against CLAUDE.md §5/§9.
   During migration do not invent a Training block absent from the approved source.
 - Classify a preserved source defect separately from a regression introduced by
   migration. Approved terminology and equivalent KaTeX adaptations are not errors.

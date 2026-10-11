@@ -55,12 +55,76 @@ $$
 
 </div>
 
+<div class="block">
+
+## Optimal Discriminator and Jensen-Shannon Divergence
+
+For fixed $G$, write the bracketed objective as $V(G,D)$:
+
+$$
+D^*(\bx)=\frac{\pd(\bx)}{\pd(\bx)+\pt(\bx)},\qquad
+V(G,D^*)=2\,\JSD(\pd(\bx)\,\|\,\pt(\bx))-2\log2.
+$$
+
+</div>
+
 <img src="/figs/gan_1.png" alt="GAN mode collapse during training" style="height: 160px; width: 100%; object-fit: contain;" />
 
 Mode collapse refers to the phenomenon where the generator in a GAN produces only one or a few different modes of the distribution.
 
 
 <div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a><br><a href="https://arxiv.org/abs/1611.02163">Metz L. et al. Unrolled Generative Adversarial Networks, 2016</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 3"
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+GAN losses also train the reconstruction stage of a **latent generative model**.
+
+<div class="block">
+
+## Stage 1: Train the Autoencoder
+
+A fixed pretrained network $F$ defines the perceptual loss for reconstruction $\hat{\bx}$:
+
+$$
+\cL_{\text{perc}}=\|F(\bx)-F(\hat{\bx})\|_2^2.
+$$
+
+Train a discriminator $D$ to separate real and reconstructed image patches; train the autoencoder to fool $D$.
+
+A KL-autoencoder also uses weak KL regularization.
+
+</div>
+<div class="block">
+
+## Stage 2: Freeze the Autoencoder and Learn a Prior
+
+Fit the distribution of its latent codes — the **aggregated posterior**.
+
+**VQGAN:** sample a code map $\bc$ from an AR prior, look up its embeddings $\bz_q(\bc)$, then decode.
+
+$$
+\bc\sim p_{\bpsi}(\bc)\;\longrightarrow\;\bz_q(\bc)\;\longrightarrow\;\hat{\bx}.
+$$
+
+**KL-autoencoder:** a diffusion prior over continuous latents.
+
+$$
+\bepsilon\sim\cN(\bzero,\bI)\;\longrightarrow\;\bz\sim p_{\bpsi}(\bz)\;\longrightarrow\;\hat{\bx}.
+$$
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2012.09841">Esser P., Rombach R., Ommer B. Taming Transformers for High-Resolution Image Synthesis, 2021</a><br><a href="https://arxiv.org/abs/2112.10752">Rombach R. et al. High-Resolution Image Synthesis with Latent Diffusion Models, 2022</a></div>
+
+<!--
+The preceding GAN objective now supplies the adversarial reconstruction criterion. Recall the two distinct stages: train perceptual/adversarial reconstruction, then freeze the representation and learn its code distribution for generation. VQGAN and the KL-autoencoder are examples, not an exhaustive taxonomy. The next recap returns to the limitations of the standard GAN objective and motivates Wasserstein distance. A separate slide is needed because the existing GAN/theoretical-results recaps concern distribution matching and collapse, not the two-stage latent construction; appending the full perceptual formula and both sampling chains would mix topics and crowd those slides. The feature loss is the same schematic expression as in the preceding body; F stays frozen while gradients pass through it, whereas D is trained. Diffusion is only a prior-family pointer, not a new algorithm here. Weak KL does not guarantee a Gaussian aggregated posterior.
+-->
 
 ---
 clicks: 0
@@ -128,7 +192,7 @@ $$
 <div class="source"><a href="https://udlbook.github.io/udlbook/">Simon J.D. Prince. Understanding Deep Learning, 2023</a><br><a href="https://arxiv.org/abs/1701.07875">Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017</a></div>
 
 ---
-clicks: 1
+clicks: 0
 sourceFrame: "6"
 class: theorems
 ---
@@ -145,7 +209,7 @@ For a feedforward generator $\bG_{\btheta}$ with Lipschitz activations and $\bbE
 
 </div>
 
-<div v-click="1">
+<div>
 
 <div class="block">
 

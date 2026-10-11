@@ -333,7 +333,7 @@ The generative model $\pt(\bx)$ matches $\pd(\bx)$ if a discriminative model $p(
 - **Discriminator:** a classifier $D_{\bphi}(\bx)\in[0,1]$ distinguishing real from generated samples.
 
 ---
-clicks: 3
+clicks: 0
 sourceFrame: "8"
 class: theorems
 ---
@@ -350,14 +350,14 @@ $$
 
 </div>
 
-<div v-click="1">
+<div>
 
 - **Discriminator:** A classifier $p_{\bphi}(y=1|\bx)=D_{\bphi}(\bx)\in[0,1]$, distinguishing real and generated samples. The discriminator aims to **maximize** cross-entropy.
 - **Generator:** The generative model $\bx=\bG_{\btheta}(\bz),\;\bz\sim p(\bz)$, seeks to fool the discriminator. The generator aims to **minimize** cross-entropy.
 
 </div>
 
-<div class="block" v-click="2">
+<div class="block">
 
 ## GAN Objective
 
@@ -365,7 +365,7 @@ $$
 \min_G\max_D\left[\bbE_{\pd(\bx)}\log D(\bx)+\bbE_{\pt(\bx)}\log(1-D(\bx))\right]
 $$
 
-<div v-click="3">
+<div>
 
 $$
 \min_G\max_D\left[\bbE_{\pd(\bx)}\log D(\bx)+\bbE_{p(\bz)}\log(1-D(\bG(\bz)))\right]

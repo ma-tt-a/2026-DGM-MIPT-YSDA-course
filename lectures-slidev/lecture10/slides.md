@@ -82,9 +82,19 @@ $$
 
 </div>
 
-More advanced numerical methods (such as Runge-Kutta) are often used instead of unstable Euler update step.
+For a smooth field on a fixed interval, compare global error and **NFE** (velocity-network evaluations):
 
-<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a></div>
+- **Euler:** $\cO(h)$ global error, **1** evaluation per step.
+- **Heun:** $\cO(h^2)$ global error, **2** evaluations per step, averaging the current and predicted endpoint velocities.
+
+<!--
+Recap keeps the global-error/NFE comparison needed by the solver discussion. The
+previous lecture also distinguishes one-step error from an exact starting point,
+O(h^{p+1}) for global order p; that secondary qualification is not repeated here.
+Euler and Heun's displayed global orders assume a smooth field on a fixed interval.
+-->
+
+<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a><br><a href="https://fncbook.com/rk/">Driscoll T. A., Braun R. J. Fundamentals of Numerical Computation: Runge–Kutta methods</a></div>
 
 ---
 clicks: 0
@@ -184,23 +194,79 @@ $$
 
 </div>
 
-<ul>
+**Hutchinson's trace estimator:**
 
+$$
+\tr(\bJ)=\bbE_{\bepsilon\sim\cN(0,\bI)}[\bepsilon^T\bJ\bepsilon],\qquad
+\bJ=\frac{\partial\bv(\bx(t),t)}{\partial\bx(t)}.
+$$
+
+**Exact density identity; approximate computation.** Use a numerical ODE solver and one noise vector for an unbiased trace estimate via autodiff.
+
+<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a><br><a href="https://arxiv.org/abs/1810.01367">Grathwohl W. et al. FFJORD: Free-form Continuous Dynamics for Scalable Reversible Generative Models, 2018</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 5"
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+Fix $p_0=\cN(0,\bI)$ and learn $\bv_{\btheta}$; the endpoint density is $p_1=\pt$.
+
+<div class="block">
+
+## Training
+
+<ol>
 <li>
 
-This solution gives us the density **along the trajectory**.
+Sample $\bx\sim\pd$. Solve the ODE **backward**, from $\bx(1)=\bx$ to $\bx(0)$.
 
 </li>
-
 <li>
 
-However, it's difficult to efficiently estimate <span style="color:teal">the last term</span>.
+Compute the negative log-likelihood along this trajectory:
+
+$$
+\cL=-\log\pt(\bx)=-\log p_0(\bx(0))+\int_0^1\tr\left(\frac{\partial\bv_{\btheta}(\bx(t),t)}{\partial\bx(t)}\right)\,dt.
+$$
 
 </li>
+<li>
 
-</ul>
+Update $\btheta\leftarrow\btheta-\eta\nabla_{\btheta}\cL$; differentiate through the ODE, e.g., via the **adjoint method**.
 
-<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a></div>
+</li>
+</ol>
+
+</div>
+
+<div class="block">
+
+## Sampling
+
+<ol>
+<li>
+
+Sample $\bx(0)\sim p_0$.
+
+</li>
+<li>
+
+Solve the ODE **forward** and return the endpoint:
+
+$$
+\bx(1)=\ODESolve_v(\bx(0),\btheta,t_0=0,t_1=1)\sim\pt.
+$$
+
+</li>
+</ol>
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/1806.07366">Chen R. T. Q. et al. Neural Ordinary Differential Equations, 2018</a><br><a href="https://arxiv.org/abs/1810.01367">Grathwohl W. et al. FFJORD: Free-form Continuous Dynamics for Scalable Reversible Generative Models, 2018</a></div>
 
 ---
 clicks: 0

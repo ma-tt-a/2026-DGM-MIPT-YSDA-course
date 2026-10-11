@@ -94,7 +94,38 @@ class: theorems
 </div>
 </div>
 
-<div class="source"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">Weng L. What are Diffusion Models?, blog post, 2021</a></div>
+<div class="block">
+
+## SNR and Log-SNR
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon,
+\qquad\bepsilon\sim\cN(0,\bI).
+$$
+
+$$
+\SNR(t)=\frac{{\color{#007f82}\bar{\alpha}_t}}{{\color{#8854c0}1-\bar{\alpha}_t}}.
+$$
+
+$$
+\lambda_t=\log\SNR(t),
+\qquad\bar{\alpha}_t=\frac{1}{1+e^{-\lambda_t}}.
+$$
+
+$\lambda_t>0$: signal dominates; $\lambda_t=0$: equal scales; $\lambda_t<0$: noise dominates.
+
+</div>
+
+<div class="source"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">Weng L. What are Diffusion Models?, blog post, 2021</a><br><a href="https://arxiv.org/abs/2107.00630">Kingma D. et al. Variational Diffusion Models, 2021</a></div>
+
+<!--
+Recap coverage: the forward/reverse processes already share this slide. The added
+noise-level coordinate summarizes the preceding lecture's SNR result here instead
+of creating a separate recap page. Alpha_bar retains its DDPM cumulative meaning;
+SNR compares squared marginal signal/noise coefficients. The next slide recalls the
+complete Gaussian transition and marginal formulas. The schedule demo and
+high-resolution application are examples, not additional prerequisite results.
+-->
 
 ---
 clicks: 0
@@ -177,6 +208,52 @@ $$
 </div>
 
 <div class="source"><a href="https://ayandas.me/blog-tut/2021/12/04/diffusion-prob-models.html">Das A. An Introduction to Diffusion Probabilistic Models, blog post, 2021</a><br><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 7"
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+## Diffusion Parameterizations
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon.
+$$
+
+<div>
+
+| Network output at $\bx_t$ | Regression target | Clean-data estimate |
+| --- | --- | --- |
+| Noise $\bepsilon_{\btheta,t}$ | $\bepsilon$ | $\dfrac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bepsilon_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
+| Clean data $\hat{\bx}_{\btheta,t}$ | $\bx_0$ | $\hat{\bx}_{\btheta,t}$ |
+| Score $\bs_{\btheta,t}$ | $-\dfrac{\bepsilon}{\sqrt{1-\bar{\alpha}_t}}$ | $\dfrac{\bx_t+(1-\bar{\alpha}_t)\,\bs_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
+| $v$-prediction $\bv_{\btheta,t}$ | $\sqrt{\bar{\alpha}_t}\,\bepsilon-\sqrt{1-\bar{\alpha}_t}\,\bx_0$ | $\sqrt{\bar{\alpha}_t}\,\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bv_{\btheta,t}$ |
+
+</div>
+<div class="block">
+
+**Convertible predictions; different losses.** Plain MSE assigns different weights to different noise levels.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2202.00512">Salimans T., Ho J. Progressive Distillation for Fast Sampling of Diffusion Models, 2022</a></div>
+
+<!--
+Recap coverage: after the ELBO decomposition, recall the available network targets
+before the existing DDPM Training/Sampling slide fixes noise prediction. The table
+and plain-MSE caveat exactly mirror the previous lecture. The existing ELBO page
+already contains the bound and full three-term decomposition; the algorithm page
+already contains complete Training and Sampling. Adding this four-row table to
+either would mix a separate parameterization decision with dense formulas. Keep a
+separate static recap at the approved type size, preserving every target and inverse.
+Assume 0 < alpha_bar_t < 1 for conversion. The score row's regression target is the
+conditional Gaussian score; population MSE predicts the marginal score. Convertible
+predictions do not make unweighted training losses equal: their factors depend on
+noise level. The v target is a diffusion parameterization, not a general ODE velocity.
+-->
 
 ---
 clicks: 0

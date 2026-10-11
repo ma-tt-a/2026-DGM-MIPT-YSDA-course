@@ -238,10 +238,57 @@ $$
 
 A coupling layer is a special instance of the Gaussian autoregressive NF.
 
-<div class="source"><a href="https://arxiv.org/abs/1605.08803">Dinh L., Sohl-Dickstein J., Bengio S. Density Estimation Using Real NVP, 2016</a></div>
+**TarFlow uses affine autoregressive transforms on image patches.** A causal Transformer predicts componentwise shifts and positive scales from earlier patches. The Jacobian remains triangular; sampling is sequential across patches and parallel within each patch.
+
+<div class="source"><a href="https://arxiv.org/abs/1605.08803">Dinh L., Sohl-Dickstein J., Bengio S. Density Estimation Using Real NVP, 2016</a><br><a href="https://arxiv.org/abs/2412.06329">Zhai S. et al. Normalizing Flows are Capable Generative Models, 2024</a></div>
 
 ---
-clicks: 1
+clicks: 0
+sourceFrame: "extension: 6"
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+A flow evaluates a **continuous density**; an 8-bit image has discrete pixel values.
+
+<div class="block">
+
+## Probability of a Pixel Bin
+
+For $\bx\in\{0,\ldots,255\}^m$ and a model supported on $[0,256)^m$:
+
+$$
+P_{\btheta}(\bx)=\int_{[0,1)^m}\pt(\bx+\bu)\,d\bu.
+$$
+
+</div>
+<div class="block">
+
+## Uniform Dequantization
+
+$$
+\bu\sim\Uniform([0,1)^m),\qquad \bv=\bx+\bu,\qquad \lfloor\bv\rfloor=\bx.
+$$
+
+Train the flow on $\bv$. Jensen's inequality gives
+
+$$
+\log P_{\btheta}(\bx)\geq\bbE_{\bu}\bigl[\log\pt(\bx+\bu)\bigr].
+$$
+
+</div>
+
+Exact continuous density evaluation gives a **lower bound** on discrete log-likelihood.
+
+<div class="source"><a href="https://arxiv.org/abs/1511.01844">Theis L., van den Oord A., Bethge M. A Note on the Evaluation of Generative Models, 2015. Section 3.1.</a></div>
+
+<!--
+The preceding AR/coupling recap recalls tractable continuous densities; this slide distinguishes them from probabilities of discrete image bins. Recall the bin integral, the uniform-noise construction and its Jensen bound without replaying the proof. The next recap introduces latent-variable marginalization, preparing another intractable likelihood and lower-bound construction. This is a separate slide because the full bin/noise/bound formulas concern discrete observations, distinct from the already dense coupling/Jacobian slide. No posterior or variational dequantization is introduced.
+-->
+
+---
+clicks: 0
 sourceFrame: "7"
 class: theorems
 ---
@@ -271,7 +318,7 @@ $$
 \log\pt(\bx,\bz)=\log\pt(\bx|\bz)+\log p(\bz).
 $$
 
-<div v-click="1">
+<div>
 
 $$
 \pt(\bx)=\int\pt(\bx,\bz)d\bz=\int\pt(\bx|\bz)p(\bz)d\bz.
@@ -279,7 +326,7 @@ $$
 
 </div>
 </div>
-<div v-click="1">
+<div>
 
 - $p(\bz)$ is prior distribution over the latent variable.
 - $\pt(\bx|\bz)$ is **decoder** distribution.

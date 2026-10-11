@@ -20,6 +20,8 @@ its own skill and the shared context. Workers must not run competing builds or e
 
 1. [notation-lint](../notation-lint/SKILL.md) on the selected sources.
 2. [recap-sync](../recap-sync/SKILL.md), N to N+1, when a successor exists.
+   Require both body-to-recap coverage of substantive changes and recap-to-body
+   fidelity; checking only existing repeated formulas cannot pass this check.
 3. Incoming recap N−1 to N for a full named-lecture audit, or when the recap changed
    in a diff audit; skip N = 1. Use the format selection rules for mixed neighbors.
 4. [summary-sync](../summary-sync/SKILL.md) on lecture N.

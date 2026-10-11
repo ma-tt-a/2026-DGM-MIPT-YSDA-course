@@ -199,7 +199,7 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
 ---
-clicks: 2
+clicks: 0
 sourceFrame: "6"
 class: theorems
 ---
@@ -220,12 +220,12 @@ Gaussian perturbations:
 - Rescaling the DDPM state by $1/\sqrt{\bar{\alpha}_t}$ gives the NCSN noise form.
 
 </li>
-<li v-click="1">
+<li>
 
 The objectives coincide: ELBO $\equiv$ score-matching.
 
 </li>
-<li v-click="2">
+<li>
 
 The sampling procedures differ:
 
@@ -238,6 +238,43 @@ The sampling procedures differ:
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2107.00630">Kingma D. et al. Variational Diffusion Models, 2021</a><br><a href="https://arxiv.org/abs/2011.13456">Song Y. et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 6"
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+<div class="block">
+
+## Sampling (DDIM)
+
+1. Sample $\bx_T\sim\cN(0,\bI)$; choose a grid $T=t_K>\cdots>t_0=0$.
+2. For $k=K,\ldots,1$, set $t=t_k$, $s=t_{k-1}$ and compute:
+
+$$
+\begin{aligned}
+\hat{\bepsilon}&=\bepsilon_{\btheta,t}(\bx_t)
+&&\text{predict noise},\\[8pt]
+\hat{\bx}_0&=\frac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\hat{\bepsilon}}{\sqrt{\bar{\alpha}_t}}
+&&\text{estimate clean data},\\[8pt]
+\bx_s&={\color{teal}\sqrt{\bar{\alpha}_s}}\,\hat{\bx}_0
++{\color{teal}\sqrt{1-\bar{\alpha}_s}}\,\hat{\bepsilon}
+&&\text{update state}.
+\end{aligned}
+$$
+
+3. Return $\bx_0$.
+
+</div>
+
+**Deterministic limit:** fresh transition noise is zero ($\sigma_{t\to s}=0$); randomness comes from $\bx_T$.
+
+**Fewer steps:** choose $K\ll T$; $K$ steps require $K$ network evaluations and no retraining.
+
+<div class="source"><a href="https://arxiv.org/abs/2010.02502">Song J., Meng C., Ermon S. Denoising Diffusion Implicit Models, 2021</a></div>
 
 ---
 clicks: 0
@@ -309,7 +346,17 @@ $$
 \hat p(\by|\bx_t)\propto p(\by|\bx_t)^\gamma.
 $$
 
-<div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a></div>
+Very large $\gamma$ can reduce diversity and introduce artifacts.
+
+<div class="block">
+
+## Guidance Interval
+
+Apply extra guidance only at intermediate noise levels. Outside the interval, $\gamma_t=1$: **conditioning remains**.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a><br><a href="https://arxiv.org/abs/2404.07724">Kynkäänniemi T. et al. Applying Guidance in a Limited Interval Improves Sample and Distribution Quality in Diffusion Models, 2024</a> · <a href="https://arxiv.org/abs/2410.02416">Sadat S. et al. Eliminating Oversaturation and Artifacts of High Guidance Scales in Diffusion Models, 2025</a></div>
 
 ---
 clicks: 0
@@ -395,7 +442,16 @@ $$
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2207.12598">Ho J., Salimans T. Classifier-Free Diffusion Guidance, 2022</a><br><a href="https://arxiv.org/abs/2506.02070">Holderrieth P., Erives E. An Introduction to Flow Matching and Diffusion Models, 2025</a></div>
+**Guidance distillation:** train a student to match the fixed teacher's guided prediction:
+
+$$
+\bs_{\bphi,t}(\bx_t,\by,\gamma)\approx
+(1-\gamma)\bs_{\btheta,t}(\bx_t,\varnothing)+\gamma\bs_{\btheta,t}(\bx_t,\by).
+$$
+
+Evaluate the student **once per step**; keep the sampler and step count.
+
+<div class="source"><a href="https://arxiv.org/abs/2207.12598">Ho J., Salimans T. Classifier-Free Diffusion Guidance, 2022</a><br><a href="https://arxiv.org/abs/2506.02070">Holderrieth P., Erives E. An Introduction to Flow Matching and Diffusion Models, 2025</a><br><a href="https://arxiv.org/abs/2210.03142">Meng C. et al. On Distillation of Guided Diffusion Models, 2023</a></div>
 
 ---
 clicks: 0

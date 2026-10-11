@@ -257,13 +257,61 @@ class: theorems
 
 ---
 clicks: 0
+sourceFrame: "extension: 7"
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+For additive Gaussian noise $\bx=\bx_0+\sigma\bepsilon$, $\bepsilon\sim\cN(0,\bI)$:
+
+<div class="block">
+
+## A Denoiser Parameterizes the Probability Flow ODE
+
+$$
+\bs_{\btheta}(\bx,\sigma)=\frac{D_{\btheta}(\bx,\sigma)-\bx}{\sigma^2},
+\qquad
+\frac{d\bx}{d\sigma}=-\sigma\bs_{\btheta}(\bx,\sigma)
+=\frac{\bx-D_{\btheta}(\bx,\sigma)}{\sigma}.
+$$
+
+Decreasing $\sigma$ moves towards the denoiser prediction.
+
+</div>
+
+<div class="block">
+
+## DDIM Is Euler in Noise Coordinates
+
+Normalize the DDPM state and noise level:
+
+$$
+\tilde{\bx}_t=\frac{\bx_t}{\sqrt{\bar{\alpha}_t}},
+\qquad \sigma_t=\sqrt{\frac{1-\bar{\alpha}_t}{\bar{\alpha}_t}}.
+$$
+
+Deterministic DDIM implements the Euler step using the existing noise predictor.
+
+</div>
+
+**The ODE field can be obtained from a trained denoiser.**
+
+<div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a><br><a href="https://arxiv.org/abs/2010.02502">Song J., Meng C., Ermon S. Denoising Diffusion Implicit Models, 2021</a></div>
+
+<!--
+Coverage repair: the preceding Recap Sampling slide recalls the general score-based construction. This slide recalls the new denoiser/DDIM section's main results: additive-noise coordinates, the score-to-denoiser conversion, the sigma-parameterized PF-ODE, and deterministic DDIM as Euler after DDPM rescaling. It summarizes the results rather than repeating the training-loss or DDIM derivations. The first block's x is the additive-noise state; in the second block tilde x_t is that normalized state and x_t is the original DDPM state. Assume sigma>0 and alpha_bar_t>0. The score equality defines the learned parameterization; exact marginal probability flow requires the true score. DDIM's equality is between discrete updates on the same grid with the induced denoiser and same initial state under rescaling, not exact integration or equivalence of different priors. The conclusion closes construction of a field from a trained predictor. The following CNF recap explicitly introduces learning the velocity field itself, then the cost of likelihood training motivates Flow Matching. Static recap, matching the surrounding slides.
+-->
+
+---
+clicks: 0
 sourceFrame: "8"
 class: theorems
 ---
 
 # Recap of Previous Lecture
 
-Consider ODE dynamics $\bx_t=\bx(t)$ in the interval $t\in[0,1]$ with $\bx_0\sim p_0(\bx)$ (mostly $\cN(0,\bI)$), $\bx_1\sim p_1(\bx)=\pd(\bx)$.
+**Now learn the velocity field itself.** Recall $\bx_t=\bx(t)$ for $t\in[0,1]$, with $\bx_0\sim p_0(\bx)$ (mostly $\cN(0,\bI)$), $\bx_1\sim p_1(\bx)=\pd(\bx)$.
 
 $$
 \frac{d\bx_t}{dt}=\bv(\bx_t,t),\quad\text{with initial condition }\bx(0)=\bx_0.

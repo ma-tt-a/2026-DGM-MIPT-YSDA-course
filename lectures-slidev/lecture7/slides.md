@@ -204,7 +204,7 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/1907.05600">Song Y. et al. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a></div>
 
 ---
-clicks: 1
+clicks: 0
 sourceFrame: "7"
 class: theorems
 ---
@@ -223,7 +223,7 @@ class: theorems
 </div>
 
 
-<div v-click="1">
+<div>
 
 <div class="block">
 

@@ -429,7 +429,7 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
 
 ---
-clicks: 1
+clicks: 0
 sourceFrame: "10"
 class: theorems
 ---
@@ -438,7 +438,7 @@ class: theorems
 
 <img src="/figs/cond_marg_paths.png" alt="Conditional and marginal probability paths" style="width:100%;height:315px;object-fit:contain" />
 
-<div v-click="1">
+<div>
 
 - One-sided conditioning gives us the way to construct a generative model.
 - Now we extend it to image-to-image formulation (mapping between two distinct data distributions $p_0(\bx)$ and $p_1(\bx)$).
