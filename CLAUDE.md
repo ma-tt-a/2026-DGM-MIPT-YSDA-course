@@ -2,11 +2,11 @@
 
 Shared conventions for Codex and Claude. Slidev is the course's editable format.
 Read `.codex/project-context.md` for later author decisions and
-`lectures-slidev/README.md` for commands. Current user instructions take precedence.
+`lectures/README.md` for commands. Current user instructions take precedence.
 
 ## Sources and artifacts
 
-- Each lecture has `lectures-slidev/lectureN/slides.md`, local `public/figs/`,
+- Each lecture has `lectures/lectureN/slides.md`, local `public/figs/`,
   optional demo components/lib, and one fully revealed `LectureN.pdf`.
 - Each slide declares a unique semantic `id` and integer `clicks >= 0`.
   Outline transition slides also declare `section`. Keep IDs stable for browser QA.

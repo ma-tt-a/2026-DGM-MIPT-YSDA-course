@@ -31,7 +31,7 @@ Lecture 14 остаётся черновиком.
 Из корня репозитория:
 
 ```sh
-cd lectures-slidev
+cd lectures
 npm ci
 npm run dev -- 1
 ```

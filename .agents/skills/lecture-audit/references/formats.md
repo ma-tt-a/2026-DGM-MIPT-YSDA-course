@@ -2,9 +2,9 @@
 
 Read [course conventions](../../../../CLAUDE.md),
 [author decisions](../../../../.codex/project-context.md), and
-[commands/catalog](../../../../lectures-slidev/README.md).
+[commands/catalog](../../../../lectures/README.md).
 
-Slidev sources are authoritative: `lectures-slidev/lectureN/slides.md`, adjacent
+Slidev sources are authoritative: `lectures/lectureN/slides.md`, adjacent
 fully revealed `LectureN.pdf`, shared `theme/setup/macros.json`, local `public/figs/`.
 Slide metadata has a stable `id`, explicit `clicks`, and `section` on Outline
 transitions. Use the installed Slidev parser to respect YAML, code fences, notes

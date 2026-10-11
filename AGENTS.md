@@ -3,10 +3,10 @@
 Before editing, read `CLAUDE.md` for shared course conventions and
 `.codex/project-context.md` for the author's later decisions.
 
-- Slidev sources in `lectures-slidev/lectureN/slides.md` are authoritative.
+- Slidev sources in `lectures/lectureN/slides.md` are authoritative.
   Each lecture has one fully revealed `LectureN.pdf`; keep browser reveals.
 - All lectures share the approved Slidev Lecture 1 style. Commands and artifact
-  paths are in `lectures-slidev/README.md`.
+  paths are in `lectures/README.md`.
 - Use `.agents/skills/lecture-audit` for a full audit and the notation-lint,
   recap-sync, summary-sync and readme-sync skills for focused checks.
   Read the selected skill and shared context before checking.

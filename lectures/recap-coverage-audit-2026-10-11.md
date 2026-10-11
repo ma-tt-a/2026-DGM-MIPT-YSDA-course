@@ -74,17 +74,17 @@ Source-only, report-only, 2026-10-11. Inspected current Slidev bodies, Outlines,
 
 ### 1. Missing uniform dequantization takeaway in L3 Recap
 
-Body: L2 slide 28, [slides.md:951](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture2/slides.md:951); new Summary takeaway at slide 35, [slides.md:1252](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture2/slides.md:1252).
+Body: L2 slide 28, [slides.md:951](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture2/slides.md:951); new Summary takeaway at slide 35, [slides.md:1252](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture2/slides.md:1252).
 
-The body distinguishes discrete bin probability from continuous density and derives the uniform-noise Jensen lower bound. L3 Recap slides 2–7, [slides.md:45](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture3/slides.md:45), recall only continuous CoV/NF likelihood and LVM marginalization: no discrete mass, bin integral, dequantization or lower-bound qualification appears. This is a new explicitly summarized result, relevant to the coming Jensen/ELBO discussion, not merely a modern example.
+The body distinguishes discrete bin probability from continuous density and derives the uniform-noise Jensen lower bound. L3 Recap slides 2–7, [slides.md:45](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture3/slides.md:45), recall only continuous CoV/NF likelihood and LVM marginalization: no discrete mass, bin integral, dequantization or lower-bound qualification appears. This is a new explicitly summarized result, relevant to the coming Jensen/ELBO discussion, not merely a modern example.
 
 Concrete remedy: concise Recap block with `P_theta(x)=integral_[0,1)^m p_theta(x+u)du` and `log P_theta(x)>=E_u log p_theta(x+u)`, labelled continuous density versus discrete probability. It need not repeat the entire original derivation. No explicit author decision to omit this result was found.
 
 ### 2. Missing TarFlow connection in L3 Recap
 
-Body: L2 slides 26–27, [slides.md:846](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture2/slides.md:846) and [slides.md:918](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture2/slides.md:918); new Summary takeaway slide 35, [slides.md:1251](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture2/slides.md:1251).
+Body: L2 slides 26–27, [slides.md:846](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture2/slides.md:846) and [slides.md:918](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture2/slides.md:918); new Summary takeaway slide 35, [slides.md:1251](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture2/slides.md:1251).
 
-Current L3 Recap slide 5 [slides.md:164](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture3/slides.md:164) covers scalar Gaussian AR, and slide 6 [slides.md:199](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture3/slides.md:199) covers RealNVP. Neither recalls the newly emphasized connection: affine transforms on whole patches conditioned on their strict prefix; Transformer predicts shifts/scales while the flow retains a triangular Jacobian. This method now names the revised “Blockwise Flows (RealNVP / TarFlow)” subsection and has its own Summary takeaway. No author-approved exclusion was found.
+Current L3 Recap slide 5 [slides.md:164](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture3/slides.md:164) covers scalar Gaussian AR, and slide 6 [slides.md:199](/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture3/slides.md:199) covers RealNVP. Neither recalls the newly emphasized connection: affine transforms on whole patches conditioned on their strict prefix; Transformer predicts shifts/scales while the flow retains a triangular Jacobian. This method now names the revised “Blockwise Flows (RealNVP / TarFlow)” subsection and has its own Summary takeaway. No author-approved exclusion was found.
 
 Concrete remedy: a short continuation of the AR/RealNVP recap explaining the patchwise combination, causal Transformer parameter predictor, and sequential sampling across patches versus parallel density evaluation. No need to repeat architecture diagram or generated-image gallery.
 
@@ -159,14 +159,14 @@ Earlier journal statements saying no recap extension was required were NOT treat
 
 ### Missing core GAN optimality result in L6 recap
 
-- Body: L5 slides 12–15, `lectures-slidev/lecture5/slides.md:428`, especially optimal discriminator at line 457 and `V(G,D*)=2 JSD−2 log 2` at line 506. Current Summary slide 50 explicitly recalls this at line 1853.
-- Successor: L6 Recap slides 2–3, `lectures-slidev/lecture6/slides.md:46` and `:71`, repeats the minimax objective, mode collapse and the disjoint-support special case. None of its slides 2–10 recalls the optimal discriminator or the minimax/JSD relationship. The isolated JSD=log2 statement is not coverage of that theorem.
+- Body: L5 slides 12–15, `lectures/lecture5/slides.md:428`, especially optimal discriminator at line 457 and `V(G,D*)=2 JSD−2 log 2` at line 506. Current Summary slide 50 explicitly recalls this at line 1853.
+- Successor: L6 Recap slides 2–3, `lectures/lecture6/slides.md:46` and `:71`, repeats the minimax objective, mode collapse and the disjoint-support special case. None of its slides 2–10 recalls the optimal discriminator or the minimax/JSD relationship. The isolated JSD=log2 statement is not coverage of that theorem.
 - History: GAN optimality was moved into the L5 body in `1f456d81`; its premature L5 recap copy was removed, but its result was not placed in the next recap.
 - Disposition: **Missing.** This is the main theoretical conclusion of a restored core section and Summary bullet, rather than a proof detail. A compact recap statement with the discriminator formula and resulting JSD objective would suffice; repeating the proof/demo is unnecessary. No explicit author decision to omit this result was found.
 
 ### Missing modern latent-generation takeaway in L6 recap
 
-- Body: L5 slides 20–21, `lectures-slidev/lecture5/slides.md:700` and `:760`: perceptual versus learned adversarial reconstruction losses; VQGAN/AR code prior versus KL-autoencoder/latent diffusion prior; freeze the autoencoder before fitting the latent distribution. Current Summary slide 50, line 1854, explicitly includes this teaching unit.
+- Body: L5 slides 20–21, `lectures/lecture5/slides.md:700` and `:760`: perceptual versus learned adversarial reconstruction losses; VQGAN/AR code prior versus KL-autoencoder/latent diffusion prior; freeze the autoencoder before fitting the latent distribution. Current Summary slide 50, line 1854, explicitly includes this teaching unit.
 - Successor: the complete L6 recap is lines 46–361 / slides 2–10. It moves from GAN/WGAN to evaluation with no autoencoder, VQGAN, perceptual/adversarial reconstruction, or learned latent-prior representation.
 - History: this new two-slide block was accepted and moved from L4 to L5 in September (`61d20d30`; journal `lecture5/migration.md:150`; refresh report L4 item 4). The author limited its scope but did not decide to exclude it from recap.
 - Disposition: **Missing.** This is a deliberately added modern-use takeaway and a current Summary bullet, not merely the figure illustrating it. One short recap block could retain the two-stage idea and distinguish the roles of perceptual features, discriminator and generative prior. No need to reproduce both full slides.
@@ -244,7 +244,7 @@ Current source SHA-256:
 
 # Retrospective recap coverage audit: L7→8, L8→9, L9→10
 
-2026-10-11. Read-only source review; no source/PDF/build changes. All locations below are under `/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/`; `L7:585` means `lecture7/slides.md:585`. Slide numbers are current slide-map numbers (L7 41, L8 42, L9 41, L10 50).
+2026-10-11. Read-only source review; no source/PDF/build changes. All locations below are under `/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/`; `L7:585` means `lecture7/slides.md:585`. Slide numbers are current slide-map numbers (L7 41, L8 42, L9 41, L10 50).
 
 ## Baseline and evidence
 
@@ -320,9 +320,9 @@ Source-only, read-only review, 2026-10-11. Evaluated request: «Проверь �
 
 Sources (line references below use these exact absolute paths):
 
-- **L10:** `/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture10/slides.md` — SHA-256 `6df5f4a3024045f8aee7588cc2736733384db42f7f9cceda7a2256f5bc176375`.
+- **L10:** `/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture10/slides.md` — SHA-256 `6df5f4a3024045f8aee7588cc2736733384db42f7f9cceda7a2256f5bc176375`.
 - **A:** `/private/tmp/recap-fix-20261011/before/slides.md` — SHA-256 `0f85c1ddc0aae7502968a22952e6c14677d51a1935c95d0e34dbf3f8521e83c4`.
-- **B:** `/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures-slidev/lecture11/slides.md` — SHA-256 `7b113b044521b226264e547ce6c6ad41ca3a1a416623d26940b5e44a3f75a9ca`.
+- **B:** `/Users/r-isachenko/Desktop/DGM/2026-DGM-MIPT-YSDA-course/lectures/lecture11/slides.md` — SHA-256 `7b113b044521b226264e547ce6c6ad41ca3a1a416623d26940b5e44a3f75a9ca`.
 
 The retrospective baseline is the complete current L10 body, six-section Outline and six Summary takeaways, not an empty working diff. A is compared first; B then differs by one added recap slide and the CNF opening sentence. Only actual “Recap of Previous Lecture” slides count as recap.
 
