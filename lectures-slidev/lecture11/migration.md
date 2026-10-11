@@ -173,3 +173,37 @@ SHA-256:
 - `Lecture11-handout.pdf`: `21d31de845ac93d491946dbcfe3c98d21bbeda308fc4566a0b3936bced2e43bd`.
 
 Автор одобрил итоговую версию и явно закрыл пункт Rectified Flow в рефреше, 2026-10-11.
+
+
+## Исправление FM/CFM и categorical posterior, 2026-10-11
+
+Теорема FM/CFM на слайде 19 теперь утверждает различие objectives на константу, независимую от theta, и совпадение minimizers.
+
+Автор явно разрешил исправить обе ранее отмеченные неточности. При column-stochastic convention likelihood по предыдущим состояниям равен Q_t^top x_t; знаменатель сохранён. FM/CFM share minimizers, но не обязаны иметь равные optimal values. Всего исправлены 3 утверждения (L11/L12) и 5 posterior formulas (L12/L13/L14). Предыдущие записи о сохранении этих inherited defects теперь исторические.
+
+Scoped source review: повторы body/Recap синхронизированы, Summary и Training/Sampling согласованы; разделы, README, карты и reveals не меняются. Beamer и merged не редактировались. Параллельное time-convention уточнение L11/10 сохранено и входит в экспорт L11; отдельная работа L10 не перезаписывалась.
+
+Node 24.19.0, изолированная копия: source/map/macros/assets, 63/63 tests, build и оба PDF прошли. Экспортные входы побайтно сверены с каноническими. PDF: 37 handout / 81 steps; изменены только handout [10, 19] / steps [10, 27, 28], остальные страницы попиксельно прежние. Все затронутые слайды просмотрены; браузер проверил раскрытия, обратное скрытие и геометрию. Нормализация posterior проверена на несимметричной матрице; независимая от theta разность losses — на простом условном распределении.
+
+QA: `../output/qa/math-corrections-2026-10-11/lecture11/`. SHA-256:
+
+- `slides.md`: `45bd6d32cc90ad26acbe5a757320f1cf9bff18a922e0184e34ed4071413712b8`.
+- `slide-map.json`: `c531df44efc037c16c2c75b90fb5a681fe3eb2e54cb99680885a965127e41db3`.
+- `Lecture11.pdf`: `7cfa56b972b9b71faa665d1146a90b7fbc4b6297a5eeb257df8665c8b8ef0f58`.
+- `Lecture11-handout.pdf`: `97b32584ed80b103bb68f0fbe6af38829c4bd8fcb474b5f4308c3f094e705749`.
+
+
+## Course refresh: явное направление времени, 2026-10-11
+
+По прямому запросу автора в L10/51 (sourceFrame 36) и статичном Recap L11/10 (sourceFrame 8) добавлено одинаковое пояснение до ODE: «Time convention: unlike the diffusion sections, here t=0 denotes noise and t=1 denotes data. Sampling runs forward in time.» Определения концов пути, уравнения, клики и карта сохранены. Уточнение покрыто в следующем Recap и совпадает с основным материалом; новых результатов нет. Summary, Training/Sampling, разделы и README/catalog не требуют правок. Исходный refresh-пункт закрыт.
+
+Проверки в изолированной копии, Node 24.19.0: source/map/macros, 63 штатных теста, production build и оба PDF (`finalize 11`); `render-qa.py` подтвердил 37/81 страниц. Все страницы сравнены попиксельно с экспортами перед правкой; изменённые страницы и состояния просмотрены крупно, переполнений и пересечений с источниками нет. В L10 изменены только handout 51 и steps 109–111 (остальные 54+117 страниц идентичны). В L11 — handout 10/19 и steps 10/27/28 (остальные 35+78 идентичны): параллельная задача исправила формулировку FM/CFM на 19, эта правка сохранена и включена в повторный экспорт L11. Изменения соседних L12–14 принадлежат той задаче.
+
+Browser inspector до/после export: L10/51 — три состояния; L11/10 — одно, L11/19 — три. Геометрия стабильна, обратные клики проходят, content overflow/KaTeX/resource errors отсутствуют; возврат с соседних слайдов попиксельно идентичен. Известные подписи dev-панели L11 отсутствуют в PDF. Shared theme/макросы/размеры шрифтов не менялись; подтверждённая идентичность остальных страниц сохраняет прежнюю проверку стиля L1. 81 экспортный вход сверен перед переносом PDF. QA: `../output/qa/time-convention-2026-10-11/` (manifest и сравнение).
+
+SHA-256:
+
+- `slides.md`: `45bd6d32cc90ad26acbe5a757320f1cf9bff18a922e0184e34ed4071413712b8`.
+- `slide-map.json`: `c531df44efc037c16c2c75b90fb5a681fe3eb2e54cb99680885a965127e41db3`.
+- `Lecture11.pdf`: `57eb0cbafa24653584fa992c9bd12607ec4903d1ceb2a693e52304399a8d4395`.
+- `Lecture11-handout.pdf`: `42385cd34544793491eaf0236749d24612626f5fcdbcd30cc36afce22aab1ae2`.

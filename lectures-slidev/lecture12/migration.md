@@ -169,3 +169,21 @@ SHA-256:
 - `slide-map.json`: `eb278acf08e48931827daf49427ee3325636b7dc368c7a40318e6b52d3008aaa`.
 - `Lecture12.pdf`: `440d7559a6a611d595888f80d5df52df5e3162f2c56bcb135ca162bb62f28971`.
 - `Lecture12-handout.pdf`: `b2f83647e02f07d5d17c0c07a6200d9633f9f085c3b70e3ae55c3d63490ddd7f`.
+
+
+## Исправление FM/CFM и categorical posterior, 2026-10-11
+
+В Recap 4/7 синхронизирована теорема FM/CFM; в posterior на 52/56 исправлено Q_t x_t на Q_t^top x_t.
+
+Автор явно разрешил исправить обе ранее отмеченные неточности. При column-stochastic convention likelihood по предыдущим состояниям равен Q_t^top x_t; знаменатель сохранён. FM/CFM share minimizers, но не обязаны иметь равные optimal values. Всего исправлены 3 утверждения (L11/L12) и 5 posterior formulas (L12/L13/L14). Предыдущие записи о сохранении этих inherited defects теперь исторические.
+
+Scoped source review: повторы body/Recap синхронизированы, Summary и Training/Sampling согласованы; разделы, README, карты и reveals не меняются. Beamer и merged не редактировались. Параллельное time-convention уточнение L11/10 сохранено и входит в экспорт L11; отдельная работа L10 не перезаписывалась.
+
+Node 24.19.0, изолированная копия: source/map/macros/assets, 63/63 tests, build и оба PDF прошли. Экспортные входы побайтно сверены с каноническими. PDF: 59 handout / 102 steps; изменены только handout [4, 7, 52, 56] / steps [4, 7, 84, 85, 86, 97, 98], остальные страницы попиксельно прежние. Все затронутые слайды просмотрены; браузер проверил раскрытия, обратное скрытие и геометрию. Нормализация posterior проверена на несимметричной матрице; независимая от theta разность losses — на простом условном распределении.
+
+QA: `../output/qa/math-corrections-2026-10-11/lecture12/`. SHA-256:
+
+- `slides.md`: `cdf8753a838f699b280aa56d3864b36cc7d39fb4f2769464eb5e5c1c230ea494`.
+- `slide-map.json`: `eb278acf08e48931827daf49427ee3325636b7dc368c7a40318e6b52d3008aaa`.
+- `Lecture12.pdf`: `66cd79bcc3fe9581bec519cc08123c94ddc63bc4483bd28faa2303adae00c1b5`.
+- `Lecture12-handout.pdf`: `8e6d5e14e067ff67a1a848ff2cc1175624924457b593834b52d48f48461a42af`.

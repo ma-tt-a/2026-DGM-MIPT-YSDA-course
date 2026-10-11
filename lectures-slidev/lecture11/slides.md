@@ -313,6 +313,8 @@ class: theorems
 
 **Now learn the velocity field itself.** Recall $\bx_t=\bx(t)$ for $t\in[0,1]$, with $\bx_0\sim p_0(\bx)$ (mostly $\cN(0,\bI)$), $\bx_1\sim p_1(\bx)=\pd(\bx)$.
 
+**Time convention:** unlike the diffusion sections, here $t=0$ denotes noise and $t=1$ denotes data. Sampling runs forward in time.
+
 $$
 \frac{d\bx_t}{dt}=\bv(\bx_t,t),\quad\text{with initial condition }\bx(0)=\bx_0.
 $$
@@ -529,7 +531,7 @@ $$
 
 ## Theorem
 
-If $\supp(p_t(\bx))=\bbR^m$, then the optimal value of the FM objective equals the optimal value of the CFM objective.
+If $\supp(p_t(\bx))=\bbR^m$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
 
 </div>
 <div class="block" v-click="2">

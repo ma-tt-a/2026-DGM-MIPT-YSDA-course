@@ -274,7 +274,7 @@ class: theorems
 ## Discrete conditioned reverse distribution
 
 $$
-q(\bx_{t-1}|\bx_t,\bx_0)=\Cat\left(\frac{\bQ_t\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^\top\bQ_{1:t}\bx_0}\right).
+q(\bx_{t-1}|\bx_t,\bx_0)=\Cat\left(\frac{\bQ_t^\top\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^\top\bQ_{1:t}\bx_0}\right).
 $$
 
 </div>
@@ -1164,7 +1164,7 @@ Categorical $\bx_t$ with transition matrices $\bQ_t$:
 ## Reverse process & Discrete ELBO (L12)
 
 $$
-q(\bx_{t-1}|\bx_t,\bx_0)=\Cat\!\left(\frac{\bQ_t\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^\top\bQ_{1:t}\bx_0}\right),
+q(\bx_{t-1}|\bx_t,\bx_0)=\Cat\!\left(\frac{\bQ_t^\top\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^\top\bQ_{1:t}\bx_0}\right),
 $$
 
 each $\cL_t$ reduces to a **cross-entropy** loss against $\pt(\bx_{t-1}|\bx_t)$.

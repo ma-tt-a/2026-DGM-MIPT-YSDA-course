@@ -82,3 +82,21 @@ The Slidev catalog now includes both PDFs, source and journal and explicitly mar
 ## Равномерные интервалы Summary, 2026-10-03
 
 По запросу автора общий `class: summary` использует вертикальный flex-список с `justify-content: space-between`, аналог `\vfill` между пунктами. Размер шрифта и содержание сохранены; в L4 удалены локальные margin. Проверены Summary всех 14 лекций в браузере и обоих PDF: одинаковые промежутки, отсутствие переполнений, совпадение handout и финального состояния. Для этой лекции: **25 слайдов / 50 состояний**; source check, web build и оба экспорта прошли с Node 24.19.0 в изолированной копии. Все тексты PDF сохранены, остальные страницы попиксельно совпадают с контрольной версией. Это проверка оформления Summary; полный содержательный аудит не повторялся. QA: `../output/qa/summary-spacing-2026-10-03/`.
+
+
+## Исправление FM/CFM и categorical posterior, 2026-10-11
+
+В Recap 3, который намеренно повторяет L12, исправлен числитель posterior: Q_t^top x_t. Статус draft и остальное содержание прежние.
+
+Автор явно разрешил исправить обе ранее отмеченные неточности. При column-stochastic convention likelihood по предыдущим состояниям равен Q_t^top x_t; знаменатель сохранён. FM/CFM share minimizers, но не обязаны иметь равные optimal values. Всего исправлены 3 утверждения (L11/L12) и 5 posterior formulas (L12/L13/L14). Предыдущие записи о сохранении этих inherited defects теперь исторические.
+
+Scoped source review: повторы body/Recap синхронизированы, Summary и Training/Sampling согласованы; разделы, README, карты и reveals не меняются. Beamer и merged не редактировались. Параллельное time-convention уточнение L11/10 сохранено и входит в экспорт L11; отдельная работа L10 не перезаписывалась.
+
+Node 24.19.0, изолированная копия: source/map/macros/assets, 63/63 tests, build и оба PDF прошли. Экспортные входы побайтно сверены с каноническими. PDF: 25 handout / 50 steps; изменены только handout [3] / steps [3], остальные страницы попиксельно прежние. Все затронутые слайды просмотрены; браузер проверил раскрытия, обратное скрытие и геометрию. Нормализация posterior проверена на несимметричной матрице; независимая от theta разность losses — на простом условном распределении.
+
+QA: `../output/qa/math-corrections-2026-10-11/lecture14/`. SHA-256:
+
+- `slides.md`: `38738800f98189a2fc5156e8314932eaa3e8327ba399d74222e55493c679cebf`.
+- `slide-map.json`: `2668923956a5757bff5ac8fb5cd977d2d2d9bdc2939ac0ae6d5296e163be9df9`.
+- `Lecture14.pdf`: `fc1195cae70e89da5b46e41afc3bca33f3f934e2b159d9d51e19bf16d170fc49`.
+- `Lecture14-handout.pdf`: `284f9f7c00840799331443c619b1f9e32dbb115ea53a57b4ad8f84e5bb273664`.

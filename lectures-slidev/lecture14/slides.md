@@ -74,7 +74,7 @@ class: theorems
 
 $$
 q(\bx_{t-1}|\bx_t,\bx_0)
-=\Cat\left(\frac{\bQ_t\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^{\top}\bQ_{1:t}\bx_0}\right).
+=\Cat\left(\frac{\bQ_t^\top\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^{\top}\bQ_{1:t}\bx_0}\right).
 $$
 
 </div>
