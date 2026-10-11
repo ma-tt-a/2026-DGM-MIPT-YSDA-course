@@ -500,3 +500,49 @@ SHA-256:
 Проверены интерфейсы L9→L10, L10→L11 и L11→L12: повторяемые определения, алгоритмы и картинки согласованы. L9 и incoming Recap L10, body L11 и L12 не менялись; предыдущие проверки неизменённых редакций применимы. Расширять Recap из-за denoiser specialization не требуется. Все восемь SHA-256 исходников/карт/обоих PDF L10/L11 совпадают с последними проверенными записями; повторная сборка для изменения статуса не нужна.
 
 Также проверен уже существующий исходящий коммит `1f456d81` (границы L4–6). Все 12 hashes source/map/PDF совпадают с журналами; L3–7, shared style/dependencies и README/catalog с момента его проверки неизменны. Ранее сохранённые семантические, browser/PDF и demo checks остаются применимы. Задокументированные исходные научные оговорки не являются новым drift. Shared UI и физическое оборудование текущим изменением не затрагиваются. Beamer и merged не менялись.
+
+
+## Course refresh: DDIM как Euler в координатах шума, 2026-10-11
+
+По запросу автора добавлен один слайд **43 DDIM Is Euler in Noise Coordinates**, после полного Euler Sampling 42. Повествование: 42 ставит вопрос о связи полученного sampler с deterministic DDIM; 43 напоминает именно прежние noise/clean predictions и DDIM update, затем определяет нормированное состояние и marginal noise clock, индуцированный denoiser, и полностью преобразует DDIM в предыдущий Euler step. Конец 43 открывает прямое обучение velocity field; далее 44 Outline и 45–46 CNF подводят к Flow Matching. Отсылок к номерам лекций нет.
+
+Связь с прежними темами сверена по `lecture8/slides.md`: сохранены cumulative alpha_bar, epsilon_theta,t(x_t), xhat_0 и s<t. Нормировка tilde x=x/sqrt(alpha_bar) приводит DDPM marginal к уже использованному x_0+sigma epsilon; sigma — уровень аддитивного шума в нормированных координатах. D_theta определяется через существующий predictor, не требует новой сети. Тождество касается шага при одинаковых predictor/grid; notes явно различают Euler в исходном t и новом sigma, transition noise и marginal noise, точность интегрирования и алгебраическую эквивалентность. Также учтено отличие рескейленного DDPM initial prior N(0,(1+sigma_T^2)I) от приближения N(0,sigma_max^2 I) в предыдущем additive sampler. При s=0 обе записи шага возвращают xhat_0 и не вычисляют сеть при нулевом знаменателе.
+
+Первоисточник проверен: Song, Meng, Ermon, DDIM, Section 4.3, eqs. (13)–(15), https://arxiv.org/html/2010.02502v4#S4.SS3. Статья использует alpha_t для cumulative schedule, в курсе сохранено alpha_bar_t. Все формулы нового слайда записаны полностью; ни шрифт, ни shared theme не менялись. Summary остаётся из шести пунктов; denoiser/PF-ODE takeaway включает DDIM в rescaled state/noise coordinates и NFE. Карта: **49 слайдов / 112 состояний**, новый слайд имеет два содержательных клика. Refresh пункт отмечен реализованным для просмотра автора, не закрыт автоматически.
+
+Scoped notation/semantic check и независимый read-only source review прошли. Предшествующие слайды 1–41 и все три алгоритмических блока Training / Sampling / Euler Sampling побайтово неизменны. Incoming Recap и L10→L11 повторные формулы не менялись; нового материала для обязательного расширения Recap нет. L8, L11, разделы/Outline/README/catalog, Beamer/merged не редактировались.
+
+`finalize 10`: source/map/macros, 59 tests, web build и оба PDF прошли; `render-qa.py`: 49/112. Сравнение всех страниц: **46 handout + 107 steps** попиксельно совпадают с предыдущей проверенной редакцией вне folio; изменены только handout 42/49 и steps 96/112, добавлены handout 43 и steps 97–99. Все новые/изменённые страницы обоих PDF просмотрены крупно, без наложений/обрезки. Общая тема и макросы прежние, предыдущее сравнение с утверждённой L1 применимо.
+
+Browser QA до и после export: **10 состояний 42/43/44/45/49**, без overflow/math/resource errors, стабильная геометрия и обратные клики. Финальные состояния 42–45 попиксельно идентичны после возврата с соседнего слайда. Все 32 экспортных входа сверены с изолированной копией. QA: `../output/qa/ddim-pfode-2026-10-11/`.
+
+SHA-256:
+
+- `slides.md`: `e781f3e146c1d0588872dde8e5177dc688052da52ee7861438957f9ea4fd4368`.
+- `slide-map.json`: `1301635a50fe6d7b453e1e55b5782a6f17feb93c8236e1d5dcbd43f3d1b35ce6`.
+- `Lecture10.pdf`: `e30d56c9a0288b7fab224ed51a5a80fe55cecbeeed6cbe8b01cb5d22ae8d4d07`.
+- `Lecture10-handout.pdf`: `0fa4463d9d05160290c41f3e02c696f7766071ec5339c407a29d8c8cc62c6b86`.
+
+
+## Course refresh: ранний мост DDPM/NCSN и последовательность denoiser → DDIM → CNF, 2026-10-11
+
+Автор запросил отдельный пункт оглавления и более естественный переход от DDIM к следующей теме. Добавлен раздел **5 Denoiser Parameterization and Sampling**, Outline 40, согласованы все семь Outline и Materials в корневом README. Flow Matching теперь раздел 6. Это уточняет прежнее решение не выделять блок: после добавления DDIM он рассматривается как самостоятельная последовательность. Отдельного разбора EDM preconditioning по-прежнему нет. Проверка Beamer baseline считает пять разделов; фактический Slidev Outline содержит шесть.
+
+Повествование: общая пара Training 38 / Sampling 39 → Outline 40 → noise-level ODE 41 → denoiser training 42 → Euler sampling 43 → DDIM 44. Теперь 41 напоминает знакомую additive-noise form, а 44 прямо отсылает к ранее введённому DDPM/NCSN rescaling (L8/13). Полный вывод сохранён. Последняя фраза 44: «DDIM implements this Euler step using the existing noise predictor.» Искусственный вопрос о velocity field убран. **46 CNF** начинается с «Now learn the velocity field itself», затем стоимость likelihood training мотивирует Flow Matching. Notes согласованы; Summary остаётся из шести пунктов. Incoming Recap, повторные CNF-формулы и L10→L11 не менялись.
+
+Итог **50 слайдов / 113 состояний**. Browser QA до и после export: 8/9/15/24/32/39/40/41/43/44/45/46/50, **21 состояние**; 7 возвратов с соседнего слайда попиксельно идентичны. PDF comparison вне folio: **40 handout / 98 steps** неизменны; изменены handout 8/9/15/24/32/41/44/45/46, добавлен 40; изменены steps 8/9/26/50/68/90–92/99–104, добавлен 89.
+
+Scoped notation, Summary, Recap и Outline/README проверки, включая независимые read-only reviews, прошли. `finalize` прошёл source/map/assets/macros checks (87 macros), 59 tests, web build и оба PDF. `render-qa.py` отрендерил все страницы. Все новые/изменённые страницы обоих PDF просмотрены: без обрезки/наложений. Browser: без overflow/math/resource errors, стабильная геометрия и обратные клики. 71 экспортный вход L8–10 и корневой README сверены с изолированной сборкой. Размеры шрифтов, shared theme и macros не менялись; прежнее сравнение с утверждённой L1 применимо. Beamer и merged не затронуты. QA: `../output/qa/noise-coordinates-2026-10-11/lecture10/`. Изменения подготовлены для просмотра автора, новый пункт автоматически не закрывается.
+
+SHA-256:
+
+- `slides.md`: `6df5f4a3024045f8aee7588cc2736733384db42f7f9cceda7a2256f5bc176375`.
+- `slide-map.json`: `38e6a427fe9fe8008503b7e40cb5cc298a17203902bfafc61c5b5d18a2beeabe`.
+- `Lecture10.pdf`: `e3f3954729bc068e47554b8c28b7f934cc304a3760166b7f0b3b3a6d15e60915`.
+- `Lecture10-handout.pdf`: `cd33e9cd37e7599ec8dbe3dab17097dffd8abdd36ea791fab7d0fee9913b9720`.
+
+## Course refresh: принято автором; pre-commit/push review, 2026-10-11
+
+Автор одобрил DDPM/NCSN noise-coordinate bridge, DDIM↔PF-ODE и отдельный раздел denoiser sampling; запросил commit/push. Соответствующие пункты локального refresh report закрыты. Следующий открытый пункт — термин rectified flow в L11; его слайды этим коммитом не меняются.
+
+Проверен весь текущий diff L8–10 и README, staged/unstaged/untracked scope; исходящих коммитов перед этой правкой нет. Повторные source/map/assets/macros checks прошли. Независимый semantic review подтвердил incoming/outgoing Recaps L7→8→9→10→11, повторяемые определения и Training/Sampling, Summary (5/5/6 пунктов), фактические шесть разделов L10, все семь Outline и README/catalog. Все 12 source/map/PDF hashes совпадают с предыдущими QA-записями; 54 текущих входа (sources/maps/assets/theme/components/lib/package/lock) и README совпали с изолированной сборкой. Предыдущие проверки browser/PDF относятся к этой же редакции; для обновления статуса повторная сборка не требуется. Нового semantic drift не найдено. Beamer/merged и shared infrastructure не менялись.

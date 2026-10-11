@@ -1086,3 +1086,25 @@ Source check, build, оба PDF и **28 визуальных состояний*
 Источники и тема сверены перед сохранением PDF. Численные тесты не запускались
 повторно для правки типографики. QA и SHA-256 manifest:
 `../output/qa/lecture8/cfg-gamma-latex-20261003/`.
+
+
+## Course refresh: ранний мост DDPM/NCSN и последовательность denoiser → DDIM → CNF, 2026-10-11
+
+По запросу автора добавлен слайд **13 DDPM and NCSN: Connecting Noise Coordinates**, после сравнения objectives и перед sampling. Полное DDPM-разложение → деление на sqrt(alpha_bar_t) → tilde x_t=x_0+sigma_t epsilon. Уровень sigma_t определён явно; notes отличают marginal noise от шума reverse transition и не отождествляют совместные процессы или сэмплеры. Следующий шаг повествования — сравнение ancestral sampling и Langevin dynamics. Согласованы comparison Summary 16 и финальный Summary 42 (пять пунктов); повторяемый блок перенесён дословно в Recap L9/7. Incoming L7→L8 и прежние Training/Sampling не менялись.
+
+Итог **42 слайда / 95 состояний**. Browser QA до и после export: слайды 12–17/42, **18 состояний**; 6 возвратов с соседнего слайда попиксельно идентичны. PDF comparison вне folio: **39 handout / 88 steps** неизменны; handout изменены 16/42, добавлен 13; steps изменены 27–29/95, добавлены 20–22.
+
+Scoped notation, Summary, Recap и Outline/README проверки, включая независимые read-only reviews, прошли. `finalize` прошёл source/map/assets/macros checks (87 macros), 59 tests, web build и оба PDF. `render-qa.py` отрендерил все страницы. Все новые/изменённые страницы обоих PDF просмотрены: без обрезки/наложений. Browser: без overflow/math/resource errors, стабильная геометрия и обратные клики. 71 экспортный вход L8–10 и корневой README сверены с изолированной сборкой. Размеры шрифтов, shared theme и macros не менялись; прежнее сравнение с утверждённой L1 применимо. Beamer и merged не затронуты. QA: `../output/qa/noise-coordinates-2026-10-11/lecture8/`. Изменения подготовлены для просмотра автора, новый пункт автоматически не закрывается.
+
+SHA-256:
+
+- `slides.md`: `c616d5a3b2ed0c93fdc9da9e93e81422e3216d96e04f2b95226a7946810a7082`.
+- `slide-map.json`: `61b463ab502561070122d105422be754be043938dbb92d411f26de95f4022c44`.
+- `Lecture8.pdf`: `24e88c57dfc6dd2f40637777843d3a71468f4976a54d4f277994aa3064c19902`.
+- `Lecture8-handout.pdf`: `c10e0f130997d9156395e30afda4471f9e550f81489a1789cdd25fc199b17e07`.
+
+## Course refresh: принято автором; pre-commit/push review, 2026-10-11
+
+Автор одобрил DDPM/NCSN noise-coordinate bridge, DDIM↔PF-ODE и отдельный раздел denoiser sampling; запросил commit/push. Соответствующие пункты локального refresh report закрыты. Следующий открытый пункт — термин rectified flow в L11; его слайды этим коммитом не меняются.
+
+Проверен весь текущий diff L8–10 и README, staged/unstaged/untracked scope; исходящих коммитов перед этой правкой нет. Повторные source/map/assets/macros checks прошли. Независимый semantic review подтвердил incoming/outgoing Recaps L7→8→9→10→11, повторяемые определения и Training/Sampling, Summary (5/5/6 пунктов), фактические шесть разделов L10, все семь Outline и README/catalog. Все 12 source/map/PDF hashes совпадают с предыдущими QA-записями; 54 текущих входа (sources/maps/assets/theme/components/lib/package/lock) и README совпали с изолированной сборкой. Предыдущие проверки browser/PDF относятся к этой же редакции; для обновления статуса повторная сборка не требуется. Нового semantic drift не найдено. Beamer/merged и shared infrastructure не менялись.

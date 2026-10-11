@@ -213,11 +213,11 @@ class: theorems
 <ul>
 <li>
 
-Different Markov chains:
+Gaussian perturbations:
 
 - DDPM: $\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon$;
 - NCSN: $\bx_t=\bx_0+\sigma_t\cdot\bepsilon$.
-- One can generalize to $q(\bx_t|\bx_0)=\cN(\alpha_t\cdot\bx_0,\sigma_t^2\,\bI)$.
+- Rescaling the DDPM state by $1/\sqrt{\bar{\alpha}_t}$ gives the NCSN noise form.
 
 </li>
 <li v-click="1">

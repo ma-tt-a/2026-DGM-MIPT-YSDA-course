@@ -348,6 +348,59 @@ $$
 
 ---
 clicks: 2
+sourceFrame: "extension: 19"
+class: theorems
+---
+
+# DDPM and NCSN: Connecting Noise Coordinates
+
+**DDPM scales the clean signal as it adds noise:**
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon,
+\qquad \bepsilon\sim\cN(0,\bI).
+$$
+
+<div class="block" v-click="1">
+
+## Divide by the signal coefficient
+
+$$
+\underbrace{\frac{\bx_t}{\sqrt{\bar{\alpha}_t}}}_{\displaystyle\tilde{\bx}_t}
+=\bx_0+
+\underbrace{\sqrt{\frac{1-\bar{\alpha}_t}{\bar{\alpha}_t}}}_{\displaystyle\sigma_t}\,\bepsilon.
+$$
+
+Here $\sigma_t$ measures additive noise in the rescaled state.
+
+</div>
+
+<div class="block" v-click="2">
+
+## Recover the NCSN noise form
+
+$$
+\tilde{\bx}_t=\bx_0+\sigma_t\bepsilon,
+\qquad q(\tilde{\bx}_t\mid\bx_0)=\cN(\bx_0,\sigma_t^2\bI).
+$$
+
+As $\bar{\alpha}_t$ decreases, the noise level $\sigma_t$ increases.
+
+**The Gaussian perturbations are connected by rescaling.**
+Next, compare their sampling rules: ancestral updates and Langevin dynamics.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2010.02502">Song J., Meng C., Ermon S. Denoising Diffusion Implicit Models, 2021</a><br><a href="https://arxiv.org/abs/2011.13456">Song Y. et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+
+<!--
+Narrative: the preceding DDPM/NCSN Objectives slide displays both Gaussian perturbations and compares their score-matching losses. This slide explains the apparent difference in the perturbations themselves: DDPM scales the clean signal, so divide by that known coefficient to obtain additive Gaussian noise. Define tilde x and sigma inside the equality before reusing them. The resulting conditional Gaussian has the familiar NCSN form. This closes the comparison of noise coordinates and prepares the next pair of ancestral and annealed-Langevin sampling slides. No SDE terminology or ODE theory is required here.
+Assume alpha_bar_t>0; a standard decreasing DDPM cumulative schedule gives increasing sigma_t=sqrt((1-alpha_bar_t)/alpha_bar_t). Tilde x_t is the rescaled DDPM state, not an additional noisy sample. Sigma_t here denotes its total additive-noise standard deviation; the sigma_t multiplying fresh randomness in the following ancestral update denotes a reverse-transition standard deviation and is a different quantity. Do not identify them. The next two Sampling blocks keep their established conventions.
+The comparison is between Gaussian conditional marginals at matched noise levels. It does not assert that the original DDPM and NCSN samplers, all joint laws, arbitrary noise schedules, or training weightings coincide. A score also transforms under rescaling; converting a full training objective would require the corresponding factors. That derivation is not part of this slide. In later continuous-time language, VP state rescaling produces an additive-noise/VE coordinate; in the later DDIM-to-PF-ODE derivation exactly these definitions are recalled. DDIM Section 4.3 equations (13)-(14) uses alpha_t for the course's cumulative alpha_bar_t.
+-->
+
+---
+clicks: 2
 sourceFrame: "20"
 class: derivation
 ---
@@ -411,11 +464,11 @@ class: theorems
 <ul>
 <li>
 
-Different Markov chains:
+Gaussian perturbations:
 
 - DDPM: $\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon$;
 - NCSN: $\bx_t=\bx_0+\sigma_t\cdot\bepsilon$.
-- One can generalize to $q(\bx_t|\bx_0)=\cN(\alpha_t\cdot\bx_0,\sigma_t^2\,\bI)$.
+- Rescaling the DDPM state by $1/\sqrt{\bar{\alpha}_t}$ gives the NCSN noise form.
 
 </li>
 <li v-click="1">
@@ -1411,7 +1464,7 @@ class: summary
 
 # Summary
 
-- DDPM and NCSN are intimately connected at the objective level.
+- DDPM and NCSN are connected through score matching and a rescaling of their Gaussian perturbations.
 - DDPM and NCSN use different samplers; DDIM reuses the DDPM network on a shorter sampling grid.
 - Guidance makes generation controllable through labels or text prompts.
 - Classifier guidance turns an unconditional model into a conditional one by training an auxiliary classifier on noisy data.
