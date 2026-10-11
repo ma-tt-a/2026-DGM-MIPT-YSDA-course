@@ -357,6 +357,8 @@ class: theorems
 
 # Recap of Previous Lecture
 
+## Rectified Flow Objective
+
 $$
 p_t(\bx|\bx_1)=\cN\left(t\bx_1,(1-t)^2\bI\right);\quad{\color{teal}\bx_t=t\bx_1+(1-t)\bx_0}
 $$
@@ -372,7 +374,7 @@ $$
 \end{aligned}
 $$
 
-<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a></div>
+<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
 ---
 clicks: 0
@@ -383,14 +385,14 @@ class: theorems
 # Recap of Previous Lecture
 
 - $\bv(\bx_t,\bx_1,t)$ defines straight lines between $\pd(\bx)$ and $\cN(0,\bI)$.
-- The **marginal** path $p_t(\bx)$ does not give straight lines.
+- **Straight training paths do not imply straight sampling trajectories.**
 
 <div class="columns">
 <img src="/figs/g2g-vector-field-samples-cond.png" alt="Straight conditional paths between Gaussian endpoints" style="width:100%;height:340px;object-fit:contain" />
 <img src="/figs/g2g-forward_samples.png" alt="Curved marginal paths between Gaussian distributions" style="width:100%;height:340px;object-fit:contain" />
 </div>
 
-<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a></div>
+<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
 ---
 clicks: 0

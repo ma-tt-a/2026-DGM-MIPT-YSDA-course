@@ -377,3 +377,32 @@ presenter/viewer не реализована. Демо работают без �
 Численные проверки: `node --test tools/test-dynamics-demos.mjs` (включены в
 `test:demos` и `finalize`). Браузер: `node tools/inspect-dynamics-demos.mjs`.
 Подробности: [журнал Lecture 9](lecture9/migration.md).
+
+## Интерактивная Lecture 10
+
+- Слайд 22: одна Gaussian-mixture probability path для forward SDE и PF-ODE.
+  Горизонтальная шкала времени, переключатель SDE / PF-ODE без сброса времени
+  и частиц, Run / Pause, Step, New noise и Reset. Справа — текущая плотность; Brownian increments и
+  одномерный quantile flow вычисляются аналитически.
+- Слайд 33: обращение той же диффузии. Горизонтальное время 2 → 0 и переключатель
+  Reverse SDE / PF-ODE без сброса времени и частиц. Точные reverse conditional transitions показывают
+  восстановление двух пиков без ошибки дискретизации. Обратный процесс восстанавливает
+  распределение, а не конкретную прямую траекторию.
+- Слайд 46: аналитический оптимум denoiser как взвешенное среднее обучающих
+  примеров (EDM, Appendix B.3, Eq. 57), между training и sampling.
+- Слайд 48: геометрия Euler-шага к denoiser prediction. Три начальные точки,
+  отношение noise levels r, Step и Reset; denoiser пересчитывается после каждого шага.
+  r = 0 завершает процесс без деления на ноль; после 12 шагов нужно начать заново.
+- Слайд 54: Direct / Detour / Rotation между общими Gaussian endpoints. Время,
+  пять пресетов и Reset; видны частицы, полные траектории и текущие скорости
+  в общем масштабе. Только endpoint densities обязаны совпадать.
+
+PDF фиксирует SDE/PF-ODE при t = 4/3, reverse sampling при t = 0,
+один denoiser-шаг σ = 2.5 → 1.25 и три transport flows при t = 0.5.
+Состояния сохраняются при возврате; анимация останавливается при уходе.
+Случайность воспроизводима, вычисления локальные. Управлять в выводимом на экран
+окне; синхронизация presenter/viewer не реализована.
+
+Численные проверки: `node --test tools/test-process-demos.mjs` (включены в
+`test:demos` и `finalize`). Браузер: `node tools/inspect-process-demos.mjs`.
+Подробности: [журнал Lecture 10](lecture10/migration.md).

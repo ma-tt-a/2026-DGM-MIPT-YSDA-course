@@ -152,3 +152,20 @@ SHA-256 итоговых файлов:
 - `slide-map.json`: `eb278acf08e48931827daf49427ee3325636b7dc368c7a40318e6b52d3008aaa`.
 - `Lecture12-handout.pdf`: `d5ba8f96081a041c23a1bfdb47ea95a80b50044a6f0f9c5feb040feafbea4fde`.
 - `Lecture12.pdf`: `3cd50661418ce4f9f1870655f52cebb8679c370f050578957fdeaf4818c48f74`.
+
+## Rectified Flow: название и условные/маргинальные траектории, 2026-10-11
+
+По согласованному автором плану выполнены локальные правки без новых слайдов. В статичном Recap 14 добавлены название Rectified Flow Objective и источник Liu/Gong/Liu 2022. В Recap 15 категоричное утверждение о непрямых marginal paths заменено точной оговоркой: straight training paths do not imply straight sampling trajectories. Формулы/картинки и весь body от первого Outline прежние; источник обновлён. Все recap-слайды clicks: 0.
+
+Повествование L11: 33 даёт target x1−x0 → 34 подставляет его в CFM, называет Rectified Flow и различает conditional paths / marginal ODE → 35 собирает алгоритмы. Формула оптимального поля согласована с posterior-mean identity на 23; notes различают population optimum и приближение конечной сетью. Reflow не вводится. Покрытие нового термина и уточнения синхронизировано с L12 Recap 14–15, fidelity сохранена. Изменение терминологии не меняет разделы и README Materials; карты обновлены для заголовка L11/35, нумерация прежняя. L12 body/Summary/outgoing Recap не затронуты.
+
+Проверки: source checks, 59 существующих тестов, production build и оба экспорта через `finalize 12` прошли. `render-qa.py`: **59 handout / 102 steps**. Все изменённые страницы и состояния обоих PDF просмотрены, плотный L11/34 крупно; переполнений/обрезки нет. Остальные **57 handout / 100 steps** страницы совпадают с предыдущими PDF попиксельно вне folio. Browser inspector до/после экспорта: 4 состояний на слайдах 13, 14, 15, 16; KaTeX/resources/геометрия/обратные клики прошли. Все 4 возврата с соседнего слайда попиксельно идентичны.
+
+Экспорт выполнен в изолированной копии: 76 входов сверены до/после сборки; package.json и tools/run.mjs взяты из проверенного commit 48f50d2e, поскольку параллельная задача регистрирует новые тесты L10. Остальные export inputs и корневой README совпадают с текущими каноническими. Дополнительные тесты параллельной задачи не входят в заявленные 59; shared rendering/theme/export не менялись. Параллельные изменения L10/README/tools не редактировались этой задачей. QA: `../output/qa/rectified-flow-2026-10-11/lecture12/`.
+
+SHA-256:
+
+- `slides.md`: `ca43bafe3f7e5bb3995da034e5ceb15ae30aa84c522d73d813959fe42bf397b7`.
+- `slide-map.json`: `eb278acf08e48931827daf49427ee3325636b7dc368c7a40318e6b52d3008aaa`.
+- `Lecture12.pdf`: `440d7559a6a611d595888f80d5df52df5e3162f2c56bcb135ca162bb62f28971`.
+- `Lecture12-handout.pdf`: `b2f83647e02f07d5d17c0c07a6200d9633f9f085c3b70e3ae55c3d63490ddd7f`.

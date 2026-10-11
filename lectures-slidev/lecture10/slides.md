@@ -869,6 +869,24 @@ The ODE produces more stable trajectories.
 <div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
 
 ---
+clicks: 0
+sourceFrame: "extension: 18"
+class: interactive-slide
+---
+
+# Same Densities, Different Trajectories
+
+The probability flow ODE follows the same probability path as the SDE.
+
+<ProbabilityPathDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+
+<!--
+After the PF-ODE theorem and proof, compare paths and densities. Reveal the distinction through time and fresh-noise controls; this prepares the deterministic-sampling discussion. The 1D toy starts from an equal mixture N(-1.8,0.25), N(1.8,0.25), with forward variance rate 2. Quantile transport is the exact 1D PF-ODE flow. Curves join sampled time points, not smooth Brownian paths. Histogram errors are finite-sample effects. No network is trained. The print state uses t=4/3.
+-->
+
+---
 clicks: 2
 sourceFrame: "19"
 class: theorems
@@ -1361,6 +1379,24 @@ $$
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 26"
+class: interactive-slide
+---
+
+# Reverse SDE and Probability Flow ODE
+
+Start from the same noisy samples: two dynamics, the same evolving density.
+
+<ProbabilityPathDemo reverse />
+
+<div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+
+<!--
+After the reverse-SDE proof, compare exact reverse-SDE dynamics and PF-ODE on a horizontal time axis; the next slide specializes the formulas to VE/VP. Here f=0 and g=sqrt(2): the reverse SDE drift in forward tau time is +2 score(x,2-tau), while the reverse PF-ODE drift is +score(x,2-tau). Exact reverse transition: sample the mixture component conditional on the current state, then the Gaussian conditional at the earlier time. It reverses the law, not the particular forward Brownian realization. All methods start from the exact terminal mixture, not an approximate Gaussian prior.
+-->
 
 ---
 clicks: 2
@@ -1956,10 +1992,59 @@ The trained denoiser now supplies the field for sampling.
 <div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a></div>
 
 <!--
-Narrative: the preceding slide rewrites the PF-ODE in sigma and chooses the familiar clean-data denoiser to represent its field. This slide answers how to train that denoiser. Start directly from the earlier per-pair DSM training loss, compute its conditional Gaussian target, and substitute the already established denoiser representation. Do not reintroduce Tweedie, the conditional-mean definition, or a standalone score conversion: those are inputs from the preceding slide, not new conclusions here. The conclusion is equivalence of that objective under a different network prediction target. The next slide uses the trained denoiser in an explicit sampling loop.
+Narrative: the preceding slide rewrites the PF-ODE in sigma and chooses the familiar clean-data denoiser to represent its field. This slide answers how to train that denoiser. Start directly from the earlier per-pair DSM training loss, compute its conditional Gaussian target, and substitute the already established denoiser representation. Do not reintroduce Tweedie, the conditional-mean definition, or a standalone score conversion: those are inputs from the preceding slide, not new conclusions here. The conclusion is equivalence of that objective under a different network prediction target. The next slide makes the MSE optimum explicit for an empirical data distribution, before the trained denoiser is used in the sampling loop.
 The optimal MSE predictor is the conditional mean at each fixed sigma > 0, not the original individual clean sample. The arrow from Tweedie's formula motivates a parameterization; a learned D_theta and score are approximate. The conditional Gaussian target in training is distinct from the marginal score in Tweedie's identity.
 The loss equivalence is algebraic for every theta under the displayed substitution. The original score loss becomes sigma^-4 times clean-target MSE; this is not an arbitrary extra weight or the full EDM recipe. Preserve the same distribution over noise levels when calling the objectives equivalent.
 This additive path is a specialization of the previous Gaussian transition; it does not identify VP's unscaled state with x_0 + sigma epsilon. Sigma denotes the total additive-noise standard deviation.
+-->
+
+---
+clicks: 2
+sourceFrame: "extension: 34"
+class: theorems
+---
+
+# What Does the Optimal Denoiser Predict?
+
+Use uniform empirical data $\{\bx_1,\ldots,\bx_N\}$. For fixed $\bx$ and $\sigma>0$, let
+$a_i=\cN(\bx;\bx_i,\sigma^2\bI)$ be the likelihood of the noisy observation.
+
+<div class="block" v-click="1">
+
+## Minimize the conditional MSE at $\bx$
+
+$$
+D^*(\bx,\sigma)=\argmin_{\by}\sum_{i=1}^{N}a_i\|\by-\bx_i\|_2^2
+\quad\Longrightarrow\quad
+2\sum_{i=1}^{N}a_i(\by-\bx_i)=0.
+$$
+
+$$
+D^*(\bx,\sigma)
+=\frac{\sum_{i=1}^{N}\exp\!\left(-\frac{\|\bx-\bx_i\|_2^2}{2\sigma^2}\right)\bx_i}
+{\sum_{j=1}^{N}\exp\!\left(-\frac{\|\bx-\bx_j\|_2^2}{2\sigma^2}\right)}
+=\bbE[\bx_0\mid\bx].
+$$
+
+Set the gradient to zero: the optimum is a **posterior-weighted average**.
+
+</div>
+
+<div class="block" v-click="2">
+
+## Why train a network?
+
+- The exact formula scans **all $N$ training examples at every sampling step**.
+- It describes the empirical distribution; exact sampling only reproduces training examples.
+
+</div>
+
+<div class="source"><a href="https://proceedings.neurips.cc/paper_files/paper/2022/file/a98846e9d9cc01cfb87eb694d946ce6b-Supplemental-Conference.pdf#page=11">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022 — Appendix B.3, Eqs. (53–57)</a></div>
+
+<!--
+Narrative: the preceding slide expresses DSM as clean-target MSE. Here fix a noisy observation and sigma, and minimize the corresponding weighted least-squares problem. Under a uniform empirical prior, posterior weights are a_i/sum_j a_j, so the positive normalization constant can be dropped from the argmin. The sigma-only loss weight also does not change this unrestricted pointwise optimum. Differentiate with respect to the candidate vector y, set the gradient to zero, and solve for the weighted mean. Substitute the Gaussian likelihoods: the common normalization cancels, leaving the explicit normalized exponential formula. All a_i are positive for sigma>0, hence the objective is strictly convex and its unique minimizer is the conditional mean.
+The rationale then motivates the next slide's neural Euler sampler. Exact evaluation of this finite sum costs O(Nd) for d-dimensional data and requires the training set at every evaluation. The formula is for a discrete empirical distribution, not the unknown population distribution. Exact sampling means starting from its exact noisy marginal and reversing exactly to zero noise; the resulting law is supported on the training examples. Finite-step sampling, approximate initialization and stopping at positive sigma do not imply this exact endpoint statement. A neural denoiser avoids an explicit dataset scan and supplies an inductive bias; it can generalize but can also memorize, so generalization is not guaranteed by choosing a network. D_theta is learned from noisy-clean pairs, not necessarily distilled by explicitly evaluating this sum.
+The following Euler demo uses a smooth two-Gaussian population rather than the discrete empirical example. The conditional-mean definition and sampling field are unchanged. Noise-level asymptotics were removed at the author's request.
 -->
 
 ---
@@ -2016,11 +2101,29 @@ How does this relate to the deterministic DDIM update?
 <div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a></div>
 
 <!--
-Narrative: the noise-coordinate PF-ODE defines the denoiser field, and the preceding slide trains its denoiser. This slide answers how to generate with the trained model: initialize strong Gaussian noise, repeatedly evaluate the network and apply an explicit Euler step, and return the final state. The conclusion asks how this explicit Euler sampler relates to the familiar deterministic DDIM update. The next slide recalls the original DDIM state and predictions, then normalizes the state and noise level to expose exactly this Euler step. The DDIM slide closes with the equivalence of the two updates; the next section motivates learning the velocity field at its own opening. Do not restart the conditional-mean explanation or branch into solver comparisons here; the model definition and solver options have already been established.
+Narrative: the noise-coordinate PF-ODE defines the denoiser field, and the preceding slides train its denoiser and interpret its conditional-mean prediction. This slide answers how to generate with the trained model: initialize strong Gaussian noise, repeatedly evaluate the network and apply an explicit Euler step, and return the final state. The conclusion asks how this explicit Euler sampler relates to the familiar deterministic DDIM update. The next slide recalls the original DDIM state and predictions, then normalizes the state and noise level to expose exactly this Euler step. The DDIM slide closes with the equivalence of the two updates; the next section motivates learning the velocity field at its own opening. Do not restart the conditional-mean explanation or branch into solver comparisons here; the model definition and solver options have already been established.
 Superscripts (i) index numerical sampling states, avoiding confusion with the clean training target x_0. Choose sigma_0 sufficiently large that N(0,sigma_0^2 I) approximates the noisy data marginal. Euler is an approximate numerical solver; this is not an exact sampler at arbitrary step sizes or sigma_0.
 The step follows x_next = x + delta_sigma * (x - D_theta)/sigma, with delta_sigma < 0. For a step ending at zero, x_next = D_theta(x,sigma); the network and denominator are evaluated at the positive current sigma, never at zero. Heun can integrate the same field; its final zero-noise step uses Euler to avoid evaluating the singular endpoint.
 The learned denoiser estimates E[x_0|x] at the current positive noise level. It does not identify which original clean point generated a noisy point; repeated predictions along the numerical trajectory are part of the generative process. This distinction also prevents confusing the denoiser with a consistency model that targets a trajectory endpoint.
 This extends the sampler-change idea introduced with DDIM, rather than claiming that denoiser prediction or changing the sampler is new. It is the explicit ODE/Euler realization of the denoiser parameterization.
+-->
+
+---
+clicks: 0
+sourceFrame: "extension: 34"
+class: interactive-slide
+---
+
+# One Denoiser Prediction, One Euler Step
+
+Decrease the noise level, then recompute the denoiser at the new state.
+
+<DenoiserStepDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a></div>
+
+<!--
+The previous slide gives the complete Euler algorithm. This slide rewrites that update as interpolation towards the current denoiser prediction, then recomputes it at each accepted step. The next slide derives the identical update from deterministic DDIM in normalized coordinates. The analytic denoiser is the exact conditional mean for a two-component 2D Gaussian mixture with covariance 0.12 I. It need not lie in a high-density region. At sigma_next=0 stop; never evaluate an ODE quotient at sigma=0. Twelve accepted steps bound the live demonstration. No new training objective is introduced.
 -->
 
 ---
@@ -2313,7 +2416,7 @@ $$
 ---
 clicks: 0
 sourceFrame: "39"
-class: theorems
+class: interactive-slide
 ---
 
 # Flow Matching
@@ -2322,25 +2425,13 @@ $$
 \bbE_{t \sim U[0, 1]} \bbE_{\bx \sim p_t(\bx)}\left\| \bv(\bx, t) - \bv_{\btheta}(\bx, t) \right\|^2 \rightarrow \min_{\btheta}
 $$
 
-<ul>
+<TransportPathsDemo />
 
-<li>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">Original illustration: A Visual Dive into Conditional Flow Matching</a></div>
 
-There are infinitely many possible $\bv(\bx, t)$ between $p_0(\bx)$ and $p_1(\bx)$.
-
-</li>
-
-<li>
-
-We need to select the "best" $\bv(\bx, t)$ and make the objective tractable.
-
-</li>
-
-</ul>
-
-<img src="/figs/multiple_dynamics.png" alt="multiple dynamics" style="width:100%;height:260px;object-fit:contain" />
-
-<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">image credit: A Visual Dive into Conditional Flow Matching</a></div>
+<!--
+The preceding FM algorithm exposes an unknown target field. Three explicit invertible flows now demonstrate that endpoint densities do not select one unique target. This motivates constructing tractable paths in the continuation of flow matching. The Summary retains the regression takeaway. Unlike the PF-ODE example, only endpoints are constrained to agree. All flows have positive affine scales and analytic Gaussian pushforwards: mean (-2+4t, 0), scales (1-.45t,1-.2t); Detour adds (0,1.6 sin(pi t)); Rotation inserts a 1.3 sin(pi t) rotation before scaling. Rotation preserves the current Gaussian density relative to Direct but changes particle trajectories; Detour changes intermediate density. No claim about optimal transport or learned-model quality. Noise-to-data time increases from 0 to 1.
+-->
 
 ---
 clicks: 0

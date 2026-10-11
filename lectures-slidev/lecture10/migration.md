@@ -570,3 +570,269 @@ SHA-256 итоговых файлов:
 - `slide-map.json`: `1179dbba3d14e7a46568eedc9a2da416995f7085a5619e1ebc4302b6e3a0e044`.
 - `Lecture10-handout.pdf`: `97dcf263a1b5bdedd23ca73a38b5d16e4f7c38372c8f7aa92290c31f0fbcc9fb`.
 - `Lecture10.pdf`: `dae4813bf01cbe003a2b6c889cbaea743a9514f6c5b6c2f374f128bbdd7f2239`.
+
+## Четыре интерактивные визуализации, 2026-10-11
+
+По запросу автора реализованы предложенные демо 2–5. Отдельное VE/VP-демо
+отклонено как повторение DDPM/NCSN. Добавлены три самостоятельных слайда;
+на заключительном FM-слайде заменена иллюстрация, повторная regression formula
+сохранена. Итог: **54 слайда / 117 состояний**.
+
+- **22 Same Densities, Different Trajectories:** после PF-ODE theorem/proof и
+  перед применениями. Одна смесь N(−1.8,0.25), N(1.8,0.25), forward g=√2,
+  точные Brownian increments и одномерный quantile flow. Общие начальные частицы,
+  восемь показанных траекторий, 384 частицы в гистограмме; time/Run/Pause/Step/
+  New noise/Reset. Гистограмма не перенормирует хвосты за пределами окна.
+  Равенство marginal densities отделено от различия индивидуальных траекторий.
+- **33 Reversing Diffusion Needs the Score:** после reverse proof и перед
+  формулами VE/VP. Общие terminal samples; одновременно naive drift reversal,
+  correct reverse SDE и PF-ODE. При f=0 наивное обращение продолжает размывание.
+  Reverse transition вычисляется точно: posterior mixture component и Gaussian
+  conditional на более раннем времени. Forward τ drift равен +2 score(x,2−τ).
+  Это обращение закона, а не воспроизведение конкретной прямой реализации.
+- **47 One Denoiser Prediction, One Euler Step:** между полным Euler sampler
+  и выводом DDIM. Точная conditional mean smooth 2D Gaussian mixture, covariance
+  0.12 I; r=σ_next/σ задаёт интерполяцию между текущей точкой и denoiser prediction.
+  Step пересчитывает prediction, r=0 завершает процесс без 0/0. После 12 шагов
+  — Reset. Три стартовых пресета; prediction может лежать между модами.
+- **53 Flow Matching:** Direct / Detour / Rotation — обратимые affine flows
+  с общими Gaussian endpoints. Частицы, полные траектории и текущие скорости
+  в общем масштабе. Положительные scales обеспечивают invertibility. Detour
+  меняет промежуточную плотность; Rotation сохраняет Direct marginals, меняя
+  траектории. Это иллюстрирует свободу выбора target field после неизвестного
+  velocity в алгоритме и мотивирует tractable paths далее. Не утверждается
+  оптимальность или превосходство по качеству генерации.
+
+Демо используют общий DemoPanel и принятую палитру/шрифты/геометрию курса;
+shared theme/macros не менялись. Три новых слайда имеют sourceFrame extensions,
+нулевые reveal clicks и заметки о входящем/исходящем переходе. Состояния живут
+в lecture-local reactive store, сохраняются при возврате; таймер останавливается
+при уходе. Управлять в выводимом на экран окне; presenter/viewer sync не заявлен.
+PDF: t=4/3 для forward, t=0 для reverse, σ=2.5→1.25 для denoiser,
+t=0.5 для всех трёх transport flows. В PDF контролы скрыты.
+
+### Проверки
+
+- Независимые report-only source reviews: notation/math/narrative и
+  outgoing Recap/Summary/schedule. Исправлен обнаруженный terminal 0/0;
+  добавлены velocity arrows согласно согласованному предложению.
+- Incoming Recap и Summary побайтно неизменны. L11 Recap уже содержит PF-ODE,
+  reverse score, denoiser PF-ODE/DDIM и FM regression. Новые игрушечные примеры
+  иллюстрируют существующие результаты; расширять Recap/Summary не требуется.
+  Разделы/Outline/root README schedule прежние; каталог дополнен описанием демо.
+- `finalize 10` в изолированной копии, Node **24.19.0**: source/map/assets/macros,
+  **63/63 tests**, production build, оба PDF. Четыре новых математических теста
+  включены в `test:demos` и `finalize`: score/quantile velocity, reverse moments/CDF,
+  Euler interpolation/terminal state, endpoints/invertibility.
+- Финальные 40 экспортных входов (sources/map/components/lib/assets/theme/package
+  и lock) побайтно сверены с каноническими перед переносом PDF. Изоляция использует
+  полноценную копию зависимостей: первоначальный экспорт с symlink node_modules
+  выявил запрет Vite на загрузку шрифтов и был отброшен; финальный экспорт без него.
+- `render-qa.py`: **54 / 117** страниц; raw math delimiters нет. Все четыре
+  новые/изменённые страницы просмотрены крупно. Их изображения в обоих PDF
+  попиксельно идентичны. Остальные **50 handout / 113 steps** страниц попиксельно
+  совпадают с проверенной предыдущей редакцией вне folio, её QA остаётся применим.
+- Browser после export: новые слайды и соседи 21/22/32/33/34/46/47/48/52/53/54,
+  раскрытия вперёд/назад и геометрия прошли. Общий inspector не отслеживает
+  отдельные tr и сообщил empty click на неизменённом слайде 23; отдельный
+  сценарий подтвердил table-row reveal и обратное скрытие без изменения геометрии.
+- `inspect-process-demos.mjs`: **33 состояния**, endpoints/presets, смена шума,
+  Run/Pause/Step, r=0 и 12-step limit, reentry, keyboard, synthetic pen, offline
+  (внешние запросы блокированы), static print. Нет NaN/KaTeX/resource errors,
+  выхода контента в источники или за поля. Реальные перо/планшет/проектор не проверялись.
+- QA: `../output/qa/lecture10/`, исходная редакция в `before/`;
+  `comparison.json`, `export-inputs.json`, build/browser reports и PNG сохранены.
+  Это scoped проверка четырёх демо и их соседей; Beamer и merged не затронуты.
+
+SHA-256:
+
+- `slides.md`: `a86201f12477f922c002cf70bc925be0768b99b7995affc54918a8fa1406ddc2`.
+- `slide-map.json`: `1132b7839877646e6f894f1198361ed6f3b83da9a508518f5b4488462acf0cdd`.
+- `Lecture10.pdf`: `05420cb5ab7cd50e5839d4d080be9f9f0341b447d0b172fc84b7ad99d44c7410`.
+- `Lecture10-handout.pdf`: `ef1a0c730fdb1632e33fa48f27edfa39a229130f738f9f775bda77eb0995e795`.
+
+## Слайд 22: горизонтальное время и переключение SDE / PF-ODE, 2026-10-11
+
+По замечанию автора forward-демо использует один широкий график: время слева
+направо, состояние по вертикали, справа гистограмма и точная текущая плотность
+на той же шкале состояния. Переключатель SDE / PF-ODE сохраняет time/seed/частицы;
+Reset возвращает SDE и t=0. New noise меняет только stochastic trajectories.
+В PDF оба режима показаны рядом с горизонтальными временными осями при t=4/3.
+Новый HorizontalProcessPlot не используется в reverse-демо. Слайды 33/47/53
+автор пока оставил; смысл naive drift reversal объяснён в чате. Аналитический
+optimal denoiser из EDM Appendix B.3, Eq. (57), обсуждается как отдельный будущий
+слайд после Train the Denoiser; в текущие материалы он не добавлен.
+
+Содержание, макросы, Summary/Recap/Outline и карта неизменны: **54/117**.
+Изменение только представления существующего результата, дополнительного
+семантического материала нет. `finalize 10` на Node 24.19.0 в изолированной
+копии: **63/63 tests**, web build и оба PDF прошли. Все **41** экспортных входа
+сверены побайтно. `render-qa.py`: 54/117, raw delimiters нет. Слайд 22 обоих PDF
+просмотрен крупно; варианты попиксельно одинаковы. Относительно предыдущей
+редакции изменены только handout 22 / steps 42; остальные **53/116** страниц
+попиксельно идентичны, включая reverse-демо 33. Общая тема и стиль прежние.
+Браузер: переключение режимов сохраняет состояние, возврат сохраняет выбранный
+режим, Reset восстанавливает SDE; endpoints/noise/step/run/keyboard/synthetic pen/
+print/offline — расширенный `inspect-process-demos.mjs`. Проверены также 22/33
+общим инспектором после экспорта. Реальное оборудование и presenter/viewer sync
+не заявляются проверенными.
+
+QA: `../output/qa/lecture10/horizontal-before/` и `horizontal/`.
+PDF SHA-256:
+
+- `Lecture10.pdf`: `a40bbecf5fcdc1a502ac7f8cff050eb59508203e3ac80a5ad0b12e7f1f4bce0e`.
+- `Lecture10-handout.pdf`: `6ca2c1a2c621adcccca2818d858345a96ac147a32ff0a1b248bcd9761ffa5f22`.
+
+## Слайд 33: горизонтальное время; аналитический D*, 2026-10-11
+
+По следующему явному решению автора reverse-демо теперь использует тот же
+HorizontalProcessPlot: время 2 → 0 слева направо, состояние по вертикали,
+текущая гистограмма и целевая плотность справа. Noise only / Reverse SDE /
+PF-ODE переключаются без сброса времени/seed. Формула соответствует выбранному
+режиму; Noise only подписан «no score correction» вместо drift reversal only.
+Reset возвращает Reverse SDE и начало обратного процесса (t=2). В PDF три
+горизонтальных режима показаны одновременно при t=0; формула явно подписана
+Reverse SDE. Прежняя запись выше о сохранении вертикального reverse-демо устарела.
+
+Добавлен слайд **46, What Does the Optimal Denoiser Predict?**, после Train the
+Denoiser и до Generate Samples with a Denoiser. Из MSE переход к условному
+среднему, затем его явный вид для равномерного эмпирического распределения:
+взвешенная сумма примеров с нормированными Gaussian likelihoods. Источник
+сверен с EDM Appendix B.3, Eq. (57), стр. 11 supplement. Указаны sigma>0,
+предельное поведение весов, возможность среднего между модами и приближённый
+характер learned D_theta. В notes оговорены фиксированный x в пределах,
+nearest-neighbor ties, duplicates и отличие эмпирической формулы от smooth
+Gaussian-mixture денойзера интерактивного примера. Narrative соседей обновлён.
+Euler-демо теперь **48**, FM-демо **54**. Карта и каталог README синхронизированы;
+**55 слайдов / 120 reveal states**. Новых разделов/Training/Sampling нет.
+
+Scoped notation/source review: существующие bx/bbE/btheta, явные условия и
+источник, две содержательные группы раскрытия с сохранением геометрии.
+Summary: прежние шесть пунктов покрывают те же шесть разделов; новый слайд
+конкретизирует уже существовавшее условное среднее (слайд 44) внутри denoiser
+раздела. Дополнительного Summary-пункта не требуется. Outgoing coverage:
+L11 Recap «A Denoiser Parameterizes the Probability Flow ODE» сохраняет
+основной результат раздела; явная конечная сумма — поясняющий частный случай,
+рекомендуемый к опущению в Recap, не новый prerequisite для L11. Это решение
+проверки, а не ранее утверждённое автором исключение. Fidelity: score conversion,
+sigma-ODE и DDIM/Euler не менялись, соответствуют L11 Recap. Incoming Recap,
+общие алгоритмы, Summary, Outline и root README schedule неизменны. L11/L12
+и Beamer/merged в рамках этой правки не редактировались.
+
+Проверки окончательных входов:
+
+- `finalize 10` в изолированной копии на Node 24.19.0: source/map/assets/macros,
+  **63/63 tests**, production build, оба PDF; **41** экспортный вход побайтно
+  совпадает с каноническим перед переносом PDF.
+- `render-qa.py`: **55/120**, raw delimiters нет. Новый 46 просмотрен во всех
+  раскрытиях, 33 — в обоих PDF. Финальные состояния handout/steps попиксельно
+  одинаковы. Относительно предыдущей редакции **53/116** существующих страниц
+  совпадают вне folio; изменён лишь 33-й (steps page 67), добавлены 46 и его три
+  состояния. Общая тема, размеры и макросы не менялись; прежняя QA остальных
+  страниц и сравнение общего стиля остаются применимы.
+- Браузер: 22/32/33/34/44/45/46/47/48, раскрытия вперёд/назад и геометрия;
+  финальный `inspect-process-demos.mjs`: **38 состояний**, оба горизонтальных
+  переключателя, сохранение step/seed/mode, Reset/reentry, endpoints, noise,
+  Run/Pause, terminal denoiser, keyboard, synthetic pen, offline и print.
+  Нет KaTeX/NaN/resource errors или выхода за поля/в источники.
+- Реальное перо/планшет/проектор и presenter/viewer sync не проверялись.
+
+QA: `../output/qa/lecture10/reverse-denoiser-before/` и `reverse-denoiser/`.
+SHA-256:
+
+- `slides.md`: `7bdddc994f68a03f4565e11f8162f07ab5aa3b56235e0657e2289cc29070cc9c`.
+- `slide-map.json`: `e64778ca10acc9106ea131d632b8a602b3fec7ec7d292864af1306777e1acae2`.
+- `Lecture10.pdf`: `ad9f9755af4d8efb944f779c9d09520da0875870c1843f68bdf65720be4ff562`.
+- `Lecture10-handout.pdf`: `37f2ae24393fc3f2940d7a870a65571573892ebdaab33f0e8889be76f2cfbed6`.
+
+## Удаление Noise only, 2026-10-11
+
+По явному решению автора из слайда 33 удалён Noise only, включая генерацию
+его траекторий и относящуюся только к нему проверку. Оставлены Reverse SDE /
+PF-ODE. Заголовок теперь «Reverse SDE and Probability Flow ODE», вводная фраза
+и takeaway подчёркивают общие маргинальные плотности при разных траекториях.
+PDF содержит два более широких горизонтальных графика. Карта и README
+обновлены; 55/120 и нумерация прежние. Старое сохранённое значение режима
+нормализуется к SDE при обновлении компонента. Summary/Recap/Outline и
+основные формулы не меняются: удалён поясняющий контрпример, core coverage
+и fidelity предыдущей scoped проверки остаются применимы.
+
+`finalize 10`: 63/63 tests, source/map/assets/macros, build и оба PDF прошли.
+41 экспортный вход побайтно совпадает с каноническим. Browser inspector:
+37 состояний, переключатели, reentry/reset, endpoints, keyboard, synthetic pen,
+offline и print без ошибок. Слайд 33 просмотрен в браузере и PDF; изменились
+только handout page 33 / steps page 67, остальные 54/119 страниц попиксельно
+совпадают с предыдущей проверенной редакцией. QA: `../output/qa/lecture10/two-reverse/`.
+
+- `Lecture10.pdf`: `016626951ff40dceffac34eb8f317a90a6365a730f3de976c467f1a2014eeb35`.
+- `Lecture10-handout.pdf`: `d8a9b175b9e306d38c67b7805cbf4d170fa5514d6857bc084e248a79a3ce28d1`.
+
+## Слайд 46: идея вывода и зачем сеть, 2026-10-11
+
+По замечанию автора заменён анализ пределов sigma на короткий вывод:
+a_i = N(x; x_i, sigma^2 I), минимизация взвешенного MSE по кандидату y,
+нулевой градиент и решение в виде нормированного взвешенного среднего.
+Нормировка posterior weights не зависит от y и не меняет argmin;
+положительные a_i при sigma>0 обеспечивают единственный минимум. Источник
+сверен с EDM Appendix B.3, Eqs. 53–57. Использованы существующие макросы.
+После вывода кратко объясняется, зачем обучать D_theta: прямой расчёт требует
+всего датасета при каждом шаге; формула относится к эмпирическому распределению,
+точное сэмплирование которого возвращает обучающие примеры. Нейросеть избегает
+явного сканирования датасета и даёт inductive bias для обобщения. Notes отличают
+идеальный empirical sampler от конечных шагов и приближённого prior; не обещают
+обобщение любой обученной сети. Вывод продолжает предыдущий MSE, заключение
+готовит следующий neural Euler sampler. Анализ sigma удалён.
+
+Сохранены два клика, карта и 55/120. Это детализация прежнего conditional-mean
+результата и мотивации параметризации; основные формулы/Training/Sampling,
+Summary/Recap coverage и fidelity прежние. Новых разделов и изменений README
+schedule нет. Другие лекции не редактировались.
+
+`finalize 10`: source/map/assets/macros, 63/63 tests, build и оба PDF прошли.
+Browser 45/46/47: все раскрытия, обратное скрытие и геометрия прошли; 46 просмотрен
+во всех PDF-состояниях. 41 экспортный вход совпадает с каноническим. Изменились
+только handout 46 и steps 99–101; остальные 54/117 страниц попиксельно прежние.
+QA: `../output/qa/lecture10/derive-denoiser/`.
+
+- `Lecture10.pdf`: `8e5f830deb0c5ea7ba3a9a602eb2b75ff6867a8e5ba943c043480855ebe5f8b6`.
+- `Lecture10-handout.pdf`: `0e9dc9aceae71c620c367965dfef1c7bc8fcdec912e119b7c24393b0d46da55a`.
+
+## Слайд 46: явная финальная формула, 2026-10-11
+
+По уточнению автора после условия нулевого градиента теперь явно выписана
+нормированная сумма exp(-||x-x_i||²/(2 sigma²)) x_i. Общий Gaussian factor
+сокращается; условное среднее и идея вывода сохранены. В Why train a network
+оставлены только первые два пункта (стоимость и эмпирическое распределение).
+Это эквивалентное раскрытие обозначений; Summary/Recap и соседние формулы
+не меняются. Сохранены 55/120, два клика, общая тема и размеры шрифтов.
+
+`finalize 10`: source/map/macros/assets, 63/63 tests, build и оба PDF прошли.
+Browser 46: раскрытия и обратное скрытие без изменения геометрии; финальный
+вид просмотрен после полной загрузки стилей Slidev. PDF 46 просмотрен на
+изменённых состояниях. 41 экспортный вход совпадает с каноническим; изменены
+только handout 46 / steps 100–101, остальные 54/118 страниц попиксельно прежние.
+QA: `../output/qa/lecture10/explicit-denoiser/`.
+
+- `Lecture10.pdf`: `eeebfda68ed2796a99993ca001d02b0ae7717b2874f577f29c6dfa38d471b965`.
+- `Lecture10-handout.pdf`: `aeae83414898ef3bc0bbec1fe0790fcf43afe330ef20cd9407131bac14aa49e1`.
+
+## Проверка совокупного коммита L10–L12, 2026-10-11
+
+Проверены весь unstaged/untracked diff и зависимые интерфейсы перед commit/push:
+notation/math/citations, incoming/outgoing Recap coverage и fidelity, Summary,
+Training/Sampling, Outline/README schedule и каталог. Новых замечаний нет.
+L10 примеры покрывают прежние основные результаты; конечная empirical сумма
+остаётся поясняющей специализацией. Rectified Flow L11 синхронизирован с Recap
+L12; L12 body/Summary неизменны, исходящий интерфейс не меняется. Source checks
+10/11/12 прошли; повторно использованы актуальные 63 tests и PDF/browser evidence
+для совпадающих исходников/экспортов. Shared rendering/export не менялись;
+добавлена только регистрация новых численных тестов. Итоговые L10 source hashes:
+slides.md `8410160fec17689ac7114ba3535491c6ecfb3cf9da44c0af1a24a2b9281697e9`,
+slide-map.json `69628bff64231d08251c12e62e908d794a2fb88cd5133f128b6c0e6489717360`.
+
+Проверка соседнего неизменённого материала отдельно выявила baseline-вопросы,
+не вызванные этим diff и не исправленные в данном коммите: фраза об одинаковых
+optimal values FM/CFM (L11:532, L12:90/179; в общем случае совпадают minimizers,
+а losses отличаются константой), и транспонирование Q_t в categorical posterior
+при column-stochastic convention (L12:1396/1552, L13:277/1167). Это не новые
+расхождения body/Recap и не основание расширять согласованные правки этого коммита.

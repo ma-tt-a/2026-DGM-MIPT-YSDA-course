@@ -1057,16 +1057,36 @@ $$
 
 <div v-click="2">
 
-- We fit straight lines between the noise distribution $p_0(\bx)$ and the data distribution $\pd(\bx)$.
-- The **marginal** path $p_t(\bx)$ does not give straight lines.
+## Rectified Flow
+
+Regressing on $\bx_1-\bx_0$ along $\bx_t=(1-t)\bx_0+t\bx_1$ gives the **rectified flow objective**.
+
+**Straight training paths do not imply straight sampling trajectories.** The optimal field averages conditional velocities:
+
+$$
+\bv_{\btheta^*}(\bx,t)=\bbE\left[\bx_1-\bx_0\mid\bx_t=\bx\right].
+$$
 
 </div>
 <div class="columns" v-click="3">
-<img src="/figs/g2g-vector-field-samples-cond.png" alt="Conditional straight paths" style="width:100%;height:185px;object-fit:contain" />
-<img src="/figs/g2g-forward_samples.png" alt="Marginal nonlinear paths" style="width:100%;height:185px;object-fit:contain" />
+<div>
+
+**Conditional paths: straight**
+
+<img src="/figs/g2g-vector-field-samples-cond.png" alt="Conditional straight paths" style="width:100%;height:115px;object-fit:contain" />
+</div>
+<div>
+
+**ODE trajectories: not necessarily straight**
+
+<img src="/figs/g2g-forward_samples.png" alt="Marginal nonlinear paths" style="width:100%;height:115px;object-fit:contain" />
+</div>
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
+
+
+<!-- The preceding slide derives the conditional target x1-x0. This slide substitutes it into CFM, names the resulting linear-interpolation regression Rectified Flow, and distinguishes conditional training paths from integral curves of the optimal marginal field. The following slide gives the unchanged Training/Sampling algorithms. The conditional-expectation identity assumes the population MSE optimum and sufficient model capacity; a fitted finite network approximates it. Rectified Flow does not require straight sampling trajectories or reflow. Reflow is deferred to the coupling discussion. -->
 
 ---
 clicks: 1
@@ -1074,7 +1094,7 @@ sourceFrame: "26"
 class: theorems
 ---
 
-# CFM with One-Sided Conditioning: Training and Sampling
+# Rectified Flow: Training and Sampling
 
 $$
 \bbE_{t\sim U[0,1]}\bbE_{\bx_1\sim\pd(\bx)}\bbE_{\bx_0\sim\cN(0,\bI)}\left\|(\bx_1-\bx_0)-\bv_{\btheta}(\bx_t,t)\right\|^2\rightarrow\min_{\btheta}
@@ -1102,7 +1122,7 @@ $$
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
 ---
 clicks: 1
@@ -1134,4 +1154,4 @@ class: summary
 - The marginal vector field can be expressed as the posterior mean of conditional vector fields: $\bv(\bx,t)=\bbE_{p_t(\bz|\bx)}\bv(\bx,\bz,t)$.
 - The FM and CFM objectives have the same optimal solution, making CFM a tractable alternative to FM.
 - For Gaussian conditional paths $p_t(\bx|\bz)=\cN(\bmu_t(\bz),\bsigma_t^2(\bz))$, the conditional vector field has a closed form for $\bv(\bx_t,\bz,t)$.
-- One-sided conditioning uses endpoint conditioning $\bz=\bx_1$ with straight conditional paths, yielding the simple vector field $\bv(\bx_t,\bx_1,t)=\bx_1-\bx_0$.
+- One-sided conditioning $\bz=\bx_1$ with straight conditional paths yields the **rectified flow objective**, using the target $\bv(\bx_t,\bx_1,t)=\bx_1-\bx_0$.

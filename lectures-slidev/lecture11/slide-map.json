@@ -206,7 +206,7 @@
   {
     "slide": 35,
     "frame": 26,
-    "title": "CFM with One-Sided Conditioning: Training and Sampling",
+    "title": "Rectified Flow: Training and Sampling",
     "clicks": 1
   },
   {
