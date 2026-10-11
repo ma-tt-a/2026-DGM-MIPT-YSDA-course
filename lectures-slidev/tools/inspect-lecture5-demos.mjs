@@ -2,12 +2,12 @@ import assert from 'node:assert/strict'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { chromium } from 'playwright-chromium'
-import { lecturePaths, root } from './course.mjs'
+import { lecturePaths, root, readSlides } from './course.mjs'
 import { initialLangevin, advanceLangevin, langevinConfig } from '../lecture5/lib/geometry-demos.mjs'
 
-const lecture = lecturePaths(5), map = JSON.parse(readFileSync(lecture.map, 'utf8'))
+const lecture = lecturePaths(5), map = readSlides(lecture)
 const base = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
-const langevinLecture = lecturePaths(6), langevinMap = JSON.parse(readFileSync(langevinLecture.map, 'utf8'))
+const langevinLecture = lecturePaths(6), langevinMap = readSlides(langevinLecture)
 const langevinBase = process.env.SLIDEV_QA_LANGEVIN_URL || `http://localhost:${langevinLecture.port}`
 const qa = process.env.SLIDEV_QA_DIR || resolve(root, 'output/qa/lecture5/interactive-demos')
 mkdirSync(qa, { recursive: true })
@@ -23,7 +23,7 @@ await context.route('**/*', route => {
 })
 const demo = () => page.locator('[data-demo]:visible')
 const data = () => demo().evaluate(el => ({ ...el.dataset }))
-const slideByFrame = frame => map.find(s => s.frame === frame)
+const slideByFrame = frame => map.find(s => s.id === frame)
 async function go(slide, pen = false) {
   await page.goto(`${slide.base}/${slide.slide}?clicks=${slide.clicks}${pen ? '&tools' : ''}`, { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
@@ -69,8 +69,8 @@ async function penClick(button) {
     for (const type of ['mousePressed', 'mouseReleased']) await cdp.send('Input.dispatchMouseEvent', { type, x: box.x + box.width / 2, y: box.y + box.height / 2, button: 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: 1, pointerType: 'pen' })
   } finally { await cdp.detach() }
 }
-const support = { ...slideByFrame(20), base, total: map.length }
-const langevin = { ...langevinMap.find(s => s.frame === 'extension: 14'), base: langevinBase, total: langevinMap.length }
+const support = { ...slideByFrame('wasserstein-distance-vs-kl-vs-jsd'), base, total: map.length }
+const langevin = { ...langevinMap.find(s => s.id === 'langevin-dynamics-why-add-noise'), base: langevinBase, total: langevinMap.length }
 try {
   // Warm the deck before deep links, so stock navigation styles/fonts are loaded.
   await page.goto(`${base}/1`, { waitUntil: 'networkidle' })

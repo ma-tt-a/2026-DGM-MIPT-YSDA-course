@@ -1,36 +1,29 @@
 # DGM course in Slidev
 
-Параллельная версия курса: Beamer-исходники и PDF остаются в `../lectures/`.
-Весь Slidev использует один набор зависимостей и общую локальную тему.
-Обязательные правила и порядок переноса: [MIGRATION.md](MIGRATION.md).
-
-Навыки проекта: [slidev-migrate](../.agents/skills/slidev-migrate/SKILL.md) для
-переноса, [lecture-audit](../.agents/skills/lecture-audit/SKILL.md) для полного аудита.
-Notation, Recap, Summary и README проверяются теми же проектными навыками в режиме
-Slidev. Общий навык PDF помогает просматривать экспорт; формулы и раскрытия
-проверяются также по исходникам и в браузере.
+Slidev — единственный рабочий формат лекций. Общие зависимости и тема находятся
+здесь, соглашения по содержанию и стилю — в [CLAUDE.md](../CLAUDE.md).
+Для проверок используются [проектные навыки](../.agents/skills/lecture-audit/SKILL.md).
 
 ## Лекции
 
-| Лекция | Исходник | PDF с раскрытиями | Раздатка | Перенос и проверки |
-|---|---|---|---|---|
-| 1 | [slides.md](lecture1/slides.md) | [Lecture1.pdf](lecture1/Lecture1.pdf) | [Lecture1-handout.pdf](lecture1/Lecture1-handout.pdf) | [migration.md](lecture1/migration.md) |
-| 2 | [slides.md](lecture2/slides.md) | [Lecture2.pdf](lecture2/Lecture2.pdf) | [Lecture2-handout.pdf](lecture2/Lecture2-handout.pdf) | [migration.md](lecture2/migration.md) |
-| 3 | [slides.md](lecture3/slides.md) | [Lecture3.pdf](lecture3/Lecture3.pdf) | [Lecture3-handout.pdf](lecture3/Lecture3-handout.pdf) | [migration.md](lecture3/migration.md) |
-| 4 | [slides.md](lecture4/slides.md) | [Lecture4.pdf](lecture4/Lecture4.pdf) | [Lecture4-handout.pdf](lecture4/Lecture4-handout.pdf) | [migration.md](lecture4/migration.md) |
-| 5 | [slides.md](lecture5/slides.md) | [Lecture5.pdf](lecture5/Lecture5.pdf) | [Lecture5-handout.pdf](lecture5/Lecture5-handout.pdf) | [migration.md](lecture5/migration.md) |
-| 6 | [slides.md](lecture6/slides.md) | [Lecture6.pdf](lecture6/Lecture6.pdf) | [Lecture6-handout.pdf](lecture6/Lecture6-handout.pdf) | [migration.md](lecture6/migration.md) |
-| 7 | [slides.md](lecture7/slides.md) | [Lecture7.pdf](lecture7/Lecture7.pdf) | [Lecture7-handout.pdf](lecture7/Lecture7-handout.pdf) | [migration.md](lecture7/migration.md) |
-| 8 | [slides.md](lecture8/slides.md) | [Lecture8.pdf](lecture8/Lecture8.pdf) | [Lecture8-handout.pdf](lecture8/Lecture8-handout.pdf) | [migration.md](lecture8/migration.md) |
-| 9 | [slides.md](lecture9/slides.md) | [Lecture9.pdf](lecture9/Lecture9.pdf) | [Lecture9-handout.pdf](lecture9/Lecture9-handout.pdf) | [migration.md](lecture9/migration.md) |
-| 10 | [slides.md](lecture10/slides.md) | [Lecture10.pdf](lecture10/Lecture10.pdf) | [Lecture10-handout.pdf](lecture10/Lecture10-handout.pdf) | [migration.md](lecture10/migration.md) |
-| 11 | [slides.md](lecture11/slides.md) | [Lecture11.pdf](lecture11/Lecture11.pdf) | [Lecture11-handout.pdf](lecture11/Lecture11-handout.pdf) | [migration.md](lecture11/migration.md) |
-| 12 | [slides.md](lecture12/slides.md) | [Lecture12.pdf](lecture12/Lecture12.pdf) | [Lecture12-handout.pdf](lecture12/Lecture12-handout.pdf) | [migration.md](lecture12/migration.md) |
-| 13 | [slides.md](lecture13/slides.md) | [Lecture13.pdf](lecture13/Lecture13.pdf) | [Lecture13-handout.pdf](lecture13/Lecture13-handout.pdf) | [migration.md](lecture13/migration.md) |
-| 14 | [slides.md](lecture14/slides.md) | [Lecture14.pdf](lecture14/Lecture14.pdf) | [Lecture14-handout.pdf](lecture14/Lecture14-handout.pdf) | [migration.md](lecture14/migration.md) |
+| Лекция | Исходник | PDF с полным раскрытием |
+|---|---|---|
+| 1 | [slides.md](lecture1/slides.md) | [Lecture1.pdf](lecture1/Lecture1.pdf) |
+| 2 | [slides.md](lecture2/slides.md) | [Lecture2.pdf](lecture2/Lecture2.pdf) |
+| 3 | [slides.md](lecture3/slides.md) | [Lecture3.pdf](lecture3/Lecture3.pdf) |
+| 4 | [slides.md](lecture4/slides.md) | [Lecture4.pdf](lecture4/Lecture4.pdf) |
+| 5 | [slides.md](lecture5/slides.md) | [Lecture5.pdf](lecture5/Lecture5.pdf) |
+| 6 | [slides.md](lecture6/slides.md) | [Lecture6.pdf](lecture6/Lecture6.pdf) |
+| 7 | [slides.md](lecture7/slides.md) | [Lecture7.pdf](lecture7/Lecture7.pdf) |
+| 8 | [slides.md](lecture8/slides.md) | [Lecture8.pdf](lecture8/Lecture8.pdf) |
+| 9 | [slides.md](lecture9/slides.md) | [Lecture9.pdf](lecture9/Lecture9.pdf) |
+| 10 | [slides.md](lecture10/slides.md) | [Lecture10.pdf](lecture10/Lecture10.pdf) |
+| 11 | [slides.md](lecture11/slides.md) | [Lecture11.pdf](lecture11/Lecture11.pdf) |
+| 12 | [slides.md](lecture12/slides.md) | [Lecture12.pdf](lecture12/Lecture12.pdf) |
+| 13 | [slides.md](lecture13/slides.md) | [Lecture13.pdf](lecture13/Lecture13.pdf) |
+| 14 | [slides.md](lecture14/slides.md) | [Lecture14.pdf](lecture14/Lecture14.pdf) |
 
-Lecture 14 сохраняет текущую черновую редакцию Beamer; статус содержания и
-согласованные ограничения описаны в [журнале переноса](lecture14/migration.md).
+Lecture 14 остаётся черновиком.
 
 ## Запуск
 
@@ -67,27 +60,22 @@ npm run dev -- 1
 - Сервер по умолчанию доступен только с этого компьютера. Доступ отдельного
   планшета по сети требует отдельно настроенного и разрешённого сетевого режима.
 
-## Завершение миграции и PDF
+## Сборка и PDF
 
-Для получения окончательных артефактов остановить dev-серверы общего проекта
-и выполнить (заменить 1 на номер лекции):
+Перед build/export остановить dev-серверы общего проекта. Для выбранной лекции:
 
 ```sh
 npm run finalize -- 1
 ```
 
-Команда проверяет покрытие исходных frames, согласованность карты, наличие
-разделов и ссылок, распознанные изображения и макросы; запускает существующие
-тесты, собирает веб-версию и **оба PDF**. Экспорт проверяет число страниц по карте
-и обновляет файлы рядом с выбранной лекцией только после успеха обоих вариантов:
-
-- `lectureN/LectureN.pdf` — все раскрытия.
-- `lectureN/LectureN-handout.pdf` — финальные состояния логических слайдов.
-
-Актуальные числа страниц и результаты проверок хранятся в журнале каждой лекции.
-Критерии завершения и состав коммита заданы в `MIGRATION.md` §7.
-Промежуточные PDF, веб-сборка, QA и зависимости исключены из Git;
-Beamer PDF и `lectures/merged/` команда не меняет.
+Команда проверяет Slidev-исходник, идентификаторы слайдов, явные числа кликов,
+разделы README, изображения с записанными источниками и общие макросы;
+запускает тесты, собирает веб-версию и один PDF: `lectureN/LectureN.pdf`.
+В PDF каждый логический слайд показан один раз, с полным раскрытием материала.
+Пошаговые раскрытия сохраняются в браузерной презентации.
+Экспорт проверяет число страниц по `slides.md` и заменяет итоговый файл только
+после успешной проверки. Временные файлы находятся в игнорируемом `output/`.
+`lectures/merged/` команда не меняет.
 
 Отдельные этапы: `npm run check -- 1`, `npm run build -- 1`,
 `npm run export -- 1`, `npm run test:demos`.
@@ -110,7 +98,7 @@ node tools/inspect.mjs 1
 node tools/inspect-demos.mjs 1
 ```
 
-`inspect.mjs N` проверяет раскрытия по карте и границы содержимого;
+`inspect.mjs N` проверяет раскрытия по `slides.md` и границы содержимого;
 сценарии пера в нём сейчас покрывают Lecture 1. Для демо выбирать инспектор
 соответствующей лекции из разделов ниже. `SLIDEV_QA_URL` меняет адрес сервера.
 `SLIDEV_BROWSER_PATH` задаёт путь к Chromium-браузеру; по умолчанию инспекторы
@@ -127,9 +115,8 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
 - `package.json`, lock-файл и `node_modules/` — общие для курса.
 - `theme/` — локальная тема. Она подключает базовые стили theme-default,
   затем оформление курса; содержит `global-top.vue`, панель пера и компоненты.
-- `theme/setup/macros.json` — адаптер из `../lectures/utils/newcommands.tex`.
-  Обновление: `node tools/sync-notation.mjs`.
-- `theme/assets/` — общие SVG taxonomy; экспорт: `tools/export-taxonomy.sh`.
+- `theme/setup/macros.json` — единый редактируемый источник математических макросов.
+- `theme/assets/` — общие редактируемые SVG taxonomy.
 - `lectureN/slides.md` — текст, формулы, раскрытия и заметки преподавателя.
   В headmatter: `theme: ../theme`.
 - `lectureN/public/figs/` — локальные иллюстрации; в слайдах `src="/figs/name.png"`.
@@ -142,7 +129,9 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
 - `lectureN/components/` и `lectureN/lib/` — компоненты и расчёты демонстраций.
   После переноса разделов Lecture 5 импортирует discriminator из `lecture4/components/`,
   а Lecture 6 — Langevin из `lecture5/components/`; исходники демо сохраняются в этих папках.
-- `lectureN/slide-map.json` и `migration.md` — карта и журнал переноса.
+- Метаданные слайда: уникальный `id`, целочисленный `clicks ≥ 0`;
+  переходы Outline также содержат `section` с названием раздела.
+  Проверки читают эти данные напрямую через установленный парсер Slidev.
 - `tools/` — общие команды, тесты и проверка PDF.
 - `deferred/kl/` — сохранённый оригинал KL-демо; его копия используется в Lecture 5.
   [Заметки по повторному использованию](deferred-demos.md).
@@ -185,7 +174,6 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
   статические примеры.
 
 Сценарии браузера: `node tools/inspect-demos.mjs 1`.
-История вариантов и текущие сценарии: [журнал Lecture 1](lecture1/migration.md).
 Отложенные демонстрации: [deferred-demos.md](deferred-demos.md).
 
 ## Интерактивная Lecture 2
@@ -217,7 +205,6 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
 
 Браузерные сценарии: `node tools/inspect-variational-demos.mjs` при работающей Lecture 3.
 Два численных теста входят в `npm run test:demos` и `npm run finalize -- 3`.
-Подробности и проверенные ограничения: [журнал Lecture 3](lecture3/migration.md).
 
 ## Интерактивная Lecture 4
 
@@ -246,7 +233,6 @@ PDF Lecture 4 содержит сравнение prior; схема quantization
 `node tools/inspect-latent-demos.mjs` при работающих Lectures 4 и 5 (discriminator).
 По умолчанию используются порты 3034 и 3035; для других адресов задать
 `SLIDEV_QA_URL` (Lecture 4) и `SLIDEV_QA_GAN_URL` (Lecture 5).
-Проверенные сценарии и ограничения: [журнал Lecture 4](lecture4/migration.md).
 
 ## Интерактивная Lecture 5
 
@@ -273,7 +259,6 @@ PDF Lecture 4 содержит сравнение prior; схема quantization
 Браузерные сценарии: `node tools/inspect-lecture5-demos.mjs` при работающих Lectures 5 и 6 (Langevin).
 По умолчанию используются порты 3035 и 3036; для других адресов задать
 `SLIDEV_QA_URL` (Lecture 5) и `SLIDEV_QA_LANGEVIN_URL` (Lecture 6).
-Проверенные сценарии управления и экспорта: [журнал Lecture 5](lecture5/migration.md).
 
 ## Интерактивная Lecture 6
 
@@ -300,7 +285,6 @@ PDF Lecture 4 содержит сравнение prior; схема quantization
 Численные проверки: `node --test tools/test-score-demos.mjs` (также входят
 в `npm run test:demos` и `finalize`). Браузерные сценарии:
 `node tools/inspect-score-demos.mjs` при работающей Lecture 6.
-Проверенные сценарии и ограничения: [журнал Lecture 6](lecture6/migration.md).
 
 ## Интерактивная Lecture 7
 
@@ -325,7 +309,6 @@ schedules при t = 500 и три эквивалентные оценки с no
 
 Численные проверки: `node --test tools/test-diffusion-demos.mjs` (включены в
 `test:demos` и `finalize`). Браузер: `node tools/inspect-diffusion-demos.mjs`.
-Подробности: [журнал Lecture 7](lecture7/migration.md).
 
 ## Интерактивная Lecture 8
 
@@ -351,7 +334,6 @@ presenter/viewer не реализована. Демо работают без �
 
 Численные проверки: `node --test tools/test-guidance-demos.mjs` (включены
 в `test:demos` и `finalize`). Браузер: `node tools/inspect-guidance-demos.mjs`.
-Подробности: [журнал Lecture 8](lecture8/migration.md).
 
 ## Интерактивная Lecture 9
 
@@ -376,7 +358,6 @@ presenter/viewer не реализована. Демо работают без �
 
 Численные проверки: `node --test tools/test-dynamics-demos.mjs` (включены в
 `test:demos` и `finalize`). Браузер: `node tools/inspect-dynamics-demos.mjs`.
-Подробности: [журнал Lecture 9](lecture9/migration.md).
 
 ## Интерактивная Lecture 10
 
@@ -405,4 +386,3 @@ PDF фиксирует SDE/PF-ODE при t = 4/3, reverse sampling при t = 0,
 
 Численные проверки: `node --test tools/test-process-demos.mjs` (включены в
 `test:demos` и `finalize`). Браузер: `node tools/inspect-process-demos.mjs`.
-Подробности: [журнал Lecture 10](lecture10/migration.md).

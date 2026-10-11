@@ -21,10 +21,7 @@ download: false
 info: false
 favicon: "data:,"
 clicks: 0
-omittedSourceFrames: [2, 9, 10, 12, 14]
-omittedSourceSections: ["Forward Gaussian Diffusion Process"]
-importedSourceFrames: {"8": [9, 10, 11, 12, 13, 14, 15, 16, 17]}
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -40,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -72,7 +69,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -107,7 +104,7 @@ satisfies $\bs_{\btheta,\sigma}(\bx_{\sigma})\approx\bs_{\btheta,0}(\bx_0)=\bs_{
 
 ---
 clicks: 0
-sourceFrame: "extension: 4"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -150,7 +147,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -178,7 +175,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -205,7 +202,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -247,7 +244,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "11"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -276,7 +273,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "13"
+id: recap-of-previous-lecture-8
 class: theorems
 ---
 
@@ -304,7 +301,7 @@ Our goal now becomes inverting this diffusion.
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: outline
 ---
 
 # Outline
@@ -321,7 +318,8 @@ sourceFrame: "8"
 
 ---
 clicks: 0
-sourceFrame: "auto: Reverse Gaussian Diffusion Process"
+id: outline-2
+section: "Reverse Gaussian Diffusion Process"
 ---
 
 # Outline
@@ -338,7 +336,7 @@ sourceFrame: "auto: Reverse Gaussian Diffusion Process"
 
 ---
 clicks: 3
-sourceFrame: "15"
+id: reverse-gaussian-diffusion-process
 class: theorems
 ---
 
@@ -379,7 +377,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "16"
+id: reverse-gaussian-diffusion-process-2
 class: theorems
 ---
 
@@ -405,7 +403,7 @@ The original DDPM used $T=1000$ steps. Faster sampling methods will be discussed
 
 ---
 clicks: 0
-sourceFrame: "17"
+id: reverse-gaussian-diffusion-process-ancestral-sampling
 class: theorems
 ---
 
@@ -425,7 +423,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 17"
+id: reverse-gaussian-diffusion-process-ancestral-sampling-2
 class: theorems
 ---
 
@@ -463,7 +461,7 @@ class: theorems
 
 ---
 clicks: 3
-sourceFrame: "18"
+id: conditioned-reverse-distribution
 class: theorems
 ---
 
@@ -520,7 +518,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 18"
+id: what-does-knowing-the-clean-data-change
 class: interactive-slide
 ---
 
@@ -534,7 +532,7 @@ class: interactive-slide
 
 ---
 clicks: 2
-sourceFrame: "19"
+id: distribution-summary
 class: theorems
 ---
 
@@ -578,7 +576,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 19"
+id: noise-schedule-through-signal-to-noise-ratio
 class: theorems interactive-slide
 ---
 
@@ -635,7 +633,8 @@ $\lambda_t<0$: noise dominates.
 
 ---
 clicks: 0
-sourceFrame: "auto: Gaussian Diffusion Model as VAE"
+id: outline-3
+section: "Gaussian Diffusion Model as VAE"
 ---
 
 # Outline
@@ -652,7 +651,7 @@ sourceFrame: "auto: Gaussian Diffusion Model as VAE"
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: gaussian-diffusion-model-as-vae
 class: theorems
 ---
 
@@ -687,7 +686,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "21"
+id: gaussian-diffusion-model-as-vae-2
 class: theorems
 ---
 
@@ -728,7 +727,8 @@ Unlike the vanilla VAE: a **simple decoder** $\pt(\bx|\bz)$ and a **Markov-chain
 
 ---
 clicks: 0
-sourceFrame: "auto: Diffusion ELBO Derivation"
+id: outline-4
+section: "Diffusion ELBO Derivation"
 ---
 
 # Outline
@@ -745,7 +745,7 @@ sourceFrame: "auto: Diffusion ELBO Derivation"
 
 ---
 clicks: 3
-sourceFrame: "22"
+id: elbo-for-gaussian-diffusion-model
 class: derivation
 ---
 
@@ -783,7 +783,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "23"
+id: elbo-for-gaussian-diffusion-model-2
 class: derivation
 ---
 
@@ -865,7 +865,7 @@ Intermediate marginals telescope; the $q(\bx_1|\bx_0)$ factor cancels too.
 
 ---
 clicks: 2
-sourceFrame: "24"
+id: elbo-for-gaussian-diffusion-model-3
 class: derivation
 ---
 
@@ -928,7 +928,7 @@ Use the definition of KL. For each $\bx_t$, average over $q(\bx_{t-1}|\bx_t,\bx_
 
 ---
 clicks: 3
-sourceFrame: "25"
+id: elbo-for-gaussian-diffusion-model-4
 class: theorems
 ---
 
@@ -971,7 +971,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "imported: 8:9"
+id: elbo-for-gaussian-diffusion-model-5
 class: theorems
 ---
 
@@ -994,7 +994,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "imported: 8:10"
+id: elbo-for-gaussian-diffusion-model-6
 class: theorems
 ---
 
@@ -1048,7 +1048,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "imported: 8:11"
+id: elbo-for-gaussian-diffusion-model-7
 class: theorems
 ---
 
@@ -1083,7 +1083,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Gaussian Diffusion Reparametrization"
+id: outline-5
+section: "Gaussian Diffusion Reparametrization"
 ---
 
 # Outline
@@ -1100,7 +1101,7 @@ sourceFrame: "auto: Gaussian Diffusion Reparametrization"
 
 ---
 clicks: 5
-sourceFrame: "imported: 8:12"
+id: reparametrization-of-ddpm
 class: theorems
 ---
 
@@ -1143,7 +1144,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "imported: 8:13"
+id: reparametrization-of-ddpm-2
 class: theorems
 ---
 
@@ -1188,7 +1189,7 @@ At every step of the reverse process, we attempt to predict the noise $\bepsilon
 
 ---
 clicks: 0
-sourceFrame: "extension: imported: 8:13"
+id: one-prediction-three-parameterizations
 class: interactive-slide
 ---
 
@@ -1202,7 +1203,7 @@ class: interactive-slide
 
 ---
 clicks: 2
-sourceFrame: "extension: imported: 8:13"
+id: diffusion-parameterizations
 class: theorems
 ---
 
@@ -1261,7 +1262,7 @@ See Salimans & Ho, Section 4 and Appendix D.
 
 ---
 clicks: 2
-sourceFrame: "imported: 8:14"
+id: reparametrization-of-ddpm-3
 class: theorems
 ---
 
@@ -1303,7 +1304,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Denoising Diffusion Probabilistic Model (DDPM)"
+id: outline-6
+section: "Denoising Diffusion Probabilistic Model (DDPM)"
 ---
 
 # Outline
@@ -1320,7 +1322,7 @@ sourceFrame: "auto: Denoising Diffusion Probabilistic Model (DDPM)"
 
 ---
 clicks: 0
-sourceFrame: "imported: 8:15"
+id: generative-models-taxonomy
 class: figure-slide
 ---
 
@@ -1330,7 +1332,7 @@ class: figure-slide
 
 ---
 clicks: 2
-sourceFrame: "imported: 8:16"
+id: denoising-diffusion-probabilistic-model-ddpm
 class: theorems
 ---
 
@@ -1371,7 +1373,7 @@ class: theorems
 
 ---
 clicks: 1
-sourceFrame: "imported: 8:17"
+id: denoising-diffusion-probabilistic-model-ddpm-2
 class: theorems
 ---
 
@@ -1405,7 +1407,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "26"
+id: summary
 class: summary
 ---
 

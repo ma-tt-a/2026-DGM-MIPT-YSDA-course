@@ -21,7 +21,7 @@ favicon: "data:,"
 download: false
 info: false
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -37,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -53,7 +53,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 2"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -73,7 +73,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -95,7 +95,7 @@ If $p_t(\bx)>0$ for all $\bx\in\bbR^m$ and $0\le t<1$, the FM and CFM objectives
 
 ---
 clicks: 0
-sourceFrame: "extension: 3"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -126,7 +126,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lectures
 class: theorems
 ---
 
@@ -157,7 +157,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 4"
+id: recap-of-previous-lectures-2
 class: theorems
 ---
 
@@ -184,7 +184,7 @@ If $p_t(\bx)>0$ for all $\bx\in\bbR^m$ and $0\le t<1$, the FM and CFM objectives
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -209,7 +209,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 5"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -232,7 +232,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -262,7 +262,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 6"
+id: recap-of-previous-lecture-8
 class: theorems
 ---
 
@@ -298,7 +298,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-9
 class: theorems
 ---
 
@@ -339,7 +339,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 7"
+id: recap-of-previous-lecture-10
 class: figure-slide
 ---
 
@@ -351,7 +351,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-11
 class: theorems
 ---
 
@@ -380,7 +380,7 @@ At $t=1$, the quotient is undefined. Use the simplified training target $\bx_1-\
 
 ---
 clicks: 0
-sourceFrame: "extension: 8"
+id: recap-of-previous-lecture-12
 class: theorems
 ---
 
@@ -398,7 +398,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: recap-of-previous-lecture-13
 class: theorems
 ---
 
@@ -434,7 +434,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "10"
+id: recap-of-previous-lecture-14
 class: theorems
 ---
 
@@ -453,7 +453,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "11"
+id: outline
 ---
 
 # Outline
@@ -471,7 +471,8 @@ sourceFrame: "11"
 
 ---
 clicks: 0
-sourceFrame: "auto: Two-Sided Conditioning"
+id: outline-2
+section: "Two-Sided Conditioning"
 ---
 
 # Outline
@@ -489,7 +490,7 @@ sourceFrame: "auto: Two-Sided Conditioning"
 
 ---
 clicks: 0
-sourceFrame: "12"
+id: pair-conditioning
 class: theorems
 ---
 
@@ -520,7 +521,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 12"
+id: pair-conditioning-2
 class: theorems
 ---
 
@@ -545,7 +546,7 @@ $\displaystyle\Rightarrow\quad\begin{cases}p_0(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_0
 
 ---
 clicks: 0
-sourceFrame: "13"
+id: two-sided-conditioning
 class: theorems
 ---
 
@@ -572,7 +573,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 13"
+id: two-sided-conditioning-2
 class: theorems
 ---
 
@@ -599,7 +600,7 @@ $\displaystyle\Rightarrow\quad\begin{cases}p_0(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_0
 
 ---
 clicks: 1
-sourceFrame: "14"
+id: flow-matching-one-sided-vs-two-sided-conditioning
 class: theorems
 ---
 
@@ -635,7 +636,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "15"
+id: two-sided-conditioning-vector-field-and-objective
 class: theorems
 ---
 
@@ -672,7 +673,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 15"
+id: two-sided-conditioning-vector-field-and-objective-2
 class: theorems
 ---
 
@@ -701,7 +702,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "16"
+id: cfm-with-two-sided-conditioning-training-and-sampling
 class: theorems
 ---
 
@@ -724,7 +725,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "extension: 16"
+id: cfm-with-two-sided-conditioning-training-and-sampling-2
 class: theorems
 ---
 
@@ -747,7 +748,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "17"
+id: stable-diffusion-3-scalable-flow-matching
 class: figure-slide
 ---
 
@@ -759,7 +760,8 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "auto: Link between Flow Matching and Score-Based Models"
+id: outline-3
+section: "Link between Flow Matching and Score-Based Models"
 ---
 
 # Outline
@@ -777,7 +779,7 @@ sourceFrame: "auto: Link between Flow Matching and Score-Based Models"
 
 ---
 clicks: 1
-sourceFrame: "18"
+id: score-based-generative-models-through-sdes
 class: theorems
 ---
 
@@ -820,7 +822,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 18"
+id: score-based-generative-models-through-sdes-2
 class: theorems
 ---
 
@@ -854,7 +856,7 @@ When the conditional velocity is affine in $\bx_1$, averaging over $\bx_1\mid\bx
 
 ---
 clicks: 0
-sourceFrame: "19"
+id: score-based-generative-models-through-sdes-3
 class: theorems
 ---
 
@@ -876,7 +878,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 19"
+id: score-based-generative-models-through-sdes-4
 class: theorems
 ---
 
@@ -905,7 +907,7 @@ Let's derive the conditional vector fields for VE (NCSN) and VP (DDPM).
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: flow-matching-vs-score-based-sde-models
 class: theorems
 ---
 
@@ -946,7 +948,7 @@ Thus, VE/VP SDE models correspond to particular choices of the Gaussian probabil
 
 ---
 clicks: 1
-sourceFrame: "21"
+id: flow-matching-vs-score-based-sde-models-2
 class: theorems
 ---
 
@@ -965,7 +967,8 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "auto: Discrete Diffusion Models"
+id: outline-4
+section: "Discrete Diffusion Models"
 ---
 
 # Outline
@@ -983,7 +986,7 @@ sourceFrame: "auto: Discrete Diffusion Models"
 
 ---
 clicks: 0
-sourceFrame: "22"
+id: generative-models-taxonomy
 ---
 
 # Generative Models Taxonomy
@@ -992,7 +995,7 @@ sourceFrame: "22"
 
 ---
 clicks: 1
-sourceFrame: "23"
+id: discrete-or-continuous-diffusion-models
 class: theorems
 ---
 
@@ -1028,7 +1031,7 @@ Let's discuss why we need discrete diffusion models.
 
 ---
 clicks: 5
-sourceFrame: "24"
+id: why-discrete-diffusion-models
 class: theorems
 ---
 
@@ -1052,7 +1055,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "25"
+id: 2025-big-bang-of-discrete-diffusion-models
 class: figure-slide
 ---
 
@@ -1064,7 +1067,8 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "auto: Forward Discrete Process"
+id: outline-5
+section: "Forward Discrete Process"
 ---
 
 # Outline
@@ -1082,7 +1086,7 @@ sourceFrame: "auto: Forward Discrete Process"
 
 ---
 clicks: 2
-sourceFrame: "26"
+id: forward-discrete-process
 class: theorems
 ---
 
@@ -1121,7 +1125,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "27"
+id: forward-process-over-time
 class: theorems
 ---
 
@@ -1165,7 +1169,7 @@ We design the transition matrices $\bQ_t$ to achieve this behavior.
 
 ---
 clicks: 3
-sourceFrame: "28"
+id: transition-matrix
 class: theorems
 ---
 
@@ -1218,7 +1222,7 @@ Tokens are gradually replaced by a special mask $m$; the stationary distribution
 
 ---
 clicks: 2
-sourceFrame: "29"
+id: transition-matrix-2
 class: theorems
 ---
 
@@ -1253,7 +1257,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "30"
+id: transition-matrix-3
 class: theorems
 ---
 
@@ -1285,7 +1289,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "31"
+id: uniform-vs-absorbing-transition-matrix
 class: theorems
 ---
 
@@ -1312,7 +1316,8 @@ Absorbing diffusion bridges diffusion and masked-language-model objectives.
 
 ---
 clicks: 0
-sourceFrame: "auto: Reverse Diffusion Process"
+id: outline-6
+section: "Reverse Diffusion Process"
 ---
 
 # Outline
@@ -1330,7 +1335,7 @@ sourceFrame: "auto: Reverse Diffusion Process"
 
 ---
 clicks: 1
-sourceFrame: "32"
+id: posterior-of-the-forward-process
 class: theorems
 ---
 
@@ -1360,7 +1365,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 32"
+id: posterior-of-the-forward-process-2
 class: theorems
 ---
 
@@ -1384,7 +1389,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "33"
+id: posterior-of-the-forward-process-3
 class: theorems
 ---
 
@@ -1425,7 +1430,7 @@ where $\bpi_{\btheta}$ is a neural network.
 
 ---
 clicks: 3
-sourceFrame: "34"
+id: discrete-time-elbo-for-discrete-diffusion
 class: theorems
 ---
 
@@ -1469,7 +1474,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: From Token To Sequence"
+id: outline-7
+section: "From Token To Sequence"
 ---
 
 # Outline
@@ -1487,7 +1493,7 @@ sourceFrame: "auto: From Token To Sequence"
 
 ---
 clicks: 2
-sourceFrame: "35"
+id: from-token-to-sequence
 class: theorems
 ---
 
@@ -1529,7 +1535,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "36"
+id: from-token-to-sequence-2
 class: theorems
 ---
 
@@ -1570,7 +1576,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "37"
+id: reverse-model-for-sequence
 class: theorems
 ---
 
@@ -1601,7 +1607,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 37"
+id: reverse-model-for-sequence-2
 class: theorems
 ---
 
@@ -1621,7 +1627,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "38"
+id: summary
 class: summary
 ---
 

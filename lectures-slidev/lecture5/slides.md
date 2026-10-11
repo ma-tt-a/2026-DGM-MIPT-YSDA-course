@@ -20,9 +20,8 @@ drawings:
 download: false
 info: false
 favicon: "data:,"
-omittedSourceFrames: [2]
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -38,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -87,7 +86,7 @@ Thus, the optimal prior distribution $p(\bz)$ is the aggregated variational post
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -104,7 +103,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -154,7 +153,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -203,7 +202,7 @@ The independent uniform prior is used during tokenizer training. Then fix the to
 
 ---
 clicks: 0
-sourceFrame: "extension: 6"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -294,7 +293,7 @@ Sample $\bx\sim\pt(\bx|\bz_q)$.
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -334,7 +333,7 @@ The generative model $\pt(\bx)$ matches $\pd(\bx)$ if a discriminative model $p(
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -381,7 +380,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: outline
 ---
 
 # Outline
@@ -396,7 +395,8 @@ sourceFrame: "9"
 
 ---
 clicks: 0
-sourceFrame: "auto: Generative Adversarial Networks (GAN)"
+id: outline-2
+section: "Generative Adversarial Networks (GAN)"
 ---
 
 # Outline
@@ -411,7 +411,7 @@ sourceFrame: "auto: Generative Adversarial Networks (GAN)"
 
 ---
 clicks: 0
-sourceFrame: "10"
+id: generative-models-taxonomy
 class: figure-slide
 ---
 
@@ -421,7 +421,7 @@ class: figure-slide
 
 ---
 clicks: 3
-sourceFrame: "11"
+id: gan-optimality
 class: theorems
 ---
 
@@ -467,7 +467,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 11"
+id: the-optimal-discriminator-responds-to-the-densities
 class: interactive-slide
 ---
 
@@ -489,7 +489,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "12"
+id: gan-optimality-2
 class: theorems
 ---
 
@@ -535,7 +535,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "13"
+id: gan-optimality-3
 class: theorems
 ---
 
@@ -578,7 +578,7 @@ If the generator can express **any** function and the discriminator is **optimal
 
 ---
 clicks: 2
-sourceFrame: "14"
+id: gan-training
 class: theorems
 ---
 
@@ -611,7 +611,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "15"
+id: mode-collapse
 class: theorems
 ---
 
@@ -635,7 +635,7 @@ Numerous methods have been proposed to tackle mode collapse: changing architectu
 
 ---
 clicks: 1
-sourceFrame: "16"
+id: jensen-shannon-vs-kullback-leibler-divergences
 class: theorems
 ---
 
@@ -677,7 +677,7 @@ Next: fit one Gaussian with the two KL directions.
 
 ---
 clicks: 0
-sourceFrame: "extension: 16"
+id: mode-covering-vs-mode-seeking
 class: interactive-slide
 ---
 
@@ -693,7 +693,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 8"
+id: from-vq-vae-to-vqgan
 class: theorems
 ---
 
@@ -753,7 +753,7 @@ learned prior used for generation. Moved from Lecture 4 slide 42 by author reque
 
 ---
 clicks: 2
-sourceFrame: "extension: 6"
+id: generative-modeling-in-latent-space
 class: theorems
 ---
 
@@ -833,7 +833,8 @@ The decoder is deterministic here; z_q(c) includes codebook lookup.
 
 ---
 clicks: 0
-sourceFrame: "auto: Wasserstein Distance"
+id: outline-3
+section: "Wasserstein Distance"
 ---
 
 # Outline
@@ -848,7 +849,7 @@ sourceFrame: "auto: Wasserstein Distance"
 
 ---
 clicks: 3
-sourceFrame: "17"
+id: theoretical-results
 class: theorems
 ---
 
@@ -885,7 +886,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "18"
+id: wasserstein-distance-discrete
 class: theorems
 ---
 
@@ -909,7 +910,7 @@ The minimum cost of moving and transforming a pile of “dirt” shaped like one
 
 ---
 clicks: 1
-sourceFrame: "19"
+id: wasserstein-distance-continuous
 class: theorems
 ---
 
@@ -955,7 +956,7 @@ In Lecture 12, minibatch optimal transport pairs noise and data samples for flow
 
 ---
 clicks: 4
-sourceFrame: "20"
+id: wasserstein-distance-vs-kl-vs-jsd
 class: theorems interactive-slide
 ---
 
@@ -1020,7 +1021,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "21"
+id: why-wasserstein-distance
 class: theorems
 ---
 
@@ -1068,7 +1069,8 @@ The first implication also holds for $\KL(p_t\|\pi)\to0$; the converses need not
 
 ---
 clicks: 0
-sourceFrame: "auto: Wasserstein GAN (WGAN)"
+id: outline-4
+section: "Wasserstein GAN (WGAN)"
 ---
 
 # Outline
@@ -1083,7 +1085,7 @@ sourceFrame: "auto: Wasserstein GAN (WGAN)"
 
 ---
 clicks: 3
-sourceFrame: "22"
+id: wasserstein-gan
 class: theorems
 ---
 
@@ -1136,7 +1138,7 @@ We can thus estimate $W(\pi\|p)$ using only samples and a function $f$.
 
 ---
 clicks: 1
-sourceFrame: "23"
+id: wasserstein-gan-2
 class: theorems
 ---
 
@@ -1175,7 +1177,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "24"
+id: wasserstein-gan-3
 class: theorems
 ---
 
@@ -1223,7 +1225,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "25"
+id: wasserstein-gan-4
 class: theorems
 ---
 
@@ -1254,7 +1256,8 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "auto: Evaluation of Likelihood-Free Models"
+id: outline-5
+section: "Evaluation of Likelihood-Free Models"
 ---
 
 # Outline
@@ -1269,7 +1272,7 @@ sourceFrame: "auto: Evaluation of Likelihood-Free Models"
 
 ---
 clicks: 3
-sourceFrame: "26"
+id: what-makes-a-good-generator
 class: theorems
 ---
 
@@ -1344,7 +1347,8 @@ Historical source of the replaced illustrations:
 
 ---
 clicks: 0
-sourceFrame: "auto: Frechet Inception Distance (FID)"
+id: outline-6
+section: "Frechet Inception Distance (FID)"
 ---
 
 # Outline
@@ -1359,7 +1363,7 @@ sourceFrame: "auto: Frechet Inception Distance (FID)"
 
 ---
 clicks: 3
-sourceFrame: "27"
+id: wasserstein-metric
 class: theorems
 ---
 
@@ -1410,7 +1414,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "28"
+id: frechet-inception-distance-fid
 class: theorems
 ---
 
@@ -1438,7 +1442,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "29"
+id: frechet-inception-distance-fid-2
 class: theorems
 ---
 
@@ -1472,7 +1476,7 @@ Finite-sample FID is biased, and its value depends on the sample size.
 
 ---
 clicks: 2
-sourceFrame: "extension: 29"
+id: maximum-mean-discrepancy-mmd
 class: theorems
 ---
 
@@ -1522,7 +1526,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 29"
+id: cmmd-comparing-clip-image-embeddings
 class: theorems
 ---
 
@@ -1558,7 +1562,8 @@ Synthetic example: same means and covariances, different shapes.
 
 ---
 clicks: 0
-sourceFrame: "auto: Precision-Recall"
+id: outline-7
+section: "Precision-Recall"
 ---
 
 # Outline
@@ -1573,7 +1578,7 @@ sourceFrame: "auto: Precision-Recall"
 
 ---
 clicks: 1
-sourceFrame: "30"
+id: precision-recall
 class: theorems
 ---
 
@@ -1604,7 +1609,7 @@ class: theorems
 
 ---
 clicks: 4
-sourceFrame: "31"
+id: precision-recall-2
 class: theorems
 ---
 
@@ -1648,7 +1653,7 @@ Embed the samples using a pretrained network (as in FID).
 
 ---
 clicks: 1
-sourceFrame: "32"
+id: precision-recall-3
 class: theorems
 ---
 
@@ -1670,7 +1675,8 @@ Here, stronger truncation (smaller $\psi$) favors precision over recall.
 
 ---
 clicks: 0
-sourceFrame: "auto: CLIP Score"
+id: outline-8
+section: "CLIP Score"
 ---
 
 # Outline
@@ -1685,7 +1691,7 @@ sourceFrame: "auto: CLIP Score"
 
 ---
 clicks: 1
-sourceFrame: "33"
+id: clip-similarity-and-human-preferences
 class: theorems
 ---
 
@@ -1748,7 +1754,7 @@ replaced by this compact explanation to keep the whole topic to two slides.
 
 ---
 clicks: 1
-sourceFrame: "extension: 33"
+id: does-the-image-follow-the-prompt
 class: theorems
 ---
 
@@ -1796,7 +1802,8 @@ perfect. The next Human Evaluation slide motivates validation with human judgmen
 
 ---
 clicks: 0
-sourceFrame: "auto: Human Eval"
+id: outline-9
+section: "Human Eval"
 ---
 
 # Outline
@@ -1811,7 +1818,7 @@ sourceFrame: "auto: Human Eval"
 
 ---
 clicks: 1
-sourceFrame: "34"
+id: human-evaluation
 class: theorems
 ---
 
@@ -1844,7 +1851,7 @@ Historical source of the replaced Beamer illustration:
 
 ---
 clicks: 0
-sourceFrame: "35"
+id: summary
 class: summary
 ---
 

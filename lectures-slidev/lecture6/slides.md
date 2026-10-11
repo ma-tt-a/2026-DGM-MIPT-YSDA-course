@@ -20,10 +20,8 @@ drawings:
 download: false
 info: false
 favicon: "data:,"
-omittedSourceFrames: [2]
-importedSourceFrames: {"7": [9, 10, 11, 12, 13, 14]}
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -39,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -77,7 +75,7 @@ Mode collapse refers to the phenomenon where the generator in a GAN produces onl
 
 ---
 clicks: 0
-sourceFrame: "extension: 3"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -128,7 +126,7 @@ The preceding GAN objective now supplies the adversarial reconstruction criterio
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -163,7 +161,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -193,7 +191,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -241,7 +239,7 @@ The first implication also holds for $\KL(p_t\|\pi)\to0$; the converses need not
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -283,7 +281,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -323,7 +321,7 @@ Here $\bz,\bz'\sim P$ and $\bw,\bw'\sim Q$ are mutually independent. This compar
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: recap-of-previous-lecture-8
 class: theorems
 ---
 
@@ -351,7 +349,7 @@ Embed the samples using a pretrained network (as in FID).
 
 ---
 clicks: 0
-sourceFrame: "10"
+id: recap-of-previous-lecture-9
 class: theorems
 ---
 
@@ -391,7 +389,7 @@ A learned preference score can guide sample selection and model training — but
 
 ---
 clicks: 0
-sourceFrame: "11"
+id: recap-of-previous-lecture-10
 class: theorems
 ---
 
@@ -424,7 +422,7 @@ Historical source of the replaced Beamer illustration:
 
 ---
 clicks: 0
-sourceFrame: "12"
+id: outline
 class:
 ---
 
@@ -440,7 +438,8 @@ class:
 
 ---
 clicks: 0
-sourceFrame: "auto: Langevin Dynamics"
+id: outline-2
+section: "Langevin Dynamics"
 class:
 ---
 
@@ -456,7 +455,7 @@ class:
 
 ---
 clicks: 2
-sourceFrame: "13"
+id: energy-based-models
 class: theorems
 ---
 
@@ -496,7 +495,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "14"
+id: langevin-dynamics
 class: theorems
 ---
 
@@ -530,7 +529,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 14"
+id: langevin-dynamics-why-add-noise
 class: interactive-slide
 ---
 
@@ -552,7 +551,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Score Matching"
+id: outline-3
+section: "Score Matching"
 class:
 ---
 
@@ -568,7 +568,7 @@ class:
 
 ---
 clicks: 0
-sourceFrame: "15"
+id: generative-models-taxonomy
 class: theorems
 ---
 
@@ -578,7 +578,7 @@ class: theorems
 
 ---
 clicks: 1
-sourceFrame: "16"
+id: score-function
 class: theorems
 ---
 
@@ -609,7 +609,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "17"
+id: score-matching
 class: theorems
 ---
 
@@ -640,7 +640,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "18"
+id: why-is-the-score-function-better-than-the-density
 class: theorems
 ---
 
@@ -678,7 +678,8 @@ Modeling the score is as expressive as modeling $p(\bx)$ itself, while often mor
 
 ---
 clicks: 0
-sourceFrame: "auto: Denoising Score Matching"
+id: outline-4
+section: "Denoising Score Matching"
 class:
 ---
 
@@ -694,7 +695,7 @@ class:
 
 ---
 clicks: 3
-sourceFrame: "19"
+id: denoising-score-matching
 class: theorems
 ---
 
@@ -739,7 +740,7 @@ satisfies $\bs_{\btheta,\sigma}(\bx_{\sigma})\approx\bs_{\btheta,0}(\bx_0)=\bs_{
 
 ---
 clicks: 3
-sourceFrame: "20"
+id: denoising-score-matching-2
 class: theorems
 ---
 
@@ -787,7 +788,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "21"
+id: denoising-score-matching-3
 class: theorems
 ---
 
@@ -839,7 +840,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "22"
+id: denoising-score-matching-4
 class: theorems
 ---
 
@@ -896,8 +897,7 @@ The score-norm term $C_1$ is independent of $\btheta$.
 
 ---
 clicks: 5
-sourceFrame: "23"
-mergedSourceFrames: [24]
+id: denoising-score-matching-5
 class: theorems
 ---
 
@@ -952,7 +952,7 @@ $$
 
 ---
 clicks: 5
-sourceFrame: "25"
+id: denoising-score-matching-6
 class: theorems
 ---
 
@@ -1000,7 +1000,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "extension: 25"
+id: tweedie-s-formula
 class: theorems
 ---
 
@@ -1045,7 +1045,7 @@ Both conditional means are MSE-optimal predictions given the noisy observation.
 
 ---
 clicks: 3
-sourceFrame: "extension: 25"
+id: from-conditional-scores-to-denoising
 class: theorems interactive-slide
 ---
 
@@ -1065,7 +1065,7 @@ Toy data: three equally likely clean points $\bx_i$, with $\bx_\sigma=\bx+\sigma
 
 ---
 clicks: 4
-sourceFrame: "26"
+id: denoising-score-matching-7
 class: theorems
 ---
 
@@ -1117,7 +1117,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Noise-Conditioned Score Network (NCSN)"
+id: outline-5
+section: "Noise-Conditioned Score Network (NCSN)"
 class:
 ---
 
@@ -1133,7 +1134,7 @@ class:
 
 ---
 clicks: 0
-sourceFrame: "27"
+id: denoising-score-matching-8
 class: theorems
 ---
 
@@ -1168,7 +1169,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "28"
+id: noise-conditioned-score-network-ncsn
 class: theorems
 ---
 
@@ -1192,7 +1193,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "29"
+id: noise-conditioned-score-network-ncsn-2
 class: theorems
 ---
 
@@ -1230,7 +1231,7 @@ How do we sample from such a model?
 
 ---
 clicks: 1
-sourceFrame: "30"
+id: noise-conditioned-score-network-ncsn-3
 class: theorems
 ---
 
@@ -1259,7 +1260,8 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "auto: Forward Gaussian Diffusion Process"
+id: outline-6
+section: "Forward Gaussian Diffusion Process"
 ---
 
 # Outline
@@ -1274,7 +1276,7 @@ sourceFrame: "auto: Forward Gaussian Diffusion Process"
 
 ---
 clicks: 0
-sourceFrame: "imported: 7:9"
+id: generative-models-taxonomy-2
 ---
 
 # Generative Models Taxonomy
@@ -1283,7 +1285,7 @@ sourceFrame: "imported: 7:9"
 
 ---
 clicks: 4
-sourceFrame: "imported: 7:10"
+id: forward-gaussian-diffusion-process
 class: theorems
 ---
 
@@ -1334,7 +1336,7 @@ $$
 
 ---
 clicks: 6
-sourceFrame: "imported: 7:11"
+id: forward-gaussian-diffusion-process-2
 class: theorems
 ---
 
@@ -1380,7 +1382,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "imported: 7:12"
+id: forward-gaussian-diffusion-process-3
 class: theorems interactive-slide
 ---
 
@@ -1405,7 +1407,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: imported: 7:12"
+id: forward-gaussian-diffusion-process-4
 class: theorems
 ---
 
@@ -1441,7 +1443,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "imported: 7:13"
+id: forward-gaussian-diffusion-process-5
 class: theorems
 ---
 
@@ -1470,7 +1472,7 @@ Our goal now becomes inverting this diffusion.
 
 ---
 clicks: 3
-sourceFrame: "imported: 7:14"
+id: denoising-score-matching-9
 class: theorems
 ---
 
@@ -1525,7 +1527,7 @@ NCSN with annealed Langevin dynamics is an early score-based generative framewor
 
 ---
 clicks: 0
-sourceFrame: "31"
+id: summary
 class: summary
 ---
 

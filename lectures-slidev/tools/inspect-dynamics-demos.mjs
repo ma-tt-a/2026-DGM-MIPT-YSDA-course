@@ -2,9 +2,9 @@ import { chromium } from 'playwright-chromium'
 import { resolve } from 'node:path'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
-import { root, lecturePaths } from './course.mjs'
+import { root, lecturePaths, readSlides } from './course.mjs'
 const lecture=lecturePaths('9'),base=process.env.SLIDEV_QA_URL||`http://localhost:${lecture.port}`
-const map=JSON.parse(readFileSync(lecture.map,'utf8')),qa=resolve(root,'output/qa/lecture9/dynamics-demos')
+const map=readSlides(lecture),qa=resolve(root,'output/qa/lecture9/dynamics-demos')
 mkdirSync(qa,{recursive:true})
 const browser=await chromium.launch({executablePath:process.env.SLIDEV_BROWSER_PATH||'/Applications/Yandex.app/Contents/MacOS/Yandex',headless:true})
 const context=await browser.newContext({viewport:{width:1280,height:720}}),page=await context.newPage()

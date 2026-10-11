@@ -4,15 +4,17 @@ import pypdfium2 as pdfium
 from pypdf import PdfReader
 from PIL import Image,ImageDraw
 import json
+import os
+import subprocess
 import sys
 root=Path(__file__).resolve().parents[1]
 number=sys.argv[1] if len(sys.argv)>1 else '1'
 assert number.isdigit() and 1 <= int(number) <= 99, 'Expected a lecture number'
 lecture=root/f'lecture{int(number)}'
 qa=root/f'output/qa/lecture{int(number)}';qa.mkdir(exist_ok=True,parents=True)
-mapping=json.loads((lecture/'slide-map.json').read_text())
-for kind,expected in [('handout',len(mapping)),('steps',sum(s['clicks']+1 for s in mapping))]:
- path=lecture/f'Lecture{int(number)}{"-handout" if kind=="handout" else ""}.pdf'
+mapping=json.loads(subprocess.check_output([os.environ.get('NODE', 'node'), str(root/'tools/course.mjs'), number], text=True))
+for kind,expected in [('slides',len(mapping))]:
+ path=lecture/f'Lecture{int(number)}.pdf'
  doc=pdfium.PdfDocument(str(path));reader=PdfReader(path)
  assert len(doc)==expected,(kind,len(doc),expected)
  texts=[p.extract_text() for p in reader.pages]

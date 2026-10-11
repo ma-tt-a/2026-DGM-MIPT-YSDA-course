@@ -2,8 +2,8 @@ import { chromium } from 'playwright-chromium'
 import { resolve } from 'node:path'
 import { mkdirSync,readFileSync,writeFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
-import { root,lecturePaths } from './course.mjs'
-const lecture=lecturePaths(10),base=process.env.SLIDEV_QA_URL||'http://localhost:3040',map=JSON.parse(readFileSync(lecture.map,'utf8')),qa=resolve(root,'output/qa/lecture10/process-demos');mkdirSync(qa,{recursive:true})
+import { root,lecturePaths,readSlides } from './course.mjs'
+const lecture=lecturePaths(10),base=process.env.SLIDEV_QA_URL||'http://localhost:3040',map=readSlides(lecture),qa=resolve(root,'output/qa/lecture10/process-demos');mkdirSync(qa,{recursive:true})
 const titles=['Same Densities, Different Trajectories','Reverse SDE and Probability Flow ODE','One Denoiser Prediction, One Euler Step','Flow Matching'],selected=titles.map(title=>map.find(s=>s.title===title))
 const browser=await chromium.launch({executablePath:process.env.SLIDEV_BROWSER_PATH||'/Applications/Yandex.app/Contents/MacOS/Yandex',headless:true}),context=await browser.newContext({viewport:{width:1280,height:720}}),page=await context.newPage(),errors=[],http=[],external=[],states=[]
 page.on('pageerror',e=>errors.push(String(e)));page.on('response',r=>{if(r.status()>=400)http.push([r.status(),r.url()])})

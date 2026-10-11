@@ -21,10 +21,7 @@ download: false
 info: false
 favicon: "data:,"
 clicks: 0
-omittedSourceFrames: [7, 10, 11]
-omittedSourceSections: ["Variational Autoencoder (VAE)"]
-sectionTitleOverrides: {"Discrete VAE Latent Representations": "Discrete Latent VAEs"}
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -40,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -83,7 +80,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -134,7 +131,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -179,7 +176,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -228,7 +225,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -283,7 +280,7 @@ Update $\bphi$, $\btheta$ via stochastic gradient ascent.
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -326,7 +323,7 @@ Typically $\cN(0,\bI)$; used for sampling.
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: outline
 class: theorems
 ---
 
@@ -342,7 +339,8 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "auto: ELBO Surgery and Optimal VAE Prior"
+id: outline-2
+section: "ELBO Surgery and Optimal VAE Prior"
 ---
 
 # Outline
@@ -357,7 +355,7 @@ sourceFrame: "auto: ELBO Surgery and Optimal VAE Prior"
 
 ---
 clicks: 2
-sourceFrame: "12"
+id: elbo-surgery
 class: theorems
 ---
 
@@ -399,7 +397,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "13"
+id: elbo-surgery-2
 class: theorems
 ---
 
@@ -435,7 +433,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "14"
+id: elbo-surgery-3
 class: derivation theorems
 ---
 
@@ -477,7 +475,7 @@ Hence, the **optimal prior** $p(\bz)$ is the **aggregated variational posterior*
 
 ---
 clicks: 1
-sourceFrame: "15"
+id: marginal-kl
 class: theorems
 ---
 
@@ -522,7 +520,7 @@ The decoder receives $\bz\sim p(\bz)$, then generates $\bx\sim\pt(\bx|\bz)$.
 
 ---
 clicks: 0
-sourceFrame: "extension: 15"
+id: matching-the-prior-which-kl-vanishes
 class: interactive-slide
 ---
 
@@ -544,7 +542,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 15"
+id: elbo-surgery-in-modern-latent-models
 class: theorems
 ---
 
@@ -634,7 +632,7 @@ the detailed training schedule on this slide.
 
 ---
 clicks: 2
-sourceFrame: "16"
+id: from-elbo-to-squared-error
 class: theorems
 ---
 
@@ -674,7 +672,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 16"
+id: why-are-vae-generations-blurry
 class: theorems
 ---
 
@@ -711,7 +709,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Discrete Latent VAEs"
+id: outline-3
+section: "Discrete Latent VAEs"
 ---
 
 # Outline
@@ -726,7 +725,7 @@ sourceFrame: "auto: Discrete Latent VAEs"
 
 ---
 clicks: 2
-sourceFrame: "17"
+id: discrete-vae-latents
 class: theorems
 ---
 
@@ -759,7 +758,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "18"
+id: discrete-vae-latents-2
 class: theorems
 ---
 
@@ -806,7 +805,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "19"
+id: discrete-vae-latents-3
 class: theorems
 ---
 
@@ -830,7 +829,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Vector Quantized VAE (VQ-VAE)"
+id: outline-4
+section: "Vector Quantized VAE (VQ-VAE)"
 ---
 
 # Outline
@@ -845,7 +845,7 @@ sourceFrame: "auto: Vector Quantized VAE (VQ-VAE)"
 
 ---
 clicks: 3
-sourceFrame: "20"
+id: vector-quantization
 class: theorems
 ---
 
@@ -892,7 +892,7 @@ Move it to an encoder output; assignments and Voronoi regions change.
 
 ---
 clicks: 3
-sourceFrame: "21"
+id: vector-quantized-vae-vq-vae
 class: theorems
 ---
 
@@ -932,7 +932,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "22"
+id: vector-quantized-vae-vq-vae-forward
 class: theorems
 ---
 
@@ -980,7 +980,7 @@ The deterministic map and independent uniform training prior give $\KL=M\log K$.
 
 ---
 clicks: 4
-sourceFrame: "23"
+id: vector-quantized-vae-vq-vae-backward
 class: theorems
 ---
 
@@ -1018,7 +1018,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 25"
+id: vq-vae-learning-a-prior-over-codes
 class: theorems
 ---
 
@@ -1058,7 +1058,7 @@ $p_{\bpsi}(\bc)$ → **code map** → **codebook lookup** → **decoder** → $\
 
 ---
 clicks: 0
-sourceFrame: "24"
+id: vector-quantized-vae-2-vq-vae-2
 class: theorems
 ---
 
@@ -1077,7 +1077,7 @@ VQ-VAE-2 combines code maps at **multiple resolutions**.
 
 ---
 clicks: 1
-sourceFrame: "25"
+id: vector-quantized-vae-vq-vae-final-algorithm
 class: theorems
 ---
 
@@ -1168,7 +1168,8 @@ Sample $\bx\sim\pt(\bx|\bz_q)$.
 
 ---
 clicks: 0
-sourceFrame: "auto: Likelihood-Free Learning"
+id: outline-5
+section: "Likelihood-Free Learning"
 ---
 
 # Outline
@@ -1183,7 +1184,7 @@ sourceFrame: "auto: Likelihood-Free Learning"
 
 ---
 clicks: 2
-sourceFrame: "26"
+id: likelihood-based-models
 class: theorems
 ---
 
@@ -1232,7 +1233,7 @@ This model contains mostly noisy, irrelevant samples; for high dimensions, $\log
 
 ---
 clicks: 3
-sourceFrame: "27"
+id: likelihood-free-learning
 class: theorems
 ---
 
@@ -1273,7 +1274,7 @@ The generative model $\pt(\bx)$ matches $\pd(\bx)$ if a discriminative model $p(
 
 ---
 clicks: 3
-sourceFrame: "28"
+id: generative-adversarial-networks-gan
 class: theorems
 ---
 
@@ -1313,7 +1314,7 @@ Suppose $\pt(\bx,\bz)=\pt(\bx|\bz)p(\bz)$, where $p(\bz)$ is a base distribution
 
 ---
 clicks: 3
-sourceFrame: "29"
+id: generative-adversarial-networks-gan-2
 class: theorems
 ---
 
@@ -1357,7 +1358,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "30"
+id: summary
 class: summary
 ---
 

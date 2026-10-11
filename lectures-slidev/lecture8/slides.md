@@ -21,10 +21,7 @@ download: false
 info: false
 favicon: "data:,"
 clicks: 0
-omittedSourceFrames: [2, 3, 4, 9, 10, 11, 12, 13, 14, 15, 16]
-omittedSourceSections: ["Diffusion ELBO Derivation (continued)", "Gaussian Diffusion Reparametrization"]
-sectionTitleOverrides: {"Denoising Diffusion Probabilistic Model (DDPM)": "DDPM as a Score-Based Generative Model"}
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -40,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -67,7 +64,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 5"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -129,7 +126,7 @@ high-resolution application are examples, not additional prerequisite results.
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -160,7 +157,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -183,7 +180,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 7"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -211,7 +208,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 7"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -257,7 +254,7 @@ noise level. The v target is a diffusion parameterization, not a general ODE vel
 
 ---
 clicks: 0
-sourceFrame: "17"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -291,7 +288,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: outline
 ---
 
 # Outline
@@ -305,7 +302,8 @@ sourceFrame: "8"
 
 ---
 clicks: 0
-sourceFrame: "auto: DDPM as a Score-Based Generative Model"
+id: outline-2
+section: "DDPM as a Score-Based Generative Model"
 ---
 
 # Outline
@@ -319,7 +317,7 @@ sourceFrame: "auto: DDPM as a Score-Based Generative Model"
 
 ---
 clicks: 3
-sourceFrame: "18"
+id: denoising-diffusion-as-a-score-based-generative-model
 class: theorems
 ---
 
@@ -352,7 +350,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 18"
+id: denoising-diffusion-as-a-score-based-generative-model-2
 class: theorems
 ---
 
@@ -378,7 +376,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "19"
+id: ddpm-vs-ncsn-objectives
 class: theorems
 ---
 
@@ -425,7 +423,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 19"
+id: ddpm-and-ncsn-connecting-noise-coordinates
 class: theorems
 ---
 
@@ -478,7 +476,7 @@ The comparison is between Gaussian conditional marginals at matched noise levels
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: ddpm-vs-ncsn-sampling
 class: derivation
 ---
 
@@ -503,7 +501,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 20"
+id: ddpm-vs-ncsn-sampling-2
 class: theorems
 ---
 
@@ -528,7 +526,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "21"
+id: ddpm-vs-ncsn-summary
 class: theorems
 ---
 
@@ -569,7 +567,7 @@ The sampling procedures differ:
 
 ---
 clicks: 2
-sourceFrame: "extension: 21"
+id: ddim-from-noise-to-clean-data
 class: theorems
 ---
 
@@ -648,7 +646,7 @@ coarse finite-step updates exact.
 
 ---
 clicks: 2
-sourceFrame: "extension: 21"
+id: ddim-same-marginals-different-transitions
 class: theorems
 ---
 
@@ -714,7 +712,7 @@ on the next slide: its initial random latent supplies the output variability.
 
 ---
 clicks: 2
-sourceFrame: "extension: 21"
+id: ddim-deterministic-sampling
 class: theorems
 ---
 
@@ -810,7 +808,8 @@ predictor; next we modify its predictions to steer generation toward a condition
 
 ---
 clicks: 0
-sourceFrame: "auto: Model Guidance"
+id: outline-3
+section: "Model Guidance"
 ---
 
 # Outline
@@ -824,7 +823,7 @@ sourceFrame: "auto: Model Guidance"
 
 ---
 clicks: 0
-sourceFrame: "22"
+id: guidance
 class: theorems
 ---
 
@@ -841,7 +840,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "23"
+id: conditional-models
 class: theorems
 ---
 
@@ -860,7 +859,7 @@ In practice, we're typically interested in learning conditional models (sampling
 
 ---
 clicks: 0
-sourceFrame: "24"
+id: label-guidance
 class: figure-slide
 ---
 
@@ -874,7 +873,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "25"
+id: text-guidance
 class: figure-slide
 ---
 
@@ -923,7 +922,7 @@ Author-approved replacement of the former panda illustration from
 
 ---
 clicks: 6
-sourceFrame: "26"
+id: guidance-in-generative-models
 class: theorems
 ---
 
@@ -974,7 +973,8 @@ $\pt(\bx_{t-1}|\bx_t,{\color{olive}\by})$ for DDPMs.
 
 ---
 clicks: 0
-sourceFrame: "auto: Classifier Guidance"
+id: outline-4
+section: "Classifier Guidance"
 ---
 
 # Outline
@@ -988,7 +988,7 @@ sourceFrame: "auto: Classifier Guidance"
 
 ---
 clicks: 3
-sourceFrame: "27"
+id: classifier-guidance
 class: theorems
 ---
 
@@ -1028,7 +1028,7 @@ What is the link between $\nabla_{\bx_t}\log\pt(\bx_t)$ and $\nabla_{\bx_t}\log\
 
 ---
 clicks: 3
-sourceFrame: "28"
+id: classifier-guidance-guided-score-function
 class: theorems
 ---
 
@@ -1061,7 +1061,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 28"
+id: classifier-guidance-which-way-does-it-push
 class: interactive-slide
 ---
 
@@ -1081,7 +1081,7 @@ Four Gaussian components, two classes, one fixed noise level.
 
 ---
 clicks: 3
-sourceFrame: "29"
+id: classifier-guidance-guidance-scale
 class: theorems
 ---
 
@@ -1125,7 +1125,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "30"
+id: classifier-guidance-distribution-sharpening
 class: theorems
 ---
 
@@ -1169,7 +1169,7 @@ Very large $\gamma$ can reduce diversity and introduce artifacts.
 
 ---
 clicks: 0
-sourceFrame: "extension: 30"
+id: guidance-scale-changes-the-density
 class: interactive-slide
 ---
 
@@ -1191,7 +1191,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "31"
+id: classifier-guidance-overview
 class: theorems
 ---
 
@@ -1222,7 +1222,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Classifier-Free Guidance"
+id: outline-5
+section: "Classifier-Free Guidance"
 ---
 
 # Outline
@@ -1236,7 +1237,7 @@ sourceFrame: "auto: Classifier-Free Guidance"
 
 ---
 clicks: 3
-sourceFrame: "32"
+id: classifier-free-guidance
 class: theorems
 ---
 
@@ -1269,7 +1270,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 32"
+id: classifier-free-guidance-2
 class: derivation
 ---
 
@@ -1293,7 +1294,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "33"
+id: classifier-free-guidance-formulation
 class: theorems
 ---
 
@@ -1352,7 +1353,7 @@ How to avoid training two separate score function models?
 
 ---
 clicks: 0
-sourceFrame: "extension: 33"
+id: cfg-interpolation-and-extrapolation
 class: interactive-slide
 ---
 
@@ -1374,7 +1375,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "34"
+id: classifier-free-guidance-3
 class: theorems
 ---
 
@@ -1408,7 +1409,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 34"
+id: classifier-free-guidance-guidance-interval
 class: theorems
 ---
 
@@ -1441,7 +1442,7 @@ instead select the unconditional model in the preceding CFG convention.
 
 ---
 clicks: 3
-sourceFrame: "extension: 34"
+id: classifier-free-guidance-guidance-distillation
 class: theorems
 ---
 
@@ -1535,7 +1536,7 @@ this does not assert that its proprietary training recipe is identical to Meng's
 
 ---
 clicks: 0
-sourceFrame: "35"
+id: summary
 class: summary
 ---
 

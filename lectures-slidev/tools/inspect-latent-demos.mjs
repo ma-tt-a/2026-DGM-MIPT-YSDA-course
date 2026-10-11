@@ -3,17 +3,17 @@ import { resolve } from 'node:path'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import assert from 'node:assert/strict'
-import { lecturePaths, root } from './course.mjs'
+import { lecturePaths, root, readSlides } from './course.mjs'
 import { priorExamples } from '../lecture4/lib/prior-demo.mjs'
 import { vqInitialPoint, codebook, vqBounds, nearestCode, vqCollapsePoints, vqRestartCodebook, codeUsage } from '../lecture4/lib/vq-demo.mjs'
 import { ganPresets, optimalDiscriminator } from '../lecture4/lib/gan-demo.mjs'
 
 const lecture = lecturePaths('4')
 const base = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
-const map = JSON.parse(readFileSync(lecture.map, 'utf8'))
+const map = readSlides(lecture)
 const ganLecture = lecturePaths('5')
 const ganBase = process.env.SLIDEV_QA_GAN_URL || `http://localhost:${ganLecture.port}`
-const ganMap = JSON.parse(readFileSync(ganLecture.map, 'utf8'))
+const ganMap = readSlides(ganLecture)
 const byTitle = title => {
   const inGan = title === 'The Optimal Discriminator Responds to the Densities'
   const slide = (inGan ? ganMap : map).find(s => s.title === title)

@@ -1,5 +1,5 @@
 import { resolve } from 'node:path'
-import { lecturePaths, root } from './course.mjs'
+import { lecturePaths, root, readSlides } from './course.mjs'
 const lecture = lecturePaths(process.argv[2])
 process.chdir(root)
 const qa = resolve(root, 'output/qa', lecture.name)
@@ -14,7 +14,7 @@ page.on('pageerror', err => errors.push(String(err)))
 page.on('response', res => { if(res.status()>=400) failed.push([res.status(),res.url()]) })
 mkdirSync(qa, { recursive: true })
 const selected = process.env.QA_SLIDES?.split(',').map(Number)
-const map = JSON.parse(readFileSync(lecture.map,'utf8'))
+const map = readSlides(lecture)
 async function ready() {
   await page.waitForFunction(()=>[...document.querySelectorAll('.slidev-layout')].some(el=>el.getBoundingClientRect().width>0))
   await page.evaluate(() => document.fonts.ready)
@@ -55,7 +55,7 @@ try {
  }
  if (lecture.number === 1) {
  // Annotation integration: use a fresh dev server before handoff and an isolated browser profile.
- const annotationSlide = map.find(s => s.frame === 21)
+ const annotationSlide = map.find(s => s.id === 'course-tricks-ii')
  assert.ok(annotationSlide, 'Missing CoV / LOTUS slide for annotation check')
  const annotationPage = annotationSlide.slide
  await page.goto(`${baseURL}/${annotationPage}?tools`, {waitUntil:'networkidle'}); await ready()

@@ -21,7 +21,7 @@ download: false
 info: false
 favicon: "data:,"
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -37,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -98,7 +98,7 @@ Euler and Heun's displayed global orders assume a smooth field on a fixed interv
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -130,7 +130,7 @@ $p_t(\bx) = p(\bx, t)$ describes the **probability path** between $p_0(\bx)$ and
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -162,7 +162,7 @@ How can we compute $p_t(\bx)$ at arbitrary $t$?
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -207,7 +207,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 5"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -270,7 +270,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -324,7 +324,7 @@ $p: \bbR^m \times [0, 1] \rightarrow \bbR_+$ is a **probability path** between $
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -369,7 +369,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: outline
 class: theorems
 ---
 
@@ -388,7 +388,8 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "auto: Diffusion and Score Matching SDEs (VP-SDE / VE-SDE)"
+id: outline-2
+section: "Diffusion and Score Matching SDEs (VP-SDE / VE-SDE)"
 class: theorems
 ---
 
@@ -407,7 +408,7 @@ class: theorems
 
 ---
 clicks: 4
-sourceFrame: "9"
+id: score-matching-sde
 class: theorems
 ---
 
@@ -456,7 +457,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "10"
+id: score-matching-sde-2
 class: theorems
 ---
 
@@ -510,7 +511,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "11"
+id: diffusion-sde
 class: theorems
 ---
 
@@ -548,7 +549,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "12"
+id: diffusion-sde-2
 class: theorems
 ---
 
@@ -590,7 +591,7 @@ Variance is preserved as long as $\bx(0)$ has unit variance.
 
 ---
 clicks: 1
-sourceFrame: "13"
+id: diffusion-sde-3
 class: theorems
 ---
 
@@ -638,7 +639,8 @@ We treat the discrete-time methods (NCSN, DDPM) as a special case of the continu
 
 ---
 clicks: 0
-sourceFrame: "auto: Probability Flow ODE"
+id: outline-3
+section: "Probability Flow ODE"
 class: theorems
 ---
 
@@ -657,7 +659,7 @@ class: theorems
 
 ---
 clicks: 1
-sourceFrame: "14"
+id: probability-flow-ode
 class: theorems
 ---
 
@@ -713,7 +715,7 @@ Now there are two sources of randomness: the initial distribution $p_0(\bx)$ and
 
 ---
 clicks: 1
-sourceFrame: "15"
+id: probability-flow-ode-2
 class: theorems
 ---
 
@@ -742,7 +744,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "16"
+id: probability-flow-ode-3
 class: theorems
 ---
 
@@ -780,7 +782,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "17"
+id: probability-flow-ode-4
 class: theorems
 ---
 
@@ -827,7 +829,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "18"
+id: probability-flow-ode-5
 class: theorems
 ---
 
@@ -870,7 +872,7 @@ The ODE produces more stable trajectories.
 
 ---
 clicks: 0
-sourceFrame: "extension: 18"
+id: same-densities-different-trajectories
 class: interactive-slide
 ---
 
@@ -888,7 +890,7 @@ After the PF-ODE theorem and proof, compare paths and densities. Reveal the dist
 
 ---
 clicks: 2
-sourceFrame: "19"
+id: why-convert-sdes-to-pf-odes-1-efficient-sampling
 class: theorems
 ---
 
@@ -929,7 +931,7 @@ EDM's deterministic sampler uses Heun; noise injection is a separate option. EDM
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: why-convert-sdes-to-pf-odes-2-deterministic-sampling
 class: theorems
 ---
 
@@ -993,7 +995,7 @@ Smooth interpolation in latent space between two samples.
 
 ---
 clicks: 2
-sourceFrame: "21"
+id: sampling-reverse-sde-vs-pf-ode
 class: theorems
 ---
 
@@ -1069,7 +1071,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Reverse SDE"
+id: outline-4
+section: "Reverse SDE"
 class: theorems
 ---
 
@@ -1088,7 +1091,7 @@ class: theorems
 
 ---
 clicks: 3
-sourceFrame: "22"
+id: reverse-sde
 class: theorems
 ---
 
@@ -1166,7 +1169,7 @@ where $dt<0$ and $\bar{\bw}$ is a reverse-time Wiener process.
 
 ---
 clicks: 2
-sourceFrame: "23"
+id: reverse-sde-2
 class: theorems
 ---
 
@@ -1234,7 +1237,7 @@ Convert the reversed probability flow ODE back to an SDE.
 
 ---
 clicks: 1
-sourceFrame: "24"
+id: proof-of-reverse-sde
 class: theorems
 ---
 
@@ -1274,7 +1277,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 24"
+id: proof-of-reverse-sde-2
 class: theorems
 ---
 
@@ -1303,7 +1306,7 @@ Here $\bw(\tau)$ is a Wiener process in forward $\tau$-time.
 
 ---
 clicks: 1
-sourceFrame: "25"
+id: reverse-sde-3
 class: theorems
 ---
 
@@ -1351,7 +1354,7 @@ Here $d\tau > 0$, $dt < 0$, and $\bar{\bw}$ is reverse-time Wiener process.
 
 ---
 clicks: 1
-sourceFrame: "26"
+id: reverse-sde-4
 class: theorems
 ---
 
@@ -1382,7 +1385,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 26"
+id: reverse-sde-and-probability-flow-ode
 class: interactive-slide
 ---
 
@@ -1400,8 +1403,7 @@ After the reverse-SDE proof, compare exact reverse-SDE dynamics and PF-ODE on a 
 
 ---
 clicks: 2
-sourceFrame: "27"
-mergedSourceFrames: [28]
+id: ve-and-vp-probability-flow-and-reverse-sde
 class: theorems
 ---
 
@@ -1491,7 +1493,8 @@ Here $dt<0$ and $\bar{\bw}$ is a reverse-time Wiener process.
 
 ---
 clicks: 0
-sourceFrame: "auto: Score-Based Generative Models Through SDEs"
+id: outline-5
+section: "Score-Based Generative Models Through SDEs"
 class: theorems
 ---
 
@@ -1510,7 +1513,7 @@ class: theorems
 
 ---
 clicks: 2
-sourceFrame: "29"
+id: score-based-generative-models-through-sdes
 class: theorems
 ---
 
@@ -1552,7 +1555,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "30"
+id: generative-models-taxonomy
 class: theorems
 ---
 
@@ -1562,7 +1565,7 @@ class: theorems
 
 ---
 clicks: 2
-sourceFrame: "31"
+id: score-based-generative-models-through-sdes-2
 class: theorems
 ---
 
@@ -1626,7 +1629,7 @@ Is it possible to explicitly derive $\bmu(\bx(0), t)$ and $\sigma^2(t)$ for VE-S
 
 ---
 clicks: 4
-sourceFrame: "32"
+id: score-based-generative-models-through-sdes-3
 class: theorems
 ---
 
@@ -1686,7 +1689,7 @@ We prove the mean equation only; the variance equation is stated without proof.
 
 ---
 clicks: 2
-sourceFrame: "33"
+id: score-based-generative-models-through-sdes-4
 class: theorems
 ---
 
@@ -1736,7 +1739,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "34"
+id: score-based-generative-models-through-sdes-5
 class: theorems
 ---
 
@@ -1806,7 +1809,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "35"
+id: sampling-with-the-reverse-sde
 class: theorems
 ---
 
@@ -1862,7 +1865,8 @@ Narrative: directly complete the preceding general Training slide. Use its train
 
 ---
 clicks: 0
-sourceFrame: "auto: Denoiser Parameterization and Sampling"
+id: outline-6
+section: "Denoiser Parameterization and Sampling"
 class: theorems
 ---
 
@@ -1881,7 +1885,7 @@ class: theorems
 
 ---
 clicks: 2
-sourceFrame: "extension: 34"
+id: from-time-to-noise-level
 class: theorems
 ---
 
@@ -1948,7 +1952,7 @@ The freedom to change samplers appeared with DDIM; the contribution here connect
 
 ---
 clicks: 2
-sourceFrame: "extension: 34"
+id: train-the-denoiser
 class: theorems
 ---
 
@@ -2000,7 +2004,7 @@ This additive path is a specialization of the previous Gaussian transition; it d
 
 ---
 clicks: 2
-sourceFrame: "extension: 34"
+id: what-does-the-optimal-denoiser-predict
 class: theorems
 ---
 
@@ -2049,7 +2053,7 @@ The following Euler demo uses a smooth two-Gaussian population rather than the d
 
 ---
 clicks: 1
-sourceFrame: "extension: 34"
+id: generate-samples-with-a-denoiser
 class: theorems
 ---
 
@@ -2110,7 +2114,7 @@ This extends the sampler-change idea introduced with DDIM, rather than claiming 
 
 ---
 clicks: 0
-sourceFrame: "extension: 34"
+id: one-denoiser-prediction-one-euler-step
 class: interactive-slide
 ---
 
@@ -2128,7 +2132,7 @@ The previous slide gives the complete Euler algorithm. This slide rewrites that 
 
 ---
 clicks: 2
-sourceFrame: "extension: 34"
+id: ddim-is-euler-in-noise-coordinates
 class: theorems
 ---
 
@@ -2190,7 +2194,8 @@ All hats are recomputed at the current t for every step; they are held fixed onl
 
 ---
 clicks: 0
-sourceFrame: "auto: Flow Matching (FM)"
+id: outline-7
+section: "Flow Matching (FM)"
 class: theorems
 ---
 
@@ -2209,7 +2214,7 @@ class: theorems
 
 ---
 clicks: 2
-sourceFrame: "36"
+id: continuous-time-normalizing-flows
 class: theorems
 ---
 
@@ -2279,7 +2284,7 @@ Narrative: the denoiser/DDIM section has completed a construction of ODE fields 
 
 ---
 clicks: 2
-sourceFrame: "37"
+id: continuous-time-normalizing-flows-2
 class: theorems
 ---
 
@@ -2345,7 +2350,7 @@ Use the learned flow $\bpsi_t$ for deterministic sampling: $\bx_1 = \bpsi_1(\bx_
 
 ---
 clicks: 3
-sourceFrame: "38"
+id: flow-matching-training-and-sampling
 class: theorems
 ---
 
@@ -2417,7 +2422,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "39"
+id: flow-matching
 class: interactive-slide
 ---
 
@@ -2437,7 +2442,7 @@ The preceding FM algorithm exposes an unknown target field. Three explicit inver
 
 ---
 clicks: 0
-sourceFrame: "40"
+id: summary
 class: summary
 ---
 

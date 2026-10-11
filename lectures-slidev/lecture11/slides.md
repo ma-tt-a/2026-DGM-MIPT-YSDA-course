@@ -21,7 +21,7 @@ favicon: "data:,"
 download: false
 info: false
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -37,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -77,7 +77,7 @@ The variance is preserved if $\bx(0)$ has unit variance.
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -100,7 +100,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -139,7 +139,7 @@ where $dt<0$ and $\bar{\bw}(t)$ is a reverse-time Wiener process.
 
 ---
 clicks: 0
-sourceFrame: "extension: 4"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -159,7 +159,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -186,7 +186,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -233,7 +233,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -257,7 +257,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "extension: 7"
+id: recap-of-previous-lecture-8
 class: theorems
 ---
 
@@ -305,7 +305,7 @@ Coverage repair: the preceding Recap Sampling slide recalls the general score-ba
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-9
 class: theorems
 ---
 
@@ -339,7 +339,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 8"
+id: recap-of-previous-lecture-10
 class: theorems
 ---
 
@@ -361,7 +361,7 @@ Flow matching fits velocities by regression, without model ODE solves or trace e
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: outline
 ---
 
 # Outline
@@ -375,7 +375,8 @@ sourceFrame: "9"
 
 ---
 clicks: 0
-sourceFrame: "auto: Conditional Flow Matching (CFM)"
+id: outline-2
+section: "Conditional Flow Matching (CFM)"
 ---
 
 # Outline
@@ -389,7 +390,7 @@ sourceFrame: "auto: Conditional Flow Matching (CFM)"
 
 ---
 clicks: 0
-sourceFrame: "10"
+id: generative-models-taxonomy
 ---
 
 # Generative Models Taxonomy
@@ -398,7 +399,8 @@ sourceFrame: "10"
 
 ---
 clicks: 0
-sourceFrame: "auto: CFM Objective"
+id: outline-3
+section: "CFM Objective"
 ---
 
 # Outline
@@ -412,7 +414,7 @@ sourceFrame: "auto: CFM Objective"
 
 ---
 clicks: 2
-sourceFrame: "11"
+id: flow-matching
 class: theorems
 ---
 
@@ -449,7 +451,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "12"
+id: conditional-vector-field
 class: theorems
 ---
 
@@ -477,7 +479,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "extension: 12"
+id: conditional-vector-field-2
 class: derivation
 ---
 
@@ -503,7 +505,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "13"
+id: flow-matching-2
 class: theorems
 ---
 
@@ -546,7 +548,7 @@ This can be proved in a similar way as in the denoising score matching theorem.
 
 ---
 clicks: 1
-sourceFrame: "14"
+id: conditional-flow-matching
 class: derivation
 ---
 
@@ -581,7 +583,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 14"
+id: conditional-flow-matching-2
 class: derivation
 ---
 
@@ -606,7 +608,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "15"
+id: conditional-flow-matching-training-and-sampling
 class: theorems
 ---
 
@@ -645,7 +647,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "16"
+id: marginal-to-conditional-scores-vs-velocities
 class: theorems
 ---
 
@@ -691,7 +693,8 @@ In both cases, the optimal MSE predictor is the posterior mean of the **conditio
 
 ---
 clicks: 0
-sourceFrame: "auto: Conditional Probability Paths"
+id: outline-4
+section: "Conditional Probability Paths"
 ---
 
 # Outline
@@ -705,7 +708,7 @@ sourceFrame: "auto: Conditional Probability Paths"
 
 ---
 clicks: 3
-sourceFrame: "17"
+id: conditional-flow-matching-continuity-equations
 class: theorems
 ---
 
@@ -748,7 +751,7 @@ Moreover, not every given path $p_t(\bx)$ can actually arise from particles movi
 
 ---
 clicks: 3
-sourceFrame: "18"
+id: conditional-flow-matching-paths-and-vector-fields
 class: theorems
 ---
 
@@ -789,7 +792,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "19"
+id: from-marginal-to-conditional-paths
 class: theorems
 ---
 
@@ -814,7 +817,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: gaussian-conditional-probability-paths-q2
 class: theorems
 ---
 
@@ -853,7 +856,7 @@ where $\bepsilon$ is fixed by the condition: $\bx_0=\bmu_0(\bz)+\bsigma_0(\bz)\o
 
 ---
 clicks: 4
-sourceFrame: "21"
+id: gaussian-conditional-vector-field
 class: theorems
 ---
 
@@ -902,7 +905,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: One-Sided Conditioning"
+id: outline-5
+section: "One-Sided Conditioning"
 ---
 
 # Outline
@@ -916,7 +920,7 @@ sourceFrame: "auto: One-Sided Conditioning"
 
 ---
 clicks: 3
-sourceFrame: "22"
+id: endpoint-conditioning
 class: theorems
 ---
 
@@ -962,7 +966,7 @@ $\displaystyle\begin{cases}\bbE_{p(\bz)}p_0(\bx|\bz)=\cN(0,\bI)\\\bbE_{p(\bz)}p_
 
 ---
 clicks: 3
-sourceFrame: "23"
+id: one-sided-conditioning
 class: theorems
 ---
 
@@ -1002,7 +1006,7 @@ $\displaystyle\begin{cases}\bmu_t(\bx_1)=t\bx_1\\\bsigma_t(\bx_1)=1-t\end{cases}
 
 ---
 clicks: 4
-sourceFrame: "24"
+id: one-sided-conditioning-conditional-vector-field
 class: theorems
 ---
 
@@ -1054,7 +1058,7 @@ For 0 <= t < 1, the conditional Gaussian variance (1-t)^2 is strictly positive, 
 
 ---
 clicks: 3
-sourceFrame: "25"
+id: one-sided-conditioning-cfm-objective
 class: derivation
 ---
 
@@ -1103,7 +1107,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "26"
+id: rectified-flow-training-and-sampling
 class: theorems
 ---
 
@@ -1139,7 +1143,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "27"
+id: conditional-vs-marginal-paths
 class: theorems
 ---
 
@@ -1157,7 +1161,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "28"
+id: summary
 class: summary
 ---
 

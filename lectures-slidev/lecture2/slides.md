@@ -20,9 +20,8 @@ drawings:
 download: false
 info: false
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
-sectionTitleOverrides: {"Coupling Layer (RealNVP)": "Blockwise Flows (RealNVP / TarFlow)"}
 ---
 
 <div class="cover-kicker">MIPT & YSDA · AUTUMN 2026</div>
@@ -37,7 +36,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -77,7 +76,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -117,7 +116,7 @@ Maximum likelihood estimation is equivalent to minimizing a Monte Carlo estimate
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -151,7 +150,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -181,7 +180,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: outline
 class:
 ---
 
@@ -197,7 +196,8 @@ class:
 
 ---
 clicks: 0
-sourceFrame: "auto: Normalizing Flows (NF)"
+id: outline-2
+section: "Normalizing Flows (NF)"
 class:
 ---
 
@@ -213,7 +213,7 @@ class:
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: generative-models-taxonomy
 class: figure-slide
 ---
 
@@ -223,7 +223,7 @@ class: figure-slide
 
 ---
 clicks: 3
-sourceFrame: "8"
+id: normalizing-flows-prerequisites
 class: theorems derivation
 ---
 
@@ -280,7 +280,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "9"
+id: jacobian-determinant
 class: interactive-slide theorems
 ---
 
@@ -327,7 +327,7 @@ The determinant of the Jacobian $\bJ=\frac{\partial\bff_{\btheta}(\bx)}{\partial
 
 ---
 clicks: 2
-sourceFrame: "10"
+id: fitting-normalizing-flows
 class: theorems
 ---
 
@@ -356,7 +356,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "11"
+id: composition-of-normalizing-flows
 class: theorems derivation
 ---
 
@@ -389,7 +389,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "12"
+id: normalizing-flows-nf
 class: theorems
 ---
 
@@ -437,7 +437,7 @@ We focus on **continuous** variables; **discrete flows** have not become mainstr
 
 ---
 clicks: 2
-sourceFrame: "13"
+id: normalizing-flows
 class: theorems
 ---
 
@@ -503,7 +503,8 @@ What's the computational complexity of evaluating this determinant?
 
 ---
 clicks: 0
-sourceFrame: "auto: NF Examples"
+id: outline-3
+section: "NF Examples"
 class:
 ---
 
@@ -519,7 +520,8 @@ class:
 
 ---
 clicks: 0
-sourceFrame: "auto: Linear NF"
+id: outline-4
+section: "Linear NF"
 class:
 ---
 
@@ -535,7 +537,7 @@ class:
 
 ---
 clicks: 4
-sourceFrame: "14"
+id: jacobian-structure
 class: theorems
 ---
 
@@ -589,8 +591,7 @@ $z_j$ depends only on $\bx_{1:j}$ (autoregressive dependency).
 
 ---
 clicks: 2
-sourceFrame: "15"
-mergedSourceFrames: [16]
+id: linear-normalizing-flows
 class: theorems
 ---
 
@@ -640,7 +641,8 @@ invertibility therefore keeps the determinant sign fixed.
 
 ---
 clicks: 0
-sourceFrame: "auto: Gaussian Autoregressive NF"
+id: outline-5
+section: "Gaussian Autoregressive NF"
 class:
 ---
 
@@ -656,7 +658,7 @@ class:
 
 ---
 clicks: 5
-sourceFrame: "17"
+id: gaussian-autoregressive-model
 class: theorems
 ---
 
@@ -709,7 +711,7 @@ The Jacobian matrix of this transformation is triangular.
 
 ---
 clicks: 0
-sourceFrame: "18"
+id: gaussian-autoregressive-nf-two-directions
 class: interactive-slide
 ---
 
@@ -721,7 +723,8 @@ class: interactive-slide
 
 ---
 clicks: 0
-sourceFrame: "auto: Blockwise Flows (RealNVP / TarFlow)"
+id: outline-6
+section: "Blockwise Flows (RealNVP / TarFlow)"
 class:
 ---
 
@@ -737,7 +740,7 @@ class:
 
 ---
 clicks: 3
-sourceFrame: "19"
+id: realnvp
 class: theorems
 ---
 
@@ -778,7 +781,7 @@ $\displaystyle\begin{cases}\bx_1=\bz_1\\\bx_2=\bz_2\odot\bsigma_{\btheta}(\bz_1)
 
 ---
 clicks: 3
-sourceFrame: "20"
+id: realnvp-2
 class: theorems
 ---
 
@@ -827,7 +830,7 @@ How can the RealNVP layer be derived as a special instance of the Gaussian autor
 
 ---
 clicks: 0
-sourceFrame: "extension: 20"
+id: realnvp-explore-a-coupling-layer
 class: interactive-slide
 ---
 
@@ -839,7 +842,7 @@ class: interactive-slide
 
 ---
 clicks: 2
-sourceFrame: "extension: 17"
+id: tarflow-autoregression-over-patches
 class: theorems
 ---
 
@@ -911,7 +914,7 @@ directions traverse the flow layers sequentially.
 
 ---
 clicks: 1
-sourceFrame: "extension: 11"
+id: tarflow-transformer-architecture
 class: theorems
 ---
 
@@ -944,7 +947,7 @@ the preceding method slide uses the course's one-based indices for one block.
 
 ---
 clicks: 2
-sourceFrame: "extension: 13"
+id: dequantization-of-images
 class: theorems
 ---
 
@@ -1003,7 +1006,7 @@ handling is outside this introduction.
 
 ---
 clicks: 1
-sourceFrame: "extension: 12"
+id: tarflow-flows-can-generate-detailed-images
 class: figure-slide
 ---
 
@@ -1044,7 +1047,7 @@ is introduced here.
 
 ---
 clicks: 2
-sourceFrame: "extension: 13"
+id: normalizing-flows-what-comes-next
 class: theorems
 ---
 
@@ -1081,7 +1084,8 @@ Continuous-time normalizing flows (CNF) replace layers by an ODE, relaxing the l
 
 ---
 clicks: 0
-sourceFrame: "auto: Latent Variable Models (LVM)"
+id: outline-7
+section: "Latent Variable Models (LVM)"
 class:
 ---
 
@@ -1097,8 +1101,7 @@ class:
 
 ---
 clicks: 2
-sourceFrame: "21"
-mergedSourceFrames: [22]
+id: bayesian-framework
 class: theorems
 ---
 
@@ -1147,7 +1150,7 @@ The evidence requires integration over the unobserved variables. If it is intrac
 
 ---
 clicks: 4
-sourceFrame: "23"
+id: latent-variable-models-lvm
 class: theorems
 ---
 
@@ -1196,7 +1199,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "24"
+id: latent-variable-models-lvm-2
 class: theorems
 ---
 
@@ -1238,7 +1241,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "25"
+id: summary
 class: summary
 ---
 

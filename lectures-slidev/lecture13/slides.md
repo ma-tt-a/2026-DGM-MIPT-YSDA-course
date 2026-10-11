@@ -21,7 +21,7 @@ favicon: "data:,"
 download: false
 info: false
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -37,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -69,7 +69,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 2"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -87,7 +87,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -119,7 +119,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 3"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -144,7 +144,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -194,7 +194,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -232,7 +232,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -263,7 +263,7 @@ Both schemes gradually destroy information, but differ in their stationary limit
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-8
 class: theorems
 ---
 
@@ -299,7 +299,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-9
 class: theorems
 ---
 
@@ -336,7 +336,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: outline
 ---
 
 # Outline
@@ -350,7 +350,8 @@ sourceFrame: "9"
 
 ---
 clicks: 0
-sourceFrame: "auto: Discrete Diffusion"
+id: outline-2
+section: "Discrete Diffusion"
 ---
 
 # Outline
@@ -364,7 +365,8 @@ sourceFrame: "auto: Discrete Diffusion"
 
 ---
 clicks: 0
-sourceFrame: "auto: Absorbing Diffusion"
+id: outline-3
+section: "Absorbing Diffusion"
 ---
 
 # Outline
@@ -378,7 +380,7 @@ sourceFrame: "auto: Absorbing Diffusion"
 
 ---
 clicks: 0
-sourceFrame: "10"
+id: generative-models-taxonomy
 ---
 
 # Generative Models Taxonomy
@@ -387,7 +389,7 @@ sourceFrame: "10"
 
 ---
 clicks: 3
-sourceFrame: "11"
+id: absorbing-diffusion-forward-process
 class: theorems
 ---
 
@@ -433,7 +435,7 @@ What happens in the conditioned reverse process $q(\bx_{t-1}|\bx_t,\bx_0)$?
 
 ---
 clicks: 1
-sourceFrame: "12"
+id: absorbing-diffusion
 class: theorems
 ---
 
@@ -469,7 +471,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 12"
+id: absorbing-diffusion-2
 class: theorems
 ---
 
@@ -483,7 +485,7 @@ class: theorems
 
 ---
 clicks: 1
-sourceFrame: "13"
+id: absorbing-diffusion-3
 class: theorems
 ---
 
@@ -520,7 +522,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "14"
+id: absorbing-diffusion-4
 class: theorems
 ---
 
@@ -549,7 +551,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "15"
+id: algorithm-discrete-time-absorbing-diffusion
 class: theorems
 ---
 
@@ -608,7 +610,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "16"
+id: algorithm-discrete-time-absorbing-diffusion-2
 class: theorems
 ---
 
@@ -675,7 +677,8 @@ Return the final sequence $\bX_0$ (fully unmasked).
 
 ---
 clicks: 0
-sourceFrame: "auto: Continuous Time Formulation"
+id: outline-4
+section: "Continuous Time Formulation"
 ---
 
 # Outline
@@ -689,7 +692,7 @@ sourceFrame: "auto: Continuous Time Formulation"
 
 ---
 clicks: 3
-sourceFrame: "17"
+id: from-discrete-time-to-mask-rate
 class: theorems
 ---
 
@@ -733,7 +736,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "18"
+id: discrete-elbo-revisited
 class: theorems
 ---
 
@@ -766,7 +769,7 @@ Training corresponds to optimizing a **continuous mixture of masked language mod
 
 ---
 clicks: 0
-sourceFrame: "19"
+id: algorithm-masked-diffusion-language-model-mdlm
 class: theorems
 ---
 
@@ -825,7 +828,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "20"
+id: algorithm-masked-diffusion-language-model-mdlm-2
 class: theorems
 ---
 
@@ -892,7 +895,7 @@ Return the final sequence $\bX_{{\color{#8854c0}\lambda_L}}$ (fully unmasked).
 
 ---
 clicks: 0
-sourceFrame: "extension: 20"
+id: algorithm-masked-diffusion-language-model-mdlm-3
 class: theorems
 ---
 
@@ -908,7 +911,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Course Overview"
+id: outline-5
+section: "Course Overview"
 ---
 
 # Outline
@@ -922,7 +926,7 @@ sourceFrame: "auto: Course Overview"
 
 ---
 clicks: 0
-sourceFrame: "21"
+id: course-overview-problem-statement
 class: theorems
 ---
 
@@ -952,7 +956,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "22"
+id: course-roadmap
 ---
 
 # Course Roadmap
@@ -961,7 +965,7 @@ sourceFrame: "22"
 
 ---
 clicks: 0
-sourceFrame: "23"
+id: likelihood-based-exact-approximate-density-l1-l4
 class: theorems
 ---
 
@@ -1000,7 +1004,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "24"
+id: implicit-score-based-foundations-l5-l6
 class: theorems
 ---
 
@@ -1031,7 +1035,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "25"
+id: diffusion-models-l7-l8
 class: theorems
 ---
 
@@ -1068,7 +1072,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "26"
+id: continuous-dynamics-sde-l9-l10
 class: theorems
 ---
 
@@ -1110,7 +1114,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "27"
+id: flow-matching-l10-l11
 class: theorems
 ---
 
@@ -1143,7 +1147,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "28"
+id: discrete-diffusion-l12-l13
 class: theorems
 ---
 
@@ -1173,7 +1177,7 @@ each $\cL_t$ reduces to a **cross-entropy** loss against $\pt(\bx_{t-1}|\bx_t)$.
 
 ---
 clicks: 0
-sourceFrame: "29"
+id: generative-learning-trilemma
 class: figure-slide
 ---
 
@@ -1185,7 +1189,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "extension: 29"
+id: generative-learning-trilemma-2
 class: theorems
 ---
 
@@ -1218,7 +1222,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "30"
+id: summary
 class: summary
 ---
 

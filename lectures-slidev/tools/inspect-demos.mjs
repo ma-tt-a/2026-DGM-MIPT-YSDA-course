@@ -1,5 +1,5 @@
 import { resolve } from 'node:path'
-import { lecturePaths, root } from './course.mjs'
+import { lecturePaths, root, readSlides } from './course.mjs'
 const lecture = lecturePaths(process.argv[2])
 process.chdir(root)
 const qa = resolve(root, 'output/qa', lecture.name)
@@ -8,9 +8,9 @@ import { chromium } from 'playwright-chromium'
 import { mkdirSync, writeFileSync, readFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
 if (lecture.number !== 1) throw new Error('Demo inspection currently covers Lecture 1 only')
-const map = JSON.parse(readFileSync(lecture.map, 'utf8'))
-const histogramSlide = map.find(s => s.frame === 24)
-const arSlide = map.find(s => s.frame === 'extension: 31')
+const map = readSlides(lecture)
+const histogramSlide = map.find(s => s.id === 'histogram-as-a-generative-model')
+const arSlide = map.find(s => s.id === 'sampling-vs-density-evaluation')
 assert.ok(histogramSlide && arSlide, 'Missing demo slides')
 const browser = await chromium.launch({ executablePath: process.env.SLIDEV_BROWSER_PATH || '/Applications/Yandex.app/Contents/MacOS/Yandex', headless: true })
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 })
