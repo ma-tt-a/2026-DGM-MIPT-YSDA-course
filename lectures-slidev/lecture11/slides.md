@@ -531,7 +531,7 @@ $$
 
 ## Theorem
 
-If $\supp(p_t(\bx))=\bbR^m$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
+If $p_t(\bx)>0$ for all $\bx\in\bbR^m$ and $0\le t<1$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
 
 </div>
 <div class="block" v-click="2">
@@ -1024,13 +1024,20 @@ $$
 
 $$ {1|1-2|all} {at:2}
 \begin{aligned}
-\bv(\bx_t,\bx_1,t)&=\bx_1-\frac{1}{1-t}\cdot(\bx_t-t\bx_1)=\frac{\bx_1-{\color{teal}\bx_t}}{1-t}\\
+\bv(\bx_t,\bx_1,t)&=\bx_1-\frac{1}{1-t}\cdot(\bx_t-t\bx_1)=\frac{\bx_1-{\color{teal}\bx_t}}{1-t},\qquad t<1\\
 &=\frac{\bx_1-{\color{teal}t\bx_1-(1-t)\bx_0}}{1-t}\\
 &=\bx_1-\bx_0
 \end{aligned}
 $$
 
 </div></div>
+
+<div v-click="3">
+
+At $t=1$, the quotient is undefined. Use the simplified training target $\bx_1-\bx_0$, which contains no division.
+
+</div>
+
 <div class="columns balanced" v-click="4">
 <img src="/figs/g2g-vector-field-samples-cond.png" alt="Straight conditional vector field trajectories" style="width:100%;height:160px;object-fit:contain" />
 <div>
@@ -1040,6 +1047,10 @@ The conditional vector field $\bv(\bx_t,\bx_1,t)$ defines straight lines between
 </div></div>
 
 <div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a></div>
+
+<!--
+For 0 <= t < 1, the conditional Gaussian variance (1-t)^2 is strictly positive, so the marginal density p_t(x) is positive everywhere. At t=1 the conditional law collapses to a point mass; the data distribution need not have full support. Thus the positivity assumption in the FM/CFM theorem is imposed for t<1. The single endpoint has zero probability under continuous time sampling and does not change the expected loss (assuming finite expectations). The quotient is undefined at the endpoint; training uses x1-x0 directly. Its finite pathwise limit does not imply that the conditional field is bounded away from the path or that the marginal field has a unique endpoint extension.
+-->
 
 ---
 clicks: 3

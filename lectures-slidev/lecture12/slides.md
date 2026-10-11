@@ -87,7 +87,7 @@ $$
 \bbE_{t\sim U[0,1]}\bbE_{\bz\sim p(\bz)}\bbE_{\bx\sim p_t(\bx|\bz)}\left\|\bv(\bx,\bz,t)-\bv_{\btheta}(\bx,t)\right\|^2\rightarrow\min_{\btheta}
 $$
 
-If $\supp(p_t(\bx))=\bbR^m$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
+If $p_t(\bx)>0$ for all $\bx\in\bbR^m$ and $0\le t<1$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
 
 </div>
 
@@ -176,7 +176,7 @@ $$
 
 ## Theorem
 
-If $\supp(p_t(\bx))=\bbR^m$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
+If $p_t(\bx)>0$ for all $\bx\in\bbR^m$ and $0\le t<1$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
 
 </div>
 
@@ -364,7 +364,7 @@ p_t(\bx|\bx_1)=\cN\left(t\bx_1,(1-t)^2\bI\right);\quad{\color{teal}\bx_t=t\bx_1+
 $$
 
 $$
-\bv(\bx_t,\bx_1,t)=\frac{\bx_1-\bx_t}{1-t}=\bx_1-\bx_0
+\bv(\bx_t,\bx_1,t)=\frac{\bx_1-\bx_t}{1-t}=\bx_1-\bx_0,\qquad t<1
 $$
 
 $$
@@ -373,6 +373,8 @@ $$
 &=\bbE_{t\sim U[0,1]}\bbE_{\bx_1\sim\pd(\bx)}\bbE_{\bx_0\sim\cN(0,\bI)}\left\|(\bx_1-\bx_0)-\bv_{\btheta}\left(t\bx_1+(1-t)\bx_0,t\right)\right\|^2
 \end{aligned}
 $$
+
+At $t=1$, the quotient is undefined. Use the simplified training target $\bx_1-\bx_0$, which contains no division.
 
 <div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
