@@ -807,67 +807,38 @@ class: theorems
 
 # Why convert SDEs to PF-ODEs? (1) Efficient Sampling
 
-<ul>
+Use the familiar ODE solvers with the learned PF-ODE field:
 
-<li>
+$$
+\bv_{\btheta}(\bx,t)=\bff(\bx,t)-\frac12 g^2(t)\bs_{\btheta}(\bx,t).
+$$
 
-Brownian increments scale as $d\bw \sim \sqrt{dt}$ — SDE trajectories are nowhere differentiable.
+<table>
+<thead><tr><th style="width: 24%">Solver</th><th>How it uses the network</th></tr></thead>
+<tbody>
+<tr><td><strong>Euler / Heun</strong></td><td>Apply the familiar ODE updates: 1 / 2 evaluations per step. EDM uses Heun.</td></tr>
+<tr v-click="1"><td><strong>DPM-Solver<br>DPM-Solver++</strong></td><td>For VE/VP, integrate the linear drift exactly; approximate the network term. The ++ variant targets guided sampling.</td></tr>
+<tr v-click="1"><td><strong>UniPC</strong></td><td>Correct the predicted ODE step using stored network predictions.</td></tr>
+</tbody>
+</table>
 
-</li>
+<div v-click="2">
 
-<li>
+Compare **NFE** (network evaluations). DPM-Solver reports **10–20 NFE**; the required budget depends on the model.
 
-$\SDESolve$ (Euler–Maruyama): local error $\cO(\sqrt{\Delta t})$.
-
-</li>
-
-<li>
-
-Higher-order SDE schemes need Lévy areas $\Rightarrow$ impractical in high dimensions.
-
-</li>
-
-</ul>
-
-<div class="block" v-click="1">
-
-## PF-ODE drift $\bv(\bx, t) = \bff(\bx, t) - \frac{1}{2} g^2(t) \bs(\bx, t)$ is smooth
-
-<ul>
-
-<li v-click="1">
-
-Euler: $\cO(\Delta t)$,   Heun: $\cO(\Delta t^2)$,   RK4: $\cO(\Delta t^4)$.
-
-</li>
-
-<li v-click="1">
-
-Adaptive step-size control is standard for $\ODESolve$.
-
-</li>
-
-</ul>
+Noise injection is a separate choice: it can improve quality, but does not help every model.
 
 </div>
 
-<ul>
+<div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a><br><a href="https://arxiv.org/abs/2206.00927">Lu C., et al. DPM-Solver: A Fast ODE Solver for Diffusion Probabilistic Model Sampling in Around 10 Steps, 2022</a><br><a href="https://arxiv.org/abs/2211.01095">Lu C., et al. DPM-Solver++: Fast Solver for Guided Sampling of Diffusion Probabilistic Models, 2022</a><br><a href="https://arxiv.org/abs/2302.04867">Zhao W., et al. UniPC: A Unified Predictor-Corrector Framework for Fast Sampling of Diffusion Models, 2023</a></div>
 
-<li v-click="2">
-
-In practice: $100$–$1000$ $\SDESolve$ steps $\to$ $20$–$50$ $\ODESolve$ steps.
-
-</li>
-
-<li v-click="2">
-
-Caveat: SDE sampling can still win at high NFE — injected noise corrects accumulated error.
-
-</li>
-
-</ul>
-
-<div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a></div>
+<!--
+The trained score network stays fixed; the sampler changes how its evaluations are used.
+For VE/VP, the PF-ODE has a known linear term and a learned score term. DPM-Solver integrates the linear part analytically and approximates the remaining integral; DPM-Solver++ uses the equivalent data-prediction form for guided sampling. No solver derivation is intended here.
+UniPC's corrector is a deterministic ODE accuracy correction, not the Langevin corrector in stochastic predictor-corrector sampling. Its order can be increased without extra network evaluations by reusing predictions.
+The 10–20 NFE figure is an experimental result from DPM-Solver, not a guarantee for arbitrary models or guidance settings. UniPC reports examples at 10 NFE; avoid turning this into a ranking across different benchmarks.
+EDM's deterministic sampler uses Heun; noise injection is a separate option. EDM reports both models that benefit from stochasticity and models whose best results are deterministic. The denoiser parameterization is introduced later, after the complete score-model Training/Sampling pair.
+-->
 
 ---
 clicks: 2
@@ -941,7 +912,7 @@ class: theorems
 
 # Sampling: Reverse SDE vs PF-ODE
 
-Same trained score $\bs_{\btheta}(\bx, t)$; only the discretization changes (reverse SDE derived in the next section).
+The same trained score $\bs_{\btheta}(\bx, t)$ defines two sampling dynamics (reverse SDE derived next).
 
 <div class="block" v-click="1">
 
@@ -977,7 +948,7 @@ $$
 
 <div class="block" v-click="2">
 
-## Sampling (PF-ODE: Euler / Heun / RK4)
+## Sampling (PF-ODE, Euler)
 
 <ol>
 
@@ -989,7 +960,7 @@ Sample $\bx_T \sim \cN(0, \bI)$.
 
 <li v-click="2">
 
-Initialize step $\Delta t = T / K$  (with $K \ll$ SDE case).
+Initialize step $\Delta t = T / K$.
 
 </li>
 
@@ -1103,7 +1074,7 @@ where $dt<0$ and $\bar{\bw}$ is a reverse-time Wiener process.
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+<div class="source"><a href="https://doi.org/10.1016/0304-4149(82)90051-5">Anderson B. D. O. Reverse-time diffusion equation models, 1982</a><br><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
 
 ---
 clicks: 2
@@ -1171,7 +1142,7 @@ Convert the reversed probability flow ODE back to an SDE.
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+<div class="source"><a href="https://doi.org/10.1016/0304-4149(82)90051-5">Anderson B. D. O. Reverse-time diffusion equation models, 1982</a><br><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
 
 ---
 clicks: 1
@@ -1288,7 +1259,7 @@ Here $d\tau > 0$, $dt < 0$, and $\bar{\bw}$ is reverse-time Wiener process.
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+<div class="source"><a href="https://doi.org/10.1016/0304-4149(82)90051-5">Anderson B. D. O. Reverse-time diffusion equation models, 1982</a><br><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
 
 ---
 clicks: 1
@@ -1322,90 +1293,91 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
 
 ---
-clicks: 3
+clicks: 2
 sourceFrame: "27"
+mergedSourceFrames: [28]
 class: theorems
 ---
 
-# Score Matching SDE
+# VE and VP: Probability Flow and Reverse SDE
+
+Write $\bs = \nabla_{\bx}\log p_t(\bx)$.
+
+<div class="columns">
+<div>
+
+## VE / NCSN
+
+$\sigma(t)$ is monotonically increasing.
 
 $$
-\bx(t) = \bx(t - dt) + \sqrt{\frac{ d [\sigma^2(t)]}{dt}} \cdot d \bw
+d\bx = \sqrt{\frac{d\sigma^2(t)}{dt}}\,d\bw
 $$
 
-<div class="block" v-click="1">
+</div>
+<div>
 
-## Variance Exploding SDE
+## VP / DDPM
 
-<div v-click="1">
+Unit initial variance is preserved.
 
 $$
-d \bx = \sqrt{\frac{ d [\sigma^2(t)]}{dt}} \cdot d \bw
+d\bx = -\frac12\beta(t)\bx\,dt + \sqrt{\beta(t)}\,d\bw
 $$
 
+</div>
 </div>
 
 <div v-click="1">
 
-$\sigma(t)$ is a monotonically increasing function.
+## Probability Flow ODE
+
+<div class="columns">
+<div>
+
+$$
+d\bx = -\frac12\frac{d\sigma^2(t)}{dt}\bs\,dt
+$$
 
 </div>
+<div>
 
+$$
+d\bx = \left(-\frac12\beta(t)\bx-\frac12\beta(t)\bs\right)dt
+$$
+
+</div>
+</div>
 </div>
 
 <div v-click="2">
 
-$$
-d\bx = \bff(\bx, t) dt + g(t) d \bw, \quad \bff(\bx, t) = 0, \quad g(t) = \sqrt{\frac{ d [\sigma^2(t)]}{dt}}
-$$
+## Reverse SDE
 
-</div>
-
-<div v-click="3">
+<div class="columns">
+<div>
 
 $$
 \begin{aligned}
-d\bx &= \left(-\frac{1}{2} \frac{ d [\sigma^2(t)]}{dt} \frac{\partial}{\partial \bx} \log p_t(\bx) \right) dt \qquad\quad\, \text{(probability flow ODE)} \\
-		d\bx &= \left(- \frac{ d [\sigma^2(t)]}{dt} \frac{\partial}{\partial \bx}\log p_t(\bx)\right) dt + \sqrt{\frac{ d [\sigma^2(t)]}{dt}}  d \bar{\bw} \ \ \text{(reverse SDE)}
+d\bx &= -\frac{d\sigma^2(t)}{dt}\bs\,dt \\
+&\quad + \sqrt{\frac{d\sigma^2(t)}{dt}}\,d\bar{\bw}
 \end{aligned}
 $$
 
 </div>
-
-<div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
-
----
-clicks: 1
-sourceFrame: "28"
-class: theorems
----
-
-# Diffusion SDE
-
-<div class="block">
-
-## Variance Preserving SDE
-
-$$
-d \bx = - \frac{1}{2} \beta(t) \bx(t) dt + \sqrt{\beta(t)} \cdot d \bw
-$$
-
-$$
-\bff(\bx, t) = - \frac{1}{2} \beta(t) \bx(t) , \quad g(t) = \sqrt{\beta(t)}
-$$
-
-</div>
-
-Variance is preserved as long as $\bx(0)$ has unit variance.
-
-<div v-click="1">
+<div>
 
 $$
 \begin{aligned}
-d\bx &= \left(- \frac{1}{2} \beta(t) \bx(t) - \frac{1}{2} \beta(t) \frac{\partial}{\partial \bx} \log p_t(\bx) \right) dt \quad\quad \text{(probability flow ODE)} \\
-		d\bx &= \left(- \frac{1}{2} \beta(t) \bx(t) - \beta(t) \frac{\partial}{\partial \bx} \log p_t(\bx)\right) dt + \sqrt{\beta(t)} d \bar{\bw}\ \ \text{(reverse SDE)}
+d\bx &= \left(-\frac12\beta(t)\bx-\beta(t)\bs\right)dt \\
+&\quad + \sqrt{\beta(t)}\,d\bar{\bw}
 \end{aligned}
 $$
+
+</div>
+</div>
+
+Here $dt<0$ and $\bar{\bw}$ is a reverse-time Wiener process.
 
 </div>
 
@@ -1546,7 +1518,7 @@ Is it possible to explicitly derive $\bmu(\bx(0), t)$ and $\sigma^2(t)$ for VE-S
 <div class="source"><a href="https://users.aalto.fi/~asolin/sde-book/sde-book.pdf">Särkkä S., Solin A. Applied stochastic differential equations, 2019</a></div>
 
 ---
-clicks: 3
+clicks: 4
 sourceFrame: "32"
 class: theorems
 ---
@@ -1564,10 +1536,8 @@ $$
 The moments of the SDE $d\bx = f(t) \bx dt + g(t) d \bw$ satisfy:
 
 $$
-\frac{d \bmu(\bx(0), t)}{dt} = f(t) \bmu(\bx(0), t)
-$$
-
-$$
+\frac{d \bmu(\bx(0), t)}{dt} = f(t) \bmu(\bx(0), t),
+\qquad
 \frac{d \sigma^2(t)}{dt} = 2 f(t) \sigma^2(t) + g^2(t)
 $$
 
@@ -1589,12 +1559,26 @@ $$
 
 </div>
 
+<div v-click="4">
+
+$$
+\frac{d \bbE\left[\bx(t) | \bx(0) \right]}{dt} = \frac{d \bmu(\bx(0), t)}{dt} = f(t) \bmu(\bx(0), t)
+$$
+
+</div>
+
+</div>
+
+<div v-click="1">
+
+We prove the mean equation only; the variance equation is stated without proof.
+
 </div>
 
 <div class="source"><a href="https://users.aalto.fi/~asolin/sde-book/sde-book.pdf">Särkkä S., Solin A. Applied stochastic differential equations, 2019</a></div>
 
 ---
-clicks: 5
+clicks: 2
 sourceFrame: "33"
 class: theorems
 ---
@@ -1611,33 +1595,11 @@ $$
 
 </div>
 
-<div class="block" v-click="1">
-
-## Proof (Continued)
-
-<div v-click="1">
-
-$$
-\bbE\left[d\bx | \bx(0) \right] = f(t) \bmu(\bx(0), t) dt
-$$
-
-</div>
-
-<div v-click="2">
-
-$$
-\frac{d \bbE\left[\bx(t) | \bx(0) \right]}{dt} = \frac{d \bmu(\bx(0), t)}{dt} = f(t) \bmu(\bx(0), t)
-$$
-
-</div>
-
-</div>
-
-<div class="block" v-click="3">
+<div class="block">
 
 ## Examples
 
-<div v-click="3">
+<div>
 
 $$
 \textbf{NCSN:}\quad	f(t) = 0 \quad \Rightarrow \quad \bmu = \bx(0)
@@ -1645,7 +1607,7 @@ $$
 
 </div>
 
-<div v-click="4">
+<div v-click="1">
 
 $$
 \textbf{DDPM:}\quad f(t) = - \frac{1}{2} \beta(t)\;\;   \Rightarrow\quad \frac{d \bmu}{dt} = - \frac{1}{2} \beta(t) \bmu
@@ -1653,7 +1615,7 @@ $$
 
 </div>
 
-<div v-click="5">
+<div v-click="2">
 
 $$
 \bmu = \bx(0) \exp\left(- \frac{1}{2} \int_0^t \beta(s)ds\right)
@@ -1733,12 +1695,6 @@ $$
 
 </div>
 
-<div v-click="2">
-
-Here we omit the derivations of the variance.
-
-</div>
-
 <div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
 
 ---
@@ -1747,7 +1703,9 @@ sourceFrame: "35"
 class: theorems
 ---
 
-# Score-Based Generative Models Through SDEs
+# Sampling with the Reverse SDE
+
+**Use the trained score for sampling.** Assume terminal prior $\cN(0,\bI)$.
 
 <div class="block">
 
@@ -1790,6 +1748,190 @@ Discretizing the probability flow ODE yields deterministic sampling.
 </ul>
 
 <div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+
+<!--
+Narrative: directly complete the preceding general Training slide. Use its trained score in reverse-SDE sampling; the final bullets recall that the PF-ODE provides the deterministic alternative. The standard Gaussian terminal prior belongs to the general SDE convention here. The next block specializes this completed training/sampling scheme to additive-noise coordinates and a denoiser representation. No denoiser knowledge is required on this slide. The Training/Sampling blocks and formulas repeated in the next recap are unchanged.
+-->
+
+---
+clicks: 2
+sourceFrame: "extension: 34"
+class: theorems
+---
+
+# From Time to Noise Level
+
+**Now specialize to additive noise:** $\bx=\bx_0+\sigma\bepsilon$, $\bepsilon\sim\cN(0,\bI)$.
+
+$$
+\bff(\bx,t)=0,\qquad g^2(t)=\frac{d\sigma^2(t)}{dt}
+=2\sigma(t)\frac{d\sigma(t)}{dt}.
+$$
+
+<div class="block" v-click="1" style="margin-top:8px">
+
+## Rewrite the probability flow ODE using $\sigma$
+
+<div>
+
+$$
+\begin{aligned}
+\frac{d\bx(t)}{dt}
+&=\bff(\bx(t),t)-\frac12g^2(t)\bs_{\btheta}(\bx(t),\sigma(t))\\
+&=-\sigma(t)\frac{d\sigma(t)}{dt}\bs_{\btheta}(\bx(t),\sigma(t)).
+\end{aligned}
+$$
+
+$$
+\frac{d\bx}{d\sigma}
+=\left(\frac{d\sigma(t)}{dt}\right)^{-1}\frac{d\bx(t)}{dt}
+=-\sigma\bs_{\btheta}(\bx,\sigma).
+$$
+
+</div>
+
+</div>
+
+<div class="block" v-click="2">
+
+## Choose a denoiser using Tweedie's formula
+
+$$
+\bbE[\bx_0\mid\bx]=\bx+\sigma^2\nabla_{\bx}\log p_{\sigma}(\bx).
+$$
+
+$$
+D_{\btheta}(\bx,\sigma)\approx\bbE[\bx_0\mid\bx],\qquad
+\frac{d\bx}{d\sigma}=-\sigma\bs_{\btheta}(\bx,\sigma)
+=\frac{\bx-D_{\btheta}(\bx,\sigma)}{\sigma}.
+$$
+
+Decreasing $\sigma$ moves towards the denoiser prediction. **How do we train this denoiser?**
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a></div>
+
+<!--
+Narrative: the preceding adjacent Training/Sampling pair completes the general score-based construction. Now specialize it to additive Gaussian noise and reuse the known PF-ODE. The block starts after the complete general algorithm, rather than interrupting its two halves. First substitute f and g, then apply the chain rule to use sigma as the independent variable. Only after obtaining the sigma-ODE, recall Tweedie's full identity and choose the familiar clean-data parameterization. The identity appears before its use to express the field through a denoiser. The denoiser form gives an interpretation of a negative-sigma step and motivates the next slide's training question.
+All arguments are retained: f(x,t), g(t), sigma(t), s_theta(x(t),sigma(t)). The score network is indexed by noise level here. After changing independent variable, x denotes the same trajectory expressed as a function of sigma; this is a time reparameterization, not an additional generative method.
+Assume sigma(t)>0 and d sigma(t)/dt>0 on the interval of the change of variables. The additive path is x = x_0 + sigma epsilon, so its forward SDE has zero drift and diffusion variance rate d sigma^2/dt. Sigma is the total additive-noise standard deviation; the earlier VE formula permits a nonzero initial sigma, which must be accounted for when identifying the clean initial state. VP's unscaled state is not this additive coordinate.
+The denoiser choice is convenient, not required by the change of time coordinate and not universally superior to noise/score/v prediction. D_theta estimates the conditional mean; its score conversion follows from Tweedie. A learned prediction approximates the true marginal score and probability flow. A negative Euler increment in sigma points towards the current denoiser prediction; that prediction is recomputed along the trajectory.
+The freedom to change samplers appeared with DDIM; the contribution here connects the familiar denoiser parameterization with the previously introduced general ODE solvers. Integrate at positive sigma, with an Euler denoising step to zero; do not evaluate the network or divide by sigma at zero. The preceding general Sampling slide uses its own standard-Gaussian terminal prior; the additive-noise sampler below scales its initial noise by sigma_max.
+-->
+
+---
+clicks: 2
+sourceFrame: "extension: 34"
+class: theorems
+---
+
+# Train the Denoiser
+
+**Use the existing score-training objective.** For a noisy-clean pair $(\bx,\bx_0)$ with $q(\bx\mid\bx_0)=\cN(\bx_0,\sigma^2\bI)$:
+
+$$
+\cL=\left\|\bs_{\btheta}(\bx,\sigma)-\nabla_{\bx}\log q(\bx\mid\bx_0)\right\|_2^2.
+$$
+
+<div class="block" v-click="1">
+
+## Compute the conditional Gaussian target
+
+$$
+\nabla_{\bx}\log q(\bx\mid\bx_0)=-\frac{\bx-\bx_0}{\sigma^2}.
+$$
+
+</div>
+
+<div class="block" v-click="2">
+
+## Substitute the denoiser representation
+
+$$
+\begin{aligned}
+\cL
+&=\left\|\frac{D_{\btheta}(\bx,\sigma)-\bx}{\sigma^2}
++\frac{\bx-\bx_0}{\sigma^2}\right\|_2^2\\
+&=\frac{1}{\sigma^4}\left\|D_{\btheta}(\bx,\sigma)-\bx_0\right\|_2^2.
+\end{aligned}
+$$
+
+**Same training objective, different prediction target.**
+
+The trained denoiser now supplies the field for sampling.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a></div>
+
+<!--
+Narrative: the preceding slide rewrites the PF-ODE in sigma and chooses the familiar clean-data denoiser to represent its field. This slide answers how to train that denoiser. Start directly from the earlier per-pair DSM training loss, compute its conditional Gaussian target, and substitute the already established denoiser representation. Do not reintroduce Tweedie, the conditional-mean definition, or a standalone score conversion: those are inputs from the preceding slide, not new conclusions here. The conclusion is equivalence of that objective under a different network prediction target. The next slide uses the trained denoiser in an explicit sampling loop.
+The optimal MSE predictor is the conditional mean at each fixed sigma > 0, not the original individual clean sample. The arrow from Tweedie's formula motivates a parameterization; a learned D_theta and score are approximate. The conditional Gaussian target in training is distinct from the marginal score in Tweedie's identity.
+The loss equivalence is algebraic for every theta under the displayed substitution. The original score loss becomes sigma^-4 times clean-target MSE; this is not an arbitrary extra weight or the full EDM recipe. Preserve the same distribution over noise levels when calling the objectives equivalent.
+This additive path is a specialization of the previous Gaussian transition; it does not identify VP's unscaled state with x_0 + sigma epsilon. Sigma denotes the total additive-noise standard deviation.
+-->
+
+---
+clicks: 1
+sourceFrame: "extension: 34"
+class: theorems
+---
+
+# Generate Samples with a Denoiser
+
+**Use the trained denoiser in the ODE solver.** Start from strong noise and decrease $\sigma$.
+
+<div class="block" v-click="1">
+
+## Sampling (Euler)
+
+<ol>
+
+<li>
+
+Choose $\sigma_0>\sigma_1>\cdots>\sigma_N=0$ and sample $\bx^{(0)}\sim\cN(0,\sigma_0^2\bI)$.
+
+</li>
+
+<li>
+
+For $i=0,\ldots,N-1$, evaluate $D_{\btheta}(\bx^{(i)},\sigma_i)$ and update:
+
+$$
+\bx^{(i+1)}=\bx^{(i)}+(\sigma_{i+1}-\sigma_i)
+\frac{\bx^{(i)}-D_{\btheta}(\bx^{(i)},\sigma_i)}{\sigma_i}.
+$$
+
+</li>
+
+<li>
+
+Return $\bx^{(N)}$.
+
+</li>
+
+</ol>
+
+</div>
+
+<div v-click="1">
+
+**The denoiser defines the velocity field used by the ODE solver.**
+
+Can we train a velocity field directly?
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a></div>
+
+<!--
+Narrative: the noise-coordinate PF-ODE defines the denoiser field, and the preceding slide trains its denoiser. This slide answers how to generate with the trained model: initialize strong Gaussian noise, repeatedly evaluate the network and apply an explicit Euler step, and return the final state. The conclusion closes the denoiser-based construction: the denoiser defines the velocity field used by the solver. The question about training a velocity field directly motivates Flow Matching. The intervening Outline is agenda-only; the next content slide recalls CNF dynamics before introducing the velocity-regression objective. Do not restart the conditional-mean explanation or branch into solver comparisons here; the model definition and solver options have already been established.
+Superscripts (i) index numerical sampling states, avoiding confusion with the clean training target x_0. Choose sigma_0 sufficiently large that N(0,sigma_0^2 I) approximates the noisy data marginal. Euler is an approximate numerical solver; this is not an exact sampler at arbitrary step sizes or sigma_0.
+The step follows x_next = x + delta_sigma * (x - D_theta)/sigma, with delta_sigma < 0. For a step ending at zero, x_next = D_theta(x,sigma); the network and denominator are evaluated at the positive current sigma, never at zero. Heun can integrate the same field; its final zero-noise step uses Euler to avoid evaluating the singular endpoint.
+The learned denoiser estimates E[x_0|x] at the current positive noise level. It does not identify which original clean point generated a noisy point; repeated predictions along the numerical trajectory are part of the generative process. This distinction also prevents confusing the denoiser with a consistency model that targets a trajectory endpoint.
+This extends the sampler-change idea introduced with DDIM, rather than claiming that denoiser prediction or changing the sampler is new. It is the explicit ODE/Euler realization of the denoiser parameterization.
+-->
 
 ---
 clicks: 0
@@ -2067,7 +2209,7 @@ Every SDE admits a corresponding probability flow ODE that follows the same prob
 
 <li>
 
-Converting SDEs to PF-ODEs enables efficient high-order numerical solvers, reducing the number of sampling steps from $100$–$1000$ to $20$–$50$.
+A denoiser can parameterize the PF-ODE. Efficient ODE solvers reduce sampling cost, measured in network evaluations (NFE).
 
 </li>
 

@@ -54,6 +54,15 @@ to see if it already has a name.
 
 ## 3. Slide structure
 
+- Refer to earlier course material by concept or topic, not by lecture number: lecture numbering changes over time. Avoid student-facing phrases such as "from Lecture 7"; use the relevant concept name instead. Author preference, 2026-10-11.
+- Every new slide, in Beamer or Slidev, must satisfy three narrative checks:
+  (1) its opening follows from the previous slide's idea or unresolved question;
+  (2) its conclusion prepares the next slide's idea;
+  (3) its own argument develops step by step, motivating each new concept or
+  formula before introducing it. Check the actual neighboring content, including
+  across Outline transitions. If the chain is weak, move or split the slide rather
+  than compressing several unmotivated ideas onto it. Record these three links
+  when proposing or reviewing a new slide. Author preference, 2026-10-11.
 - Frames are separated by a `%=======` comment line. Preserve this separator when
   inserting or moving frames; it's the visual delimiter used throughout the
   codebase.
