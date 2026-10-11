@@ -1321,7 +1321,7 @@ class: theorems
 
 <div class="block">
 
-## Cross-Entropy for Discriminative Model
+## Log-Likelihood for Discriminative Model
 
 $$
 \max_{p(y|\bx)}\left[\bbE_{\pd(\bx)}\log p(y=1|\bx)+\bbE_{\pt(\bx)}\log p(y=0|\bx)\right]
@@ -1330,8 +1330,8 @@ $$
 </div>
 <div v-click="1">
 
-- **Discriminator:** A classifier $p_{\bphi}(y=1|\bx)=D_{\bphi}(\bx)\in[0,1]$, distinguishing real and generated samples. The discriminator aims to **maximize** cross-entropy.
-- **Generator:** The generative model $\bx=\bG_{\btheta}(\bz),\;\bz\sim p(\bz)$, seeks to fool the discriminator. The generator aims to **minimize** cross-entropy.
+- **Discriminator:** A classifier $p_{\bphi}(y=1|\bx)=D_{\bphi}(\bx)\in[0,1]$, distinguishing real and generated samples. The discriminator aims to **maximize** log-likelihood.
+- **Generator:** The generative model $\bx=\bG_{\btheta}(\bz),\;\bz\sim p(\bz)$, seeks to fool the discriminator. The generator aims to **minimize** the same log-likelihood objective.
 
 </div>
 <div class="block" v-click="2">

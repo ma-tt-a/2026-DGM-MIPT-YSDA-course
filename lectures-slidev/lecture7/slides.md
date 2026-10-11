@@ -122,7 +122,7 @@ Under mild regularity conditions, the last term is independent of $\btheta$:
 $$
 \begin{aligned}
 &\bbE_{q(\bx_{\sigma})}\bigl\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\bigr\|_2^2\\
-&\quad=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\bigl\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\bigr\|_2^2+\text{const}(\btheta)
+&\quad=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\bigl\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\bigr\|_2^2+\text{const}
 \end{aligned}
 $$
 

@@ -749,12 +749,12 @@ class: theorems
 
 ## Theorem
 
-Under mild regularity conditions, the following holds:
+Under mild regularity conditions, the last term is independent of $\btheta$:
 
 $$
 \begin{aligned}
 &\bbE_{q(\bx_{\sigma})}\big\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\big\|_2^2\\
-&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\big\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\big\|_2^2+\text{const}(\btheta)
+&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\big\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\big\|_2^2+\text{const}
 \end{aligned}
 $$
 
@@ -853,7 +853,7 @@ Under mild regularity conditions, the last term is independent of $\btheta$:
 
 $$
 \bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
-=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta).
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}.
 $$
 
 </div>
@@ -911,7 +911,7 @@ Under mild regularity conditions, the last term is independent of $\btheta$:
 
 $$
 \bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
-=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta).
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}.
 $$
 
 </div>
@@ -939,7 +939,7 @@ $$ {1|all} {at:5}
 \begin{gathered}
 \bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
 =\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left[\|\bs_{\btheta,\sigma}(\bx_{\sigma})\|_2^2-2\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right]+C_1\\
-=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta).
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}.
 \end{gathered}
 $$
 
@@ -948,7 +948,7 @@ $$
 
 <div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
 
-<!-- Compact proof, part 2, incorporates source frame 24. The last mixed-term equality uses grad q = q grad log q and Fubini. const(theta) = C_1 - E_joint ||grad log q(x_sigma | x)||^2, independent of theta. The theorem remains visible on both slides. -->
+<!-- Compact proof, part 2, incorporates source frame 24. The last mixed-term equality uses grad q = q grad log q and Fubini. const = C_1 - E_joint ||grad log q(x_sigma | x)||^2, independent of theta. The theorem remains visible on both slides. -->
 
 ---
 clicks: 5
@@ -1508,7 +1508,7 @@ $$
 $$
 \begin{aligned}
 &\bbE_{q(\bx_t)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t)\right\|_2^2\\
-&\quad=\bbE_{\pd(\bx)}\bbE_{q(\bx_t|\bx)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx)\right\|_2^2+\text{const}(\btheta)
+&\quad=\bbE_{\pd(\bx)}\bbE_{q(\bx_t|\bx)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx)\right\|_2^2+\text{const}
 \end{aligned}
 $$
 
