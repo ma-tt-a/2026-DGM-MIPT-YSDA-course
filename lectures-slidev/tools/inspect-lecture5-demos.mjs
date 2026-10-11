@@ -7,6 +7,8 @@ import { initialLangevin, advanceLangevin, langevinConfig } from '../lecture5/li
 
 const lecture = lecturePaths(5), map = JSON.parse(readFileSync(lecture.map, 'utf8'))
 const base = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
+const langevinLecture = lecturePaths(6), langevinMap = JSON.parse(readFileSync(langevinLecture.map, 'utf8'))
+const langevinBase = process.env.SLIDEV_QA_LANGEVIN_URL || `http://localhost:${langevinLecture.port}`
 const qa = process.env.SLIDEV_QA_DIR || resolve(root, 'output/qa/lecture5/interactive-demos')
 mkdirSync(qa, { recursive: true })
 const browser = await chromium.launch({ executablePath: process.env.SLIDEV_BROWSER_PATH || '/Applications/Yandex.app/Contents/MacOS/Yandex', headless: true })
@@ -16,17 +18,17 @@ page.on('pageerror', e => errors.push(String(e)))
 page.on('response', r => { if (r.status() >= 400) failed.push([r.status(), r.url()]) })
 await context.route('**/*', route => {
   const url = new URL(route.request().url())
-  if (['http:', 'https:'].includes(url.protocol) && url.origin !== new URL(base).origin) { external.push(url.href); return route.abort() }
+  if (['http:', 'https:'].includes(url.protocol) && ![base, langevinBase].some(value => url.origin === new URL(value).origin)) { external.push(url.href); return route.abort() }
   return route.continue()
 })
 const demo = () => page.locator('[data-demo]:visible')
 const data = () => demo().evaluate(el => ({ ...el.dataset }))
 const slideByFrame = frame => map.find(s => s.frame === frame)
 async function go(slide, pen = false) {
-  await page.goto(`${base}/${slide.slide}?clicks=${slide.clicks}${pen ? '&tools' : ''}`, { waitUntil: 'networkidle' })
+  await page.goto(`${slide.base}/${slide.slide}?clicks=${slide.clicks}${pen ? '&tools' : ''}`, { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
   await demo().waitFor()
-  assert.match(await page.locator('.course-folio:visible').innerText(), new RegExp(`/ ${map.length}$`))
+  assert.match(await page.locator('.course-folio:visible').innerText(), new RegExp(`/ ${slide.total}$`))
 }
 async function snapshot(name) {
   await page.mouse.move(1235, 40)
@@ -67,7 +69,8 @@ async function penClick(button) {
     for (const type of ['mousePressed', 'mouseReleased']) await cdp.send('Input.dispatchMouseEvent', { type, x: box.x + box.width / 2, y: box.y + box.height / 2, button: 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: 1, pointerType: 'pen' })
   } finally { await cdp.detach() }
 }
-const support = slideByFrame(20), langevin = slideByFrame('extension: imported: 6:14')
+const support = { ...slideByFrame(20), base, total: map.length }
+const langevin = { ...langevinMap.find(s => s.frame === 'extension: 14'), base: langevinBase, total: langevinMap.length }
 try {
   // Warm the deck before deep links, so stock navigation styles/fonts are loaded.
   await page.goto(`${base}/1`, { waitUntil: 'networkidle' })
@@ -151,7 +154,7 @@ try {
   }
   checks.push('Controls work with pen active; plots accept annotations; synthetic strokes undone')
   for (const slide of [support, langevin]) {
-    await page.goto(`${base}/${slide.slide}?print&clicks=${slide.clicks}`, { waitUntil: 'networkidle' })
+    await page.goto(`${slide.base}/${slide.slide}?print&clicks=${slide.clicks}`, { waitUntil: 'networkidle' })
     await page.evaluate(() => document.fonts.ready)
     assert.equal(await demo().locator('button,input').count(), 0)
     await snapshot(`print-${slide.slide}`)

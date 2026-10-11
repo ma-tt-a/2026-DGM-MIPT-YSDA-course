@@ -11,10 +11,14 @@ import { ganPresets, optimalDiscriminator } from '../lecture4/lib/gan-demo.mjs'
 const lecture = lecturePaths('4')
 const base = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
 const map = JSON.parse(readFileSync(lecture.map, 'utf8'))
+const ganLecture = lecturePaths('5')
+const ganBase = process.env.SLIDEV_QA_GAN_URL || `http://localhost:${ganLecture.port}`
+const ganMap = JSON.parse(readFileSync(ganLecture.map, 'utf8'))
 const byTitle = title => {
-  const slide = map.find(s => s.title === title)
+  const inGan = title === 'The Optimal Discriminator Responds to the Densities'
+  const slide = (inGan ? ganMap : map).find(s => s.title === title)
   assert.ok(slide, `Missing slide: ${title}`)
-  return slide
+  return { ...slide, base: inGan ? ganBase : base, total: inGan ? ganMap.length : map.length }
 }
 const slides = [
   byTitle('Matching the Prior: Which KL Vanishes?'),
@@ -33,7 +37,7 @@ page.on('pageerror', error => errors.push(String(error)))
 page.on('response', response => { if (response.status() >= 400) failures.push([response.status(), response.url()]) })
 await context.route('**/*', route => {
   const url = new URL(route.request().url())
-  if (['http:', 'https:'].includes(url.protocol) && url.origin !== new URL(base).origin) {
+  if (['http:', 'https:'].includes(url.protocol) && ![base, ganBase].some(value => url.origin === new URL(value).origin)) {
     external.push(url.href)
     return route.abort()
   }
@@ -44,9 +48,9 @@ const dataset = demo => demo.evaluate(element => ({ ...element.dataset }))
 const currentDemo = () => page.locator('[data-demo]:visible')
 async function go(slide, tools = false) {
   const clicks = slide.title === 'Vector Quantization' ? 1 : slide.clicks
-  await page.goto(`${base}/${slide.slide}?clicks=${clicks}${tools ? '&tools' : ''}`, { waitUntil: 'networkidle' })
+  await page.goto(`${slide.base}/${slide.slide}?clicks=${clicks}${tools ? '&tools' : ''}`, { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
-  assert.match(await page.locator('.course-folio:visible').last().innerText(), new RegExp(`/ ${map.length}$`), 'Wrong deck or stale server')
+  assert.match(await page.locator('.course-folio:visible').last().innerText(), new RegExp(`/ ${slide.total}$`), 'Wrong deck or stale server')
   await currentDemo().waitFor({ state: 'visible' })
   return currentDemo()
 }

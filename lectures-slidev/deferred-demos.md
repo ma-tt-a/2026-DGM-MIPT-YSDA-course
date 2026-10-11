@@ -9,8 +9,8 @@ and keep it for the GAN discussion. The matching existing frame is
 It already compares a two-Gaussian target and a single-Gaussian model.
 
 The 2026-09-15 migration integrated the plot in
-[`lecture5/slides.md`](lecture5/slides.md): slide 17 retains the divergence
-definitions and original JSD illustration; slide 18 continues the same source
+[`lecture5/slides.md`](lecture5/slides.md). After the 2026-10-11 section moves,
+slide 18 retains the divergence definitions; slide 19 continues the same source
 frame with the interactive forward/reverse KL comparison. Reverse-KL fitting is
 not identified with GAN training.
 

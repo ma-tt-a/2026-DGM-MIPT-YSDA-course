@@ -21,7 +21,6 @@ download: false
 info: false
 favicon: "data:,"
 clicks: 0
-importedSourceFrames: {"5": [10, 11, 12, 13, 14]}
 omittedSourceFrames: [7, 10, 11]
 omittedSourceSections: ["Variational Autoencoder (VAE)"]
 sectionTitleOverrides: {"Discrete VAE Latent Representations": "Discrete Latent VAEs"}
@@ -338,7 +337,6 @@ class: theorems
 <div class="outline-item"><span>01</span><div>ELBO Surgery and Optimal VAE Prior</div></div>
 <div class="outline-item"><span>02</span><div>Discrete Latent VAEs<div class="outline-sub">Discrete VAE Latent Representations<br>Vector Quantized VAE (VQ-VAE)</div></div></div>
 <div class="outline-item"><span>03</span><div>Likelihood-Free Learning</div></div>
-<div class="outline-item"><span>04</span><div>Generative Adversarial Networks (GAN)</div></div>
 
 </div>
 
@@ -354,7 +352,6 @@ sourceFrame: "auto: ELBO Surgery and Optimal VAE Prior"
 <div class="outline-item current"><span>01</span><div>ELBO Surgery and Optimal VAE Prior</div></div>
 <div class="outline-item"><span>02</span><div>Discrete Latent VAEs<div class="outline-sub">Discrete VAE Latent Representations<br>Vector Quantized VAE (VQ-VAE)</div></div></div>
 <div class="outline-item"><span>03</span><div>Likelihood-Free Learning</div></div>
-<div class="outline-item"><span>04</span><div>Generative Adversarial Networks (GAN)</div></div>
 
 </div>
 
@@ -724,7 +721,6 @@ sourceFrame: "auto: Discrete Latent VAEs"
 <div class="outline-item"><span>01</span><div>ELBO Surgery and Optimal VAE Prior</div></div>
 <div class="outline-item current"><span>02</span><div>Discrete Latent VAEs<div class="outline-sub"><strong>Discrete VAE Latent Representations</strong><br>Vector Quantized VAE (VQ-VAE)</div></div></div>
 <div class="outline-item"><span>03</span><div>Likelihood-Free Learning</div></div>
-<div class="outline-item"><span>04</span><div>Generative Adversarial Networks (GAN)</div></div>
 
 </div>
 
@@ -844,7 +840,6 @@ sourceFrame: "auto: Vector Quantized VAE (VQ-VAE)"
 <div class="outline-item"><span>01</span><div>ELBO Surgery and Optimal VAE Prior</div></div>
 <div class="outline-item current"><span>02</span><div>Discrete Latent VAEs<div class="outline-sub">Discrete VAE Latent Representations<br><strong>Vector Quantized VAE (VQ-VAE)</strong></div></div></div>
 <div class="outline-item"><span>03</span><div>Likelihood-Free Learning</div></div>
-<div class="outline-item"><span>04</span><div>Generative Adversarial Networks (GAN)</div></div>
 
 </div>
 
@@ -1183,7 +1178,6 @@ sourceFrame: "auto: Likelihood-Free Learning"
 <div class="outline-item"><span>01</span><div>ELBO Surgery and Optimal VAE Prior</div></div>
 <div class="outline-item"><span>02</span><div>Discrete Latent VAEs<div class="outline-sub">Discrete VAE Latent Representations<br>Vector Quantized VAE (VQ-VAE)</div></div></div>
 <div class="outline-item current"><span>03</span><div>Likelihood-Free Learning</div></div>
-<div class="outline-item"><span>04</span><div>Generative Adversarial Networks (GAN)</div></div>
 
 </div>
 
@@ -1278,33 +1272,6 @@ The generative model $\pt(\bx)$ matches $\pd(\bx)$ if a discriminative model $p(
 </div>
 
 ---
-clicks: 0
-sourceFrame: "auto: Generative Adversarial Networks (GAN)"
-class: theorems
----
-
-# Outline
-
-<div class="course-outline">
-
-<div class="outline-item"><span>01</span><div>ELBO Surgery and Optimal VAE Prior</div></div>
-<div class="outline-item"><span>02</span><div>Discrete Latent VAEs<div class="outline-sub">Discrete VAE Latent Representations<br>Vector Quantized VAE (VQ-VAE)</div></div></div>
-<div class="outline-item"><span>03</span><div>Likelihood-Free Learning</div></div>
-<div class="outline-item current"><span>04</span><div>Generative Adversarial Networks (GAN)</div></div>
-
-</div>
-
----
-clicks: 0
-sourceFrame: "imported: 5:10"
-class: figure-slide
----
-
-# Generative Models Taxonomy
-
-<TaxonomyDiagram generative-adversarial-network class="taxonomy" />
-
----
 clicks: 3
 sourceFrame: "28"
 class: theorems
@@ -1389,196 +1356,6 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
 
 ---
-clicks: 3
-sourceFrame: "imported: 5:11"
-class: theorems
----
-
-# GAN Optimality
-
-<div class="block">
-
-## Theorem
-
-The minimax game
-
-$$
-\min_G\max_D\Bigl[\underbrace{\bbE_{\pd(\bx)}\log D(\bx)+\bbE_{p(\bz)}\log(1-D(\bG(\bz)))}_{V(G,D)}\Bigr]
-$$
-
-achieves its global optimum when $\pd(\bx)=\pt(\bx)$, and $D^*(\bx)=0.5$.
-
-</div>
-
-<div class="block" v-click="1">
-
-## Proof (Fixed $G$)
-
-$$ {1|1-2} {at:2}
-\begin{aligned}
-V(G,D)&=\bbE_{\pd(\bx)}\log D(\bx)+\bbE_{\pt(\bx)}\log(1-D(\bx))\\
-&=\int\underbrace{\left[\pd(\bx)\log D(\bx)+\pt(\bx)\log(1-D(\bx))\right]}_{y(D)}d\bx
-\end{aligned}
-$$
-<div v-click="3">
-
-$$
-\frac{dy(D)}{dD}=\frac{\pd(\bx)}{D(\bx)}-\frac{\pt(\bx)}{1-D(\bx)}=0\quad\Rightarrow\quad D^*(\bx)=\frac{\pd(\bx)}{\pd(\bx)+\pt(\bx)}
-$$
-
-</div>
-
-</div>
-
-
-
-<div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
-
----
-clicks: 0
-sourceFrame: "extension: imported: 5:11"
-class: interactive-slide
----
-
-<script setup>
-import OptimalDiscriminatorDemo from './components/OptimalDiscriminatorDemo.vue'
-</script>
-
-# The Optimal Discriminator Responds to the Densities
-
-$$
-D^*(x)=\frac{\pd(x)}{\pd(x)+\pt(x)},\qquad\pd(x)=\cN(0,1),\quad\pt(x)=\cN(\mu,1).
-$$
-
-<OptimalDiscriminatorDemo />
-
-<div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
-
-<!-- This is the optimal discriminator for each chosen generator density, not a simulation of alternating GAN training. Move the generator mean towards zero. Where data has more density, D* is above one half; matching both densities gives D*=1/2 everywhere. -->
-
----
-clicks: 4
-sourceFrame: "imported: 5:12"
-class: theorems
----
-
-# GAN Optimality
-
-<div class="block">
-
-## Proof Continued (Fixed $D=D^*$)
-
-$$ {1|1-2|1-3} {at:1}
-\begin{aligned}
-V(G,D^*)&=\bbE_{\pd(\bx)}\log\left(\frac{\pd(\bx)}{\pd(\bx)+\pt(\bx)}\right)+\bbE_{\pt(\bx)}\log\left(\frac{\pt(\bx)}{\pd(\bx)+\pt(\bx)}\right)\\
-&=\KL\left(\pd(\bx)\,\|\,\frac{\pd(\bx)+\pt(\bx)}2\right)+\KL\left(\pt(\bx)\,\|\,\frac{\pd(\bx)+\pt(\bx)}2\right)-2\log2\\
-&=2\,\JSD(\pd(\bx)\,\|\,\pt(\bx))-2\log2.
-\end{aligned}
-$$
-
-</div>
-
-<div class="block" v-click="3">
-
-## Jensen-Shannon Divergence (Symmetric KL Divergence)
-
-$$
-\JSD(\pd(\bx)\|\pt(\bx))=\frac12\left[\KL\left(\pd(\bx)\,\|\,{\color{teal}\frac{\pd(\bx)+\pt(\bx)}{2}}\right)+\KL\left(\pt(\bx)\,\|\,{\color{teal}\frac{\pd(\bx)+\pt(\bx)}{2}}\right)\right]
-$$
-
-</div>
-
-<div v-click="4">
-
-This can be regarded as a proper distance metric!
-
-$$
-V(G^*,D^*)=-2\log2,\quad\pd(\bx)=\pt(\bx),\quad D^*(\bx)=0.5.
-$$
-
-</div>
-
-
-
-<div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
-
----
-clicks: 1
-sourceFrame: "imported: 5:13"
-class: theorems
----
-
-# GAN Optimality
-
-<div class="block">
-
-## Theorem
-
-The following minimax game
-
-$$
-\min_G\max_D\Bigl[\bbE_{\pd(\bx)}\log D(\bx)+\bbE_{p(\bz)}\log(1-D(\bG(\bz)))\Bigr]
-$$
-
-achieves its global optimum precisely when $\pd(\bx)=\pt(\bx)$, and $D^*(\bx)=0.5$.
-
-</div>
-
-<div class="block">
-
-## Expectations
-
-If the generator can express **any** function and the discriminator is **optimal** at every step, the generator **will converge** to the target distribution.
-
-</div>
-
-<div class="block" v-click="1">
-
-## Reality
-
-- Generator updates are performed in parameter space, and the discriminator is often imperfectly optimized.
-- Generator and discriminator losses typically oscillate during GAN training.
-
-</div>
-
-
-
-<div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
-
----
-clicks: 2
-sourceFrame: "imported: 5:14"
-class: theorems
----
-
-# GAN Training
-
-Assume both generator and discriminator are parametric models: $D_{\bphi}(\bx)$ and $\bG_{\btheta}(\bz)$.
-<div class="block">
-
-## Objective
-
-$$
-\min_{\btheta}\max_{\bphi}\left[\bbE_{\pd(\bx)}\log D_{\bphi}(\bx)+\bbE_{p(\bz)}\log(1-D_{\bphi}(\bG_{\btheta}(\bz)))\right]
-$$
-
-</div>
-
-<img src="/figs/gan_1.png" alt="gan 1" style="width: 100%; height: 230px; object-fit: contain; margin: 0 auto;" v-click="1" />
-
-<div v-click="2">
-
-- $\bz\sim p(\bz)$ is a latent variable.
-- $\pt(\bx|\bz)=\delta(\bx-\bG_{\btheta}(\bz))$ serves as a deterministic decoder (<span style="color: gray">like normalizing flows</span>).
-- There is no encoder present.
-
-</div>
-
-
-
-<div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
-
----
 clicks: 0
 sourceFrame: "30"
 class: summary
@@ -1614,7 +1391,7 @@ Likelihood is not always a suitable metric for evaluating generative models; lik
 </li>
 <li>
 
-GANs optimize the Jensen-Shannon divergence in theory; training alternates generator and discriminator updates to match the data distribution.
+GANs formulate distribution matching as a minimax game between a generator and a discriminator.
 
 </li>
 </ul>

@@ -139,7 +139,9 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
   `variational-autoencoder`, `generative-adversarial-network`, `score-matching`,
   `denoising-diffusion`, `continuous-normalizing-flow`, `sde-based-diffusion`,
   `flow-matching`, `discrete-diffusion` или `absorbing-diffusion`.
-- `lectureN/components/` и `lectureN/lib/` — демонстрации этой лекции.
+- `lectureN/components/` и `lectureN/lib/` — компоненты и расчёты демонстраций.
+  После переноса разделов Lecture 5 импортирует discriminator из `lecture4/components/`,
+  а Lecture 6 — Langevin из `lecture5/components/`; исходники демо сохраняются в этих папках.
 - `lectureN/slide-map.json` и `migration.md` — карта и журнал переноса.
 - `tools/` — общие команды, тесты и проверка PDF.
 - `deferred/kl/` — сохранённый оригинал KL-демо; его копия используется в Lecture 5.
@@ -231,10 +233,8 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
   lookup общего codebook → тензор для декодера.
 - Слайд 26: путь forward и копирование градиента в straight-through estimator
   раскрываются штатными кликами вместе с существующим выводом.
-- Слайд 38: Gaussian data/model densities и точный оптимальный discriminator;
-  ползунок среднего generator, Separated / Overlap / Matched и Reset.
 
-PDF содержит сравнения prior и discriminator; схема quantization сохраняет
+PDF Lecture 4 содержит сравнение prior; схема quantization сохраняет
 облако, старую позицию перезапущенного кода и число использованных кодов до/после. Состояние
 управления сохраняется при возврате на слайд. Управлять в выводимом на экран
 окне; синхронизация компонентов между presenter/viewer не реализована.
@@ -243,44 +243,52 @@ PDF содержит сравнения prior и discriminator; схема quant
 
 Численные проверки: `node --test tools/test-latent-demos.mjs` (также входят
 в `npm run test:demos` и `finalize`). Браузерные сценарии:
-`node tools/inspect-latent-demos.mjs` при работающей Lecture 4.
+`node tools/inspect-latent-demos.mjs` при работающих Lectures 4 и 5 (discriminator).
+По умолчанию используются порты 3034 и 3035; для других адресов задать
+`SLIDEV_QA_URL` (Lecture 4) и `SLIDEV_QA_GAN_URL` (Lecture 5).
 Проверенные сценарии и ограничения: [журнал Lecture 4](lecture4/migration.md).
 
 ## Интерактивная Lecture 5
 
-- Слайд 13: одна Gaussian-модель для смеси двух Gaussians — ползунки Mean / Std. deviation,
+- Слайд 13: Gaussian data/model densities и точный оптимальный discriminator;
+  ползунок среднего generator, Separated / Overlap / Matched и Reset.
+
+- Слайд 19: одна Gaussian-модель для смеси двух Gaussians — ползунки Mean / Std. deviation,
   Fit forward KL, Fit reverse KL: left / right, Reset.
-- Демо продолжает исходное сравнение Jensen–Shannon и KL на слайде 12;
+- Демо продолжает исходное сравнение Jensen–Shannon и KL на слайде 18;
   на нём оставлены определения и пояснение averaging distributions, без статичных fits.
   Reverse-KL fitting не отождествляется с GAN training.
-- Слайд 20: компактная интерактивная схема на месте исходной картинки рядом с постановкой —
+- Слайд 26: компактная интерактивная схема на месте исходной картинки рядом с постановкой —
   ползунок θ, Match (точный нуль), Reset (θ = 1.5). Исходные вычисления KL/JSD/Wasserstein
   и четыре раскрытия сохранены; отдельного продолжения нет. PDF показывает θ = 1.5,
   а случаи θ = 0 и θ ≠ 0 остаются в формулах.
-- Слайд 37: по отзыву автора восстановлена исходная статичная k-NN-картинка;
+- Слайд 43: по отзыву автора восстановлена исходная статичная k-NN-картинка;
   она раскрывается прежним третьим кликом. Отдельного PR-компонента нет.
-- Слайд 47: принятая Langevin dynamics — Noise off / Noise on, Run / Pause, Step, Reset.
-  Точный score двумерной Gaussian mixture, 192 частицы, фиксированный шаг η = 0.04
-  и воспроизводимый шум. Смена режима начинает с тех же частиц; уход со слайда
-  ставит симуляцию на паузу. Лимит — 600 шагов; PDF сравнивает режимы после 300.
 - В PDF показаны оба подготовленных решения: forward KL и один симметричный минимум reverse KL.
   Состояние ползунков сохраняется при возврате на слайд; управлять демо в выводимом
   на экран окне, синхронизация с presenter/viewer не предполагается.
 
 Численные проверки KL и новых демо входят в `npm run test:demos` и `finalize`.
 Новые демо отдельно: `node --test tools/test-lecture5-demos.mjs`.
-Браузерные сценарии: `node tools/inspect-lecture5-demos.mjs` при работающей Lecture 5.
+Браузерные сценарии: `node tools/inspect-lecture5-demos.mjs` при работающих Lectures 5 и 6 (Langevin).
+По умолчанию используются порты 3035 и 3036; для других адресов задать
+`SLIDEV_QA_URL` (Lecture 5) и `SLIDEV_QA_LANGEVIN_URL` (Lecture 6).
 Проверенные сценарии управления и экспорта: [журнал Lecture 5](lecture5/migration.md).
 
 ## Интерактивная Lecture 6
 
-- Слайд 27: три равновероятные чистые точки и перемещаемое шумное наблюдение при σ = 1.
+- Слайд 15: принятая Langevin dynamics — Noise off / Noise on, Run / Pause, Step, Reset.
+  Точный score двумерной Gaussian mixture, 192 частицы, фиксированный шаг η = 0.04
+  и воспроизводимый шум. Смена режима начинает с тех же частиц; уход со слайда
+  ставит симуляцию на паузу. Лимит — 600 шагов; PDF сравнивает режимы после 300.
+
+- Слайд 29: три равновероятные чистые точки и перемещаемое шумное наблюдение при σ = 1.
   Клики показывают conditional scores, posterior weights, marginal score и posterior
   mean по Tweedie. Between modes / Near left / Near right, Reset; точку можно
   перетаскивать или двигать стрелками и Home после фокуса. Точные значения вычисляются
   аналитически; это иллюстрация, без обучения сети. При включённом пере перетаскивание
   отключено, график доступен для пометок, кнопки остаются доступны.
-- Слайд 38: прямая Gaussian diffusion для смеси двух одномерных Gaussians,
+- Слайд 40: прямая Gaussian diffusion для смеси двух одномерных Gaussians,
   постоянный β = 0.01. Ползунок t = 0…1000, четыре пресета и Reset. Слева исходная
   плотность, справа текущая маргинальная плотность и эталон N(0,1); отдельно показаны
   коэффициент сигнала и стандартное отклонение добавленного шума.

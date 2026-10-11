@@ -20,8 +20,7 @@ drawings:
 download: false
 info: false
 favicon: "data:,"
-omittedSourceFrames: [2, 10, 11, 12, 14]
-importedSourceFrames: {"6": [13, 14]}
+omittedSourceFrames: [2]
 clicks: 0
 sourceFrame: "1"
 class: cover
@@ -50,7 +49,7 @@ class: theorems
 ## Theorem
 
 $$
-\frac1n\sum_{i=1}^n\KL(q_{\bphi}(\bz|\bx_i)\,\|\,p(\bz))=\KL({\color{teal}\qagg(\bz)}\,\|\,p(\bz))+\bbI_q[\bx,\bz].
+\frac1n\sum_{i=1}^n\KL(q_{\bphi}(\bz|\bx_i)\,\|\,p(\bz))={\color{#8854c0}\KL(\qagg(\bz)\|p(\bz))}+{\color{teal}\bbI_q[\bx,\bz]}.
 $$
 
 </div>
@@ -64,7 +63,7 @@ $$
 \frac1n\sum_{i=1}^n\cL_{\bphi,\btheta}(\bx_i)
 &=\underbrace{\frac1n\sum_{i=1}^n\bbE_{q_{\bphi}(\bz|\bx_i)}\log\pt(\bx_i|\bz)}_{\text{Reconstruction Loss}}\\
 &\quad-\underbrace{\bbI_q[\bx,\bz]}_{\text{Mutual Information}}
--\underbrace{\KL({\color{teal}\qagg(\bz)}\,\|\,{\color{#8854c0}p(\bz)})}_{\text{Marginal KL}}.
+-\underbrace{\KL(\qagg(\bz)\|{\color{teal}p(\bz)})}_{\text{Marginal KL}}.
 \end{aligned}
 $$
 
@@ -96,7 +95,8 @@ class: theorems
 
 - **Prior mismatch:** The unimodal encoder $q_{\bphi}(\bz|\bx)$ yields $\qagg(\bz)$ that often does not match the Gaussian prior $p(\bz)$.
 - **Blurriness from averaging:** With a fixed encoder, prior and Gaussian decoder variance, ELBO maximization gives $\bmu^*(\bz)=\bbE_{q_{\bphi}(\bx|\bz)}[\bx]$. If distinct inputs $\bx\neq\bx'$ map to *overlapping* latent regions, the decoder averages over unrelated data.
-<img src="/figs/agg_posterior.png" alt="agg posterior" style="width: 100%; height: 240px; object-fit: contain; margin: 0 auto;" />
+- **Fixed encoder and prior:** The conditional KL is constant in $\btheta$, not necessarily zero. At $p=\qagg$, only the marginal KL vanishes; the average conditional KL equals $\bbI_q[\bx,\bz]$.
+<img src="/figs/agg_posterior.png" alt="agg posterior" style="width: 100%; height: 180px; object-fit: contain; margin: 0 auto;" />
 
 
 
@@ -114,11 +114,7 @@ class: theorems
 
 ## Assumptions
 
-- Let $c\sim\Cat(\bpi)$, where
-
-$$
-\bpi=(\pi_1,\dots,\pi_K),\quad\pi_k=P(c=k),\quad\sum_{k=1}^K\pi_k=1.
-$$
+- Let $c\sim\Cat(\bpi)$, where $\pi_k=P(c=k)$ and $\sum_{k=1}^K\pi_k=1$.
 
 - For tokenizer training, fix $p(c)=\Uniform\{1,\dots,K\}$.
 
@@ -152,9 +148,9 @@ $$
 
 </div>
 
+**Codebook collapse:** Only a small subset of entries is used across the data; restart an unused code at an encoder output.
 
-
-<div class="source"><a href="https://arxiv.org/abs/1711.00937">Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017</a></div>
+<div class="source"><a href="https://arxiv.org/abs/1711.00937">Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017</a><br><a href="https://arxiv.org/abs/2004.02088">Zhao Y. et al. Feature Quantization Improves GAN Training, 2020</a> · <a href="https://arxiv.org/abs/2309.15505">Mentzer F. et al. Finite Scalar Quantization, 2023</a></div>
 
 ---
 clicks: 0
@@ -202,6 +198,97 @@ $$
 The independent uniform prior is used during tokenizer training. Then fix the tokenizer and decoder, and fit an autoregressive prior $p_{\bpsi}(\bc)$ to the aggregated posterior $\qagg(\bc)$.
 
 
+
+<div class="source"><a href="https://arxiv.org/abs/1711.00937">Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 6"
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+<div class="columns" style="grid-template-columns: 1.9fr 1fr; gap: 30px">
+<div class="block" style="margin: 0">
+
+## Training
+
+**Stage 1: tokenizer.**
+
+<ol style="margin: 0">
+<li>
+
+Sample $\bx\sim\pd(\bx)$.
+
+</li>
+<li>
+
+Compute encoder outputs $\bz_{e,m}=\NN_{e,\bphi}(\bx)_m$.
+
+</li>
+<li>
+
+Compute the quantized representation at each location:
+
+$$
+c_m=\argmin_k\|\bz_{e,m}-\be_k\|_2,\quad\bz_{q,m}=\be_{c_m}.
+$$
+
+</li>
+<li>
+
+Compute the ELBO with the uniform training prior:
+
+$$
+\cL_{\bphi,\btheta}(\bx)=\log\pt(\bx|\bz_q)-M\log K.
+$$
+
+</li>
+<li>
+
+Compute the loss with codebook and commitment terms:
+
+$$
+\begin{aligned}
+\cL&=-\cL_{\bphi,\btheta}(\bx)+\sum\nolimits_{m=1}^M\big\|\sg[\bz_{e,m}]-\be_{c_m}\big\|_2^2\\
+&\quad+\beta\sum\nolimits_{m=1}^M\big\|\bz_{e,m}-\sg[\be_{c_m}]\big\|_2^2.
+\end{aligned}
+$$
+
+</li>
+<li>
+
+Update $\bphi$, $\btheta$ and $\{\be_k\}$ (straight-through for $\bphi$).
+
+</li>
+</ol>
+</div>
+<div class="block" style="margin: 0">
+
+## Sampling
+
+After **Stage 2: prior training**, fix all parameters.
+
+<ol>
+<li>
+
+Sample the code map $\bc\sim p_{\bpsi}(\bc)$ autoregressively.
+
+</li>
+<li>
+
+Compute $\bz_{q,m}=\be_{c_m}$ at each location.
+
+</li>
+<li>
+
+Sample $\bx\sim\pt(\bx|\bz_q)$.
+
+</li>
+</ol>
+</div>
+</div>
 
 <div class="source"><a href="https://arxiv.org/abs/1711.00937">Oord A., Vinyals O., Kavukcuoglu K. Neural Discrete Representation Learning, 2017</a></div>
 
@@ -293,12 +380,166 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
 
 ---
+clicks: 0
+sourceFrame: "9"
+---
+
+# Outline
+
+<div class="course-outline" style="margin-top: 24px;">
+<div class="outline-item"><span>01</span><div>Generative Adversarial Networks (GAN)</div></div>
+<div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
+<div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
+<div class="outline-item"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · CLIP Score · Human Eval</div></div></div>
+
+</div>
+
+---
+clicks: 0
+sourceFrame: "auto: Generative Adversarial Networks (GAN)"
+---
+
+# Outline
+
+<div class="course-outline" style="margin-top: 24px;">
+<div class="outline-item current"><span>01</span><div>Generative Adversarial Networks (GAN)</div></div>
+<div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
+<div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
+<div class="outline-item"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · CLIP Score · Human Eval</div></div></div>
+
+</div>
+
+---
+clicks: 0
+sourceFrame: "10"
+class: figure-slide
+---
+
+# Generative Models Taxonomy
+
+<TaxonomyDiagram generative-adversarial-network class="taxonomy" />
+
+---
+clicks: 3
+sourceFrame: "11"
+class: theorems
+---
+
+# GAN Optimality
+
+<div class="block">
+
+## Theorem
+
+The minimax game
+
+$$
+\min_G\max_D\Bigl[\underbrace{\bbE_{\pd(\bx)}\log D(\bx)+\bbE_{p(\bz)}\log(1-D(\bG(\bz)))}_{V(G,D)}\Bigr]
+$$
+
+achieves its global optimum when $\pd(\bx)=\pt(\bx)$, and $D^*(\bx)=0.5$.
+
+</div>
+
+<div class="block" v-click="1">
+
+## Proof (Fixed $G$)
+
+$$ {1|1-2} {at:2}
+\begin{aligned}
+V(G,D)&=\bbE_{\pd(\bx)}\log D(\bx)+\bbE_{\pt(\bx)}\log(1-D(\bx))\\
+&=\int\underbrace{\left[\pd(\bx)\log D(\bx)+\pt(\bx)\log(1-D(\bx))\right]}_{y(D)}d\bx
+\end{aligned}
+$$
+<div v-click="3">
+
+$$
+\frac{dy(D)}{dD}=\frac{\pd(\bx)}{D(\bx)}-\frac{\pt(\bx)}{1-D(\bx)}=0\quad\Rightarrow\quad D^*(\bx)=\frac{\pd(\bx)}{\pd(\bx)+\pt(\bx)}
+$$
+
+</div>
+
+</div>
+
+
+
+<div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
+
+---
+clicks: 0
+sourceFrame: "extension: 11"
+class: interactive-slide
+---
+
+<script setup>
+import OptimalDiscriminatorDemo from '../lecture4/components/OptimalDiscriminatorDemo.vue'
+</script>
+
+# The Optimal Discriminator Responds to the Densities
+
+$$
+D^*(x)=\frac{\pd(x)}{\pd(x)+\pt(x)},\qquad\pd(x)=\cN(0,1),\quad\pt(x)=\cN(\mu,1).
+$$
+
+<OptimalDiscriminatorDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
+
+<!-- This is the optimal discriminator for each chosen generator density, not a simulation of alternating GAN training. Move the generator mean towards zero. Where data has more density, D* is above one half; matching both densities gives D*=1/2 everywhere. -->
+
+---
+clicks: 4
+sourceFrame: "12"
+class: theorems
+---
+
+# GAN Optimality
+
+<div class="block">
+
+## Proof Continued (Fixed $D=D^*$)
+
+$$ {1|1-2|1-3} {at:1}
+\begin{aligned}
+V(G,D^*)&=\bbE_{\pd(\bx)}\log\left(\frac{\pd(\bx)}{\pd(\bx)+\pt(\bx)}\right)+\bbE_{\pt(\bx)}\log\left(\frac{\pt(\bx)}{\pd(\bx)+\pt(\bx)}\right)\\
+&=\KL\left(\pd(\bx)\,\|\,\frac{\pd(\bx)+\pt(\bx)}2\right)+\KL\left(\pt(\bx)\,\|\,\frac{\pd(\bx)+\pt(\bx)}2\right)-2\log2\\
+&=2\,\JSD(\pd(\bx)\,\|\,\pt(\bx))-2\log2.
+\end{aligned}
+$$
+
+</div>
+
+<div class="block" v-click="3">
+
+## Jensen-Shannon Divergence (Symmetric KL Divergence)
+
+$$
+\JSD(\pd(\bx)\|\pt(\bx))=\frac12\left[\KL\left(\pd(\bx)\,\|\,{\color{teal}\frac{\pd(\bx)+\pt(\bx)}{2}}\right)+\KL\left(\pt(\bx)\,\|\,{\color{teal}\frac{\pd(\bx)+\pt(\bx)}{2}}\right)\right]
+$$
+
+</div>
+
+<div v-click="4">
+
+This can be regarded as a proper distance metric!
+
+$$
+V(G^*,D^*)=-2\log2,\quad\pd(\bx)=\pt(\bx),\quad D^*(\bx)=0.5.
+$$
+
+</div>
+
+
+
+<div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
+
+---
 clicks: 1
 sourceFrame: "13"
 class: theorems
 ---
 
-# Recap of Previous Lecture
+# GAN Optimality
 
 <div class="block">
 
@@ -336,36 +577,37 @@ If the generator can express **any** function and the discriminator is **optimal
 <div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
 
 ---
-clicks: 0
-sourceFrame: "9"
+clicks: 2
+sourceFrame: "14"
+class: theorems
 ---
 
-# Outline
+# GAN Training
 
-<div class="course-outline" style="margin-top: 24px;">
-<div class="outline-item"><span>01</span><div>Generative Adversarial Networks (GAN)</div></div>
-<div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
-<div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
-<div class="outline-item"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · CLIP Score · Human Eval</div></div></div>
-<div class="outline-item"><span>05</span><div>Langevin Dynamics</div></div>
+Assume both generator and discriminator are parametric models: $D_{\bphi}(\bx)$ and $\bG_{\btheta}(\bz)$.
+<div class="block">
+
+## Objective
+
+$$
+\min_{\btheta}\max_{\bphi}\left[\bbE_{\pd(\bx)}\log D_{\bphi}(\bx)+\bbE_{p(\bz)}\log(1-D_{\bphi}(\bG_{\btheta}(\bz)))\right]
+$$
 
 </div>
 
----
-clicks: 0
-sourceFrame: "auto: Generative Adversarial Networks (GAN)"
----
+<img src="/figs/gan_1.png" alt="gan 1" style="width: 100%; height: 230px; object-fit: contain; margin: 0 auto;" v-click="1" />
 
-# Outline
+<div v-click="2">
 
-<div class="course-outline" style="margin-top: 24px;">
-<div class="outline-item current"><span>01</span><div>Generative Adversarial Networks (GAN)</div></div>
-<div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
-<div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
-<div class="outline-item"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · CLIP Score · Human Eval</div></div></div>
-<div class="outline-item"><span>05</span><div>Langevin Dynamics</div></div>
+- $\bz\sim p(\bz)$ is a latent variable.
+- $\pt(\bx|\bz)=\delta(\bx-\bG_{\btheta}(\bz))$ serves as a deterministic decoder (<span style="color: gray">like normalizing flows</span>).
+- There is no encoder present.
 
 </div>
+
+
+
+<div class="source"><a href="https://arxiv.org/abs/1406.2661">Goodfellow I. J. et al. Generative Adversarial Networks, 2014</a></div>
 
 ---
 clicks: 1
@@ -601,7 +843,6 @@ sourceFrame: "auto: Wasserstein Distance"
 <div class="outline-item current"><span>02</span><div>Wasserstein Distance</div></div>
 <div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
 <div class="outline-item"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · CLIP Score · Human Eval</div></div></div>
-<div class="outline-item"><span>05</span><div>Langevin Dynamics</div></div>
 
 </div>
 
@@ -837,7 +1078,6 @@ sourceFrame: "auto: Wasserstein GAN (WGAN)"
 <div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
 <div class="outline-item current"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
 <div class="outline-item"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · CLIP Score · Human Eval</div></div></div>
-<div class="outline-item"><span>05</span><div>Langevin Dynamics</div></div>
 
 </div>
 
@@ -934,7 +1174,7 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/1701.07875">Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017</a></div>
 
 ---
-clicks: 1
+clicks: 2
 sourceFrame: "24"
 class: theorems
 ---
@@ -966,6 +1206,10 @@ $$
 - The discriminator $D$ is replaced by function $f$: in WGAN, it is known as the **critic**, which is *not* a classifier.
 - *“Weight clipping is a clearly terrible way to enforce a Lipschitz constraint.”*
   - If $c$ is large, optimizing the critic is hard; if $c$ is small, gradients may vanish.
+
+</div>
+
+<div v-click="2">
 
 **Gradient penalty** encourages the critic’s input-gradient norm to stay close to 1 on interpolations between real and generated samples.
 
@@ -1020,7 +1264,6 @@ sourceFrame: "auto: Evaluation of Likelihood-Free Models"
 <div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
 <div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
 <div class="outline-item current"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · CLIP Score · Human Eval</div></div></div>
-<div class="outline-item"><span>05</span><div>Langevin Dynamics</div></div>
 
 </div>
 
@@ -1111,7 +1354,6 @@ sourceFrame: "auto: Frechet Inception Distance (FID)"
 <div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
 <div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
 <div class="outline-item current"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub"><b>Frechet Inception Distance (FID)</b> · Precision-Recall · CLIP Score · Human Eval</div></div></div>
-<div class="outline-item"><span>05</span><div>Langevin Dynamics</div></div>
 
 </div>
 
@@ -1326,7 +1568,6 @@ sourceFrame: "auto: Precision-Recall"
 <div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
 <div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
 <div class="outline-item current"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · <b>Precision-Recall</b> · CLIP Score · Human Eval</div></div></div>
-<div class="outline-item"><span>05</span><div>Langevin Dynamics</div></div>
 
 </div>
 
@@ -1439,7 +1680,6 @@ sourceFrame: "auto: CLIP Score"
 <div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
 <div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
 <div class="outline-item current"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · <b>CLIP Score</b> · Human Eval</div></div></div>
-<div class="outline-item"><span>05</span><div>Langevin Dynamics</div></div>
 
 </div>
 
@@ -1566,7 +1806,6 @@ sourceFrame: "auto: Human Eval"
 <div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
 <div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
 <div class="outline-item current"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · CLIP Score · <b>Human Eval</b></div></div></div>
-<div class="outline-item"><span>05</span><div>Langevin Dynamics</div></div>
 
 </div>
 
@@ -1605,124 +1844,15 @@ Historical source of the replaced Beamer illustration:
 
 ---
 clicks: 0
-sourceFrame: "auto: Langevin Dynamics"
----
-
-# Outline
-
-<div class="course-outline" style="margin-top: 24px;">
-<div class="outline-item"><span>01</span><div>Generative Adversarial Networks (GAN)</div></div>
-<div class="outline-item"><span>02</span><div>Wasserstein Distance</div></div>
-<div class="outline-item"><span>03</span><div>Wasserstein GAN (WGAN)</div></div>
-<div class="outline-item"><span>04</span><div>Evaluation of Likelihood-Free Models<div class="outline-sub">Frechet Inception Distance (FID) · Precision-Recall · CLIP Score · Human Eval</div></div></div>
-<div class="outline-item current"><span>05</span><div>Langevin Dynamics</div></div>
-
-</div>
-
----
-clicks: 2
-sourceFrame: "imported: 6:13"
-class: theorems
----
-
-# Energy-Based Models
-
-<div class="block">
-
-## Unnormalized Density
-
-$$
-\pt(\bx)=\frac{\hat p_{\btheta}(\bx)}{Z_{\btheta}},\qquad\text{where }Z_{\btheta}=\int\hat p_{\btheta}(\bx)d\bx
-$$
-
-- $\hat p_{\btheta}(\bx)$ can be any non-negative function.
-- If we reparameterize as $\hat p_{\btheta}(\bx)=\exp(-f_{\btheta}(\bx))$, we eliminate the non-negativity constraint.
-
-</div>
-<div class="block" v-click="1">
-
-## Log-Density Gradient
-
-The gradient of the normalized log-density equals that of the unnormalized log-density:
-
-$$
-\nabla_{\bx}\log\pt(\bx)=\nabla_{\bx}\log\hat p_{\btheta}(\bx)-\nabla_{\bx}\log Z_{\btheta}=\nabla_{\bx}\log\hat p_{\btheta}(\bx)
-$$
-
-</div>
-<div v-click="2">
-
-- Suppose we already have this density (normalized or not) $\pt(\bx)$.
-- How can we sample from the model?
-
-</div>
-
-<div class="source"><a href="https://yann.lecun.org/exdb/publis/pdf/lecun-06.pdf">LeCun Y. et al. A Tutorial on Energy-Based Learning, 2006</a></div>
-
----
-clicks: 1
-sourceFrame: "imported: 6:14"
-class: theorems
----
-
-# Langevin Dynamics
-
-<div class="block">
-
-## Theorem (Informal)
-
-Let $\bx_0$ be a random vector. Under mild regularity conditions, samples from the following dynamics will eventually follow $\pt(\bx)$ (for sufficiently small $\eta$ and large $l$):
-
-$$
-\bx_{l+1}=\bx_l+\frac\eta2\cdot\nabla_{\bx_l}\log\pt(\bx_l)+\sqrt\eta\cdot\bepsilon_l,\qquad\bepsilon_l\sim\cN(0,\bI).
-$$
-
-</div>
-<div class="columns balanced" v-click="1" style="grid-template-columns: 1.2fr 1fr;">
-<div>
-
-- What if $\bepsilon_l=\bzero$?
-- The density $\pt(\bx)$ is the **stationary** distribution of the Markov chain.
-- The gradient is taken with respect to $\bx$, not $\btheta$.
-- $\nabla_{\bx}\log\pt(\bx)$ defines a vector field.
-
-</div>
-<img src="/figs/langevin_dynamic.png" alt="Langevin trajectories move along the score vector field" style="height: 240px; width: 100%; object-fit: contain;" />
-</div>
-
-
-<div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The principles of diffusion models, 2025.</a></div>
-
----
-clicks: 0
-sourceFrame: "extension: imported: 6:14"
-class: interactive-slide
----
-
-# Langevin Dynamics: Why Add Noise?
-
-$$
-\pt(\bx)=\tfrac12\cN(\bmu_-,0.7^2\bI)+\tfrac12\cN(\bmu_+,0.7^2\bI),\qquad\bmu_\pm=(\pm1.5,0),\quad\eta=0.04.
-$$
-
-<LangevinDemo />
-
-<div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The Principles of Diffusion Models, 2025</a></div>
-
-<!-- Exact score of an equally weighted two-component isotropic Gaussian mixture; no learned network. Step uses x <- x + eta/2 * score(x) + sqrt(eta) * epsilon with independent standard normal noise in both coordinates, matching the preceding formula. Start with Noise off and run: particles approach the two density modes. Turn Noise on (same initial particles and seed), run, and compare the x_1 histogram against its exact marginal. This finite unadjusted Langevin simulation is approximate; fixed nonzero eta generally biases the invariant distribution, and finite time/particles create further error. Contours are exact density level sets; arrow lengths are compressed for readability but directions are those of the score. Particles are never clipped or reflected; counts outside the visible field/histogram are disclosed. PDF compares deterministic runs after 300 steps. Each run is capped at 600 steps. Run pauses when leaving the slide, while coordinates and RNG state persist. -->
-
----
-clicks: 0
 sourceFrame: "35"
 class: summary
 ---
 
 # Summary
 
-- GANs can suffer from mode collapse; KL and Jensen-Shannon measure mismatch differently.
+- With an optimal discriminator, the GAN minimax objective minimizes Jensen-Shannon divergence; alternating training can suffer from mode collapse.
 - Perceptual and adversarial losses train autoencoders; learned priors model their latents.
 - WGAN uses Kantorovich-Rubinstein duality to estimate a distance informative even for disjoint supports; weight clipping constrains the critic.
 - FID compares Gaussian approximations; CMMD compares distributions of CLIP features using a kernel.
 - Precision-recall measures the balance between sample quality and diversity.
 - Image–text similarity, human preference, and compositional correctness require different evaluation signals.
-- Langevin dynamics uses log-density gradients and Gaussian noise to sample from an unnormalized model.

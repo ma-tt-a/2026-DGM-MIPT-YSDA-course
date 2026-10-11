@@ -21,7 +21,6 @@ download: false
 info: false
 favicon: "data:,"
 omittedSourceFrames: [2]
-omittedSourceSections: ["Langevin Dynamics"]
 importedSourceFrames: {"7": [9, 10, 11, 12, 13, 14]}
 clicks: 0
 sourceFrame: "1"
@@ -360,12 +359,44 @@ Historical source of the replaced Beamer illustration:
 -->
 
 ---
+clicks: 0
+sourceFrame: "12"
+class:
+---
+
+# Outline
+
+<div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
+
+<div class="outline-item"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
+
+</div>
+
+---
+clicks: 0
+sourceFrame: "auto: Langevin Dynamics"
+class:
+---
+
+# Outline
+
+<div class="course-outline">
+<div class="outline-item current"><span>01</span><div>Langevin Dynamics</div></div>
+
+<div class="outline-item"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
+
+</div>
+
+---
 clicks: 2
 sourceFrame: "13"
 class: theorems
 ---
 
-# Recap of Previous Lecture
+# Energy-Based Models
 
 <div class="block">
 
@@ -405,7 +436,7 @@ sourceFrame: "14"
 class: theorems
 ---
 
-# Recap of Previous Lecture
+# Langevin Dynamics
 
 <div class="block">
 
@@ -435,18 +466,25 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "12"
-class:
+sourceFrame: "extension: 14"
+class: interactive-slide
 ---
 
-# Outline
+<script setup>
+import LangevinDemo from '../lecture5/components/LangevinDemo.vue'
+</script>
 
-<div class="course-outline">
+# Langevin Dynamics: Why Add Noise?
 
-<div class="outline-item"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
+$$
+\pt(\bx)=\tfrac12\cN(\bmu_-,0.7^2\bI)+\tfrac12\cN(\bmu_+,0.7^2\bI),\qquad\bmu_\pm=(\pm1.5,0),\quad\eta=0.04.
+$$
 
-</div>
+<LangevinDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The Principles of Diffusion Models, 2025</a></div>
+
+<!-- Exact score of an equally weighted two-component isotropic Gaussian mixture; no learned network. Step uses x <- x + eta/2 * score(x) + sqrt(eta) * epsilon with independent standard normal noise in both coordinates, matching the preceding formula. Start with Noise off and run: particles approach the two density modes. Turn Noise on (same initial particles and seed), run, and compare the x_1 histogram against its exact marginal. This finite unadjusted Langevin simulation is approximate; fixed nonzero eta generally biases the invariant distribution, and finite time/particles create further error. Contours are exact density level sets; arrow lengths are compressed for readability but directions are those of the score. Particles are never clipped or reflected; counts outside the visible field/histogram are disclosed. PDF compares deterministic runs after 300 steps. Each run is capped at 600 steps. Run pauses when leaving the slide, while coordinates and RNG state persist. -->
 
 ---
 clicks: 0
@@ -457,9 +495,10 @@ class:
 # Outline
 
 <div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item current"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
@@ -582,9 +621,10 @@ class:
 # Outline
 
 <div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item current"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
@@ -1020,9 +1060,10 @@ class:
 # Outline
 
 <div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item current"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
@@ -1160,9 +1201,10 @@ sourceFrame: "auto: Forward Gaussian Diffusion Process"
 # Outline
 
 <div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item current"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item current"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
@@ -1424,6 +1466,8 @@ class: summary
 ---
 
 # Summary
+
+- Langevin dynamics combines log-density gradients and Gaussian noise to sample approximately from an unnormalized model.
 
 - Score matching minimizes Fisher divergence to estimate the score function.
 - Denoising score matching makes the score objective estimable using corrupted samples and the known corruption kernel.
