@@ -2,9 +2,9 @@ import { chromium } from 'playwright-chromium'
 import { resolve } from 'node:path'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
-import { root, lecturePaths } from './course.mjs'
+import { root, lecturePaths, readSlides } from './course.mjs'
 const lecture = lecturePaths('8'), base = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
-const map = JSON.parse(readFileSync(lecture.map, 'utf8')), qa = resolve(root, 'output/qa/lecture8/guidance-demos')
+const map = readSlides(lecture), qa = resolve(root, 'output/qa/lecture8/guidance-demos')
 mkdirSync(qa, { recursive: true })
 const browser = await chromium.launch({ executablePath: process.env.SLIDEV_BROWSER_PATH || '/Applications/Yandex.app/Contents/MacOS/Yandex', headless: true })
 const context = await browser.newContext({ viewport: { width: 1280, height: 720 } }), page = await context.newPage()
@@ -16,7 +16,7 @@ await context.route('**/*', route => {
   if (['http:', 'https:'].includes(u.protocol) && u.origin !== new URL(base).origin) { external.push(u.href); return route.abort() }
   return route.continue()
 })
-const slide = frame => map.find(s => s.frame === frame)
+const slide = frame => map.find(s => s.id === frame)
 const data = demo => demo.evaluate(e => ({ ...e.dataset }))
 async function go(s, tools = false) {
   await page.goto(`${base}/${s.slide}?clicks=${s.clicks}${tools ? '&tools' : ''}`, { waitUntil: 'networkidle' })
@@ -47,7 +47,7 @@ async function reentry(demo, s) {
   await demo.waitFor({ state: 'visible' }); assert.deepEqual(await data(demo), before)
 }
 try {
-  const geometry = slide('extension: 28'), density = slide('extension: 30'), cfg = slide('extension: 33')
+  const geometry = slide('classifier-guidance-which-way-does-it-push'), density = slide('guidance-scale-changes-the-density'), cfg = slide('cfg-interpolation-and-extrapolation')
   let demo = await go(geometry), slider = demo.getByRole('slider')
   const purpleEndpoints = () => demo.locator('[data-score-arrow="unconditional"]').evaluate(e => ['x1','y1','x2','y2'].map(a => e.getAttribute(a)))
   const fixedUnconditional = await purpleEndpoints()

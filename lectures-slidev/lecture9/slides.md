@@ -21,7 +21,7 @@ download: false
 info: false
 favicon: "data:,"
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -37,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -73,7 +73,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -100,7 +100,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 3"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -126,7 +126,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -160,7 +160,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -199,8 +199,8 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
 ---
-clicks: 2
-sourceFrame: "6"
+clicks: 0
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -213,19 +213,19 @@ class: theorems
 <ul>
 <li>
 
-Different Markov chains:
+Gaussian perturbations:
 
 - DDPM: $\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon$;
 - NCSN: $\bx_t=\bx_0+\sigma_t\cdot\bepsilon$.
-- One can generalize to $q(\bx_t|\bx_0)=\cN(\alpha_t\cdot\bx_0,\sigma_t^2\,\bI)$.
+- Rescaling the DDPM state by $1/\sqrt{\bar{\alpha}_t}$ gives the NCSN noise form.
 
 </li>
-<li v-click="1">
+<li>
 
 The objectives coincide: ELBO $\equiv$ score-matching.
 
 </li>
-<li v-click="2">
+<li>
 
 The sampling procedures differ:
 
@@ -241,7 +241,44 @@ The sampling procedures differ:
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-7
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+<div class="block">
+
+## Sampling (DDIM)
+
+1. Sample $\bx_T\sim\cN(0,\bI)$; choose a grid $T=t_K>\cdots>t_0=0$.
+2. For $k=K,\ldots,1$, set $t=t_k$, $s=t_{k-1}$ and compute:
+
+$$
+\begin{aligned}
+\hat{\bepsilon}&=\bepsilon_{\btheta,t}(\bx_t)
+&&\text{predict noise},\\[8pt]
+\hat{\bx}_0&=\frac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\hat{\bepsilon}}{\sqrt{\bar{\alpha}_t}}
+&&\text{estimate clean data},\\[8pt]
+\bx_s&={\color{teal}\sqrt{\bar{\alpha}_s}}\,\hat{\bx}_0
++{\color{teal}\sqrt{1-\bar{\alpha}_s}}\,\hat{\bepsilon}
+&&\text{update state}.
+\end{aligned}
+$$
+
+3. Return $\bx_0$.
+
+</div>
+
+**Deterministic limit:** fresh transition noise is zero ($\sigma_{t\to s}=0$); randomness comes from $\bx_T$.
+
+**Fewer steps:** choose $K\ll T$; $K$ steps require $K$ network evaluations and no retraining.
+
+<div class="source"><a href="https://arxiv.org/abs/2010.02502">Song J., Meng C., Ermon S. Denoising Diffusion Implicit Models, 2021</a></div>
+
+---
+clicks: 0
+id: recap-of-previous-lecture-8
 class: theorems
 ---
 
@@ -284,7 +321,7 @@ Here, $p(\by|\bx_t)$ denotes a classifier operating on noisy samples (which must
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-9
 class: theorems
 ---
 
@@ -309,11 +346,21 @@ $$
 \hat p(\by|\bx_t)\propto p(\by|\bx_t)^\gamma.
 $$
 
-<div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a></div>
+Very large $\gamma$ can reduce diversity and introduce artifacts.
+
+<div class="block">
+
+## Guidance Interval
+
+Apply extra guidance only at intermediate noise levels. Outside the interval, $\gamma_t=1$: **conditioning remains**.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2105.05233">Dhariwal P., Nichol A. Diffusion Models Beat GANs on Image Synthesis, 2021</a><br><a href="https://arxiv.org/abs/2404.07724">Kynkäänniemi T. et al. Applying Guidance in a Limited Interval Improves Sample and Distribution Quality in Diffusion Models, 2024</a> · <a href="https://arxiv.org/abs/2410.02416">Sadat S. et al. Eliminating Oversaturation and Artifacts of High Guidance Scales in Diffusion Models, 2025</a></div>
 
 ---
 clicks: 0
-sourceFrame: "extension: 8"
+id: recap-of-previous-lecture-10
 class: theorems
 ---
 
@@ -344,7 +391,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: recap-of-previous-lecture-11
 class: theorems
 ---
 
@@ -368,7 +415,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 9"
+id: recap-of-previous-lecture-12
 class: theorems
 ---
 
@@ -395,11 +442,20 @@ $$
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2207.12598">Ho J., Salimans T. Classifier-Free Diffusion Guidance, 2022</a><br><a href="https://arxiv.org/abs/2506.02070">Holderrieth P., Erives E. An Introduction to Flow Matching and Diffusion Models, 2025</a></div>
+**Guidance distillation:** train a student to match the fixed teacher's guided prediction:
+
+$$
+\bs_{\bphi,t}(\bx_t,\by,\gamma)\approx
+(1-\gamma)\bs_{\btheta,t}(\bx_t,\varnothing)+\gamma\bs_{\btheta,t}(\bx_t,\by).
+$$
+
+Evaluate the student **once per step**; keep the sampler and step count.
+
+<div class="source"><a href="https://arxiv.org/abs/2207.12598">Ho J., Salimans T. Classifier-Free Diffusion Guidance, 2022</a><br><a href="https://arxiv.org/abs/2506.02070">Holderrieth P., Erives E. An Introduction to Flow Matching and Diffusion Models, 2025</a><br><a href="https://arxiv.org/abs/2210.03142">Meng C. et al. On Distillation of Guided Diffusion Models, 2023</a></div>
 
 ---
 clicks: 0
-sourceFrame: "10"
+id: outline
 ---
 
 # Outline
@@ -414,7 +470,8 @@ sourceFrame: "10"
 
 ---
 clicks: 0
-sourceFrame: "auto: Continuous-Time Normalizing Flows (CNF)"
+id: outline-2
+section: "Continuous-Time Normalizing Flows (CNF)"
 ---
 
 # Outline
@@ -429,7 +486,7 @@ sourceFrame: "auto: Continuous-Time Normalizing Flows (CNF)"
 
 ---
 clicks: 1
-sourceFrame: "11"
+id: discrete-time-normalizing-flows
 class: theorems
 ---
 
@@ -463,7 +520,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "12"
+id: towards-continuous-time-normalizing-flows
 class: theorems
 ---
 
@@ -503,7 +560,7 @@ If $\bv_{\btheta}$ has Lipschitz constant $L<1$ in $\bx$, the iteration is contr
 
 ---
 clicks: 2
-sourceFrame: "13"
+id: towards-continuous-time-normalizing-flows-2
 class: theorems
 ---
 
@@ -544,7 +601,7 @@ The **velocity field** $\bv_{\btheta}:\bbR^m\times[t_0,t_1]\rightarrow\bbR^m$ ne
 
 ---
 clicks: 2
-sourceFrame: "14"
+id: odes-flows-and-numerical-solutions
 class: theorems
 ---
 
@@ -589,7 +646,7 @@ A numerical solver approximates the flow by a sequence of **finite steps**.
 
 ---
 clicks: 1
-sourceFrame: "15"
+id: numerical-solution-of-odes-euler
 class: theorems
 ---
 
@@ -632,7 +689,7 @@ Euler drops the higher-order terms: the **local error is $\cO(h^2)$**.
 
 ---
 clicks: 0
-sourceFrame: "extension: 15"
+id: numerical-solution-of-odes-euler-and-heun
 class: interactive-slide
 ---
 
@@ -644,7 +701,7 @@ class: interactive-slide
 
 ---
 clicks: 1
-sourceFrame: "extension: 15"
+id: ode-solvers-accuracy-and-cost
 class: theorems
 ---
 
@@ -676,7 +733,7 @@ This is the **global error** after $N$ steps.
 
 ---
 clicks: 0
-sourceFrame: "16"
+id: generative-models-taxonomy
 class: figure-slide
 ---
 
@@ -686,7 +743,7 @@ class: figure-slide
 
 ---
 clicks: 2
-sourceFrame: "17"
+id: continuous-time-normalizing-flows-neural-ode
 class: theorems
 ---
 
@@ -724,7 +781,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "18"
+id: continuous-time-normalizing-flows-intuition
 class: theorems
 ---
 
@@ -752,7 +809,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "19"
+id: continuous-time-normalizing-flows-reversibility
 class: theorems
 ---
 
@@ -796,7 +853,8 @@ How can we compute $p_t(\bx)$ at arbitrary $t$?
 
 ---
 clicks: 0
-sourceFrame: "auto: Continuity Equation for CNF Log-Likelihood"
+id: outline-3
+section: "Continuity Equation for CNF Log-Likelihood"
 ---
 
 # Outline
@@ -811,7 +869,7 @@ sourceFrame: "auto: Continuity Equation for CNF Log-Likelihood"
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: continuous-time-nf
 class: theorems
 ---
 
@@ -863,7 +921,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 20"
+id: divergence-where-does-the-density-go
 class: interactive-slide
 ---
 
@@ -875,7 +933,7 @@ class: interactive-slide
 
 ---
 clicks: 2
-sourceFrame: "extension: 20"
+id: cnf-training-and-sampling
 class: theorems
 ---
 
@@ -938,7 +996,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: SDE Basics"
+id: outline-4
+section: "SDE Basics"
 ---
 
 # Outline
@@ -953,7 +1012,7 @@ sourceFrame: "auto: SDE Basics"
 
 ---
 clicks: 1
-sourceFrame: "21"
+id: stochastic-differential-equation-sde
 class: theorems
 ---
 
@@ -995,7 +1054,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "22"
+id: stochastic-differential-equation-sde-2
 class: theorems
 ---
 
@@ -1027,7 +1086,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "23"
+id: it-integration-basics
 class: theorems
 ---
 
@@ -1061,7 +1120,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "24"
+id: stochastic-differential-equation-sde-3
 class: theorems
 ---
 
@@ -1091,7 +1150,7 @@ If $\bff$ is continuously differentiable with a bounded derivative in $\bx$ and 
 
 ---
 clicks: 2
-sourceFrame: "25"
+id: stochastic-differential-equation-sde-4
 class: theorems
 ---
 
@@ -1132,7 +1191,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "26"
+id: stochastic-differential-equation-sde-5
 class: theorems
 ---
 
@@ -1178,7 +1237,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "27"
+id: stochastic-differential-equation-sde-6
 class: theorems
 ---
 
@@ -1220,7 +1279,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "28"
+id: langevin-sde-special-case
 class: theorems
 ---
 
@@ -1267,7 +1326,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "29"
+id: langevin-sde-special-case-2
 class: theorems
 ---
 
@@ -1313,7 +1372,7 @@ We (partially) explained, why Langevin dynamics is working.
 
 ---
 clicks: 0
-sourceFrame: "extension: 29"
+id: langevin-moving-particles-stationary-density
 class: interactive-slide
 ---
 
@@ -1325,7 +1384,7 @@ class: interactive-slide
 
 ---
 clicks: 0
-sourceFrame: "30"
+id: summary
 class: summary
 ---
 

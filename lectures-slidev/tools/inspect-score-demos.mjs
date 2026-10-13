@@ -3,14 +3,14 @@ import { resolve } from 'node:path'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import assert from 'node:assert/strict'
-import { lecturePaths, root } from './course.mjs'
+import { lecturePaths, root, readSlides } from './course.mjs'
 import { observationPresets, observationBounds, posteriorAt, diffusionAt, diffusionTimes } from '../lecture6/lib/score-demos.mjs'
 
 const lecture = lecturePaths('6')
 const base = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
-const map = JSON.parse(readFileSync(lecture.map, 'utf8'))
+const map = readSlides(lecture)
 const tweedie = map.find(s => s.title === 'From Conditional Scores to Denoising')
-const diffusion = map.find(s => s.frame === 'imported: 7:12')
+const diffusion = map.find(s => s.id === 'forward-gaussian-diffusion-process-3')
 const qa = resolve(root, 'output/qa/lecture6/score-demos')
 mkdirSync(qa, { recursive: true })
 const browser = await chromium.launch({ executablePath: process.env.SLIDEV_BROWSER_PATH || '/Applications/Yandex.app/Contents/MacOS/Yandex', headless: true })

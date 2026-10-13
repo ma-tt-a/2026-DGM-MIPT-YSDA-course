@@ -3,14 +3,14 @@ import { resolve } from 'node:path'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import assert from 'node:assert/strict'
-import { lecturePaths, root } from './course.mjs'
+import { lecturePaths, root, readSlides } from './course.mjs'
 import { elboPresets, elboTerms, logEvidence } from '../lecture3/lib/variational.mjs'
 
 const lecture = lecturePaths('3')
 const base = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
-const map = JSON.parse(readFileSync(lecture.map,'utf8'))
-const slide = frame => map.find(s=>s.frame===frame)
-const elboSlide=slide(12)
+const map = readSlides(lecture)
+const slide = frame => map.find(s=>s.id===frame)
+const elboSlide=slide('variational-evidence-lower-bound-elbo')
 const qa=resolve(root,'output/qa/lecture3/variational-demos')
 mkdirSync(qa,{recursive:true})
 const browser=await chromium.launch({executablePath:process.env.SLIDEV_BROWSER_PATH||'/Applications/Yandex.app/Contents/MacOS/Yandex',headless:true})

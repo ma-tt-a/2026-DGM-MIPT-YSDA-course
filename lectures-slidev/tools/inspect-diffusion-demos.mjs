@@ -2,9 +2,9 @@ import { chromium } from 'playwright-chromium'
 import { resolve } from 'node:path'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
-import { root, lecturePaths } from './course.mjs'
+import { root, lecturePaths, readSlides } from './course.mjs'
 const lecture=lecturePaths('7'), base=process.env.SLIDEV_QA_URL||`http://localhost:${lecture.port}`
-const map=JSON.parse(readFileSync(lecture.map,'utf8')), qa=resolve(root,'output/qa/lecture7/visual-demos')
+const map=readSlides(lecture), qa=resolve(root,'output/qa/lecture7/visual-demos')
 mkdirSync(qa,{recursive:true})
 const browser=await chromium.launch({executablePath:process.env.SLIDEV_BROWSER_PATH||'/Applications/Yandex.app/Contents/MacOS/Yandex',headless:true})
 const context=await browser.newContext({viewport:{width:1280,height:720}}), page=await context.newPage()
@@ -12,7 +12,7 @@ const errors=[],http=[],external=[],states=[]
 page.on('pageerror',e=>errors.push(String(e)))
 page.on('response',r=>{if(r.status()>=400)http.push([r.status(),r.url()])})
 await context.route('**/*',route=>{const u=new URL(route.request().url());if(['http:','https:'].includes(u.protocol)&&u.origin!==new URL(base).origin){external.push(u.href);return route.abort()}return route.continue()})
-const slide=frame=>map.find(s=>s.frame===frame)
+const slide=frame=>map.find(s=>s.id===frame)
 async function go(s,tools=false){await page.goto(`${base}/${s.slide}?clicks=${s.clicks}${tools?'&tools':''}`,{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);return page.locator('[data-demo]:visible')}
 async function snapshot(name){
   await page.mouse.move(1240,20)
@@ -34,7 +34,7 @@ async function reentry(demo,s){
   assert.deepEqual(await data(demo),before)
 }
 try{
-  const reverse=slide('extension: 18'),schedule=slide('extension: 19'),prediction=slide('extension: imported: 8:13')
+  const reverse=slide('what-does-knowing-the-clean-data-change'),schedule=slide('noise-schedule-through-signal-to-noise-ratio'),prediction=slide('one-prediction-three-parameterizations')
   let demo=await go(reverse);await snapshot('reverse-unknown')
   await demo.getByRole('button',{name:'Known x₀',exact:true}).click()
   for(const x of [-2,2]){await demo.getByRole('button',{name:`Use x₀ = ${x}`,exact:true}).click();await snapshot(`reverse-known-${x}`)}
@@ -81,7 +81,7 @@ try{
   await demo.getByRole('button',{name:'Reset',exact:true}).click()
   assert.equal((await data(demo)).output,'noise');near(+(await data(demo)).noise,.5)
 
-  for(const frame of [20,21,25]){const s=slide(frame);await go(s);await snapshot(`chain-${frame}`)}
+  for(const frame of ['gaussian-diffusion-model-as-vae','gaussian-diffusion-model-as-vae-2','elbo-for-gaussian-diffusion-model-4']){const s=slide(frame);await go(s);await snapshot(`chain-${frame}`)}
   for(const s of [reverse,schedule,prediction]){
     demo=await go(s,true)
     const pen=page.getByRole('navigation',{name:'Lecture annotation tools'}).getByRole('button',{name:'Pen',exact:true})

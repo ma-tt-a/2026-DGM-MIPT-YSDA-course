@@ -20,11 +20,8 @@ drawings:
 download: false
 info: false
 favicon: "data:,"
-omittedSourceFrames: [2]
-omittedSourceSections: ["Langevin Dynamics"]
-importedSourceFrames: {"7": [9, 10, 11, 12, 13, 14]}
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -40,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -56,6 +53,19 @@ $$
 
 </div>
 
+<div class="block">
+
+## Optimal Discriminator and Jensen-Shannon Divergence
+
+For fixed $G$, write the bracketed objective as $V(G,D)$:
+
+$$
+D^*(\bx)=\frac{\pd(\bx)}{\pd(\bx)+\pt(\bx)},\qquad
+V(G,D^*)=2\,\JSD(\pd(\bx)\,\|\,\pt(\bx))-2\log2.
+$$
+
+</div>
+
 <img src="/figs/gan_1.png" alt="GAN mode collapse during training" style="height: 160px; width: 100%; object-fit: contain;" />
 
 Mode collapse refers to the phenomenon where the generator in a GAN produces only one or a few different modes of the distribution.
@@ -65,7 +75,58 @@ Mode collapse refers to the phenomenon where the generator in a GAN produces onl
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-2
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+GAN losses also train the reconstruction stage of a **latent generative model**.
+
+<div class="block">
+
+## Stage 1: Train the Autoencoder
+
+A fixed pretrained network $F$ defines the perceptual loss for reconstruction $\hat{\bx}$:
+
+$$
+\cL_{\text{perc}}=\|F(\bx)-F(\hat{\bx})\|_2^2.
+$$
+
+Train a discriminator $D$ to separate real and reconstructed image patches; train the autoencoder to fool $D$.
+
+A KL-autoencoder also uses weak KL regularization.
+
+</div>
+<div class="block">
+
+## Stage 2: Freeze the Autoencoder and Learn a Prior
+
+Fit the distribution of its latent codes — the **aggregated posterior**.
+
+**VQGAN:** sample a code map $\bc$ from an AR prior, look up its embeddings $\bz_q(\bc)$, then decode.
+
+$$
+\bc\sim p_{\bpsi}(\bc)\;\longrightarrow\;\bz_q(\bc)\;\longrightarrow\;\hat{\bx}.
+$$
+
+**KL-autoencoder:** a diffusion prior over continuous latents.
+
+$$
+\bepsilon\sim\cN(\bzero,\bI)\;\longrightarrow\;\bz\sim p_{\bpsi}(\bz)\;\longrightarrow\;\hat{\bx}.
+$$
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2012.09841">Esser P., Rombach R., Ommer B. Taming Transformers for High-Resolution Image Synthesis, 2021</a><br><a href="https://arxiv.org/abs/2112.10752">Rombach R. et al. High-Resolution Image Synthesis with Latent Diffusion Models, 2022</a></div>
+
+<!--
+The preceding GAN objective now supplies the adversarial reconstruction criterion. Recall the two distinct stages: train perceptual/adversarial reconstruction, then freeze the representation and learn its code distribution for generation. VQGAN and the KL-autoencoder are examples, not an exhaustive taxonomy. The next recap returns to the limitations of the standard GAN objective and motivates Wasserstein distance. A separate slide is needed because the existing GAN/theoretical-results recaps concern distribution matching and collapse, not the two-stage latent construction; appending the full perceptual formula and both sampling chains would mix topics and crowd those slides. The feature loss is the same schematic expression as in the preceding body; F stays frozen while gradients pass through it, whereas D is trained. Diffusion is only a prior-family pointer, not a new algorithm here. Weak KL does not guarantee a Gaussian aggregated posterior.
+-->
+
+---
+clicks: 0
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -100,7 +161,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -129,8 +190,8 @@ $$
 <div class="source"><a href="https://udlbook.github.io/udlbook/">Simon J.D. Prince. Understanding Deep Learning, 2023</a><br><a href="https://arxiv.org/abs/1701.07875">Arjovsky M., Chintala S., Bottou L. Wasserstein GAN, 2017</a></div>
 
 ---
-clicks: 1
-sourceFrame: "6"
+clicks: 0
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -146,7 +207,7 @@ For a feedforward generator $\bG_{\btheta}$ with Lipschitz activations and $\bbE
 
 </div>
 
-<div v-click="1">
+<div>
 
 <div class="block">
 
@@ -178,7 +239,7 @@ The first implication also holds for $\KL(p_t\|\pi)\to0$; the converses need not
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -220,7 +281,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -260,7 +321,7 @@ Here $\bz,\bz'\sim P$ and $\bw,\bw'\sim Q$ are mutually independent. This compar
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: recap-of-previous-lecture-8
 class: theorems
 ---
 
@@ -288,7 +349,7 @@ Embed the samples using a pretrained network (as in FID).
 
 ---
 clicks: 0
-sourceFrame: "10"
+id: recap-of-previous-lecture-9
 class: theorems
 ---
 
@@ -328,7 +389,7 @@ A learned preference score can guide sample selection and model training — but
 
 ---
 clicks: 0
-sourceFrame: "11"
+id: recap-of-previous-lecture-10
 class: theorems
 ---
 
@@ -360,12 +421,45 @@ Historical source of the replaced Beamer illustration:
 -->
 
 ---
+clicks: 0
+id: outline
+class:
+---
+
+# Outline
+
+<div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
+
+<div class="outline-item"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
+
+</div>
+
+---
+clicks: 0
+id: outline-2
+section: "Langevin Dynamics"
+class:
+---
+
+# Outline
+
+<div class="course-outline">
+<div class="outline-item current"><span>01</span><div>Langevin Dynamics</div></div>
+
+<div class="outline-item"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
+
+</div>
+
+---
 clicks: 2
-sourceFrame: "13"
+id: energy-based-models
 class: theorems
 ---
 
-# Recap of Previous Lecture
+# Energy-Based Models
 
 <div class="block">
 
@@ -401,11 +495,11 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "14"
+id: langevin-dynamics
 class: theorems
 ---
 
-# Recap of Previous Lecture
+# Langevin Dynamics
 
 <div class="block">
 
@@ -435,37 +529,46 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "12"
+id: langevin-dynamics-why-add-noise
+class: interactive-slide
+---
+
+<script setup>
+import LangevinDemo from '../lecture5/components/LangevinDemo.vue'
+</script>
+
+# Langevin Dynamics: Why Add Noise?
+
+$$
+\pt(\bx)=\tfrac12\cN(\bmu_-,0.7^2\bI)+\tfrac12\cN(\bmu_+,0.7^2\bI),\qquad\bmu_\pm=(\pm1.5,0),\quad\eta=0.04.
+$$
+
+<LangevinDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The Principles of Diffusion Models, 2025</a></div>
+
+<!-- Exact score of an equally weighted two-component isotropic Gaussian mixture; no learned network. Step uses x <- x + eta/2 * score(x) + sqrt(eta) * epsilon with independent standard normal noise in both coordinates, matching the preceding formula. Start with Noise off and run: particles approach the two density modes. Turn Noise on (same initial particles and seed), run, and compare the x_1 histogram against its exact marginal. This finite unadjusted Langevin simulation is approximate; fixed nonzero eta generally biases the invariant distribution, and finite time/particles create further error. Contours are exact density level sets; arrow lengths are compressed for readability but directions are those of the score. Particles are never clipped or reflected; counts outside the visible field/histogram are disclosed. PDF compares deterministic runs after 300 steps. Each run is capped at 600 steps. Run pauses when leaving the slide, while coordinates and RNG state persist. -->
+
+---
+clicks: 0
+id: outline-3
+section: "Score Matching"
 class:
 ---
 
 # Outline
 
 <div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
-
-</div>
-
----
-clicks: 0
-sourceFrame: "auto: Score Matching"
-class:
----
-
-# Outline
-
-<div class="course-outline">
-
-<div class="outline-item current"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
 ---
 clicks: 0
-sourceFrame: "15"
+id: generative-models-taxonomy
 class: theorems
 ---
 
@@ -475,7 +578,7 @@ class: theorems
 
 ---
 clicks: 1
-sourceFrame: "16"
+id: score-function
 class: theorems
 ---
 
@@ -506,7 +609,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "17"
+id: score-matching
 class: theorems
 ---
 
@@ -537,7 +640,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "18"
+id: why-is-the-score-function-better-than-the-density
 class: theorems
 ---
 
@@ -575,22 +678,24 @@ Modeling the score is as expressive as modeling $p(\bx)$ itself, while often mor
 
 ---
 clicks: 0
-sourceFrame: "auto: Denoising Score Matching"
+id: outline-4
+section: "Denoising Score Matching"
 class:
 ---
 
 # Outline
 
 <div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item current"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
 ---
 clicks: 3
-sourceFrame: "19"
+id: denoising-score-matching
 class: theorems
 ---
 
@@ -635,7 +740,7 @@ satisfies $\bs_{\btheta,\sigma}(\bx_{\sigma})\approx\bs_{\btheta,0}(\bx_0)=\bs_{
 
 ---
 clicks: 3
-sourceFrame: "20"
+id: denoising-score-matching-2
 class: theorems
 ---
 
@@ -645,12 +750,12 @@ class: theorems
 
 ## Theorem
 
-Under mild regularity conditions, the following holds:
+Under mild regularity conditions, the last term is independent of $\btheta$:
 
 $$
 \begin{aligned}
 &\bbE_{q(\bx_{\sigma})}\big\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\big\|_2^2\\
-&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\big\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\big\|_2^2+\text{const}(\btheta)
+&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\big\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\big\|_2^2+\text{const}
 \end{aligned}
 $$
 
@@ -683,7 +788,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "21"
+id: denoising-score-matching-3
 class: theorems
 ---
 
@@ -735,7 +840,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "22"
+id: denoising-score-matching-4
 class: theorems
 ---
 
@@ -749,7 +854,7 @@ Under mild regularity conditions, the last term is independent of $\btheta$:
 
 $$
 \bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
-=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta).
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}.
 $$
 
 </div>
@@ -792,8 +897,7 @@ The score-norm term $C_1$ is independent of $\btheta$.
 
 ---
 clicks: 5
-sourceFrame: "23"
-mergedSourceFrames: [24]
+id: denoising-score-matching-5
 class: theorems
 ---
 
@@ -807,7 +911,7 @@ Under mild regularity conditions, the last term is independent of $\btheta$:
 
 $$
 \bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
-=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta).
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}.
 $$
 
 </div>
@@ -835,7 +939,7 @@ $$ {1|all} {at:5}
 \begin{gathered}
 \bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
 =\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left[\|\bs_{\btheta,\sigma}(\bx_{\sigma})\|_2^2-2\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right]+C_1\\
-=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}(\btheta).
+=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}.
 \end{gathered}
 $$
 
@@ -844,11 +948,11 @@ $$
 
 <div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
 
-<!-- Compact proof, part 2, incorporates source frame 24. The last mixed-term equality uses grad q = q grad log q and Fubini. const(theta) = C_1 - E_joint ||grad log q(x_sigma | x)||^2, independent of theta. The theorem remains visible on both slides. -->
+<!-- Compact proof, part 2, incorporates source frame 24. The last mixed-term equality uses grad q = q grad log q and Fubini. const = C_1 - E_joint ||grad log q(x_sigma | x)||^2, independent of theta. The theorem remains visible on both slides. -->
 
 ---
 clicks: 5
-sourceFrame: "25"
+id: denoising-score-matching-6
 class: theorems
 ---
 
@@ -896,7 +1000,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "extension: 25"
+id: tweedie-s-formula
 class: theorems
 ---
 
@@ -941,7 +1045,7 @@ Both conditional means are MSE-optimal predictions given the noisy observation.
 
 ---
 clicks: 3
-sourceFrame: "extension: 25"
+id: from-conditional-scores-to-denoising
 class: theorems interactive-slide
 ---
 
@@ -961,7 +1065,7 @@ Toy data: three equally likely clean points $\bx_i$, with $\bx_\sigma=\bx+\sigma
 
 ---
 clicks: 4
-sourceFrame: "26"
+id: denoising-score-matching-7
 class: theorems
 ---
 
@@ -1013,22 +1117,24 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Noise-Conditioned Score Network (NCSN)"
+id: outline-5
+section: "Noise-Conditioned Score Network (NCSN)"
 class:
 ---
 
 # Outline
 
 <div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item current"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
 ---
 clicks: 0
-sourceFrame: "27"
+id: denoising-score-matching-8
 class: theorems
 ---
 
@@ -1063,7 +1169,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "28"
+id: noise-conditioned-score-network-ncsn
 class: theorems
 ---
 
@@ -1087,7 +1193,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "29"
+id: noise-conditioned-score-network-ncsn-2
 class: theorems
 ---
 
@@ -1125,7 +1231,7 @@ How do we sample from such a model?
 
 ---
 clicks: 1
-sourceFrame: "30"
+id: noise-conditioned-score-network-ncsn-3
 class: theorems
 ---
 
@@ -1154,21 +1260,23 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "auto: Forward Gaussian Diffusion Process"
+id: outline-6
+section: "Forward Gaussian Diffusion Process"
 ---
 
 # Outline
 
 <div class="course-outline">
+<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item"><span>01</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item current"><span>02</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item current"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
 ---
 clicks: 0
-sourceFrame: "imported: 7:9"
+id: generative-models-taxonomy-2
 ---
 
 # Generative Models Taxonomy
@@ -1177,7 +1285,7 @@ sourceFrame: "imported: 7:9"
 
 ---
 clicks: 4
-sourceFrame: "imported: 7:10"
+id: forward-gaussian-diffusion-process
 class: theorems
 ---
 
@@ -1228,7 +1336,7 @@ $$
 
 ---
 clicks: 6
-sourceFrame: "imported: 7:11"
+id: forward-gaussian-diffusion-process-2
 class: theorems
 ---
 
@@ -1274,7 +1382,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "imported: 7:12"
+id: forward-gaussian-diffusion-process-3
 class: theorems interactive-slide
 ---
 
@@ -1299,7 +1407,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: imported: 7:12"
+id: forward-gaussian-diffusion-process-4
 class: theorems
 ---
 
@@ -1335,7 +1443,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "imported: 7:13"
+id: forward-gaussian-diffusion-process-5
 class: theorems
 ---
 
@@ -1364,7 +1472,7 @@ Our goal now becomes inverting this diffusion.
 
 ---
 clicks: 3
-sourceFrame: "imported: 7:14"
+id: denoising-score-matching-9
 class: theorems
 ---
 
@@ -1402,7 +1510,7 @@ $$
 $$
 \begin{aligned}
 &\bbE_{q(\bx_t)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t)\right\|_2^2\\
-&\quad=\bbE_{\pd(\bx)}\bbE_{q(\bx_t|\bx)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx)\right\|_2^2+\text{const}(\btheta)
+&\quad=\bbE_{\pd(\bx)}\bbE_{q(\bx_t|\bx)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx)\right\|_2^2+\text{const}
 \end{aligned}
 $$
 
@@ -1419,11 +1527,13 @@ NCSN with annealed Langevin dynamics is an early score-based generative framewor
 
 ---
 clicks: 0
-sourceFrame: "31"
+id: summary
 class: summary
 ---
 
 # Summary
+
+- Langevin dynamics combines log-density gradients and Gaussian noise to sample approximately from an unnormalized model.
 
 - Score matching minimizes Fisher divergence to estimate the score function.
 - Denoising score matching makes the score objective estimable using corrupted samples and the known corruption kernel.

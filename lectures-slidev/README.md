@@ -1,36 +1,29 @@
 # DGM course in Slidev
 
-Параллельная версия курса: Beamer-исходники и PDF остаются в `../lectures/`.
-Весь Slidev использует один набор зависимостей и общую локальную тему.
-Обязательные правила и порядок переноса: [MIGRATION.md](MIGRATION.md).
-
-Навыки проекта: [slidev-migrate](../.agents/skills/slidev-migrate/SKILL.md) для
-переноса, [lecture-audit](../.agents/skills/lecture-audit/SKILL.md) для полного аудита.
-Notation, Recap, Summary и README проверяются теми же проектными навыками в режиме
-Slidev. Общий навык PDF помогает просматривать экспорт; формулы и раскрытия
-проверяются также по исходникам и в браузере.
+Slidev — единственный рабочий формат лекций. Общие зависимости и тема находятся
+здесь, соглашения по содержанию и стилю — в [CLAUDE.md](../CLAUDE.md).
+Для проверок используются [проектные навыки](../.agents/skills/lecture-audit/SKILL.md).
 
 ## Лекции
 
-| Лекция | Исходник | PDF с раскрытиями | Раздатка | Перенос и проверки |
-|---|---|---|---|---|
-| 1 | [slides.md](lecture1/slides.md) | [Lecture1.pdf](lecture1/Lecture1.pdf) | [Lecture1-handout.pdf](lecture1/Lecture1-handout.pdf) | [migration.md](lecture1/migration.md) |
-| 2 | [slides.md](lecture2/slides.md) | [Lecture2.pdf](lecture2/Lecture2.pdf) | [Lecture2-handout.pdf](lecture2/Lecture2-handout.pdf) | [migration.md](lecture2/migration.md) |
-| 3 | [slides.md](lecture3/slides.md) | [Lecture3.pdf](lecture3/Lecture3.pdf) | [Lecture3-handout.pdf](lecture3/Lecture3-handout.pdf) | [migration.md](lecture3/migration.md) |
-| 4 | [slides.md](lecture4/slides.md) | [Lecture4.pdf](lecture4/Lecture4.pdf) | [Lecture4-handout.pdf](lecture4/Lecture4-handout.pdf) | [migration.md](lecture4/migration.md) |
-| 5 | [slides.md](lecture5/slides.md) | [Lecture5.pdf](lecture5/Lecture5.pdf) | [Lecture5-handout.pdf](lecture5/Lecture5-handout.pdf) | [migration.md](lecture5/migration.md) |
-| 6 | [slides.md](lecture6/slides.md) | [Lecture6.pdf](lecture6/Lecture6.pdf) | [Lecture6-handout.pdf](lecture6/Lecture6-handout.pdf) | [migration.md](lecture6/migration.md) |
-| 7 | [slides.md](lecture7/slides.md) | [Lecture7.pdf](lecture7/Lecture7.pdf) | [Lecture7-handout.pdf](lecture7/Lecture7-handout.pdf) | [migration.md](lecture7/migration.md) |
-| 8 | [slides.md](lecture8/slides.md) | [Lecture8.pdf](lecture8/Lecture8.pdf) | [Lecture8-handout.pdf](lecture8/Lecture8-handout.pdf) | [migration.md](lecture8/migration.md) |
-| 9 | [slides.md](lecture9/slides.md) | [Lecture9.pdf](lecture9/Lecture9.pdf) | [Lecture9-handout.pdf](lecture9/Lecture9-handout.pdf) | [migration.md](lecture9/migration.md) |
-| 10 | [slides.md](lecture10/slides.md) | [Lecture10.pdf](lecture10/Lecture10.pdf) | [Lecture10-handout.pdf](lecture10/Lecture10-handout.pdf) | [migration.md](lecture10/migration.md) |
-| 11 | [slides.md](lecture11/slides.md) | [Lecture11.pdf](lecture11/Lecture11.pdf) | [Lecture11-handout.pdf](lecture11/Lecture11-handout.pdf) | [migration.md](lecture11/migration.md) |
-| 12 | [slides.md](lecture12/slides.md) | [Lecture12.pdf](lecture12/Lecture12.pdf) | [Lecture12-handout.pdf](lecture12/Lecture12-handout.pdf) | [migration.md](lecture12/migration.md) |
-| 13 | [slides.md](lecture13/slides.md) | [Lecture13.pdf](lecture13/Lecture13.pdf) | [Lecture13-handout.pdf](lecture13/Lecture13-handout.pdf) | [migration.md](lecture13/migration.md) |
-| 14 | [slides.md](lecture14/slides.md) | [Lecture14.pdf](lecture14/Lecture14.pdf) | [Lecture14-handout.pdf](lecture14/Lecture14-handout.pdf) | [migration.md](lecture14/migration.md) |
+| Лекция | Исходник | PDF с полным раскрытием |
+|---|---|---|
+| 1 | [slides.md](lecture1/slides.md) | [Lecture1.pdf](lecture1/Lecture1.pdf) |
+| 2 | [slides.md](lecture2/slides.md) | [Lecture2.pdf](lecture2/Lecture2.pdf) |
+| 3 | [slides.md](lecture3/slides.md) | [Lecture3.pdf](lecture3/Lecture3.pdf) |
+| 4 | [slides.md](lecture4/slides.md) | [Lecture4.pdf](lecture4/Lecture4.pdf) |
+| 5 | [slides.md](lecture5/slides.md) | [Lecture5.pdf](lecture5/Lecture5.pdf) |
+| 6 | [slides.md](lecture6/slides.md) | [Lecture6.pdf](lecture6/Lecture6.pdf) |
+| 7 | [slides.md](lecture7/slides.md) | [Lecture7.pdf](lecture7/Lecture7.pdf) |
+| 8 | [slides.md](lecture8/slides.md) | [Lecture8.pdf](lecture8/Lecture8.pdf) |
+| 9 | [slides.md](lecture9/slides.md) | [Lecture9.pdf](lecture9/Lecture9.pdf) |
+| 10 | [slides.md](lecture10/slides.md) | [Lecture10.pdf](lecture10/Lecture10.pdf) |
+| 11 | [slides.md](lecture11/slides.md) | [Lecture11.pdf](lecture11/Lecture11.pdf) |
+| 12 | [slides.md](lecture12/slides.md) | [Lecture12.pdf](lecture12/Lecture12.pdf) |
+| 13 | [slides.md](lecture13/slides.md) | [Lecture13.pdf](lecture13/Lecture13.pdf) |
+| 14 | [slides.md](lecture14/slides.md) | [Lecture14.pdf](lecture14/Lecture14.pdf) |
 
-Lecture 14 сохраняет текущую черновую редакцию Beamer; статус содержания и
-согласованные ограничения описаны в [журнале переноса](lecture14/migration.md).
+Lecture 14 остаётся черновиком.
 
 ## Запуск
 
@@ -67,27 +60,22 @@ npm run dev -- 1
 - Сервер по умолчанию доступен только с этого компьютера. Доступ отдельного
   планшета по сети требует отдельно настроенного и разрешённого сетевого режима.
 
-## Завершение миграции и PDF
+## Сборка и PDF
 
-Для получения окончательных артефактов остановить dev-серверы общего проекта
-и выполнить (заменить 1 на номер лекции):
+Перед build/export остановить dev-серверы общего проекта. Для выбранной лекции:
 
 ```sh
 npm run finalize -- 1
 ```
 
-Команда проверяет покрытие исходных frames, согласованность карты, наличие
-разделов и ссылок, распознанные изображения и макросы; запускает существующие
-тесты, собирает веб-версию и **оба PDF**. Экспорт проверяет число страниц по карте
-и обновляет файлы рядом с выбранной лекцией только после успеха обоих вариантов:
-
-- `lectureN/LectureN.pdf` — все раскрытия.
-- `lectureN/LectureN-handout.pdf` — финальные состояния логических слайдов.
-
-Актуальные числа страниц и результаты проверок хранятся в журнале каждой лекции.
-Критерии завершения и состав коммита заданы в `MIGRATION.md` §7.
-Промежуточные PDF, веб-сборка, QA и зависимости исключены из Git;
-Beamer PDF и `lectures/merged/` команда не меняет.
+Команда проверяет Slidev-исходник, идентификаторы слайдов, явные числа кликов,
+разделы README, изображения с записанными источниками и общие макросы;
+запускает тесты, собирает веб-версию и один PDF: `lectureN/LectureN.pdf`.
+В PDF каждый логический слайд показан один раз, с полным раскрытием материала.
+Пошаговые раскрытия сохраняются в браузерной презентации.
+Экспорт проверяет число страниц по `slides.md` и заменяет итоговый файл только
+после успешной проверки. Временные файлы находятся в игнорируемом `output/`.
+`lectures/merged/` команда не меняет.
 
 Отдельные этапы: `npm run check -- 1`, `npm run build -- 1`,
 `npm run export -- 1`, `npm run test:demos`.
@@ -110,7 +98,7 @@ node tools/inspect.mjs 1
 node tools/inspect-demos.mjs 1
 ```
 
-`inspect.mjs N` проверяет раскрытия по карте и границы содержимого;
+`inspect.mjs N` проверяет раскрытия по `slides.md` и границы содержимого;
 сценарии пера в нём сейчас покрывают Lecture 1. Для демо выбирать инспектор
 соответствующей лекции из разделов ниже. `SLIDEV_QA_URL` меняет адрес сервера.
 `SLIDEV_BROWSER_PATH` задаёт путь к Chromium-браузеру; по умолчанию инспекторы
@@ -127,9 +115,8 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
 - `package.json`, lock-файл и `node_modules/` — общие для курса.
 - `theme/` — локальная тема. Она подключает базовые стили theme-default,
   затем оформление курса; содержит `global-top.vue`, панель пера и компоненты.
-- `theme/setup/macros.json` — адаптер из `../lectures/utils/newcommands.tex`.
-  Обновление: `node tools/sync-notation.mjs`.
-- `theme/assets/` — общие SVG taxonomy; экспорт: `tools/export-taxonomy.sh`.
+- `theme/setup/macros.json` — единый редактируемый источник математических макросов.
+- `theme/assets/` — общие редактируемые SVG taxonomy.
 - `lectureN/slides.md` — текст, формулы, раскрытия и заметки преподавателя.
   В headmatter: `theme: ../theme`.
 - `lectureN/public/figs/` — локальные иллюстрации; в слайдах `src="/figs/name.png"`.
@@ -139,8 +126,12 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
   `variational-autoencoder`, `generative-adversarial-network`, `score-matching`,
   `denoising-diffusion`, `continuous-normalizing-flow`, `sde-based-diffusion`,
   `flow-matching`, `discrete-diffusion` или `absorbing-diffusion`.
-- `lectureN/components/` и `lectureN/lib/` — демонстрации этой лекции.
-- `lectureN/slide-map.json` и `migration.md` — карта и журнал переноса.
+- `lectureN/components/` и `lectureN/lib/` — компоненты и расчёты демонстраций.
+  После переноса разделов Lecture 5 импортирует discriminator из `lecture4/components/`,
+  а Lecture 6 — Langevin из `lecture5/components/`; исходники демо сохраняются в этих папках.
+- Метаданные слайда: уникальный `id`, целочисленный `clicks ≥ 0`;
+  переходы Outline также содержат `section` с названием раздела.
+  Проверки читают эти данные напрямую через установленный парсер Slidev.
 - `tools/` — общие команды, тесты и проверка PDF.
 - `deferred/kl/` — сохранённый оригинал KL-демо; его копия используется в Lecture 5.
   [Заметки по повторному использованию](deferred-demos.md).
@@ -183,7 +174,6 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
   статические примеры.
 
 Сценарии браузера: `node tools/inspect-demos.mjs 1`.
-История вариантов и текущие сценарии: [журнал Lecture 1](lecture1/migration.md).
 Отложенные демонстрации: [deferred-demos.md](deferred-demos.md).
 
 ## Интерактивная Lecture 2
@@ -203,11 +193,11 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
 
 ## Интерактивная Lecture 3
 
-- Слайд 14: вариационный Gaussian posterior и зазор ELBO. Poor / Better / Exact,
+- Слайд 15: вариационный Gaussian posterior и зазор ELBO. Poor / Better / Exact,
   ползунки среднего и стандартного отклонения, Reset. Модель и наблюдение фиксированы.
-- Слайд 19: отдельные оптимизации для наблюдений и один общий encoder;
+- Слайд 20: отдельные оптимизации для наблюдений и один общий encoder;
   три раскрытия штатными кликами Slidev.
-- Слайды 23–26: смысловые цвета и жирное выделение зависимостей от θ / φ.
+- Слайды 24–27: смысловые цвета и жирное выделение зависимостей от θ / φ.
 
 Состояние ползунков сохраняется при уходе со слайда и возврате. Управлять демо
 в выводимом на экран окне: между presenter/viewer состояние компонентов
@@ -215,7 +205,6 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
 
 Браузерные сценарии: `node tools/inspect-variational-demos.mjs` при работающей Lecture 3.
 Два численных теста входят в `npm run test:demos` и `npm run finalize -- 3`.
-Подробности и проверенные ограничения: [журнал Lecture 3](lecture3/migration.md).
 
 ## Интерактивная Lecture 4
 
@@ -231,10 +220,8 @@ generated-файлы и кэш Vite в `lectureN/node_modules/.vite`, задан
   lookup общего codebook → тензор для декодера.
 - Слайд 26: путь forward и копирование градиента в straight-through estimator
   раскрываются штатными кликами вместе с существующим выводом.
-- Слайд 38: Gaussian data/model densities и точный оптимальный discriminator;
-  ползунок среднего generator, Separated / Overlap / Matched и Reset.
 
-PDF содержит сравнения prior и discriminator; схема quantization сохраняет
+PDF Lecture 4 содержит сравнение prior; схема quantization сохраняет
 облако, старую позицию перезапущенного кода и число использованных кодов до/после. Состояние
 управления сохраняется при возврате на слайд. Управлять в выводимом на экран
 окне; синхронизация компонентов между presenter/viewer не реализована.
@@ -243,44 +230,50 @@ PDF содержит сравнения prior и discriminator; схема quant
 
 Численные проверки: `node --test tools/test-latent-demos.mjs` (также входят
 в `npm run test:demos` и `finalize`). Браузерные сценарии:
-`node tools/inspect-latent-demos.mjs` при работающей Lecture 4.
-Проверенные сценарии и ограничения: [журнал Lecture 4](lecture4/migration.md).
+`node tools/inspect-latent-demos.mjs` при работающих Lectures 4 и 5 (discriminator).
+По умолчанию используются порты 3034 и 3035; для других адресов задать
+`SLIDEV_QA_URL` (Lecture 4) и `SLIDEV_QA_GAN_URL` (Lecture 5).
 
 ## Интерактивная Lecture 5
 
-- Слайд 13: одна Gaussian-модель для смеси двух Gaussians — ползунки Mean / Std. deviation,
+- Слайд 13: Gaussian data/model densities и точный оптимальный discriminator;
+  ползунок среднего generator, Separated / Overlap / Matched и Reset.
+
+- Слайд 19: одна Gaussian-модель для смеси двух Gaussians — ползунки Mean / Std. deviation,
   Fit forward KL, Fit reverse KL: left / right, Reset.
-- Демо продолжает исходное сравнение Jensen–Shannon и KL на слайде 12;
+- Демо продолжает исходное сравнение Jensen–Shannon и KL на слайде 18;
   на нём оставлены определения и пояснение averaging distributions, без статичных fits.
   Reverse-KL fitting не отождествляется с GAN training.
-- Слайд 20: компактная интерактивная схема на месте исходной картинки рядом с постановкой —
+- Слайд 26: компактная интерактивная схема на месте исходной картинки рядом с постановкой —
   ползунок θ, Match (точный нуль), Reset (θ = 1.5). Исходные вычисления KL/JSD/Wasserstein
   и четыре раскрытия сохранены; отдельного продолжения нет. PDF показывает θ = 1.5,
   а случаи θ = 0 и θ ≠ 0 остаются в формулах.
-- Слайд 37: по отзыву автора восстановлена исходная статичная k-NN-картинка;
+- Слайд 43: по отзыву автора восстановлена исходная статичная k-NN-картинка;
   она раскрывается прежним третьим кликом. Отдельного PR-компонента нет.
-- Слайд 47: принятая Langevin dynamics — Noise off / Noise on, Run / Pause, Step, Reset.
-  Точный score двумерной Gaussian mixture, 192 частицы, фиксированный шаг η = 0.04
-  и воспроизводимый шум. Смена режима начинает с тех же частиц; уход со слайда
-  ставит симуляцию на паузу. Лимит — 600 шагов; PDF сравнивает режимы после 300.
 - В PDF показаны оба подготовленных решения: forward KL и один симметричный минимум reverse KL.
   Состояние ползунков сохраняется при возврате на слайд; управлять демо в выводимом
   на экран окне, синхронизация с presenter/viewer не предполагается.
 
 Численные проверки KL и новых демо входят в `npm run test:demos` и `finalize`.
 Новые демо отдельно: `node --test tools/test-lecture5-demos.mjs`.
-Браузерные сценарии: `node tools/inspect-lecture5-demos.mjs` при работающей Lecture 5.
-Проверенные сценарии управления и экспорта: [журнал Lecture 5](lecture5/migration.md).
+Браузерные сценарии: `node tools/inspect-lecture5-demos.mjs` при работающих Lectures 5 и 6 (Langevin).
+По умолчанию используются порты 3035 и 3036; для других адресов задать
+`SLIDEV_QA_URL` (Lecture 5) и `SLIDEV_QA_LANGEVIN_URL` (Lecture 6).
 
 ## Интерактивная Lecture 6
 
-- Слайд 27: три равновероятные чистые точки и перемещаемое шумное наблюдение при σ = 1.
+- Слайд 16: принятая Langevin dynamics — Noise off / Noise on, Run / Pause, Step, Reset.
+  Точный score двумерной Gaussian mixture, 192 частицы, фиксированный шаг η = 0.04
+  и воспроизводимый шум. Смена режима начинает с тех же частиц; уход со слайда
+  ставит симуляцию на паузу. Лимит — 600 шагов; PDF сравнивает режимы после 300.
+
+- Слайд 30: три равновероятные чистые точки и перемещаемое шумное наблюдение при σ = 1.
   Клики показывают conditional scores, posterior weights, marginal score и posterior
   mean по Tweedie. Between modes / Near left / Near right, Reset; точку можно
   перетаскивать или двигать стрелками и Home после фокуса. Точные значения вычисляются
   аналитически; это иллюстрация, без обучения сети. При включённом пере перетаскивание
   отключено, график доступен для пометок, кнопки остаются доступны.
-- Слайд 38: прямая Gaussian diffusion для смеси двух одномерных Gaussians,
+- Слайд 41: прямая Gaussian diffusion для смеси двух одномерных Gaussians,
   постоянный β = 0.01. Ползунок t = 0…1000, четыре пресета и Reset. Слева исходная
   плотность, справа текущая маргинальная плотность и эталон N(0,1); отдельно показаны
   коэффициент сигнала и стандартное отклонение добавленного шума.
@@ -292,7 +285,6 @@ PDF содержит сравнения prior и discriminator; схема quant
 Численные проверки: `node --test tools/test-score-demos.mjs` (также входят
 в `npm run test:demos` и `finalize`). Браузерные сценарии:
 `node tools/inspect-score-demos.mjs` при работающей Lecture 6.
-Проверенные сценарии и ограничения: [журнал Lecture 6](lecture6/migration.md).
 
 ## Интерактивная Lecture 7
 
@@ -317,22 +309,21 @@ schedules при t = 500 и три эквивалентные оценки с no
 
 Численные проверки: `node --test tools/test-diffusion-demos.mjs` (включены в
 `test:demos` и `finalize`). Браузер: `node tools/inspect-diffusion-demos.mjs`.
-Подробности: [журнал Lecture 7](lecture7/migration.md).
 
 ## Интерактивная Lecture 8
 
-- Слайд 28: точная двумерная Gaussian mixture с двумя классами. Выбор A/B,
+- Слайд 30: точная двумерная Gaussian mixture с двумя классами. Выбор A/B,
   центры компонент A — тёмно-синие квадраты, B — серые ромбы;
   ползунок γ = 0…7, пресеты 0 / 1 / 3 / 7 и Reset. Три стрелки показывают
   unconditional score, γ × classifier gradient и их сумму. Наблюдение можно
   перетаскивать, двигать стрелками и возвращать через Home. При фиксированной
   точке общий масштаб стрелок не зависит от γ и класса. При включённом пере
   перетаскивание отключено; кнопки и ползунок остаются доступны.
-- Слайд 31: нормированная плотность при фиксированном уровне шума в одномерной
+- Слайд 33: нормированная плотность при фиксированном уровне шума в одномерной
   версии примера. Видны unconditional / conditional / scaled densities;
   выбор класса, γ = 0…7, те же пресеты и Reset. Это отдельный 1D пример,
   а не маргинал guided 2D density или конечная плотность полного sampler.
-- Слайд 37: CFG в пространстве scores. Ползунок γ = 0…5, пресеты
+- Слайд 39: CFG в пространстве scores. Ползунок γ = 0…5, пресеты
   0 / 0.5 / 1 / 3 и Reset. Две базовые стрелки фиксированы; γ меняет
   результирующую стрелку: interpolation при 0 < γ < 1, extrapolation при γ > 1.
 
@@ -343,20 +334,19 @@ presenter/viewer не реализована. Демо работают без �
 
 Численные проверки: `node --test tools/test-guidance-demos.mjs` (включены
 в `test:demos` и `finalize`). Браузер: `node tools/inspect-guidance-demos.mjs`.
-Подробности: [журнал Lecture 8](lecture8/migration.md).
 
 ## Интерактивная Lecture 9
 
-- Слайд 18: ODE, поток и переход к численному решению.
-- Слайд 19: шаг Euler, геометрия касательной и локальная ошибка.
-- Слайд 20: формулы Euler/Heun и интерактивное вращение
+- Слайд 19: ODE, поток и переход к численному решению.
+- Слайд 20: шаг Euler, геометрия касательной и локальная ошибка.
+- Слайд 21: формулы Euler/Heun и интерактивное вращение
   слева направо. 4 / 8 / 16 / 32 шага на [0, 3], One step, Complete и Reset;
   точная траектория, ошибки и число вычислений поля. PDF: оба метода после 8 шагов.
-- Слайд 21: глобальная и одношаговая ошибка, порядки Euler/Heun/RK4, шаг и стоимость в NFE.
-- Слайд 28: краткая связь с Lecture 2 (якобиан потока, площадь и дивергенция); материальный квадрат — Expansion / Contraction / Shear, время, Reset.
+- Слайд 22: глобальная и одношаговая ошибка, порядки Euler/Heun/RK4, шаг и стоимость в NFE.
+- Слайд 29: краткая связь с Lecture 2 (якобиан потока, площадь и дивергенция); материальный квадрат — Expansion / Contraction / Shear, время, Reset.
   Видны дивергенция, площадь, плотность и сохранение массы. PDF сравнивает все
   три режима при t = 1.5; формула log-density относится к внутренности области.
-- Слайд 40: стационарный Gaussian Langevin. Drift only / Diffusion only / Both,
+- Слайд 41: стационарный Gaussian Langevin. Drift only / Diffusion only / Both,
   время, Run / Pause, Step и Reset. Общие начальные samples из N(0, 1), точная
   плотность и эмпирическая гистограмма. Точные Gaussian transitions устраняют
   ошибку дискретизации из примера стационарности; остаются флуктуации выборки.
@@ -368,4 +358,31 @@ presenter/viewer не реализована. Демо работают без �
 
 Численные проверки: `node --test tools/test-dynamics-demos.mjs` (включены в
 `test:demos` и `finalize`). Браузер: `node tools/inspect-dynamics-demos.mjs`.
-Подробности: [журнал Lecture 9](lecture9/migration.md).
+
+## Интерактивная Lecture 10
+
+- Слайд 22: одна Gaussian-mixture probability path для forward SDE и PF-ODE.
+  Горизонтальная шкала времени, переключатель SDE / PF-ODE без сброса времени
+  и частиц, Run / Pause, Step, New noise и Reset. Справа — текущая плотность; Brownian increments и
+  одномерный quantile flow вычисляются аналитически.
+- Слайд 33: обращение той же диффузии. Горизонтальное время 2 → 0 и переключатель
+  Reverse SDE / PF-ODE без сброса времени и частиц. Точные reverse conditional transitions показывают
+  восстановление двух пиков без ошибки дискретизации. Обратный процесс восстанавливает
+  распределение, а не конкретную прямую траекторию.
+- Слайд 46: аналитический оптимум denoiser как взвешенное среднее обучающих
+  примеров (EDM, Appendix B.3, Eq. 57), между training и sampling.
+- Слайд 48: геометрия Euler-шага к denoiser prediction. Три начальные точки,
+  отношение noise levels r, Step и Reset; denoiser пересчитывается после каждого шага.
+  r = 0 завершает процесс без деления на ноль; после 12 шагов нужно начать заново.
+- Слайд 54: Direct / Detour / Rotation между общими Gaussian endpoints. Время,
+  пять пресетов и Reset; видны частицы, полные траектории и текущие скорости
+  в общем масштабе. Только endpoint densities обязаны совпадать.
+
+PDF фиксирует SDE/PF-ODE при t = 4/3, reverse sampling при t = 0,
+один denoiser-шаг σ = 2.5 → 1.25 и три transport flows при t = 0.5.
+Состояния сохраняются при возврате; анимация останавливается при уходе.
+Случайность воспроизводима, вычисления локальные. Управлять в выводимом на экран
+окне; синхронизация presenter/viewer не реализована.
+
+Численные проверки: `node --test tools/test-process-demos.mjs` (включены в
+`test:demos` и `finalize`). Браузер: `node tools/inspect-process-demos.mjs`.

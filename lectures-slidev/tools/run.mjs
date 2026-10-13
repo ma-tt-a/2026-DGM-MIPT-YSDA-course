@@ -16,10 +16,10 @@ switch (action) {
   case 'export': exportPdf(); break
   case 'finalize':
     check()
-    runNode(['--test', tool('test-demos.mjs'), tool('test-flow-demos.mjs'), tool('test-course.mjs'), tool('test-variational-demos.mjs'), tool('test-latent-demos.mjs'), tool('test-lecture5-demos.mjs'), tool('test-score-demos.mjs'), tool('test-diffusion-demos.mjs'), tool('test-guidance-demos.mjs'), tool('test-dynamics-demos.mjs')])
+    runNode(['--test', tool('test-demos.mjs'), tool('test-flow-demos.mjs'), tool('test-course.mjs'), tool('test-variational-demos.mjs'), tool('test-latent-demos.mjs'), tool('test-lecture5-demos.mjs'), tool('test-score-demos.mjs'), tool('test-diffusion-demos.mjs'), tool('test-guidance-demos.mjs'), tool('test-dynamics-demos.mjs'), tool('test-process-demos.mjs')])
     build()
     exportPdf()
-    console.log(`Built ${lecture.name} and both PDFs. Render and visually review them before committing.`)
+    console.log(`Built ${lecture.name} and its fully revealed PDF. Render and visually review it before committing.`)
     break
   default: throw new Error('Expected dev, check, build, export, or finalize')
 }

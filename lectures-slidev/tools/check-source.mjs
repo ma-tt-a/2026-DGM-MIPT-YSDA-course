@@ -1,46 +1,22 @@
 import { readFileSync, existsSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { resolve } from 'node:path'
-import { execFileSync } from 'node:child_process'
-import { lecturePaths, root, retainedSourceFrames, resolveImportedSourceFrames, retainedSourceSections, checkFrameExtensions, checkSectionSchedule, checkSourceCitations, matchesOriginalAsset } from './course.mjs'
+import katex from 'katex'
+import { lecturePaths, root, readSlides, checkSectionSchedule } from './course.mjs'
 const paths = lecturePaths(process.argv[2])
-const lecture = paths.number
 const md = readFileSync(paths.entry, 'utf8')
-const tex = readFileSync(resolve(root, `../lectures/lecture${lecture}/Lecture${lecture}.tex`), 'utf8')
-const map = JSON.parse(readFileSync(paths.map, 'utf8'))
+const slides = readSlides(paths)
 const fail = message => { throw new Error(message) }
-const frames = [...tex.matchAll(/\\begin\{frame\}/g)]
-const headmatter = md.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] || ''
-const omitted = JSON.parse(headmatter.match(/^omittedSourceFrames: (.+)$/m)?.[1] || '[]')
-const retainedTex = retainedSourceFrames(tex, omitted)
-const sourceSections = [...tex.matchAll(/\\(?:sub)?section\{([^}]+)\}/g)].map(m=>m[1])
-const omittedSections = JSON.parse(headmatter.match(/^omittedSourceSections: (.+)$/m)?.[1] || '[]')
-const sectionTitleOverrides = JSON.parse(headmatter.match(/^sectionTitleOverrides: (.+)$/m)?.[1] || '{}')
-if (!sectionTitleOverrides || Array.isArray(sectionTitleOverrides) || typeof sectionTitleOverrides !== 'object')
-  fail('Invalid sectionTitleOverrides: expected an object')
-for (const [source, title] of Object.entries(sectionTitleOverrides)) {
-  if (!sourceSections.includes(source) || typeof title !== 'string' || !title.trim())
-    fail(`Invalid section title override: ${source}`)
+const ids = slides.map(s => s.id)
+if (ids.some(id => typeof id !== 'string' || !id.trim()) || new Set(ids).size !== ids.length)
+  fail('Slide IDs must be nonempty and unique')
+for (const slide of slides) {
+  if (slide.title === 'Recap of Previous Lecture'
+      && (slide.clicks !== 0 || /v-(?:click|after)\b/.test(slide.content)))
+    fail(`Recap must be fully visible on slide ${slide.slide}`)
 }
-const sections = retainedSourceSections(sourceSections, omittedSections).map(title => sectionTitleOverrides[title] ?? title)
-const ids = [...md.matchAll(/^sourceFrame: "(.+)"$/gm)].map(m=>m[1])
-const imported = resolveImportedSourceFrames(JSON.parse(headmatter.match(/^importedSourceFrames: (.+)$/m)?.[1] || '{}'), ids, lecture)
-const counts = [...md.matchAll(/^clicks: (\d+)$/gm)].map(m=>+m[1])
-if (map.length !== ids.length || counts.length !== ids.length) fail('Map/frontmatter length mismatch')
-const merged = [...md.matchAll(/^mergedSourceFrames: \[([\d, ]+)\]$/gm)].flatMap(m => m[1].split(',').map(n => Number(n.trim())))
-const mappedMerged = map.flatMap(s => s.mergedFrames || [])
-if (JSON.stringify(merged) !== JSON.stringify(mappedMerged)) fail('Stale merged-frame map')
-for (const frame of merged) if (frame < 1 || frame > frames.length) fail(`Unknown merged frame ${frame}`)
-for (let i=1;i<=frames.length;i++) if (ids.filter(x=>x===String(i)).length + merged.filter(x=>x===i).length + omitted.filter(x=>x===i).length !== 1) fail(`Frame ${i} missing or duplicated`)
-checkFrameExtensions(ids, imported)
-for (const id of ids) {
-  if (/^\d+$/.test(id) && (+id < 1 || +id > frames.length)) fail(`Unknown source frame ${id}`)
-  if (!id.startsWith('extension: ') && !/^\d+$/.test(id) && !id.startsWith('auto: ') && !imported.some(frame => frame.id === id)) fail(`Unknown frame ID: ${id}`)
-}
-map.forEach((s,i)=> { if (String(s.frame)!==ids[i] || s.clicks!==counts[i] || s.slide!==i+1) fail(`Stale map at slide ${i+1}`) })
-const readme=readFileSync(resolve(root, '../README.md'),'utf8').split('\n').find(l=>l.includes(`<b>Lecture ${lecture}:</b>`))
-checkSectionSchedule(sections, ids, md, readme)
-const urls = checkSourceCitations(retainedTex, imported, md)
+const readme = readFileSync(resolve(root, '../README.md'), 'utf8').split('\n').find(l => l.includes(`<b>Lecture ${paths.number}:</b>`))
+checkSectionSchedule(slides, readme)
 const assets = [...md.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g)]
 const provenancePath = resolve(paths.dir, 'public/figs/sources.json')
 const provenance = existsSync(provenancePath) ? JSON.parse(readFileSync(provenancePath, 'utf8')) : {}
@@ -54,15 +30,19 @@ for (const [,src] of assets) {
   if (local) {
     const file = src.slice('/figs/'.length)
     const hash=f=>createHash('sha256').update(readFileSync(f)).digest('hex')
-    if (!matchesOriginalAsset(target, file, lecture, imported)) {
-      const credit = provenance[file]
+    const credit = provenance[file]
+    if (credit) {
       if (!credit?.source?.startsWith('https://') || !credit.description) fail(`Missing provenance for new image: ${file}`)
       if (hash(target) !== credit.sha256) fail(`New image differs from recorded source: ${file}`)
       if (!md.includes(`href="${credit.source}"`)) fail(`Missing source citation for new image: ${file}`)
     }
   }
 }
-if (/\\(?:mathbf|boldsymbol|mathcal|mathbb)\b/.test(md)) fail('Raw notation in lecture; use the shared adapter')
+if (/\\(?:mathbf|boldsymbol|mathcal|mathbb)\b/.test(md)) fail('Raw notation in lecture; use shared macros')
 if (/<img[^>]+src="https?:/.test(md)) fail('Remote image dependency')
-execFileSync(process.execPath, [resolve(root,'tools/sync-notation.mjs'),'--check'],{stdio:'inherit'})
-console.log(`${paths.name}: ${frames.length} source frames (${omitted.length} approved omissions, ${imported.length} imported frames), ${sections.length} source section transitions, ${map.length} slides, ${counts.reduce((a,b)=>a+b+1,0)} states; ${urls.length} citations and ${assets.length} image uses checked.`)
+const macros = JSON.parse(readFileSync(resolve(root, 'theme/setup/macros.json'), 'utf8'))
+for (const [name, value] of Object.entries(macros)) {
+  if (!name.startsWith('\\') || typeof value !== 'string') fail(`Invalid macro ${name}`)
+  katex.renderToString(name, { macros, strict: 'error', throwOnError: true })
+}
+console.log(`${paths.name}: ${slides.length} slides, ${slides.reduce((n, s) => n + s.clicks + 1, 0)} browser states; ${assets.length} image uses and ${Object.keys(macros).length} macros checked.`)

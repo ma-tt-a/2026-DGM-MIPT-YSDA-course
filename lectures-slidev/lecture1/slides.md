@@ -19,9 +19,8 @@ drawings:
   syncAll: true
 download: false
 info: false
-omittedSourceFrames: [18]
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -37,7 +36,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: outline
 ---
 
 # Outline
@@ -53,7 +52,8 @@ sourceFrame: "2"
 
 ---
 clicks: 0
-sourceFrame: "auto: Introduction and Logistics"
+id: outline-2
+section: "Introduction and Logistics"
 ---
 
 # Outline
@@ -69,7 +69,7 @@ sourceFrame: "auto: Introduction and Logistics"
 
 ---
 clicks: 1
-sourceFrame: "3"
+id: generative-vs-discriminative-models
 ---
 
 # Generative vs Discriminative Models
@@ -85,7 +85,7 @@ sourceFrame: "3"
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: course-team
 ---
 
 # Course Team
@@ -131,7 +131,7 @@ PhD student<br>at Skoltech
 
 ---
 clicks: 1
-sourceFrame: "5"
+id: about-the-course
 ---
 
 # About the Course
@@ -153,7 +153,7 @@ Theoretical foundations & practical applications of **Deep Generative Models**. 
 
 ---
 clicks: 2
-sourceFrame: "6"
+id: course-structure-and-grading
 ---
 
 # Course Structure and Grading
@@ -198,7 +198,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: lecture-schedule
 ---
 
 # Lecture Schedule
@@ -228,7 +228,7 @@ sourceFrame: "7"
 
 ---
 clicks: 2
-sourceFrame: "8"
+id: prerequisites
 ---
 
 # Prerequisites
@@ -263,7 +263,8 @@ sourceFrame: "8"
 
 ---
 clicks: 0
-sourceFrame: "auto: Generative Models Overview"
+id: outline-3
+section: "Generative Models Overview"
 ---
 
 # Outline
@@ -279,7 +280,7 @@ sourceFrame: "auto: Generative Models Overview"
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: generative-models-taxonomy
 ---
 
 # Generative Models Taxonomy
@@ -288,7 +289,7 @@ sourceFrame: "9"
 
 ---
 clicks: 0
-sourceFrame: "10"
+id: vae-the-first-scalable-approach-for-image-generation
 class: figure-slide
 ---
 
@@ -300,7 +301,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "11"
+id: dcgan-the-first-convolutional-gan-for-image-generation
 class: figure-slide
 ---
 
@@ -312,7 +313,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "12"
+id: stylegan-high-quality-face-generation
 class: figure-slide
 ---
 
@@ -324,7 +325,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "13"
+id: language-modeling-at-scale
 class: figure-slide
 ---
 
@@ -336,7 +337,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "extension: 13"
+id: language-models-2023-2026
 class: figure-slide
 ---
 
@@ -348,8 +349,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "14"
-mergedSourceFrames: [15]
+id: diffusion-models-a-breakthrough-in-image-generation
 class: figure-slide
 ---
 
@@ -362,7 +362,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "extension: 14"
+id: diffusion-language-models-llada-2025
 ---
 
 # Diffusion Language Models — LLaDA (2025)
@@ -406,7 +406,7 @@ Restore tokens across the sequence.
 
 ---
 clicks: 0
-sourceFrame: "16"
+id: sora-video-generation-2024
 class: figure-slide
 ---
 
@@ -418,7 +418,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "17"
+id: nano-banana-pro-2025
 class: figure-slide
 ---
 
@@ -432,7 +432,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "extension: 16"
+id: genie-3-interactive-world-generation-2025
 ---
 
 # Genie 3 — Interactive World Generation (2025)
@@ -454,7 +454,7 @@ sourceFrame: "extension: 16"
 
 ---
 clicks: 0
-sourceFrame: "19"
+id: open-problems-in-generative-models
 ---
 
 # Open Problems in Generative Models
@@ -475,7 +475,8 @@ sourceFrame: "19"
 
 ---
 clicks: 0
-sourceFrame: "auto: Generative Modeling Framework"
+id: outline-4
+section: "Generative Modeling Framework"
 ---
 
 # Outline
@@ -491,7 +492,8 @@ sourceFrame: "auto: Generative Modeling Framework"
 
 ---
 clicks: 0
-sourceFrame: "auto: Course Tricks"
+id: outline-5
+section: "Course Tricks"
 ---
 
 # Outline
@@ -507,7 +509,7 @@ sourceFrame: "auto: Course Tricks"
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: course-tricks-i
 class: theorems
 ---
 
@@ -551,7 +553,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "21"
+id: course-tricks-ii
 class: theorems
 ---
 
@@ -596,7 +598,7 @@ $\displaystyle p(\bz)=p(\bx)|\det(\bJ_{\bff^{-1}})|=p(\bx)\left|\det\left(\frac{
 
 ---
 clicks: 3
-sourceFrame: "22"
+id: course-tricks-iii
 ---
 
 # Course Tricks III
@@ -637,7 +639,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Problem Statement"
+id: outline-6
+section: "Problem Statement"
 ---
 
 # Outline
@@ -653,7 +656,7 @@ sourceFrame: "auto: Problem Statement"
 
 ---
 clicks: 3
-sourceFrame: "23"
+id: problem-statement
 ---
 
 # Problem Statement
@@ -690,7 +693,7 @@ The data is high-dimensional and complex. For example, image datasets live in $\
 
 ---
 clicks: 3
-sourceFrame: "24"
+id: histogram-as-a-generative-model
 class: theorems histogram-interactive
 ---
 
@@ -738,7 +741,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "25"
+id: conditional-models
 class: table-slide
 ---
 
@@ -765,7 +768,8 @@ In practice, we're typically interested in learning conditional models (sampling
 
 ---
 clicks: 0
-sourceFrame: "auto: Divergence Minimization Framework"
+id: outline-7
+section: "Divergence Minimization Framework"
 ---
 
 # Outline
@@ -781,7 +785,7 @@ sourceFrame: "auto: Divergence Minimization Framework"
 
 ---
 clicks: 3
-sourceFrame: "26"
+id: divergences
 ---
 
 # Divergences
@@ -817,7 +821,7 @@ where $\pd(\bx)$ is the true data distribution and $\pt(\bx)$ is the model distr
 
 ---
 clicks: 3
-sourceFrame: "27"
+id: forward-kl-vs-reverse-kl-kullback-leibler-divergence
 class: theorems
 ---
 
@@ -864,7 +868,7 @@ $$
 
 ---
 clicks: 6
-sourceFrame: "28"
+id: forward-kl-vs-reverse-kl-mle-as-forward-kl
 class: derivation
 ---
 
@@ -906,7 +910,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Autoregressive Models (ImageGPT)"
+id: outline-8
+section: "Autoregressive Models (ImageGPT)"
 ---
 
 # Outline
@@ -922,7 +927,7 @@ sourceFrame: "auto: Autoregressive Models (ImageGPT)"
 
 ---
 clicks: 0
-sourceFrame: "29"
+id: generative-models-taxonomy-2
 ---
 
 # Generative Models Taxonomy
@@ -931,7 +936,7 @@ sourceFrame: "29"
 
 ---
 clicks: 3
-sourceFrame: "30"
+id: autoregressive-modeling
 class: theorems
 ---
 
@@ -977,7 +982,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "31"
+id: autoregressive-models
 ---
 
 # Autoregressive Models
@@ -1007,7 +1012,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 31"
+id: sampling-vs-density-evaluation
 class: interactive-slide
 ---
 
@@ -1024,7 +1029,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "32"
+id: autoregressive-models-mlp
 ---
 
 # Autoregressive Models: MLP
@@ -1069,7 +1074,7 @@ Can we also model continuous-valued data, not just the discrete case?
 
 ---
 clicks: 0
-sourceFrame: "33"
+id: autoregressive-models-llm
 ---
 
 # Autoregressive Models: LLM
@@ -1084,7 +1089,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "34"
+id: autoregressive-models-for-images
 ---
 
 # Autoregressive Models for Images
@@ -1111,7 +1116,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "35"
+id: autoregressive-models-imagegpt
 class: figure-slide
 ---
 
@@ -1123,7 +1128,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "36"
+id: summary
 class: summary
 ---
 

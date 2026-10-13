@@ -21,8 +21,7 @@ download: false
 info: false
 favicon: "data:,"
 clicks: 0
-importedSourceFrames: {"4": [7, 8, 9, 10, 11]}
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -38,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -88,7 +87,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -120,7 +119,7 @@ where $\bJ_{\bff_k}=\frac{\partial\bff_k}{\partial\bff_{k-1}}$.
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-3
 ---
 
 # Recap of Previous Lecture
@@ -157,7 +156,7 @@ Keep triangular diagonals nonzero to preserve invertibility.
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -192,7 +191,7 @@ Sampling must be done sequentially, but density evaluation can be parallelized.
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -238,11 +237,58 @@ $$
 
 A coupling layer is a special instance of the Gaussian autoregressive NF.
 
-<div class="source"><a href="https://arxiv.org/abs/1605.08803">Dinh L., Sohl-Dickstein J., Bengio S. Density Estimation Using Real NVP, 2016</a></div>
+**TarFlow uses affine autoregressive transforms on image patches.** A causal Transformer predicts componentwise shifts and positive scales from earlier patches. The Jacobian remains triangular; sampling is sequential across patches and parallel within each patch.
+
+<div class="source"><a href="https://arxiv.org/abs/1605.08803">Dinh L., Sohl-Dickstein J., Bengio S. Density Estimation Using Real NVP, 2016</a><br><a href="https://arxiv.org/abs/2412.06329">Zhai S. et al. Normalizing Flows are Capable Generative Models, 2024</a></div>
 
 ---
-clicks: 1
-sourceFrame: "7"
+clicks: 0
+id: recap-of-previous-lecture-6
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+A flow evaluates a **continuous density**; an 8-bit image has discrete pixel values.
+
+<div class="block">
+
+## Probability of a Pixel Bin
+
+For $\bx\in\{0,\ldots,255\}^m$ and a model supported on $[0,256)^m$:
+
+$$
+P_{\btheta}(\bx)=\int_{[0,1)^m}\pt(\bx+\bu)\,d\bu.
+$$
+
+</div>
+<div class="block">
+
+## Uniform Dequantization
+
+$$
+\bu\sim\Uniform([0,1)^m),\qquad \bv=\bx+\bu,\qquad \lfloor\bv\rfloor=\bx.
+$$
+
+Train the flow on $\bv$. Jensen's inequality gives
+
+$$
+\log P_{\btheta}(\bx)\geq\bbE_{\bu}\bigl[\log\pt(\bx+\bu)\bigr].
+$$
+
+</div>
+
+Exact continuous density evaluation gives a **lower bound** on discrete log-likelihood.
+
+<div class="source"><a href="https://arxiv.org/abs/1511.01844">Theis L., van den Oord A., Bethge M. A Note on the Evaluation of Generative Models, 2015. Section 3.1.</a></div>
+
+<!--
+The preceding AR/coupling recap recalls tractable continuous densities; this slide distinguishes them from probabilities of discrete image bins. Recall the bin integral, the uniform-noise construction and its Jensen bound without replaying the proof. The next recap introduces latent-variable marginalization, preparing another intractable likelihood and lower-bound construction. This is a separate slide because the full bin/noise/bound formulas concern discrete observations, distinct from the already dense coupling/Jacobian slide. No posterior or variational dequantization is introduced.
+-->
+
+---
+clicks: 0
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -271,7 +317,7 @@ $$
 \log\pt(\bx,\bz)=\log\pt(\bx|\bz)+\log p(\bz).
 $$
 
-<div v-click="1">
+<div>
 
 $$
 \pt(\bx)=\int\pt(\bx,\bz)d\bz=\int\pt(\bx|\bz)p(\bz)d\bz.
@@ -279,7 +325,7 @@ $$
 
 </div>
 </div>
-<div v-click="1">
+<div>
 
 - $p(\bz)$ is prior distribution over the latent variable.
 - $\pt(\bx|\bz)$ is **decoder** distribution.
@@ -289,7 +335,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: outline
 ---
 
 # Outline
@@ -306,7 +352,8 @@ sourceFrame: "8"
 
 ---
 clicks: 0
-sourceFrame: "auto: Latent Variable Models (LVM) (continued)"
+id: outline-2
+section: "Latent Variable Models (LVM) (continued)"
 ---
 
 # Outline
@@ -323,7 +370,7 @@ sourceFrame: "auto: Latent Variable Models (LVM) (continued)"
 
 ---
 clicks: 3
-sourceFrame: "9"
+id: mle-for-lvm
 class: theorems
 ---
 
@@ -357,7 +404,8 @@ where $\bz_k\sim p(\bz)$.
 
 ---
 clicks: 0
-sourceFrame: "auto: Variational Evidence Lower Bound (ELBO)"
+id: outline-3
+section: "Variational Evidence Lower Bound (ELBO)"
 ---
 
 # Outline
@@ -374,7 +422,7 @@ sourceFrame: "auto: Variational Evidence Lower Bound (ELBO)"
 
 ---
 clicks: 5
-sourceFrame: "10"
+id: elbo-derivation-i
 class: theorems
 ---
 
@@ -429,7 +477,7 @@ $$
 
 ---
 clicks: 6
-sourceFrame: "11"
+id: elbo-derivation-ii
 class: theorems
 ---
 
@@ -485,7 +533,7 @@ For fixed $\btheta$, the **variational parameter** $q$ controls the tightness of
 
 ---
 clicks: 5
-sourceFrame: "12"
+id: variational-evidence-lower-bound-elbo
 class: theorems interactive-slide
 ---
 
@@ -518,7 +566,7 @@ Here we got the intuition about variational distribution $q(\bz)$: it estimates 
 
 ---
 clicks: 7
-sourceFrame: "13"
+id: variational-evidence-lower-bound-elbo-2
 class: theorems
 ---
 
@@ -569,7 +617,7 @@ What do we have in the term $\bbE_q\log\pt(\bx|\bz)$ in the case of Normal distr
 
 ---
 clicks: 0
-sourceFrame: "extension: 13"
+id: elbo-key-takeaways
 class: theorems
 ---
 
@@ -616,7 +664,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Amortized Inference"
+id: outline-4
+section: "Amortized Inference"
 ---
 
 # Outline
@@ -633,7 +682,7 @@ sourceFrame: "auto: Amortized Inference"
 
 ---
 clicks: 3
-sourceFrame: "14"
+id: parametric-variable-posterior
 class: theorems
 ---
 
@@ -677,7 +726,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "extension: 14"
+id: amortized-inference-one-shared-encoder
 class: theorems
 ---
 
@@ -729,7 +778,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "15"
+id: elbo-optimization
 class: theorems
 ---
 
@@ -761,7 +810,7 @@ For fixed $\btheta$, optimizing $\bphi$ within a restricted family need not clos
 
 ---
 clicks: 2
-sourceFrame: "16"
+id: elbo-optimization-2
 class: theorems
 ---
 
@@ -804,7 +853,8 @@ The remaining step is to obtain **unbiased** Monte Carlo estimates of the gradie
 
 ---
 clicks: 0
-sourceFrame: "auto: ELBO Gradients, Reparametrization Trick"
+id: outline-5
+section: "ELBO Gradients, Reparametrization Trick"
 ---
 
 # Outline
@@ -821,7 +871,7 @@ sourceFrame: "auto: ELBO Gradients, Reparametrization Trick"
 
 ---
 clicks: 5
-sourceFrame: "17"
+id: elbo-gradients-nabla-btheta-cl-bphi-btheta-bx
 class: theorems
 ---
 
@@ -869,7 +919,7 @@ Prior samples do not depend on $\bx$ and may reconstruct it poorly. We train $q_
 </style>
 ---
 clicks: 3
-sourceFrame: "18"
+id: elbo-gradients-nabla-bphi-cl-bphi-btheta-bx
 class: theorems
 ---
 
@@ -921,7 +971,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "19"
+id: reparametrization-trick
 class: theorems
 ---
 
@@ -967,7 +1017,7 @@ During backpropagation, **keep $\bepsilon^*$ fixed** and differentiate through $
 
 ---
 clicks: 4
-sourceFrame: "20"
+id: elbo-gradients-nabla-bphi-cl-bphi-btheta-bx-2
 class: theorems
 ---
 
@@ -1020,7 +1070,8 @@ This expression admits a closed-form analytic solution.
 
 ---
 clicks: 0
-sourceFrame: "auto: Variational Autoencoder (VAE)"
+id: outline-6
+section: "Variational Autoencoder (VAE)"
 ---
 
 # Outline
@@ -1037,7 +1088,7 @@ sourceFrame: "auto: Variational Autoencoder (VAE)"
 
 ---
 clicks: 0
-sourceFrame: "imported: 4:7"
+id: generative-models-taxonomy
 class: theorems
 ---
 
@@ -1047,7 +1098,7 @@ class: theorems
 
 ---
 clicks: 2
-sourceFrame: "imported: 4:8"
+id: variational-autoencoder-vae
 class: theorems
 ---
 
@@ -1102,7 +1153,7 @@ Update $\bphi$, $\btheta$ via stochastic gradient ascent.
 
 ---
 clicks: 1
-sourceFrame: "imported: 4:9"
+id: variational-autoencoder
 class: theorems
 ---
 
@@ -1126,7 +1177,7 @@ VAEs are widely used as a preliminary stage of projecting data onto low-dimensio
 
 ---
 clicks: 0
-sourceFrame: "imported: 4:10"
+id: variational-autoencoder-2
 class: theorems
 ---
 
@@ -1142,7 +1193,7 @@ class: theorems
 
 ---
 clicks: 1
-sourceFrame: "imported: 4:11"
+id: vae-vs-normalizing-flows
 class: theorems
 ---
 
@@ -1171,7 +1222,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "21"
+id: summary
 class: summary
 ---
 

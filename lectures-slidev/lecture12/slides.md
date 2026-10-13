@@ -21,7 +21,7 @@ favicon: "data:,"
 download: false
 info: false
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -37,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -53,7 +53,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 2"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -73,7 +73,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -87,7 +87,7 @@ $$
 \bbE_{t\sim U[0,1]}\bbE_{\bz\sim p(\bz)}\bbE_{\bx\sim p_t(\bx|\bz)}\left\|\bv(\bx,\bz,t)-\bv_{\btheta}(\bx,t)\right\|^2\rightarrow\min_{\btheta}
 $$
 
-If $\supp(p_t(\bx))=\bbR^m$, then the optimal value of the FM objective equals the optimal value of the CFM objective.
+If $p_t(\bx)>0$ for all $\bx\in\bbR^m$ and $0\le t<1$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
 
 </div>
 
@@ -95,7 +95,7 @@ If $\supp(p_t(\bx))=\bbR^m$, then the optimal value of the FM objective equals t
 
 ---
 clicks: 0
-sourceFrame: "extension: 3"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -126,7 +126,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lectures
 class: theorems
 ---
 
@@ -157,7 +157,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 4"
+id: recap-of-previous-lectures-2
 class: theorems
 ---
 
@@ -176,7 +176,7 @@ $$
 
 ## Theorem
 
-If $\supp(p_t(\bx))=\bbR^m$, then the optimal value of the FM objective equals the optimal value of the CFM objective.
+If $p_t(\bx)>0$ for all $\bx\in\bbR^m$ and $0\le t<1$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
 
 </div>
 
@@ -184,7 +184,7 @@ If $\supp(p_t(\bx))=\bbR^m$, then the optimal value of the FM objective equals t
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -209,7 +209,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 5"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -232,7 +232,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -262,7 +262,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 6"
+id: recap-of-previous-lecture-8
 class: theorems
 ---
 
@@ -298,7 +298,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-9
 class: theorems
 ---
 
@@ -339,7 +339,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 7"
+id: recap-of-previous-lecture-10
 class: figure-slide
 ---
 
@@ -351,18 +351,20 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-11
 class: theorems
 ---
 
 # Recap of Previous Lecture
+
+## Rectified Flow Objective
 
 $$
 p_t(\bx|\bx_1)=\cN\left(t\bx_1,(1-t)^2\bI\right);\quad{\color{teal}\bx_t=t\bx_1+(1-t)\bx_0}
 $$
 
 $$
-\bv(\bx_t,\bx_1,t)=\frac{\bx_1-\bx_t}{1-t}=\bx_1-\bx_0
+\bv(\bx_t,\bx_1,t)=\frac{\bx_1-\bx_t}{1-t}=\bx_1-\bx_0,\qquad t<1
 $$
 
 $$
@@ -372,29 +374,31 @@ $$
 \end{aligned}
 $$
 
-<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a></div>
+At $t=1$, the quotient is undefined. Use the simplified training target $\bx_1-\bx_0$, which contains no division.
+
+<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
 ---
 clicks: 0
-sourceFrame: "extension: 8"
+id: recap-of-previous-lecture-12
 class: theorems
 ---
 
 # Recap of Previous Lecture
 
 - $\bv(\bx_t,\bx_1,t)$ defines straight lines between $\pd(\bx)$ and $\cN(0,\bI)$.
-- The **marginal** path $p_t(\bx)$ does not give straight lines.
+- **Straight training paths do not imply straight sampling trajectories.**
 
 <div class="columns">
 <img src="/figs/g2g-vector-field-samples-cond.png" alt="Straight conditional paths between Gaussian endpoints" style="width:100%;height:340px;object-fit:contain" />
 <img src="/figs/g2g-forward_samples.png" alt="Curved marginal paths between Gaussian distributions" style="width:100%;height:340px;object-fit:contain" />
 </div>
 
-<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a></div>
+<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: recap-of-previous-lecture-13
 class: theorems
 ---
 
@@ -429,8 +433,8 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
 
 ---
-clicks: 1
-sourceFrame: "10"
+clicks: 0
+id: recap-of-previous-lecture-14
 class: theorems
 ---
 
@@ -438,7 +442,7 @@ class: theorems
 
 <img src="/figs/cond_marg_paths.png" alt="Conditional and marginal probability paths" style="width:100%;height:315px;object-fit:contain" />
 
-<div v-click="1">
+<div>
 
 - One-sided conditioning gives us the way to construct a generative model.
 - Now we extend it to image-to-image formulation (mapping between two distinct data distributions $p_0(\bx)$ and $p_1(\bx)$).
@@ -449,7 +453,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "11"
+id: outline
 ---
 
 # Outline
@@ -467,7 +471,8 @@ sourceFrame: "11"
 
 ---
 clicks: 0
-sourceFrame: "auto: Two-Sided Conditioning"
+id: outline-2
+section: "Two-Sided Conditioning"
 ---
 
 # Outline
@@ -485,7 +490,7 @@ sourceFrame: "auto: Two-Sided Conditioning"
 
 ---
 clicks: 0
-sourceFrame: "12"
+id: pair-conditioning
 class: theorems
 ---
 
@@ -516,7 +521,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 12"
+id: pair-conditioning-2
 class: theorems
 ---
 
@@ -541,7 +546,7 @@ $\displaystyle\Rightarrow\quad\begin{cases}p_0(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_0
 
 ---
 clicks: 0
-sourceFrame: "13"
+id: two-sided-conditioning
 class: theorems
 ---
 
@@ -568,7 +573,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 13"
+id: two-sided-conditioning-2
 class: theorems
 ---
 
@@ -595,7 +600,7 @@ $\displaystyle\Rightarrow\quad\begin{cases}p_0(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_0
 
 ---
 clicks: 1
-sourceFrame: "14"
+id: flow-matching-one-sided-vs-two-sided-conditioning
 class: theorems
 ---
 
@@ -631,7 +636,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "15"
+id: two-sided-conditioning-vector-field-and-objective
 class: theorems
 ---
 
@@ -668,7 +673,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 15"
+id: two-sided-conditioning-vector-field-and-objective-2
 class: theorems
 ---
 
@@ -697,7 +702,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "16"
+id: cfm-with-two-sided-conditioning-training-and-sampling
 class: theorems
 ---
 
@@ -720,7 +725,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "extension: 16"
+id: cfm-with-two-sided-conditioning-training-and-sampling-2
 class: theorems
 ---
 
@@ -743,7 +748,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "17"
+id: stable-diffusion-3-scalable-flow-matching
 class: figure-slide
 ---
 
@@ -755,7 +760,8 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "auto: Link between Flow Matching and Score-Based Models"
+id: outline-3
+section: "Link between Flow Matching and Score-Based Models"
 ---
 
 # Outline
@@ -773,7 +779,7 @@ sourceFrame: "auto: Link between Flow Matching and Score-Based Models"
 
 ---
 clicks: 1
-sourceFrame: "18"
+id: score-based-generative-models-through-sdes
 class: theorems
 ---
 
@@ -816,7 +822,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 18"
+id: score-based-generative-models-through-sdes-2
 class: theorems
 ---
 
@@ -850,7 +856,7 @@ When the conditional velocity is affine in $\bx_1$, averaging over $\bx_1\mid\bx
 
 ---
 clicks: 0
-sourceFrame: "19"
+id: score-based-generative-models-through-sdes-3
 class: theorems
 ---
 
@@ -872,7 +878,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 19"
+id: score-based-generative-models-through-sdes-4
 class: theorems
 ---
 
@@ -901,7 +907,7 @@ Let's derive the conditional vector fields for VE (NCSN) and VP (DDPM).
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: flow-matching-vs-score-based-sde-models
 class: theorems
 ---
 
@@ -942,7 +948,7 @@ Thus, VE/VP SDE models correspond to particular choices of the Gaussian probabil
 
 ---
 clicks: 1
-sourceFrame: "21"
+id: flow-matching-vs-score-based-sde-models-2
 class: theorems
 ---
 
@@ -961,7 +967,8 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "auto: Discrete Diffusion Models"
+id: outline-4
+section: "Discrete Diffusion Models"
 ---
 
 # Outline
@@ -979,7 +986,7 @@ sourceFrame: "auto: Discrete Diffusion Models"
 
 ---
 clicks: 0
-sourceFrame: "22"
+id: generative-models-taxonomy
 ---
 
 # Generative Models Taxonomy
@@ -988,7 +995,7 @@ sourceFrame: "22"
 
 ---
 clicks: 1
-sourceFrame: "23"
+id: discrete-or-continuous-diffusion-models
 class: theorems
 ---
 
@@ -1024,7 +1031,7 @@ Let's discuss why we need discrete diffusion models.
 
 ---
 clicks: 5
-sourceFrame: "24"
+id: why-discrete-diffusion-models
 class: theorems
 ---
 
@@ -1048,7 +1055,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "25"
+id: 2025-big-bang-of-discrete-diffusion-models
 class: figure-slide
 ---
 
@@ -1060,7 +1067,8 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "auto: Forward Discrete Process"
+id: outline-5
+section: "Forward Discrete Process"
 ---
 
 # Outline
@@ -1078,7 +1086,7 @@ sourceFrame: "auto: Forward Discrete Process"
 
 ---
 clicks: 2
-sourceFrame: "26"
+id: forward-discrete-process
 class: theorems
 ---
 
@@ -1117,7 +1125,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "27"
+id: forward-process-over-time
 class: theorems
 ---
 
@@ -1161,7 +1169,7 @@ We design the transition matrices $\bQ_t$ to achieve this behavior.
 
 ---
 clicks: 3
-sourceFrame: "28"
+id: transition-matrix
 class: theorems
 ---
 
@@ -1214,7 +1222,7 @@ Tokens are gradually replaced by a special mask $m$; the stationary distribution
 
 ---
 clicks: 2
-sourceFrame: "29"
+id: transition-matrix-2
 class: theorems
 ---
 
@@ -1249,7 +1257,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "30"
+id: transition-matrix-3
 class: theorems
 ---
 
@@ -1281,7 +1289,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "31"
+id: uniform-vs-absorbing-transition-matrix
 class: theorems
 ---
 
@@ -1308,7 +1316,8 @@ Absorbing diffusion bridges diffusion and masked-language-model objectives.
 
 ---
 clicks: 0
-sourceFrame: "auto: Reverse Diffusion Process"
+id: outline-6
+section: "Reverse Diffusion Process"
 ---
 
 # Outline
@@ -1326,7 +1335,7 @@ sourceFrame: "auto: Reverse Diffusion Process"
 
 ---
 clicks: 1
-sourceFrame: "32"
+id: posterior-of-the-forward-process
 class: theorems
 ---
 
@@ -1356,7 +1365,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 32"
+id: posterior-of-the-forward-process-2
 class: theorems
 ---
 
@@ -1380,7 +1389,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "33"
+id: posterior-of-the-forward-process-3
 class: theorems
 ---
 
@@ -1391,7 +1400,7 @@ class: theorems
 ## Discrete conditioned reverse distribution
 
 $$
-q(\bx_{t-1}|\bx_t,\bx_0)=\Cat\left(\frac{\bQ_t\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^\top\bQ_{1:t}\bx_0}\right).
+q(\bx_{t-1}|\bx_t,\bx_0)=\Cat\left(\frac{\bQ_t^\top\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^\top\bQ_{1:t}\bx_0}\right).
 $$
 
 </div>
@@ -1421,7 +1430,7 @@ where $\bpi_{\btheta}$ is a neural network.
 
 ---
 clicks: 3
-sourceFrame: "34"
+id: discrete-time-elbo-for-discrete-diffusion
 class: theorems
 ---
 
@@ -1465,7 +1474,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: From Token To Sequence"
+id: outline-7
+section: "From Token To Sequence"
 ---
 
 # Outline
@@ -1483,7 +1493,7 @@ sourceFrame: "auto: From Token To Sequence"
 
 ---
 clicks: 2
-sourceFrame: "35"
+id: from-token-to-sequence
 class: theorems
 ---
 
@@ -1525,7 +1535,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "36"
+id: from-token-to-sequence-2
 class: theorems
 ---
 
@@ -1547,7 +1557,7 @@ $$
 ## Conditioned Reverse Distribution
 
 $$
-q(\bx_{t-1}|\bx_t,\bx_0)=\Cat\left(\frac{\bQ_t\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^\top\bQ_{1:t}\bx_0}\right).
+q(\bx_{t-1}|\bx_t,\bx_0)=\Cat\left(\frac{\bQ_t^\top\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^\top\bQ_{1:t}\bx_0}\right).
 $$
 
 $$
@@ -1566,7 +1576,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "37"
+id: reverse-model-for-sequence
 class: theorems
 ---
 
@@ -1597,7 +1607,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 37"
+id: reverse-model-for-sequence-2
 class: theorems
 ---
 
@@ -1617,7 +1627,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "38"
+id: summary
 class: summary
 ---
 

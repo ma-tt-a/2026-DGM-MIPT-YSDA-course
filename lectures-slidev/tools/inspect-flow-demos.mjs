@@ -2,13 +2,13 @@ import { chromium } from 'playwright-chromium'
 import { resolve } from 'node:path'
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
-import { root, lecturePaths } from './course.mjs'
+import { root, lecturePaths, readSlides } from './course.mjs'
 const lecture = lecturePaths('2')
 const baseURL = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
 const qa = resolve(root, 'output/qa/lecture2/flow-demos')
 mkdirSync(qa, { recursive: true })
-const map = JSON.parse(readFileSync(lecture.map, 'utf8'))
-const slide = frame => (map.find(s => s.frame === `extension: ${frame}`) || map.find(s => s.frame === frame)).slide
+const map = readSlides(lecture)
+const slide = frame => map.find(s => s.id === frame).slide
 const browser = await chromium.launch({ executablePath: process.env.SLIDEV_BROWSER_PATH || '/Applications/Yandex.app/Contents/MacOS/Yandex', headless: true })
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } })
 const errors = [], failures = [], states = []
@@ -16,7 +16,7 @@ page.on('pageerror', e => errors.push(String(e)))
 page.on('response', r => { if (r.status() >= 400) failures.push([r.status(), r.url()]) })
 async function go(frame, suffix = '') {
   const query = new URLSearchParams(suffix.replace(/^\?/, ''))
-  if (frame === 9) query.set('clicks', '3')
+  if (frame === 'jacobian-determinant') query.set('clicks', '3')
   await page.goto(`${baseURL}/${slide(frame)}?${query}`, { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
   return page.locator('[data-demo]:visible')
@@ -37,7 +37,7 @@ async function capture(name) {
 }
 const circles = demo => demo.locator('.coupling-card:last-child .flow-point, .coupling-card:last-child .flow-highlight').evaluateAll(els => els.map(e => [e.getAttribute('cx'), e.getAttribute('cy')]))
 try {
-  let demo = await go(9)
+  let demo = await go('jacobian-determinant')
   for (const [preset, determinant, shear] of [['Shear', '1', '1'], ['Stretch', '2', '0'], ['Identity', '1', '0']]) {
     await demo.getByRole('button', { name: preset, exact: true }).click()
     assert.equal(await demo.getAttribute('data-determinant'), determinant)
@@ -50,12 +50,12 @@ try {
   await demo.getByRole('slider', { name: 'Stretch', exact: true }).focus()
   await page.keyboard.press('ArrowRight')
   assert.equal(await demo.getAttribute('data-determinant'), '0.6')
-  assert.equal(new URL(page.url()).pathname, `/${slide(9)}`, 'Slider keyboard must not navigate')
+  assert.equal(new URL(page.url()).pathname, `/${slide('jacobian-determinant')}`, 'Slider keyboard must not navigate')
   await demo.getByRole('button', { name: 'Reset', exact: true }).click()
   assert.equal(await demo.getAttribute('data-determinant'), '1')
   assert.equal(await demo.getAttribute('data-shear'), '0')
 
-  demo = await go(18)
+  demo = await go('gaussian-autoregressive-nf-two-directions')
   const directions = demo.locator('[data-direction]')
   assert.equal(await directions.count(), 2, 'Both general AR directions stay visible')
   assert.equal(await demo.locator('[data-direction="sample"]').evaluate(el => el.classList.contains('active')), true)
@@ -92,15 +92,15 @@ try {
   assert.equal(await demo.locator('.result[data-known="true"]').count(), 4)
   await capture('ar-evaluate-complete')
   await page.keyboard.press('ArrowRight')
-  await page.waitForURL(`**/${slide(18) + 1}`)
+  await page.waitForURL(`**/${slide('gaussian-autoregressive-nf-two-directions') + 1}`)
   await page.keyboard.press('ArrowLeft')
-  await page.waitForURL(new RegExp(`/${slide(18)}(?:\\?|$)`))
+  await page.waitForURL(new RegExp(`/${slide('gaussian-autoregressive-nf-two-directions')}(?:\\?|$)`))
   assert.equal(await demo.getAttribute('data-step'), '4', 'Returning to slide preserves state')
   await demo.getByRole('button', { name: 'Reset', exact: true }).click()
   assert.equal(await demo.getAttribute('data-step'), '0')
   assert.equal(await demo.getAttribute('data-mode'), 'evaluate')
 
-  demo = await go(20)
+  demo = await go('realnvp-explore-a-coupling-layer')
   const original = await circles(demo)
   await capture('coupling-base')
   await demo.getByRole('button', { name: 'Apply layer 1', exact: true }).click()
@@ -130,12 +130,12 @@ try {
   assert.equal(await demo.getAttribute('data-step'), '0')
   assert.equal(await demo.getAttribute('data-strength'), '1')
 
-  for (const frame of [9, 18, 20]) {
+  for (const frame of ['jacobian-determinant', 'gaussian-autoregressive-nf-two-directions', 'realnvp-explore-a-coupling-layer']) {
     demo = await go(frame, '?tools')
     const toolbar = page.getByRole('navigation', { name: 'Lecture annotation tools' })
     const pen = toolbar.getByRole('button', { name: 'Pen', exact: true })
     await pen.click()
-    await demo.getByRole('button', { name: frame === 9 ? 'Shear' : frame === 18 ? 'Next coordinate' : 'Apply layer 1', exact: true }).click()
+    await demo.getByRole('button', { name: frame === 'jacobian-determinant' ? 'Shear' : frame === 'gaussian-autoregressive-nf-two-directions' ? 'Next coordinate' : 'Apply layer 1', exact: true }).click()
     await capture(`pen-${frame}`)
     await pen.click()
   }

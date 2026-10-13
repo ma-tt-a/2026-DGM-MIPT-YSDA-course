@@ -21,10 +21,7 @@ download: false
 info: false
 favicon: "data:,"
 clicks: 0
-omittedSourceFrames: [2, 3, 4, 9, 10, 11, 12, 13, 14, 15, 16]
-omittedSourceSections: ["Diffusion ELBO Derivation (continued)", "Gaussian Diffusion Reparametrization"]
-sectionTitleOverrides: {"Denoising Diffusion Probabilistic Model (DDPM)": "DDPM as a Score-Based Generative Model"}
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -40,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -67,7 +64,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 5"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -94,11 +91,42 @@ class: theorems
 </div>
 </div>
 
-<div class="source"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">Weng L. What are Diffusion Models?, blog post, 2021</a></div>
+<div class="block">
+
+## SNR and Log-SNR
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon,
+\qquad\bepsilon\sim\cN(0,\bI).
+$$
+
+$$
+\SNR(t)=\frac{{\color{#007f82}\bar{\alpha}_t}}{{\color{#8854c0}1-\bar{\alpha}_t}}.
+$$
+
+$$
+\lambda_t=\log\SNR(t),
+\qquad\bar{\alpha}_t=\frac{1}{1+e^{-\lambda_t}}.
+$$
+
+$\lambda_t>0$: signal dominates; $\lambda_t=0$: equal scales; $\lambda_t<0$: noise dominates.
+
+</div>
+
+<div class="source"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">Weng L. What are Diffusion Models?, blog post, 2021</a><br><a href="https://arxiv.org/abs/2107.00630">Kingma D. et al. Variational Diffusion Models, 2021</a></div>
+
+<!--
+Recap coverage: the forward/reverse processes already share this slide. The added
+noise-level coordinate summarizes the preceding lecture's SNR result here instead
+of creating a separate recap page. Alpha_bar retains its DDPM cumulative meaning;
+SNR compares squared marginal signal/noise coefficients. The next slide recalls the
+complete Gaussian transition and marginal formulas. The schedule demo and
+high-resolution application are examples, not additional prerequisite results.
+-->
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -129,7 +157,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -152,7 +180,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 7"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -180,7 +208,53 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "17"
+id: recap-of-previous-lecture-6
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+## Diffusion Parameterizations
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon.
+$$
+
+<div>
+
+| Network output at $\bx_t$ | Regression target | Clean-data estimate |
+| --- | --- | --- |
+| Noise $\bepsilon_{\btheta,t}$ | $\bepsilon$ | $\dfrac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bepsilon_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
+| Clean data $\hat{\bx}_{\btheta,t}$ | $\bx_0$ | $\hat{\bx}_{\btheta,t}$ |
+| Score $\bs_{\btheta,t}$ | $-\dfrac{\bepsilon}{\sqrt{1-\bar{\alpha}_t}}$ | $\dfrac{\bx_t+(1-\bar{\alpha}_t)\,\bs_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
+| $v$-prediction $\bv_{\btheta,t}$ | $\sqrt{\bar{\alpha}_t}\,\bepsilon-\sqrt{1-\bar{\alpha}_t}\,\bx_0$ | $\sqrt{\bar{\alpha}_t}\,\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bv_{\btheta,t}$ |
+
+</div>
+<div class="block">
+
+**Convertible predictions; different losses.** Plain MSE assigns different weights to different noise levels.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2202.00512">Salimans T., Ho J. Progressive Distillation for Fast Sampling of Diffusion Models, 2022</a></div>
+
+<!--
+Recap coverage: after the ELBO decomposition, recall the available network targets
+before the existing DDPM Training/Sampling slide fixes noise prediction. The table
+and plain-MSE caveat exactly mirror the previous lecture. The existing ELBO page
+already contains the bound and full three-term decomposition; the algorithm page
+already contains complete Training and Sampling. Adding this four-row table to
+either would mix a separate parameterization decision with dense formulas. Keep a
+separate static recap at the approved type size, preserving every target and inverse.
+Assume 0 < alpha_bar_t < 1 for conversion. The score row's regression target is the
+conditional Gaussian score; population MSE predicts the marginal score. Convertible
+predictions do not make unweighted training losses equal: their factors depend on
+noise level. The v target is a diffusion parameterization, not a general ODE velocity.
+-->
+
+---
+clicks: 0
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -214,7 +288,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: outline
 ---
 
 # Outline
@@ -228,7 +302,8 @@ sourceFrame: "8"
 
 ---
 clicks: 0
-sourceFrame: "auto: DDPM as a Score-Based Generative Model"
+id: outline-2
+section: "DDPM as a Score-Based Generative Model"
 ---
 
 # Outline
@@ -242,7 +317,7 @@ sourceFrame: "auto: DDPM as a Score-Based Generative Model"
 
 ---
 clicks: 3
-sourceFrame: "18"
+id: denoising-diffusion-as-a-score-based-generative-model
 class: theorems
 ---
 
@@ -275,7 +350,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 18"
+id: denoising-diffusion-as-a-score-based-generative-model-2
 class: theorems
 ---
 
@@ -301,7 +376,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "19"
+id: ddpm-vs-ncsn-objectives
 class: theorems
 ---
 
@@ -348,7 +423,60 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: ddpm-and-ncsn-connecting-noise-coordinates
+class: theorems
+---
+
+# DDPM and NCSN: Connecting Noise Coordinates
+
+**DDPM scales the clean signal as it adds noise:**
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon,
+\qquad \bepsilon\sim\cN(0,\bI).
+$$
+
+<div class="block" v-click="1">
+
+## Divide by the signal coefficient
+
+$$
+\underbrace{\frac{\bx_t}{\sqrt{\bar{\alpha}_t}}}_{\displaystyle\tilde{\bx}_t}
+=\bx_0+
+\underbrace{\sqrt{\frac{1-\bar{\alpha}_t}{\bar{\alpha}_t}}}_{\displaystyle\sigma_t}\,\bepsilon.
+$$
+
+Here $\sigma_t$ measures additive noise in the rescaled state.
+
+</div>
+
+<div class="block" v-click="2">
+
+## Recover the NCSN noise form
+
+$$
+\tilde{\bx}_t=\bx_0+\sigma_t\bepsilon,
+\qquad q(\tilde{\bx}_t\mid\bx_0)=\cN(\bx_0,\sigma_t^2\bI).
+$$
+
+As $\bar{\alpha}_t$ decreases, the noise level $\sigma_t$ increases.
+
+**The Gaussian perturbations are connected by rescaling.**
+Next, compare their sampling rules: ancestral updates and Langevin dynamics.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2010.02502">Song J., Meng C., Ermon S. Denoising Diffusion Implicit Models, 2021</a><br><a href="https://arxiv.org/abs/2011.13456">Song Y. et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+
+<!--
+Narrative: the preceding DDPM/NCSN Objectives slide displays both Gaussian perturbations and compares their score-matching losses. This slide explains the apparent difference in the perturbations themselves: DDPM scales the clean signal, so divide by that known coefficient to obtain additive Gaussian noise. Define tilde x and sigma inside the equality before reusing them. The resulting conditional Gaussian has the familiar NCSN form. This closes the comparison of noise coordinates and prepares the next pair of ancestral and annealed-Langevin sampling slides. No SDE terminology or ODE theory is required here.
+Assume alpha_bar_t>0; a standard decreasing DDPM cumulative schedule gives increasing sigma_t=sqrt((1-alpha_bar_t)/alpha_bar_t). Tilde x_t is the rescaled DDPM state, not an additional noisy sample. Sigma_t here denotes its total additive-noise standard deviation; the sigma_t multiplying fresh randomness in the following ancestral update denotes a reverse-transition standard deviation and is a different quantity. Do not identify them. The next two Sampling blocks keep their established conventions.
+The comparison is between Gaussian conditional marginals at matched noise levels. It does not assert that the original DDPM and NCSN samplers, all joint laws, arbitrary noise schedules, or training weightings coincide. A score also transforms under rescaling; converting a full training objective would require the corresponding factors. That derivation is not part of this slide. In later continuous-time language, VP state rescaling produces an additive-noise/VE coordinate; in the later DDIM-to-PF-ODE derivation exactly these definitions are recalled. DDIM Section 4.3 equations (13)-(14) uses alpha_t for the course's cumulative alpha_bar_t.
+-->
+
+---
+clicks: 2
+id: ddpm-vs-ncsn-sampling
 class: derivation
 ---
 
@@ -373,7 +501,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 20"
+id: ddpm-vs-ncsn-sampling-2
 class: theorems
 ---
 
@@ -398,7 +526,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "21"
+id: ddpm-vs-ncsn-summary
 class: theorems
 ---
 
@@ -411,11 +539,11 @@ class: theorems
 <ul>
 <li>
 
-Different Markov chains:
+Gaussian perturbations:
 
 - DDPM: $\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon$;
 - NCSN: $\bx_t=\bx_0+\sigma_t\cdot\bepsilon$.
-- One can generalize to $q(\bx_t|\bx_0)=\cN(\alpha_t\cdot\bx_0,\sigma_t^2\,\bI)$.
+- Rescaling the DDPM state by $1/\sqrt{\bar{\alpha}_t}$ gives the NCSN noise form.
 
 </li>
 <li v-click="1">
@@ -439,7 +567,7 @@ The sampling procedures differ:
 
 ---
 clicks: 2
-sourceFrame: "extension: 21"
+id: ddim-from-noise-to-clean-data
 class: theorems
 ---
 
@@ -518,7 +646,7 @@ coarse finite-step updates exact.
 
 ---
 clicks: 2
-sourceFrame: "extension: 21"
+id: ddim-same-marginals-different-transitions
 class: theorems
 ---
 
@@ -584,7 +712,7 @@ on the next slide: its initial random latent supplies the output variability.
 
 ---
 clicks: 2
-sourceFrame: "extension: 21"
+id: ddim-deterministic-sampling
 class: theorems
 ---
 
@@ -680,7 +808,8 @@ predictor; next we modify its predictions to steer generation toward a condition
 
 ---
 clicks: 0
-sourceFrame: "auto: Model Guidance"
+id: outline-3
+section: "Model Guidance"
 ---
 
 # Outline
@@ -694,7 +823,7 @@ sourceFrame: "auto: Model Guidance"
 
 ---
 clicks: 0
-sourceFrame: "22"
+id: guidance
 class: theorems
 ---
 
@@ -711,7 +840,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "23"
+id: conditional-models
 class: theorems
 ---
 
@@ -730,7 +859,7 @@ In practice, we're typically interested in learning conditional models (sampling
 
 ---
 clicks: 0
-sourceFrame: "24"
+id: label-guidance
 class: figure-slide
 ---
 
@@ -744,7 +873,7 @@ class: figure-slide
 
 ---
 clicks: 0
-sourceFrame: "25"
+id: text-guidance
 class: figure-slide
 ---
 
@@ -793,7 +922,7 @@ Author-approved replacement of the former panda illustration from
 
 ---
 clicks: 6
-sourceFrame: "26"
+id: guidance-in-generative-models
 class: theorems
 ---
 
@@ -844,7 +973,8 @@ $\pt(\bx_{t-1}|\bx_t,{\color{olive}\by})$ for DDPMs.
 
 ---
 clicks: 0
-sourceFrame: "auto: Classifier Guidance"
+id: outline-4
+section: "Classifier Guidance"
 ---
 
 # Outline
@@ -858,7 +988,7 @@ sourceFrame: "auto: Classifier Guidance"
 
 ---
 clicks: 3
-sourceFrame: "27"
+id: classifier-guidance
 class: theorems
 ---
 
@@ -898,7 +1028,7 @@ What is the link between $\nabla_{\bx_t}\log\pt(\bx_t)$ and $\nabla_{\bx_t}\log\
 
 ---
 clicks: 3
-sourceFrame: "28"
+id: classifier-guidance-guided-score-function
 class: theorems
 ---
 
@@ -931,7 +1061,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 28"
+id: classifier-guidance-which-way-does-it-push
 class: interactive-slide
 ---
 
@@ -951,7 +1081,7 @@ Four Gaussian components, two classes, one fixed noise level.
 
 ---
 clicks: 3
-sourceFrame: "29"
+id: classifier-guidance-guidance-scale
 class: theorems
 ---
 
@@ -995,7 +1125,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "30"
+id: classifier-guidance-distribution-sharpening
 class: theorems
 ---
 
@@ -1039,7 +1169,7 @@ Very large $\gamma$ can reduce diversity and introduce artifacts.
 
 ---
 clicks: 0
-sourceFrame: "extension: 30"
+id: guidance-scale-changes-the-density
 class: interactive-slide
 ---
 
@@ -1061,7 +1191,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "31"
+id: classifier-guidance-overview
 class: theorems
 ---
 
@@ -1092,7 +1222,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: Classifier-Free Guidance"
+id: outline-5
+section: "Classifier-Free Guidance"
 ---
 
 # Outline
@@ -1106,7 +1237,7 @@ sourceFrame: "auto: Classifier-Free Guidance"
 
 ---
 clicks: 3
-sourceFrame: "32"
+id: classifier-free-guidance
 class: theorems
 ---
 
@@ -1139,7 +1270,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 32"
+id: classifier-free-guidance-2
 class: derivation
 ---
 
@@ -1163,7 +1294,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "33"
+id: classifier-free-guidance-formulation
 class: theorems
 ---
 
@@ -1222,7 +1353,7 @@ How to avoid training two separate score function models?
 
 ---
 clicks: 0
-sourceFrame: "extension: 33"
+id: cfg-interpolation-and-extrapolation
 class: interactive-slide
 ---
 
@@ -1244,7 +1375,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "34"
+id: classifier-free-guidance-3
 class: theorems
 ---
 
@@ -1278,7 +1409,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "extension: 34"
+id: classifier-free-guidance-guidance-interval
 class: theorems
 ---
 
@@ -1311,7 +1442,7 @@ instead select the unconditional model in the preceding CFG convention.
 
 ---
 clicks: 3
-sourceFrame: "extension: 34"
+id: classifier-free-guidance-guidance-distillation
 class: theorems
 ---
 
@@ -1405,13 +1536,13 @@ this does not assert that its proprietary training recipe is identical to Meng's
 
 ---
 clicks: 0
-sourceFrame: "35"
+id: summary
 class: summary
 ---
 
 # Summary
 
-- DDPM and NCSN are intimately connected at the objective level.
+- DDPM and NCSN are connected through score matching and a rescaling of their Gaussian perturbations.
 - DDPM and NCSN use different samplers; DDIM reuses the DDPM network on a shorter sampling grid.
 - Guidance makes generation controllable through labels or text prompts.
 - Classifier guidance turns an unconditional model into a conditional one by training an auxiliary classifier on noisy data.

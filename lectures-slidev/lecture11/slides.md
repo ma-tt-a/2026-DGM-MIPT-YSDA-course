@@ -21,7 +21,7 @@ favicon: "data:,"
 download: false
 info: false
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -37,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-of-previous-lecture
 class: theorems
 ---
 
@@ -77,7 +77,7 @@ The variance is preserved if $\bx(0)$ has unit variance.
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-of-previous-lecture-2
 class: theorems
 ---
 
@@ -100,7 +100,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "4"
+id: recap-of-previous-lecture-3
 class: theorems
 ---
 
@@ -135,11 +135,11 @@ where $dt<0$ and $\bar{\bw}(t)$ is a reverse-time Wiener process.
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+<div class="source"><a href="https://doi.org/10.1016/0304-4149(82)90051-5">Anderson B. D. O. Reverse-time diffusion equation models, 1982</a><br><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
 
 ---
 clicks: 0
-sourceFrame: "extension: 4"
+id: recap-of-previous-lecture-4
 class: theorems
 ---
 
@@ -159,7 +159,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "5"
+id: recap-of-previous-lecture-5
 class: theorems
 ---
 
@@ -186,7 +186,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: recap-of-previous-lecture-6
 class: theorems
 ---
 
@@ -233,7 +233,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: recap-of-previous-lecture-7
 class: theorems
 ---
 
@@ -257,13 +257,63 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "8"
+id: recap-of-previous-lecture-8
 class: theorems
 ---
 
 # Recap of Previous Lecture
 
-Consider ODE dynamics $\bx_t=\bx(t)$ in the interval $t\in[0,1]$ with $\bx_0\sim p_0(\bx)$ (mostly $\cN(0,\bI)$), $\bx_1\sim p_1(\bx)=\pd(\bx)$.
+For additive Gaussian noise $\bx=\bx_0+\sigma\bepsilon$, $\bepsilon\sim\cN(0,\bI)$:
+
+<div class="block">
+
+## A Denoiser Parameterizes the Probability Flow ODE
+
+$$
+\bs_{\btheta}(\bx,\sigma)=\frac{D_{\btheta}(\bx,\sigma)-\bx}{\sigma^2},
+\qquad
+\frac{d\bx}{d\sigma}=-\sigma\bs_{\btheta}(\bx,\sigma)
+=\frac{\bx-D_{\btheta}(\bx,\sigma)}{\sigma}.
+$$
+
+Decreasing $\sigma$ moves towards the denoiser prediction.
+
+</div>
+
+<div class="block">
+
+## DDIM Is Euler in Noise Coordinates
+
+Normalize the DDPM state and noise level:
+
+$$
+\tilde{\bx}_t=\frac{\bx_t}{\sqrt{\bar{\alpha}_t}},
+\qquad \sigma_t=\sqrt{\frac{1-\bar{\alpha}_t}{\bar{\alpha}_t}}.
+$$
+
+Deterministic DDIM implements the Euler step using the existing noise predictor.
+
+</div>
+
+**The ODE field can be obtained from a trained denoiser.**
+
+<div class="source"><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a><br><a href="https://arxiv.org/abs/2010.02502">Song J., Meng C., Ermon S. Denoising Diffusion Implicit Models, 2021</a></div>
+
+<!--
+Coverage repair: the preceding Recap Sampling slide recalls the general score-based construction. This slide recalls the new denoiser/DDIM section's main results: additive-noise coordinates, the score-to-denoiser conversion, the sigma-parameterized PF-ODE, and deterministic DDIM as Euler after DDPM rescaling. It summarizes the results rather than repeating the training-loss or DDIM derivations. The first block's x is the additive-noise state; in the second block tilde x_t is that normalized state and x_t is the original DDPM state. Assume sigma>0 and alpha_bar_t>0. The score equality defines the learned parameterization; exact marginal probability flow requires the true score. DDIM's equality is between discrete updates on the same grid with the induced denoiser and same initial state under rescaling, not exact integration or equivalence of different priors. The conclusion closes construction of a field from a trained predictor. The following CNF recap explicitly introduces learning the velocity field itself, then the cost of likelihood training motivates Flow Matching. Static recap, matching the surrounding slides.
+-->
+
+---
+clicks: 0
+id: recap-of-previous-lecture-9
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+**Now learn the velocity field itself.** Recall $\bx_t=\bx(t)$ for $t\in[0,1]$, with $\bx_0\sim p_0(\bx)$ (mostly $\cN(0,\bI)$), $\bx_1\sim p_1(\bx)=\pd(\bx)$.
+
+**Time convention:** unlike the diffusion sections, here $t=0$ denotes noise and $t=1$ denotes data. Sampling runs forward in time.
 
 $$
 \frac{d\bx_t}{dt}=\bv(\bx_t,t),\quad\text{with initial condition }\bx(0)=\bx_0.
@@ -289,7 +339,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 8"
+id: recap-of-previous-lecture-10
 class: theorems
 ---
 
@@ -311,7 +361,7 @@ Flow matching fits velocities by regression, without model ODE solves or trace e
 
 ---
 clicks: 0
-sourceFrame: "9"
+id: outline
 ---
 
 # Outline
@@ -325,7 +375,8 @@ sourceFrame: "9"
 
 ---
 clicks: 0
-sourceFrame: "auto: Conditional Flow Matching (CFM)"
+id: outline-2
+section: "Conditional Flow Matching (CFM)"
 ---
 
 # Outline
@@ -339,7 +390,7 @@ sourceFrame: "auto: Conditional Flow Matching (CFM)"
 
 ---
 clicks: 0
-sourceFrame: "10"
+id: generative-models-taxonomy
 ---
 
 # Generative Models Taxonomy
@@ -348,7 +399,8 @@ sourceFrame: "10"
 
 ---
 clicks: 0
-sourceFrame: "auto: CFM Objective"
+id: outline-3
+section: "CFM Objective"
 ---
 
 # Outline
@@ -362,7 +414,7 @@ sourceFrame: "auto: CFM Objective"
 
 ---
 clicks: 2
-sourceFrame: "11"
+id: flow-matching
 class: theorems
 ---
 
@@ -399,7 +451,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "12"
+id: conditional-vector-field
 class: theorems
 ---
 
@@ -427,7 +479,7 @@ $$
 
 ---
 clicks: 4
-sourceFrame: "extension: 12"
+id: conditional-vector-field-2
 class: derivation
 ---
 
@@ -453,7 +505,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "13"
+id: flow-matching-2
 class: theorems
 ---
 
@@ -481,7 +533,7 @@ $$
 
 ## Theorem
 
-If $\supp(p_t(\bx))=\bbR^m$, then the optimal value of the FM objective equals the optimal value of the CFM objective.
+If $p_t(\bx)>0$ for all $\bx\in\bbR^m$ and $0\le t<1$, the FM and CFM objectives differ by a constant independent of $\btheta$, so they have the same minimizers.
 
 </div>
 <div class="block" v-click="2">
@@ -496,7 +548,7 @@ This can be proved in a similar way as in the denoising score matching theorem.
 
 ---
 clicks: 1
-sourceFrame: "14"
+id: conditional-flow-matching
 class: derivation
 ---
 
@@ -531,7 +583,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "extension: 14"
+id: conditional-flow-matching-2
 class: derivation
 ---
 
@@ -556,7 +608,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "15"
+id: conditional-flow-matching-training-and-sampling
 class: theorems
 ---
 
@@ -595,7 +647,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "16"
+id: marginal-to-conditional-scores-vs-velocities
 class: theorems
 ---
 
@@ -641,7 +693,8 @@ In both cases, the optimal MSE predictor is the posterior mean of the **conditio
 
 ---
 clicks: 0
-sourceFrame: "auto: Conditional Probability Paths"
+id: outline-4
+section: "Conditional Probability Paths"
 ---
 
 # Outline
@@ -655,7 +708,7 @@ sourceFrame: "auto: Conditional Probability Paths"
 
 ---
 clicks: 3
-sourceFrame: "17"
+id: conditional-flow-matching-continuity-equations
 class: theorems
 ---
 
@@ -698,7 +751,7 @@ Moreover, not every given path $p_t(\bx)$ can actually arise from particles movi
 
 ---
 clicks: 3
-sourceFrame: "18"
+id: conditional-flow-matching-paths-and-vector-fields
 class: theorems
 ---
 
@@ -739,7 +792,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "19"
+id: from-marginal-to-conditional-paths
 class: theorems
 ---
 
@@ -764,7 +817,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "20"
+id: gaussian-conditional-probability-paths-q2
 class: theorems
 ---
 
@@ -803,7 +856,7 @@ where $\bepsilon$ is fixed by the condition: $\bx_0=\bmu_0(\bz)+\bsigma_0(\bz)\o
 
 ---
 clicks: 4
-sourceFrame: "21"
+id: gaussian-conditional-vector-field
 class: theorems
 ---
 
@@ -852,7 +905,8 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "auto: One-Sided Conditioning"
+id: outline-5
+section: "One-Sided Conditioning"
 ---
 
 # Outline
@@ -866,7 +920,7 @@ sourceFrame: "auto: One-Sided Conditioning"
 
 ---
 clicks: 3
-sourceFrame: "22"
+id: endpoint-conditioning
 class: theorems
 ---
 
@@ -912,7 +966,7 @@ $\displaystyle\begin{cases}\bbE_{p(\bz)}p_0(\bx|\bz)=\cN(0,\bI)\\\bbE_{p(\bz)}p_
 
 ---
 clicks: 3
-sourceFrame: "23"
+id: one-sided-conditioning
 class: theorems
 ---
 
@@ -952,7 +1006,7 @@ $\displaystyle\begin{cases}\bmu_t(\bx_1)=t\bx_1\\\bsigma_t(\bx_1)=1-t\end{cases}
 
 ---
 clicks: 4
-sourceFrame: "24"
+id: one-sided-conditioning-conditional-vector-field
 class: theorems
 ---
 
@@ -974,13 +1028,20 @@ $$
 
 $$ {1|1-2|all} {at:2}
 \begin{aligned}
-\bv(\bx_t,\bx_1,t)&=\bx_1-\frac{1}{1-t}\cdot(\bx_t-t\bx_1)=\frac{\bx_1-{\color{teal}\bx_t}}{1-t}\\
+\bv(\bx_t,\bx_1,t)&=\bx_1-\frac{1}{1-t}\cdot(\bx_t-t\bx_1)=\frac{\bx_1-{\color{teal}\bx_t}}{1-t},\qquad t<1\\
 &=\frac{\bx_1-{\color{teal}t\bx_1-(1-t)\bx_0}}{1-t}\\
 &=\bx_1-\bx_0
 \end{aligned}
 $$
 
 </div></div>
+
+<div v-click="3">
+
+At $t=1$, the quotient is undefined. Use the simplified training target $\bx_1-\bx_0$, which contains no division.
+
+</div>
+
 <div class="columns balanced" v-click="4">
 <img src="/figs/g2g-vector-field-samples-cond.png" alt="Straight conditional vector field trajectories" style="width:100%;height:160px;object-fit:contain" />
 <div>
@@ -991,9 +1052,13 @@ The conditional vector field $\bv(\bx_t,\bx_1,t)$ defines straight lines between
 
 <div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a></div>
 
+<!--
+For 0 <= t < 1, the conditional Gaussian variance (1-t)^2 is strictly positive, so the marginal density p_t(x) is positive everywhere. At t=1 the conditional law collapses to a point mass; the data distribution need not have full support. Thus the positivity assumption in the FM/CFM theorem is imposed for t<1. The single endpoint has zero probability under continuous time sampling and does not change the expected loss (assuming finite expectations). The quotient is undefined at the endpoint; training uses x1-x0 directly. Its finite pathwise limit does not imply that the conditional field is bounded away from the path or that the marginal field has a unique endpoint extension.
+-->
+
 ---
 clicks: 3
-sourceFrame: "25"
+id: one-sided-conditioning-cfm-objective
 class: derivation
 ---
 
@@ -1009,24 +1074,44 @@ $$
 
 <div v-click="2">
 
-- We fit straight lines between the noise distribution $p_0(\bx)$ and the data distribution $\pd(\bx)$.
-- The **marginal** path $p_t(\bx)$ does not give straight lines.
+## Rectified Flow
+
+Regressing on $\bx_1-\bx_0$ along $\bx_t=(1-t)\bx_0+t\bx_1$ gives the **rectified flow objective**.
+
+**Straight training paths do not imply straight sampling trajectories.** The optimal field averages conditional velocities:
+
+$$
+\bv_{\btheta^*}(\bx,t)=\bbE\left[\bx_1-\bx_0\mid\bx_t=\bx\right].
+$$
 
 </div>
 <div class="columns" v-click="3">
-<img src="/figs/g2g-vector-field-samples-cond.png" alt="Conditional straight paths" style="width:100%;height:185px;object-fit:contain" />
-<img src="/figs/g2g-forward_samples.png" alt="Marginal nonlinear paths" style="width:100%;height:185px;object-fit:contain" />
+<div>
+
+**Conditional paths: straight**
+
+<img src="/figs/g2g-vector-field-samples-cond.png" alt="Conditional straight paths" style="width:100%;height:115px;object-fit:contain" />
+</div>
+<div>
+
+**ODE trajectories: not necessarily straight**
+
+<img src="/figs/g2g-forward_samples.png" alt="Marginal nonlinear paths" style="width:100%;height:115px;object-fit:contain" />
+</div>
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
+
+
+<!-- The preceding slide derives the conditional target x1-x0. This slide substitutes it into CFM, names the resulting linear-interpolation regression Rectified Flow, and distinguishes conditional training paths from integral curves of the optimal marginal field. The following slide gives the unchanged Training/Sampling algorithms. The conditional-expectation identity assumes the population MSE optimum and sufficient model capacity; a fitted finite network approximates it. Rectified Flow does not require straight sampling trajectories or reflow. Reflow is deferred to the coupling discussion. -->
 
 ---
 clicks: 1
-sourceFrame: "26"
+id: rectified-flow-training-and-sampling
 class: theorems
 ---
 
-# CFM with One-Sided Conditioning: Training and Sampling
+# Rectified Flow: Training and Sampling
 
 $$
 \bbE_{t\sim U[0,1]}\bbE_{\bx_1\sim\pd(\bx)}\bbE_{\bx_0\sim\cN(0,\bI)}\left\|(\bx_1-\bx_0)-\bv_{\btheta}(\bx_t,t)\right\|^2\rightarrow\min_{\btheta}
@@ -1054,11 +1139,11 @@ $$
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
 ---
 clicks: 1
-sourceFrame: "27"
+id: conditional-vs-marginal-paths
 class: theorems
 ---
 
@@ -1076,7 +1161,7 @@ class: theorems
 
 ---
 clicks: 0
-sourceFrame: "28"
+id: summary
 class: summary
 ---
 
@@ -1086,4 +1171,4 @@ class: summary
 - The marginal vector field can be expressed as the posterior mean of conditional vector fields: $\bv(\bx,t)=\bbE_{p_t(\bz|\bx)}\bv(\bx,\bz,t)$.
 - The FM and CFM objectives have the same optimal solution, making CFM a tractable alternative to FM.
 - For Gaussian conditional paths $p_t(\bx|\bz)=\cN(\bmu_t(\bz),\bsigma_t^2(\bz))$, the conditional vector field has a closed form for $\bv(\bx_t,\bz,t)$.
-- One-sided conditioning uses endpoint conditioning $\bz=\bx_1$ with straight conditional paths, yielding the simple vector field $\bv(\bx_t,\bx_1,t)=\bx_1-\bx_0$.
+- One-sided conditioning $\bz=\bx_1$ with straight conditional paths yields the **rectified flow objective**, using the target $\bv(\bx_t,\bx_1,t)=\bx_1-\bx_0$.

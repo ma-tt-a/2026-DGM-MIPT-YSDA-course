@@ -1,13 +1,12 @@
 ---
 name: notation-lint
-description: Check course notation, citations, figures, reveal conventions, and Training/Sampling blocks in Beamer .tex or Slidev slides.md. Use for notation/style review or after substantive source edits; distinguish source checks from rendered typography checks.
+description: Check course notation, citations, figures, reveal conventions, and Training/Sampling blocks in Slidev slides.md. Use for notation/style review or after substantive source edits; distinguish source checks from rendered typography checks.
 ---
 
 # Notation lint
 
-Read [shared context and format selection](../lecture-audit/references/formats.md)
-first. Use CLAUDE.md for course notation and Beamer conventions, and MIGRATION.md
-for Slidev. Read `lectures/utils/newcommands.tex` at runtime; do not hardcode the
+Read [shared context](../lecture-audit/references/formats.md)
+first. Use CLAUDE.md for course conventions. Read `lectures-slidev/theme/setup/macros.json` at runtime; do not hardcode the
 macro inventory. Shared definitions themselves are not raw-notation violations.
 
 ## Common checks
@@ -20,42 +19,25 @@ macro inventory. Shared definitions themselves are not raw-notation violations.
 - Check source attribution for results, claims, and figures from papers. A title,
   agenda, or original explanatory slide is not missing a citation solely because
   it has text or a heading. Recap figures still need their original sources.
-- Check local figure paths and existence; use the format-specific asset conventions.
+- Check local figure paths and existence; use the Slidev asset conventions.
 - Existing Training/Sampling blocks keep canonical titles (optional algorithm name),
   ordered steps, imperative verbs, sentence punctuation, course loss/parameter
-  notation, and whole-block reveals. Check changed steps against CLAUDE.md §5.
-  During migration do not invent a Training block absent from the approved source.
+  notation, and whole-block reveals outside Recap. Recap slides are fully visible
+  on entry, including Training/Sampling: no overlays or reveal directives; Slidev
+  frontmatter uses `clicks: 0`. Check changed steps against CLAUDE.md Training/Sampling and Recap rules.
+  Do not invent a Training block absent from approved content.
 - Classify a preserved source defect separately from a regression introduced by
-  migration. Approved terminology and equivalent KaTeX adaptations are not errors.
-
-## Beamer
-
-Check `lectures/lectureN/LectureN.tex`:
-
-- Paper references use `\myfootnotewithlink` near the start of the frame, or a
-  justified `\myfootnote` when no URL exists.
-- Images use local `figs/...`. Shared taxonomy/utils references require a real
-  shared source, not borrowing another lecture's figure directory.
-- Consecutive frames have `%=======` separators (allow the existing number of `=`).
-- Flag raw `\pause` inside math and overlay commands that bypass the course reveal
-  machinery. Preserve `\nextonslide`/`\eqpause` semantics; `\pause` outside math is
-  not automatically an error, and blindly replacing it with `\eqpause` is unsafe.
-- Training/Sampling use `enumerate`, with no pauses between individual steps.
-  Check displayed-equation spacing against the shared TeX convention.
+  the current edit. Approved terminology and equivalent KaTeX adaptations are not errors.
 
 ## Slidev
 
 Check `lectures-slidev/lectureN/slides.md` and relevant included sources/components:
 
-- Reuse the shared theme and KaTeX adapter. Check sourceFrame/clicks against the
-  map, meaningful Markdown/HTML boundaries, references in visible source blocks,
+- Reuse the shared theme and KaTeX macros. Check unique IDs and explicit click counts, meaningful Markdown/HTML boundaries, references in visible source blocks,
   local `/figs/...` and imported theme assets. Use `npm run check -- N` if the
   existing environment is available, and interpret its coverage accurately.
-- Do not require `%=======`, `\eqpause`, TeX footnote commands, `enumerate`, or
-  TeX `\vspace` inside Markdown. Check their purpose through Slidev equivalents.
 - Inspect math inside HTML for raw delimiters/commands; verify unsupported
-  environments were adapted without changing the formula. Check macro adapter
-  consistency with `node tools/sync-notation.mjs --check`; do not edit it by hand.
+  environments were adapted without changing the formula. Check shared macros with `npm run check -- N`.
 - Inspect click groups and the initial state. Whole algorithms reveal together;
   future content stays hidden with reserved space. Do not split paired delimiters,
   fractions, or braces across separate math fragments. Look for empty clicks and
@@ -67,9 +49,9 @@ Check `lectures-slidev/lectureN/slides.md` and relevant included sources/compone
 
 ## Report and authorized fixes
 
-Give format, absolute path:line, rule, observed snippet, and concrete fix; include
+Give absolute path:line, rule, observed snippet, and concrete fix; include
 slide/click or PDF page for rendered findings. Distinguish source-only coverage from
-visual evidence. During a requested audit, report only. If a fix or migration is
+visual evidence. During a requested audit, report only. If a fix is
 already authorized, apply the corresponding correction, including a necessary shared
 macro, without a second approval request. Ask only when the intended mathematical
 meaning or editorial direction is unresolved. Preserve unrelated formatting and

@@ -21,7 +21,7 @@ favicon: "data:,"
 download: false
 info: false
 clicks: 0
-sourceFrame: "1"
+id: deep-generative-models
 class: cover
 ---
 
@@ -37,7 +37,7 @@ Roman Isachenko
 
 ---
 clicks: 0
-sourceFrame: "2"
+id: recap-discrete-diffusion-lecture-12
 class: theorems
 ---
 
@@ -62,7 +62,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "extension: 2"
+id: recap-discrete-diffusion-lecture-12-2
 class: theorems
 ---
 
@@ -74,7 +74,7 @@ class: theorems
 
 $$
 q(\bx_{t-1}|\bx_t,\bx_0)
-=\Cat\left(\frac{\bQ_t\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^{\top}\bQ_{1:t}\bx_0}\right).
+=\Cat\left(\frac{\bQ_t^\top\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^{\top}\bQ_{1:t}\bx_0}\right).
 $$
 
 </div>
@@ -90,7 +90,7 @@ $$
 
 ---
 clicks: 0
-sourceFrame: "3"
+id: recap-discrete-diffusion-lecture-12-3
 class: theorems
 ---
 
@@ -130,7 +130,7 @@ $$
 
 ---
 clicks: 3
-sourceFrame: "4"
+id: setup-where-pf-ode-solvers-floor
 class: theorems
 ---
 
@@ -167,7 +167,7 @@ Can we go further — to **1**–**4** steps?
 
 ---
 clicks: 2
-sourceFrame: "5"
+id: setup-shortcut-networks
 class: theorems
 ---
 
@@ -194,7 +194,7 @@ Both reuse a pretrained score $\bs_{\bphi}$ as a teacher.
 
 ---
 clicks: 0
-sourceFrame: "6"
+id: outline
 ---
 
 # Outline
@@ -208,7 +208,8 @@ sourceFrame: "6"
 
 ---
 clicks: 0
-sourceFrame: "auto: Consistency Models"
+id: outline-2
+section: "Consistency Models"
 ---
 
 # Outline
@@ -222,7 +223,7 @@ sourceFrame: "auto: Consistency Models"
 
 ---
 clicks: 0
-sourceFrame: "7"
+id: consistency-function-an-ode-perspective
 class: theorems
 ---
 
@@ -245,7 +246,7 @@ $\epsilon>0$ is a small numerical cutoff — the score $\bs(\bx,t)$ blows up as 
 
 ---
 clicks: 1
-sourceFrame: "extension: 7"
+id: consistency-function-an-ode-perspective-2
 class: theorems
 ---
 
@@ -272,7 +273,7 @@ Together the two conditions pin $f_{\btheta}$ uniquely: a function that is const
 
 ---
 clicks: 1
-sourceFrame: "8"
+id: consistency-function-an-ode-perspective-3
 class: theorems
 ---
 
@@ -295,7 +296,7 @@ $$
 
 ---
 clicks: 1
-sourceFrame: "9"
+id: self-consistency-the-integrated-form
 class: theorems
 ---
 
@@ -324,7 +325,7 @@ whenever $\bx_t$ and $\bx_{t'}$ lie **on the same PF-ODE trajectory.**
 
 ---
 clicks: 1
-sourceFrame: "10"
+id: skip-connection-parameterization
 class: theorems
 ---
 
@@ -354,7 +355,7 @@ At $t=\epsilon$ the skip term passes $\bx$ through and the network term is kille
 
 ---
 clicks: 1
-sourceFrame: "11"
+id: consistency-distillation-cd
 class: theorems
 ---
 
@@ -378,7 +379,7 @@ one step of $\ODESolve$ for $d\bx/dt=-t\cdot\bs_{\bphi}(\bx,t)$ (Euler: $\Phi=-t
 
 ---
 clicks: 0
-sourceFrame: "extension: 11"
+id: consistency-distillation-cd-2
 class: theorems
 ---
 
@@ -400,7 +401,7 @@ $\lambda(t_n)>0$ — weighting; $d(\bu,\bv)\in\{\|\bu-\bv\|_2^2,\|\bu-\bv\|_1,\t
 
 ---
 clicks: 0
-sourceFrame: "12"
+id: pseudocode-consistency-distillation
 class: theorems
 ---
 
@@ -422,7 +423,7 @@ class: theorems
 
 ---
 clicks: 1
-sourceFrame: "extension: 12"
+id: pseudocode-consistency-distillation-2
 class: theorems
 ---
 
@@ -447,7 +448,7 @@ Multi-step trades a few extra NFEs ($M=2$–$4$) for higher quality; $M=1$ recov
 
 ---
 clicks: 2
-sourceFrame: "13"
+id: latent-consistency-models-lcm
 class: theorems
 ---
 
@@ -485,7 +486,8 @@ Larger SNR gap $\Rightarrow$ stronger training signal.
 
 ---
 clicks: 0
-sourceFrame: "auto: Distribution Matching Distillation"
+id: outline-3
+section: "Distribution Matching Distillation"
 ---
 
 # Outline
@@ -499,7 +501,7 @@ sourceFrame: "auto: Distribution Matching Distillation"
 
 ---
 clicks: 2
-sourceFrame: "14"
+id: one-step-generator
 class: theorems
 ---
 
@@ -534,7 +536,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "15"
+id: kl-gradient-via-score-difference
 class: theorems
 ---
 
@@ -565,7 +567,7 @@ $$
 
 ---
 clicks: 2
-sourceFrame: "16"
+id: two-score-networks
 class: theorems
 ---
 
@@ -600,7 +602,7 @@ Tracks $p_{\text{fake}}$ as the generator evolves.
 
 ---
 clicks: 2
-sourceFrame: "17"
+id: dmd1-total-loss
 class: theorems
 ---
 
@@ -636,7 +638,7 @@ Interpretation: regression anchors $G_{\btheta}$ near the teacher's deterministi
 
 ---
 clicks: 4
-sourceFrame: "18"
+id: dmd2-improvements
 class: theorems
 ---
 
@@ -671,7 +673,7 @@ Closes most of the quality gap between distilled and full-step diffusion.
 
 ---
 clicks: 0
-sourceFrame: "19"
+id: summary
 class: summary
 ---
 

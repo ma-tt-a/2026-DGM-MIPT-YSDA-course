@@ -1,32 +1,31 @@
 ---
 name: summary-sync
-description: Check Summary coverage, stale takeaways, and length in Beamer or Slidev lectures. Use after substantive content edits or on request; during migration distinguish preserved source choices from newly lost content.
+description: Check Summary coverage, stale takeaways, and length in Slidev lectures. Use after substantive content edits or on request.
 ---
 
 # Summary sync
 
-Read [shared context and format selection](../lecture-audit/references/formats.md)
+Read [shared context](../lecture-audit/references/formats.md)
 first. Summary is a concise synthesis of the actual lecture, not a verbatim copy of
 section titles. Use the current source and approved author decisions.
 
 ## Check
 
-1. Locate the final frame/slide titled `Summary`: `\begin{frame}{Summary}` in
-   Beamer, the corresponding logical slide heading in Slidev. If missing, determine
-   whether it was lost in migration, absent from the source, or still part of a draft.
+1. Locate the final Slidev slide titled `Summary`. If missing, determine
+   whether it was removed by the current edit, absent from the source, or still part of a draft.
 2. Identify the actual section hierarchy and teaching content. In Slidev, use
-   section transitions plus the original hierarchy and approved changes; do not
+   section transitions plus the Outline hierarchy and approved changes; do not
    count repeated Outline agendas or treat every slide title as a section.
-3. Count top-level Summary bullets (`\item`, Markdown items, or HTML list items),
+3. Count top-level Summary bullets (Markdown or HTML list items),
    not wrapped lines or nested lists. Target 5–7; fewer is acceptable when coverage
    is sufficient. Eight or more merits a consolidation suggestion, not an automatic
-   deletion. An inherited long/short Summary is not itself a new migration defect.
+   deletion. An inherited long/short Summary is not itself a new defect.
 4. Map conceptual sections to takeaways and check for claims no longer taught.
    A bullet can cover several topics; a takeaway need not literally repeat a
    section title. Check body content before calling a differently named topic stale.
    Preserve documented source choices, such as omitting logistics from takeaways.
 5. For a substantive content change, suggest a holistic revision: merge, replace,
-   or reword existing bullets before adding another. A pure format migration does
+   or reword existing bullets before adding another. A formatting change does
    not authorize inserting a new Training block or new takeaway to satisfy a count.
 6. If visual checking is in scope, inspect fit and the common Summary style in the
    relevant PDF/browser. Count alone does not prove readability. Preserve the
@@ -43,6 +42,6 @@ choices, actual regressions, and unverified layout. Do not flag every Summary be
 five bullets as defective or rewrite one solely to satisfy the target range.
 
 Report-only audits leave sources unchanged. A requested Summary rewrite or an
-authorized migration correction permits the corresponding edit without another
+authorized correction permits the corresponding edit without another
 confirmation. Ask only about unresolved authorial takeaways or scope changes; do not
 end every successful check with an offer or permission question.
