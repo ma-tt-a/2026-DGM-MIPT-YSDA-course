@@ -233,6 +233,42 @@ $$
 
 ---
 clicks: 0
+id: recap-training-time-and-noise-level
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+## Training Time, Noise Level and Loss Weights
+
+For $t\sim r(t)$ and differentiable monotone $\lambda(t)=\log\SNR(t)$ with nonzero derivative:
+
+$$
+p_{\lambda}(\lambda)=r(t(\lambda))\left|\frac{dt}{d\lambda}\right|,
+\qquad
+\int W(\lambda)\ell_{\btheta}(\lambda)d\lambda
+=\bbE_{p_{\lambda}}\frac{W(\lambda)\ell_{\btheta}(\lambda)}{p_{\lambda}(\lambda)}.
+$$
+
+Uniform time is generally nonuniform in log-SNR; the generation grid is a separate choice.
+
+## Changing the Prediction Target
+
+For additive Gaussian noise, preserving the unit-weight score objective gives
+
+$$
+\left\|\bs_{\btheta}(\bx,\sigma)+\frac{\bx-\bx_0}{\sigma^2}\right\|^2
+=\frac1{\sigma^4}\left\|D_{\btheta}(\bx,\sigma)-\bx_0\right\|^2.
+$$
+
+Here $\bs_{\btheta}=(D_{\btheta}-\bx)/\sigma^2$. Plain denoiser MSE changes the weights.
+
+<div class="source"><a href="https://arxiv.org/abs/2303.00848">Kingma D., Gao R. Understanding Diffusion Objectives as the ELBO with Simple Data Augmentation, 2023</a><br><a href="https://arxiv.org/abs/2206.00364">Karras T., et al. Elucidating the Design Space of Diffusion-Based Generative Models, 2022</a></div>
+
+<!-- Coverage: combines the new continuous-coordinate result and the explicit weight in the denoiser derivation. The preceding recap is already full with discrete/continuous objectives and VE/VP kernels; the later denoiser/PF-ODE recap covers sampling geometry. A separate static slide preserves readable formulas. Importance sampling requires support wherever W times the loss contributes; sigma>0. -->
+
+---
+clicks: 0
 id: recap-of-previous-lecture-7
 class: theorems
 ---
@@ -573,9 +609,11 @@ $$
 $$
 \begin{aligned}
 &\bbE_{\bx\sim p_t(\bx)}\left\|\bv(\bx,t)-\bv_{\btheta}(\bx,t)\right\|^2\\
-&\quad={\color{olive}\bbE_{\bz\sim p(\bz)}\bbE_{\bx\sim p_t(\bx|\bz)}}\left[\|\bv_{\btheta}(\bx,t)\|^2-2{\color{teal}\bv_{\btheta}^\top(\bx,t)\bv(\bx,t)}\right]+\text{const}(\btheta)
+&\quad={\color{olive}\bbE_{\bz\sim p(\bz)}\bbE_{\bx\sim p_t(\bx|\bz)}}\left[\|\bv_{\btheta}(\bx,t)\|^2-2{\color{teal}\bv_{\btheta}^\top(\bx,t)\bv(\bx,t)}\right]+\text{const}
 \end{aligned}
 $$
+
+Here $\text{const}$ is independent of $\btheta$.
 
 </div>
 
@@ -1142,6 +1180,48 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
 ---
+clicks: 3
+id: rectified-flow-training-time-distribution
+class: theorems
+---
+
+# Rectified Flow: Sampling Training Times
+
+For $\bx_t=(1-t)\bx_0+t\bx_1$, let $\ell_{\btheta}(t)=\bbE\|\bv_{\btheta}(\bx_t,t)-(\bx_1-\bx_0)\|^2$.
+
+<div v-click="1">
+
+$$
+\bbE_{t\sim r}\ell_{\btheta}(t)
+=\bbE_{t\sim U[0,1]}\left[r(t)\ell_{\btheta}(t)\right].
+$$
+
+**Without importance correction, more frequent times receive more weight.**
+
+</div>
+<div v-click="2">
+
+$$
+u\sim\cN(\mu,s^2),\qquad t=\frac1{1+e^{-u}}
+\quad\Rightarrow\quad
+\log\SNR(t)=2\log\frac{t}{1-t}=2u.
+$$
+
+<img src="/figs/logit-normal-training-times.svg" alt="Uniform and logit-normal training-time densities, with mu zero and s one" style="width:100%;height:185px;object-fit:contain" />
+
+</div>
+<div v-click="3">
+
+Logit-normal time means Gaussian log-SNR. SD3 explores this reweighting.
+The probability path and the target $\bx_1-\bx_0$ stay fixed.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2403.03206">Esser P., et al. Scaling Rectified Flow Transformers for High-Resolution Image Synthesis, 2024</a></div>
+
+<!-- Narrative: the preceding Training/Sampling slide uses uniform time. Here vary only the training-time distribution, reuse the weighted-loss identity, and show logit-normal as a concrete example. The following conditional/marginal-path slide returns to transport geometry and motivates two-sided conditioning. In this lecture t=0 is noise and t=1 is data, opposite to SD3 paper time. Thus positive mu favors data here; the symmetric mu=0,s=1 example needs no sign conversion. The Gaussian draws u and endpoint samples are independent. For the unshifted straight Gaussian path log-SNR=2u exactly. Resolution-dependent timestep shifting is a separate topic; the Gaussian log-SNR statement does not silently include it. Positive time-only weighting preserves the unrestricted pointwise conditional-mean optimum when expectations are finite; finite shared networks and finite optimization can behave differently. Restoring the uniform-time objective would require multiplying the sampled loss by 1/r(t). This concerns training times, not the ODE integration grid. -->
+
+---
 clicks: 1
 id: conditional-vs-marginal-paths
 class: theorems
@@ -1171,4 +1251,5 @@ class: summary
 - The marginal vector field can be expressed as the posterior mean of conditional vector fields: $\bv(\bx,t)=\bbE_{p_t(\bz|\bx)}\bv(\bx,\bz,t)$.
 - The FM and CFM objectives have the same optimal solution, making CFM a tractable alternative to FM.
 - For Gaussian conditional paths $p_t(\bx|\bz)=\cN(\bmu_t(\bz),\bsigma_t^2(\bz))$, the conditional vector field has a closed form for $\bv(\bx_t,\bz,t)$.
+- Changing the training-time distribution without importance correction reweights the loss; logit-normal time gives Gaussian log-SNR on the straight noise-to-data path.
 - One-sided conditioning $\bz=\bx_1$ with straight conditional paths yields the **rectified flow objective**, using the target $\bv(\bx_t,\bx_1,t)=\bx_1-\bx_0$.

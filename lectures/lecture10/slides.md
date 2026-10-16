@@ -1529,7 +1529,7 @@ $$
 
 </div>
 
-Is it possible to train score-based diffusion models in continuous time?
+Use unit score-loss weights here. Can we extend this objective to continuous time?
 
 <div class="block" v-click="1">
 
@@ -1552,6 +1552,47 @@ $$
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2011.13456">Song Y., et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
+
+---
+clicks: 3
+id: training-time-and-noise-level
+class: theorems
+---
+
+# Training Time and Noise Level
+
+**Recall:** for $\bx(t)=a(t)\bx(0)+b(t)\bepsilon$, $\lambda(t)=\log\SNR(t)=\log\frac{a(t)^2}{b(t)^2}$.<br>
+For DDPM, $a(t)^2=\bar\alpha_t$ and $b(t)^2=1-\bar\alpha_t$.<br>
+Assume $\lambda(t)$ is differentiable and strictly monotone, with nonzero derivative.
+
+<div class="block" v-click="1">
+
+## A density changes when its coordinate changes
+
+$$
+t\sim r(t)\quad\Longrightarrow\quad
+p_{\lambda}(\lambda)=r(t(\lambda))\left|\frac{dt}{d\lambda}\right|.
+$$
+
+</div>
+<div v-click="2">
+
+<img src="/figs/training-time-log-snr.svg" alt="Uniform training times mapped to nonuniform log-SNR levels and their logistic density" style="width:100%;height:200px;object-fit:contain" />
+
+**Uniform time does not mean uniform log-SNR.**
+
+</div>
+<div v-click="3">
+
+For a fixed objective $\int W(\lambda)\ell_{\btheta}(\lambda)d\lambda$, sample with loss $W(\lambda)\ell_{\btheta}(\lambda)/p_{\lambda}(\lambda)$.
+
+The training distribution does not prescribe the generation grid.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2303.00848">Kingma D., Gao R. Understanding Diffusion Objectives as the ELBO with Simple Data Augmentation, 2023</a></div>
+
+<!-- Narrative: the preceding slide extends discrete DSM to continuous time. This slide carries the earlier importance-sampling identity to a noise-level coordinate. The following taxonomy and Gaussian-kernel derivation explain which conditional distributions supply the score targets. Example only: a(t)^2=1-t, b(t)^2=t, hence lambda=log((1-t)/t), t=1/(1+exp(lambda)), and uniform t induces p_lambda=t(1-t). Endpoints are excluded; their log-SNR limits are infinite. Changing a schedule is interpreted here for a fixed family of corruption kernels indexed by noise level, not as an assertion that arbitrary probability paths or samplers coincide. W is the weight of the chosen per-level loss relative to d lambda; this is not automatically the weight of a different prediction target. For a fixed W and sufficient support, importance correction preserves the integral. -->
 
 ---
 clicks: 0
@@ -1987,9 +2028,9 @@ $$
 \end{aligned}
 $$
 
-**Same training objective, different prediction target.**
+**Preserving the score objective requires the factor $1/\sigma^4$.**
 
-The trained denoiser now supplies the field for sampling.
+Plain denoiser MSE would reweight noise levels. The trained denoiser supplies the sampling field.
 
 </div>
 
@@ -2476,7 +2517,7 @@ SDEs can be reversed in time using the score function $\nabla_{\bx} \log p_t(\bx
 
 <li>
 
-The continuous-time score matching objective generalizes DDPM and NCSN; for affine-drift SDEs the transition kernel $q(\bx(t) | \bx(0))$ is Gaussian, making the training objective tractable.
+Continuous-time DSM uses tractable Gaussian kernels for affine drift. Noise coordinates change the training density; importance correction preserves a chosen objective.
 
 </li>
 

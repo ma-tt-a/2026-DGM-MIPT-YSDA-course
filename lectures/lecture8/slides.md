@@ -264,6 +264,8 @@ class: theorems
 
 ## Training
 
+The simple loss changes the ELBO's relative weights across noise levels.
+
 1. Sample $\bx_0\sim\pd(\bx)$, $t\sim U\{1,T\}$, $\bepsilon\sim\cN(0,\bI)$.
 2. Compute noisy image $\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon$.
 3. Compute loss $\cL_{\text{simple}}=\|\bepsilon-\bepsilon_{\btheta,t}(\bx_t)\|^2$.
@@ -375,51 +377,86 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
 ---
-clicks: 3
+clicks: 2
 id: ddpm-vs-ncsn-objectives
 class: theorems
 ---
 
 # DDPM vs NCSN: Objectives
 
-<div class="block">
-
-## DDPM Objective
+Write the conditional score error as
 
 $$
-\bbE_{\pd(\bx_0)}\bbE_{t\sim U\{1,T\}}\bbE_{q(\bx_t|\bx_0)}\left[{\color{olive}C_{2,t}}\Bigl\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx_0)\Bigr\|_2^2\right]
+\ell_{\btheta}(t)=\bbE_{\pd(\bx_0)}\bbE_{q(\bx_t|\bx_0)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx_0)\right\|^2.
 $$
 
+<div class="block" v-click="1">
+
+## Same regression form, different weights
+
 $$
-\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon
+\cL=\bbE_{t\sim U\{1,T\}}\left[w_t\,\ell_{\btheta}(t)\right].
 $$
 
-<div v-click="1">
-
-In practice, <span style="color:olive">this coefficient</span> is often omitted.
+| Objective | Gaussian perturbation | Score-loss weight $w_t$ |
+| --- | --- | --- |
+| DDPM simple loss | $\sqrt{\bar\alpha_t}\bx_0+\sqrt{1-\bar\alpha_t}\bepsilon$ | $1-\bar\alpha_t$ |
+| NCSN | $\bx_0+\sigma_t\bepsilon$ | $\sigma_t^2$ |
 
 </div>
-</div>
-<div class="block" v-click="2">
+<div v-click="2">
 
-## NCSN Objective
+The DDPM ELBO uses different weights. Replacing them changes the objective.
 
-$$
-\bbE_{\pd(\bx_0)}\bbE_{t\sim U\{1,T\}}\bbE_{q(\bx_t|\bx_0)}\bigl\|\bs_{\btheta,\sigma_t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx_0)\bigr\|_2^2
-$$
-
-$$
-\bx_t=\bx_0+\sigma_t\cdot\bepsilon
-$$
-
-</div>
-<div v-click="3">
-
-**Maximizing the ELBO leads to the same objective as denoising score matching!**
+**How can we choose training times without changing these weights?**
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J., et al. Denoising Diffusion Probabilistic Models, 2020</a><br><a href="https://arxiv.org/abs/1907.05600">Song Y., Ermon S. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a></div>
+
+---
+clicks: 2
+id: loss-weighting-and-time-sampling
+class: theorems
+---
+
+# Loss Weighting and Time Sampling
+
+Let $\ell_{\btheta}(t)$ be the expected loss at step $t$, and fix weights $w_t$.
+
+$$
+\cL=\frac1T\sum_{t=1}^{T}w_t\ell_{\btheta}(t).
+$$
+
+<div class="block" v-click="1">
+
+## Sample training times with probability $r_t>0$
+
+$$
+\cL=\bbE_{t\sim r}\left[\frac{w_t}{T r_t}\ell_{\btheta}(t)\right].
+$$
+
+With the correction, the objective stays the same; gradient variance can change.
+
+</div>
+<div v-click="2">
+
+For two levels with $w_1=w_2=1$ and $(r_1,r_2)=(0.9,0.1)$:
+
+$$
+0.9\frac{\ell_1}{2\cdot0.9}+0.1\frac{\ell_2}{2\cdot0.1}
+=\frac{\ell_1+\ell_2}{2}.
+$$
+
+Without correction, $0.9\ell_1+0.1\ell_2$ is a **different objective**.
+
+These probabilities select training levels, not generation steps.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2303.00848">Kingma D., Gao R. Understanding Diffusion Objectives as the ELBO with Simple Data Augmentation, 2023</a></div>
+
+<!-- Narrative: the preceding comparison makes score-loss weights explicit. Here derive the unbiased time-sampling estimator, then contrast it with an uncorrected two-level example. The next slide compares the remaining difference: Gaussian noise coordinates. The identity assumes r_t>0 wherever a weighted term contributes; weights and sampling probabilities are independent of model parameters. Equal objectives do not imply equal stochastic gradient variance or optimization speed. The baseline 1/T normalization is retained; dropping a global constant would preserve minimizers but is not used in the equality. This concerns training-time sampling, not generation steps. -->
 
 ---
 clicks: 2
@@ -469,7 +506,7 @@ Next, compare their sampling rules: ancestral updates and Langevin dynamics.
 <div class="source"><a href="https://arxiv.org/abs/2010.02502">Song J., Meng C., Ermon S. Denoising Diffusion Implicit Models, 2021</a><br><a href="https://arxiv.org/abs/2011.13456">Song Y. et al. Score-Based Generative Modeling through Stochastic Differential Equations, 2020</a></div>
 
 <!--
-Narrative: the preceding DDPM/NCSN Objectives slide displays both Gaussian perturbations and compares their score-matching losses. This slide explains the apparent difference in the perturbations themselves: DDPM scales the clean signal, so divide by that known coefficient to obtain additive Gaussian noise. Define tilde x and sigma inside the equality before reusing them. The resulting conditional Gaussian has the familiar NCSN form. This closes the comparison of noise coordinates and prepares the next pair of ancestral and annealed-Langevin sampling slides. No SDE terminology or ODE theory is required here.
+Narrative: the preceding time-sampling slide separates objective weights from the choice of training times. The earlier DDPM/NCSN comparison displays both Gaussian perturbations and their score-matching weights. This slide explains the apparent difference in the perturbations themselves: DDPM scales the clean signal, so divide by that known coefficient to obtain additive Gaussian noise. Define tilde x and sigma inside the equality before reusing them. The resulting conditional Gaussian has the familiar NCSN form. This closes the comparison of noise coordinates and prepares the next pair of ancestral and annealed-Langevin sampling slides. No SDE terminology or ODE theory is required here.
 Assume alpha_bar_t>0; a standard decreasing DDPM cumulative schedule gives increasing sigma_t=sqrt((1-alpha_bar_t)/alpha_bar_t). Tilde x_t is the rescaled DDPM state, not an additional noisy sample. Sigma_t here denotes its total additive-noise standard deviation; the sigma_t multiplying fresh randomness in the following ancestral update denotes a reverse-transition standard deviation and is a different quantity. Do not identify them. The next two Sampling blocks keep their established conventions.
 The comparison is between Gaussian conditional marginals at matched noise levels. It does not assert that the original DDPM and NCSN samplers, all joint laws, arbitrary noise schedules, or training weightings coincide. A score also transforms under rescaling; converting a full training objective would require the corresponding factors. That derivation is not part of this slide. In later continuous-time language, VP state rescaling produces an additive-noise/VE coordinate; in the later DDIM-to-PF-ODE derivation exactly these definitions are recalled. DDIM Section 4.3 equations (13)-(14) uses alpha_t for the course's cumulative alpha_bar_t.
 -->
@@ -548,7 +585,7 @@ Gaussian perturbations:
 </li>
 <li v-click="1">
 
-The objectives coincide: ELBO $\equiv$ score-matching.
+Both use denoising score matching, with objective-specific noise-level weights.
 
 </li>
 <li v-click="2">
@@ -1542,7 +1579,8 @@ class: summary
 
 # Summary
 
-- DDPM and NCSN are connected through score matching and a rescaling of their Gaussian perturbations.
+- DDPM and NCSN use weighted denoising score matching; their Gaussian perturbations are connected by rescaling.
+- Loss weights define the objective; corrected time sampling changes its Monte Carlo estimator.
 - DDPM and NCSN use different samplers; DDIM reuses the DDPM network on a shorter sampling grid.
 - Guidance makes generation controllable through labels or text prompts.
 - Classifier guidance turns an unconditional model into a conditional one by training an auxiliary classifier on noisy data.

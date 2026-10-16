@@ -1207,7 +1207,12 @@ $$
 
 <div v-click="1">
 
-Here, $\nabla_{\bx_t}\log q(\bx_t|\bx)=-\frac{\bx_t-\bx}{\sigma_t^2}=-\frac\bepsilon{\sigma_t}$
+The target is $-\bepsilon/\sigma_t$. The weight $\sigma_t^2$ compensates its scale:
+
+$$
+\sigma_t^2\left\|\bs_{\btheta,\sigma_t}(\bx_t)+\frac{\bepsilon}{\sigma_t}\right\|^2
+=\left\|-\sigma_t\bs_{\btheta,\sigma_t}(\bx_t)-\bepsilon\right\|^2.
+$$
 
 </div>
 <div class="block" v-click="2">
@@ -1538,6 +1543,6 @@ class: summary
 - Score matching minimizes Fisher divergence to estimate the score function.
 - Denoising score matching makes the score objective estimable using corrupted samples and the known corruption kernel.
 - Tweedie's formula converts the score into MSE-optimal clean-data and noise predictions.
-- Noise-Conditioned Score Networks learn scores at multiple noise levels and sample with annealed Langevin dynamics.
+- Noise-Conditioned Score Networks balance score losses with weights $\sigma_t^2$ and sample with annealed Langevin dynamics.
 - The forward Gaussian diffusion process admits a closed-form conditional distribution for any timestep.
 - With a suitable noise schedule, the forward process converges to standard Gaussian noise; denoising score matching also applies to these diffusion marginals.

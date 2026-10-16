@@ -453,6 +453,40 @@ class: theorems
 
 ---
 clicks: 0
+id: recap-rectified-flow-training-times
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+## Rectified Flow: Training-Time Distribution
+
+Keep $\bx_t=(1-t)\bx_0+t\bx_1$ and the target $\bx_1-\bx_0$ fixed.
+Let $\ell_{\btheta}(t)$ be the expected velocity MSE at time $t$.
+
+$$
+\bbE_{t\sim r}\ell_{\btheta}(t)
+=\bbE_{t\sim U[0,1]}\left[r(t)\ell_{\btheta}(t)\right].
+$$
+
+Changing the time distribution without correction changes the objective.
+To preserve uniform-time training, use $\ell_{\btheta}(t)/r(t)$ with $t\sim r$.
+
+## Logit-Normal Example
+
+$$
+u\sim\cN(\mu,s^2),\qquad t=\frac1{1+e^{-u}},\qquad
+\log\SNR(t)=2\log\frac{t}{1-t}=2u.
+$$
+
+Time $t=0$ is noise and $t=1$ is data. This choice does not prescribe the ODE grid.
+
+<div class="source"><a href="https://arxiv.org/abs/2403.03206">Esser P., et al. Scaling Rectified Flow Transformers for High-Resolution Image Synthesis, 2024</a></div>
+
+<!-- Coverage: a separate static recap follows the complete RF Training/Sampling slide, which has no room for the new objective identity and log-SNR relation. The density plot and parameter illustration are intentionally omitted. This recalls the unshifted straight-path example, not all SD3 training details. -->
+
+---
+clicks: 0
 id: outline
 ---
 
@@ -754,7 +788,9 @@ class: figure-slide
 
 # Stable Diffusion 3: Scalable Flow Matching
 
-<img src="/figs/sd3.png" alt="Stable Diffusion 3: scalable rectified flow transformers" class="hero" />
+<img src="/figs/sd3.png" alt="Stable Diffusion 3: scalable rectified flow transformers" style="width:100%;height:340px;object-fit:contain" />
+
+**Training connection:** SD3 combines rectified flow with nonuniform training times, including logit-normal sampling.
 
 <div class="source"><a href="https://arxiv.org/abs/2403.03206">Esser P., et al. Scaling Rectified Flow Transformers for High-Resolution Image Synthesis, 2024</a></div>
 

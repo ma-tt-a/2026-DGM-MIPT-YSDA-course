@@ -110,7 +110,7 @@ $$
 \cL_t=\bbE_{{\color{#8854c0}\bepsilon\sim\cN(0,\bI)}}\left[\frac{(1-\alpha_t)^2}{2\tilde{\beta}_t\alpha_t(1-\bar{\alpha}_t)}\Bigl\|\bepsilon-\bepsilon_{\btheta,t}\bigl({\color{teal}\sqrt{\bar{\alpha}_t}\bx_0+\sqrt{1-\bar{\alpha}_t}\bepsilon}\bigr)\Bigr\|^2\right]
 $$
 
-At every step of the reverse process, we attempt to predict the noise $\bepsilon$ that was used in the forward diffusion process!
+Predict the added noise. Dropping the time-dependent ELBO coefficient changes the relative weights of the training levels.
 
 <div class="block">
 
@@ -166,37 +166,61 @@ class: theorems
 
 # Recap of Previous Lecture
 
+Write the conditional score error as
+
+$$
+\ell_{\btheta}(t)=\bbE_{\pd(\bx_0)}\bbE_{q(\bx_t|\bx_0)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx_0)\right\|^2.
+$$
+
 <div class="block">
 
-## DDPM Objective
+## Same regression form, different weights
 
 $$
-\bbE_{\pd(\bx_0)}\bbE_{t\sim U\{1,T\}}\bbE_{q(\bx_t|\bx_0)}\left[{\color{olive}C_{2,t}}\Bigl\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx_0)\Bigr\|_2^2\right]
+\cL=\bbE_{t\sim U\{1,T\}}\left[w_t\,\ell_{\btheta}(t)\right].
 $$
 
-$$
-\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon
-$$
-
-In practice, <span style="color:olive">this coefficient</span> is often omitted.
+| Objective | Gaussian perturbation | Score-loss weight $w_t$ |
+| --- | --- | --- |
+| DDPM simple loss | $\sqrt{\bar\alpha_t}\bx_0+\sqrt{1-\bar\alpha_t}\bepsilon$ | $1-\bar\alpha_t$ |
+| NCSN | $\bx_0+\sigma_t\bepsilon$ | $\sigma_t^2$ |
 
 </div>
-<div class="block">
+<div>
 
-## NCSN Objective
+The DDPM ELBO uses different weights. Replacing them changes the objective.
 
-$$
-\bbE_{\pd(\bx_0)}\bbE_{t\sim U\{1,T\}}\bbE_{q(\bx_t|\bx_0)}\bigl\|\bs_{\btheta,\sigma_t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx_0)\bigr\|_2^2
-$$
+
 
 </div>
 
-**Note:** The objectives of DDPM and NCSN are almost identical; however, their sampling procedures differ:
+<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J., et al. Denoising Diffusion Probabilistic Models, 2020</a><br><a href="https://arxiv.org/abs/1907.05600">Song Y., Ermon S. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a></div>
 
-- NCSN utilizes annealed Langevin dynamics,
-- DDPM employs ancestral sampling.
+---
+clicks: 0
+id: recap-loss-weighting-and-time-sampling
+class: theorems
+---
 
-<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
+# Recap of Previous Lecture
+
+## Loss Weighting and Time Sampling
+
+For fixed $w_t$ and expected per-step losses $\ell_{\btheta}(t)$:
+
+$$
+\cL=\frac1T\sum_{t=1}^T w_t\ell_{\btheta}(t)
+=\bbE_{t\sim r}\left[\frac{w_t}{T r_t}\ell_{\btheta}(t)\right],\qquad r_t>0.
+$$
+
+- Loss weights determine which noise levels matter in the objective.
+- With the correction $1/(T r_t)$, changing the sampling probabilities preserves the objective.
+- Without correction, changing the probabilities changes the relative weights.
+- Training-time sampling and the generation grid are separate choices.
+
+<div class="source"><a href="https://arxiv.org/abs/2303.00848">Kingma D., Gao R. Understanding Diffusion Objectives as the ELBO with Simple Data Augmentation, 2023</a></div>
+
+<!-- Coverage: this new main result from the preceding lecture needs its own recap because the objective-comparison slide already contains the score error, weighted objective and two-model table. The numerical two-level example is intentionally omitted. -->
 
 ---
 clicks: 0
@@ -222,7 +246,7 @@ Gaussian perturbations:
 </li>
 <li>
 
-The objectives coincide: ELBO $\equiv$ score-matching.
+Both use denoising score matching, with objective-specific noise-level weights.
 
 </li>
 <li>

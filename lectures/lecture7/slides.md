@@ -186,7 +186,7 @@ class: theorems
 ## Noise-Conditioned Score Network (NCSN)
 
 - Define a sequence of noise levels: $\sigma_1<\sigma_2<\dots<\sigma_T$.
-- Train the denoising score function $\bs_{\btheta,\sigma_t}(\bx_t)$ for each noise level:
+- Balance the score targets $-\bepsilon/\sigma_t$ using weights $\sigma_t^2$:
 
 $$
 \sum_{t=1}^T{\color{#8854c0}\sigma_t^2}\cdot\bbE_{\pd(\bx)}\bbE_{q(\bx_t|\bx)}\bigl\|\bs_{\btheta,\sigma_t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx)\bigr\|_2^2\rightarrow\min_{\btheta}
@@ -1286,7 +1286,7 @@ $$
 
 <div v-click="2">
 
-Let's drop the scaling coefficient; the reconstruction term ($t=1$) has the same form.
+Dropping the time-dependent coefficient **changes the relative weights of noise levels**. The reconstruction term ($t=1$) also uses noise prediction.
 
 <div class="block">
 
@@ -1419,4 +1419,4 @@ class: summary
 - Gaussian diffusion is a VAE with a hierarchy of latent variables and a fixed encoder.
 - Its ELBO decomposes into reconstruction, prior matching, and denoising terms; Gaussian denoising terms reduce to squared error.
 - The reverse mean can be parameterized through clean data, noise, score or $v$; plain MSE induces different noise-level weights.
-- DDPM combines a simplified noise-prediction objective with ancestral sampling.
+- DDPM reweights the ELBO denoising terms into a simple noise-prediction loss and uses ancestral sampling.

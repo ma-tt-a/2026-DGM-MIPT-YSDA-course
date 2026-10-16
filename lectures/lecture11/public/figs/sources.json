@@ -1,0 +1,7 @@
+{
+  "logit-normal-training-times.svg": {
+    "source": "https://arxiv.org/abs/2403.03206",
+    "description": "Original analytic plot of uniform and unshifted logit-normal time densities, mu=0 and s=1, from Esser et al. (2024), Section 3.1. No experimental data or copied artwork.",
+    "sha256": "6e1d0947fdd554dbc02ed6ceeaa682d4df5f14e553b61d14b6342766f062d124"
+  }
+}
