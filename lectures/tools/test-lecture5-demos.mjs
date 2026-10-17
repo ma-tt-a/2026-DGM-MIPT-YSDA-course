@@ -44,7 +44,7 @@ test('noiseless score ascent collapses within-mode spread, unlike noisy sampling
   const off = langevinSnapshot(false), on = langevinSnapshot(true)
   const yVariance = points => points.reduce((sum, p) => sum + p.y * p.y, 0) / points.length
   assert.ok(yVariance(off.points) < 1e-10)
-  // The shorter 300-step snapshot approaches the modes to plotting precision.
+  // The 300-step snapshot approaches the modes to plotting precision.
   assert.equal(off.step, 300)
   assert.ok(off.points.every(p => Math.hypot(...Object.values(langevinScore(p))) < 1e-4))
   assert.ok(Math.abs(yVariance(on.points) - .49) < .15)
@@ -53,9 +53,9 @@ test('noiseless score ascent collapses within-mode spread, unlike noisy sampling
 
 test('long-run mixture moments approximate the target; the update has eta/2 drift and sqrt(eta) noise', () => {
   const simulation = initialLangevin()
-  advanceLangevin(simulation, true, langevinConfig.printSteps)
+  advanceLangevin(simulation, true, 150)
   let count = 0, x = 0, y = 0, xx = 0, yy = 0
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 30; i++) {
     advanceLangevin(simulation, true, 5)
     for (const p of simulation.points) { count++; x += p.x; y += p.y; xx += p.x * p.x; yy += p.y * p.y }
   }
@@ -65,7 +65,7 @@ test('long-run mixture moments approximate the target; the update has eta/2 drif
   assert.ok(Math.abs(yy / count - .49) < .06)
   const final = structuredClone(simulation)
   advanceLangevin(simulation, true, 10)
-  assert.equal(simulation.step, 600)
+  assert.equal(simulation.step, 300)
   assert.deepEqual(simulation, final)
 })
 

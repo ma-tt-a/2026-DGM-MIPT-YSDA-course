@@ -77,14 +77,14 @@ class: theorems
 
 1. $\bx_0=\bx\sim\pd(\bx)$
 2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$
-3. $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$
+3. $q(\bx_T)\approx\cN(0,\bI)$
 
 </div>
 <div class="block">
 
 ## Reverse Process
 
-1. $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$
+1. $\bx_T\sim\cN(0,\bI)$
 2. $\bx_{t-1}=\bsigma_{\btheta,t}(\bx_t)\bepsilon+\bmu_{\btheta,t}(\bx_t)$
 3. $\bx_0=\bx\sim\pd(\bx)$
 
@@ -132,7 +132,7 @@ class: theorems
 
 # Recap of Previous Lecture
 
-**Forward process** maps any distribution $\pd(\bx)$ to $\cN(0,\bI)$ by injection of noise:
+**Forward process:** with a suitable noise schedule, $q(\bx_T)\approx\cN(0,\bI)$ as the residual signal becomes negligible:
 
 $$
 \begin{aligned}

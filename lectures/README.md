@@ -262,14 +262,15 @@ PDF Lecture 4 содержит сравнение prior; схема quantization
 
 ## Интерактивная Lecture 6
 
-- Слайд 16: принятая Langevin dynamics — Noise off / Noise on, Run / Pause, Step, Reset.
+- Слайд 15: принятая Langevin dynamics — Noise off / Noise on, Run / Pause, Step, Reset.
   Точный score двумерной Gaussian mixture, 192 частицы, фиксированный шаг η = 0.04
   и воспроизводимый шум. Смена режима начинает с тех же частиц; уход со слайда
-  ставит симуляцию на паузу. Лимит — 600 шагов; PDF сравнивает режимы после 300.
+  ставит симуляцию на паузу. Лимит — 300 шагов; PDF сравнивает режимы после 300.
 
-- Слайд 30: три равновероятные чистые точки и перемещаемое шумное наблюдение при σ = 1.
-  Клики показывают conditional scores, posterior weights, marginal score и posterior
-  mean по Tweedie. Between modes / Near left / Near right, Reset; точку можно
+- Слайд 29: три равновероятные чистые точки и перемещаемое шумное наблюдение при σ = 1.
+  Клики показывают conditional scores, posterior weights с формулой Байеса,
+  marginal score и posterior mean по Tweedie. Итог — усреднение чистых точек
+  с posterior weights; среднее может лежать между модами. Between modes / Near left / Near right, Reset; точку можно
   перетаскивать или двигать стрелками и Home после фокуса. Точные значения вычисляются
   аналитически; это иллюстрация, без обучения сети. При включённом пере перетаскивание
   отключено, график доступен для пометок, кнопки остаются доступны.
@@ -386,3 +387,27 @@ PDF фиксирует SDE/PF-ODE при t = 4/3, reverse sampling при t = 0,
 
 Численные проверки: `node --test tools/test-process-demos.mjs` (включены в
 `test:demos` и `finalize`). Браузер: `node tools/inspect-process-demos.mjs`.
+
+## Интерактивная Lecture 11
+
+- Слайд 18: два перекрывающихся Gaussian clouds с равными prior weights,
+  движущиеся без изменения формы. При фиксированном времени перемещение точки x
+  меняет точные Bayes posterior weights и teal marginal velocity. Цветные стрелки
+  показывают постоянные скорости облаков. Drag / arrow keys, Near cloud 1 / 2,
+  Reset; рисунок появляется на втором клике после теоремы. PDF фиксирует x=(0,0).
+- Слайд 28: нативная схема выбора conditional paths и совместимого velocity field,
+  затем marginal density и posterior-averaged velocity. Три обычных раскрытия;
+  поле не объявляется однозначно определённым заданным probability path.
+- Слайд 33: одномерный straight conditional path к x₁ = 2. Фиксированные Gaussian
+  quantiles, ползунок t = 0…1, пресеты 0 / 0.5 / 1 и Reset. Показаны частицы,
+  справа — три конуса к x₁ = −2 / 0 / 2 с общим временным срезом.
+  Затенение обозначает mean ± σ и mean ± 2σ; при t = 1 конусы
+  сходятся в соответствующие точечные массы.
+
+PDF фиксирует равные posterior weights на слайде 18, полную схему 28
+и t = 0.5 с полными conditional trajectories на слайде 33. Контролы сохраняют
+состояние при возврате; вычисления локальные. Управлять в выводимом на экран
+окне; синхронизация presenter/viewer не реализована.
+
+Численные проверки: `node --test tools/test-cfm-demos.mjs` (также включены в
+`test:demos` и `finalize`). Браузер: `node tools/inspect-cfm-demos.mjs`.

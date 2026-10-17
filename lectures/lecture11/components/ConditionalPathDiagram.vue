@@ -1,0 +1,27 @@
+<script setup lang="ts">
+import { useId } from 'vue'
+import { useNav } from '@slidev/client'
+const props=withDefaults(defineProps<{stage?:number}>(),{stage:0})
+const {isPrintMode}=useNav(),id=`cfm-path-${useId().replace(/[^a-z0-9-]/gi,'')}`
+const shown=(n:number)=>isPrintMode.value||props.stage>=n
+</script>
+<template>
+<svg class="path-diagram" viewBox="0 0 1120 260" role="img" aria-label="Choose conditional paths and compatible velocities; integrate densities and posterior-average velocities to construct a marginal path and field" :data-stage="stage" data-path-diagram>
+ <defs><marker :id="id" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#587083"/></marker></defs>
+ <g><rect x="10" y="8" width="365" height="76" rx="8" fill="#f4eef9" stroke="#8854c0"/><foreignObject x="20" y="14" width="345" height="66"><div class="node"><b>Choose conditional paths</b><L11Math formula="p(\bz),\quad p_t(\bx|\bz)"/></div></foreignObject></g>
+ <g :style="{visibility:shown(1)?'visible':'hidden'}" data-compatible-field>
+  <line x1="386" y1="46" x2="727" y2="46" stroke="#587083" stroke-width="2" :marker-end="`url(#${id})`"/><text x="557" y="30" text-anchor="middle">Choose a compatible field</text><text x="557" y="73" text-anchor="middle">Continuity equation; not unique</text>
+  <rect x="740" y="8" width="365" height="76" rx="8" fill="#f4eef9" stroke="#8854c0"/><foreignObject x="750" y="14" width="345" height="66"><div class="node"><b>Conditional velocity</b><L11Math formula="\bv(\bx,\bz,t)"/></div></foreignObject>
+ </g>
+ <g :style="{visibility:shown(2)?'visible':'hidden'}" data-marginal-construction>
+  <line x1="192" y1="89" x2="192" y2="169" stroke="#587083" stroke-width="2" :marker-end="`url(#${id})`"/><foreignObject x="205" y="104" width="330" height="45"><div class="edge"><L11Math formula="\bbE_{p(\bz)}[p_t(\bx|\bz)]"/></div></foreignObject>
+  <line x1="922" y1="89" x2="922" y2="169" stroke="#587083" stroke-width="2" :marker-end="`url(#${id})`"/><foreignObject x="578" y="104" width="335" height="45"><div class="edge"><L11Math formula="\bbE_{p_t(\bz|\bx)}[\bv(\bx,\bz,t)]"/></div></foreignObject>
+  <rect x="10" y="176" width="365" height="76" rx="8" fill="#eaf4f3" stroke="#007f82"/><foreignObject x="20" y="182" width="345" height="66"><div class="node"><b>Marginal probability path</b><L11Math formula="p_t(\bx)"/></div></foreignObject>
+  <rect x="740" y="176" width="365" height="76" rx="8" fill="#eaf4f3" stroke="#007f82"/><foreignObject x="750" y="182" width="345" height="66"><div class="node"><b>Marginal velocity</b><L11Math formula="\bv(\bx,t)"/></div></foreignObject>
+  <line x1="728" y1="214" x2="387" y2="214" stroke="#587083" stroke-width="2" :marker-end="`url(#${id})`"/><text x="557" y="198" text-anchor="middle">Generates the same path</text><text x="557" y="242" text-anchor="middle">with the chosen initial density</text>
+ </g>
+</svg>
+</template>
+<style scoped>
+.path-diagram{width:100%;height:260px;display:block}.node{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:5px;font:22px Arial;color:#17324d}.node b{font-size:22px}.edge{font:22px Arial;text-align:center;color:#587083}.path-diagram text{font:20px Arial;fill:#587083}
+</style>

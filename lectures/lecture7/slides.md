@@ -233,7 +233,7 @@ $$
 \bx_t^l=\bx_t^{l-1}+\frac{\eta_t}{2}\bs_{\btheta,\sigma_t}(\bx_t^{l-1})+\sqrt{\eta_t}\bepsilon_t^l.
 $$
 
-3. Update $\bx_{t-1}^0:=\bx_t^L$ and proceed to the next noise level $\sigma_{t-1}$.
+3. Update $\bx_{t-1}^0:=\bx_t^L$ and proceed to $\sigma_{t-1}$ if $t>1$.
 
 </div>
 
@@ -250,6 +250,8 @@ class: theorems
 
 # Recap of Previous Lecture
 
+Fix a schedule $0<\beta_t<1$. The noises $\bepsilon_t\sim\cN(0,\bI)$ are independent across $t$ and of $\bx_0$.
+
 $$
 \begin{aligned}
 \bx_t&=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t,\quad\bepsilon_t\sim\cN(0,\bI)\\
@@ -259,7 +261,7 @@ $$
 
 <div class="block">
 
-## Statement 1
+## Exact Conditional Distribution
 
 Let $\alpha_t=1-\beta_t$ and $\bar{\alpha}_t=\prod_{s=1}^t\alpha_s=\prod_{s=1}^t(1-\beta_s)$. Then
 
@@ -287,12 +289,12 @@ class: theorems
 
 1. $\bx_0=\bx\sim\pd(\bx)$
 2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$, $\bepsilon_t\sim\cN(0,\bI)$, $t\geq1$
-3. After $T\gg1$ steps: $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$
+3. Choose $\bar{\alpha}_T\ll1$ to suppress $\sqrt{\bar{\alpha}_T}\bx_0$; then $q(\bx_T)\approx\cN(0,\bI)$.
 
 </div>
 <div>
 
-If this process can be reversed, we can sample from $\pd(\bx)$ by starting from noise $p_\infty(\bx)=\cN(0,\bI)$.<br>
+If this process can be reversed, we can sample from $\pd(\bx)$ by starting from noise $\cN(0,\bI)\approx q(\bx_T)$.<br>
 Our goal now becomes inverting this diffusion.
 
 </div>
@@ -438,14 +440,14 @@ class: theorems
 
 1. $\bx_0=\bx\sim\pd(\bx)$
 2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$
-3. $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$
+3. $q(\bx_T)\approx\cN(0,\bI)$
 
 </div>
 <div class="block" v-click="1">
 
 ## Reverse Process
 
-1. $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$
+1. $\bx_T\sim\cN(0,\bI)$
 2. $\bx_{t-1}=\bsigma_{\btheta,t}(\bx_t)\bepsilon+\bmu_{\btheta,t}(\bx_t)$
 3. $\bx_0=\bx\sim\pd(\bx)$
 
@@ -541,7 +543,7 @@ class: theorems
 <div style="display:flex;flex-direction:column;justify-content:space-between;height:500px">
 <div>
 
-**Forward process** maps any distribution $\pd(\bx)$ to $\cN(0,\bI)$ by injection of noise:
+**Forward process:** with a suitable noise schedule, $q(\bx_T)\approx\cN(0,\bI)$ as the residual signal becomes negligible:
 
 $$
 \begin{aligned}
@@ -1355,14 +1357,14 @@ class: theorems
 
 1. $\bx_0=\bx\sim\pd(\bx)$;
 2. $\bx_t=\sqrt{1-\beta_t}\cdot\bx_{t-1}+\sqrt{\beta_t}\cdot\bepsilon_t$;
-3. $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$.
+3. $q(\bx_T)\approx\cN(0,\bI)$.
 
 </div>
 <div class="block" v-click="2">
 
 ## Reverse Process
 
-1. $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$;
+1. $\bx_T\sim\cN(0,\bI)$;
 2. $\bx_{t-1}=\bsigma_{\btheta,t}(\bx_t)\cdot\bepsilon+\bmu_{\btheta,t}(\bx_t)$;
 3. $\bx_0=\bx\sim\pd(\bx)$.
 

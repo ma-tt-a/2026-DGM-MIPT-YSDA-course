@@ -90,7 +90,7 @@ onBeforeUnmount(endDrag)
           <circle :cx="px(point.x)" :cy="py(point.y)" r="7" fill="#e17838" stroke="white" stroke-width="2" pointer-events="none" />
           <foreignObject :x="px(point.x)+(point.x>1.9 ? -46 : 12)" :y="py(point.y)+(point.y<-.9 ? -35 : 5)" width="55" height="35" pointer-events="none"><div class="point-label orange"><L6Math formula="\bx_\sigma" /></div></foreignObject>
         </svg>
-        <div class="plot-key"><span class="orange">●</span> Noisy observation <span :style="{ visibility: stage >= 3 ? 'visible' : 'hidden' }"><span class="teal">■</span> Posterior mean</span></div>
+        <div class="plot-key"><span class="orange">●</span> Noisy observation <span :style="{ visibility: stage >= 3 ? 'visible' : 'hidden' }"><span class="teal">■</span> Mean: ({{ fmt(posterior.mean.x) }}, {{ fmt(posterior.mean.y) }})</span></div>
       </div>
       <div class="explanation">
         <div class="explanation-step">
@@ -98,7 +98,8 @@ onBeforeUnmount(endDrag)
           <L6Math formula="\nabla_{\bx_\sigma}\log q(\bx_\sigma|\bx_i)=(\bx_i-\bx_\sigma)/\sigma^2" />
         </div>
         <div class="explanation-step" :style="{ visibility: stage >= 1 ? 'visible' : 'hidden' }" data-posterior-weights>
-          <b>Posterior weights</b>
+          <b>Bayes weights (priors 1/3 cancel)</b>
+          <L6Math formula="\displaystyle w_i=q(\bx_i|\bx_\sigma)=\frac{\exp(-\|\bx_\sigma-\bx_i\|^2/(2\sigma^2))}{\sum_j\exp(-\|\bx_\sigma-\bx_j\|^2/(2\sigma^2))}" />
           <div class="weights"><div v-for="(w,i) in posterior.weights" :key="i" :style="{ '--point-color': colors[i] }"><L6Math :formula="`q(\\bx_${i+1}|\\bx_\\sigma)`" /><div class="weight-track"><div :style="{ width: `${100*w}%` }" /></div><output>{{ (100*w).toFixed(1) }}%</output></div></div>
         </div>
         <div class="explanation-step" :style="{ visibility: stage >= 2 ? 'visible' : 'hidden' }" data-marginal-formula>
@@ -107,12 +108,11 @@ onBeforeUnmount(endDrag)
         </div>
         <div class="explanation-step" :style="{ visibility: stage >= 3 ? 'visible' : 'hidden' }" data-tweedie-formula>
           <b>Tweedie: from the score to the clean-data mean</b>
-          <L6Math formula="\bbE[\bx|\bx_\sigma]=\bx_\sigma+\sigma^2\nabla_{\bx_\sigma}\log q(\bx_\sigma)" />
-          <div class="mean-readout">Posterior mean: ({{ fmt(posterior.mean.x) }}, {{ fmt(posterior.mean.y) }})</div>
+          <L6Math formula="\hat{\bx}=\bx_\sigma+\sigma^2\nabla_{\bx_\sigma}\log q(\bx_\sigma)=\sum_i w_i\bx_i" />
         </div>
       </div>
     </div>
-    <div class="demo-takeaway" :style="{ visibility: stage >= 3 ? 'visible' : 'hidden' }">The MSE-optimal denoised prediction can lie between the clean-data modes.</div>
+    <div class="demo-takeaway" :style="{ visibility: stage >= 3 ? 'visible' : 'hidden' }"><b>Denoising averages plausible clean points:</b> <L6Math formula="\hat{\bx}=\sum_i w_i\bx_i" />, possibly between modes.</div>
   </DemoPanel>
 </template>
 
@@ -130,7 +130,7 @@ onBeforeUnmount(endDrag)
 .plot-key > span:first-child { margin-right: -18px; }
 .orange { color: #e17838; } .teal { color: #007f82; }
 .explanation { padding-top: 2px; }
-.explanation-step { margin-bottom: 11px; }
+.explanation-step { margin-bottom: 6px; }
 .explanation-step b { display: block; color: #007f82; font-size: 20px; margin-bottom: 5px; }
 .explanation-step > span { display: block; font-size: 19px; }
 .weights { display: flex; gap: 16px; }
@@ -138,7 +138,6 @@ onBeforeUnmount(endDrag)
 .weight-track { height: 5px; background: #edf1f5; margin: 7px 0 3px; }
 .weight-track > div { height: 5px; background: var(--point-color); }
 .weights output { font-variant-numeric: tabular-nums; }
-.mean-readout { color: #587083; font-size: 18px; margin-top: 5px; }
 .demo-takeaway { margin-top: 12px; font-size: 22px; }
 .observation-handle { cursor: grab; touch-action: none; }
 .observation-handle:active { cursor: grabbing; }

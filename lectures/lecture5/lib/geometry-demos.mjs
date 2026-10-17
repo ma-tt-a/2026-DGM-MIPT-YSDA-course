@@ -3,7 +3,7 @@ export function supportDistances(theta) {
   return { wasserstein: Math.abs(theta), jsd: theta === 0 ? 0 : Math.log(2), kl: theta === 0 ? 0 : Infinity }
 }
 
-export const langevinConfig = { mean: 1.5, sigma: .7, eta: .04, particles: 192, maxSteps: 600, printSteps: 300, seed: 52147 }
+export const langevinConfig = { mean: 1.5, sigma: .7, eta: .04, particles: 192, maxSteps: 300, printSteps: 300, seed: 52147 }
 // Two isotropic Gaussians, with an exact, stable score evaluated in data space.
 export function logLangevinDensity(x, y = 0) {
   const { mean: a, sigma } = langevinConfig, variance = sigma ** 2

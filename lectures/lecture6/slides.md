@@ -355,8 +355,6 @@ class: theorems
 
 # Recap of Previous Lecture
 
-Score an image $\bx$ for a text prompt $t$.
-
 <div class="block">
 
 ## CLIP: Learn from Image–Caption Pairs
@@ -366,58 +364,29 @@ s_{\text{CLIP}}(\bx,t)=\cos\!\left(\bff_{\text{img}}(\bx),\bff_{\text{text}}(t)\
 $$
 
 </div>
-<div class="block">
 
-## PickScore: Learn from Human Choices
+**PickScore** learns human preferences; **VQAScore / GenEval / DPG-Bench** assess compositional correctness beyond CLIP similarity.
 
-For the same prompt, a human prefers $\bx^+$ to $\bx^-$:
+<div class="takeaway">
 
-$$
-\bbP_{\btheta}(\bx^+\succ\bx^-\mid t)=
-\frac{\exp r_{\btheta}(\bx^+,t)}{\exp r_{\btheta}(\bx^+,t)+\exp r_{\btheta}(\bx^-,t)}.
-$$
+## Human Evaluation
 
-Train the score $r_{\btheta}$ to assign higher probability to the human choice.
+**No automated metric is perfect.** Validate model quality with human judgments across multiple criteria.
 
-</div>
+For image editing, assess:
 
-**VQAScore / GenEval / DPG-Bench:** evaluate compositional correctness; CLIP similarity can miss counts, attributes and relations.
-
-A learned preference score can guide sample selection and model training — but optimizing the score can exploit its flaws.
-
-<div class="source"><a href="https://arxiv.org/abs/2103.00020">Radford A. et al. Learning Transferable Visual Models From Natural Language Supervision, 2021</a><br><a href="https://arxiv.org/abs/2305.01569">Kirstain Y. et al. Pick-a-Pic: An Open Dataset of User Preferences for Text-to-Image Generation, 2023</a><br><a href="https://arxiv.org/abs/2404.01291">Lin Z. et al. Evaluating Text-to-Visual Generation with Image-to-Text Generation, 2024</a><br><a href="https://arxiv.org/abs/2310.11513">Ghosh D. et al. GenEval, 2023</a> · <a href="https://arxiv.org/abs/2403.05135">Hu X. et al. ELLA (DPG-Bench), 2024</a></div>
-
----
-clicks: 0
-id: recap-of-previous-lecture-10
-class: theorems
----
-
-# Recap of Previous Lecture
-
-<div class="columns" style="grid-template-columns: 0.72fr 1.28fr; align-items: start; margin-top: 12px;">
-<div>
-
-- No automated metric is perfect.
-- The best way to evaluate generative models is by human assessment.
-- It's important to assess various properties.
+1. **Instruction relevance:** Was the requested change made?
+2. **Preservation:** Did content that should stay unchanged remain intact?
+3. **Visual defects:** Were artifacts or distortions introduced?
 
 </div>
 
-<img src="/figs/alice_ai_art_2_evaluation.png" alt="Alice AI ART 2.0 image-editing evaluation: good and bad examples for instruction relevance, preservation of unchanged content, and visual defects." style="width: 100%; height: 530px; object-fit: contain; margin: 0 auto;" />
-
-</div>
-
-<div class="source"><a href="https://habr.com/ru/companies/yandex/articles/1058630/">Yandex. Alice AI ART 2.0: A Unified Model for Image Generation and Editing</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2103.00020">Radford A. et al. Learning Transferable Visual Models From Natural Language Supervision, 2021</a> · <a href="https://arxiv.org/abs/2305.01569">Kirstain Y. et al. Pick-a-Pic, 2023</a><br><a href="https://arxiv.org/abs/2404.01291">Lin Z. et al. Evaluating Text-to-Visual Generation with Image-to-Text Generation, 2024</a><br><a href="https://arxiv.org/abs/2310.11513">Ghosh D. et al. GenEval, 2023</a> · <a href="https://arxiv.org/abs/2403.05135">Hu X. et al. ELLA (DPG-Bench), 2024</a> · <a href="https://habr.com/ru/companies/yandex/articles/1058630/">Yandex. Alice AI ART 2.0</a></div>
 
 <!--
-The author requested this exact image and article. It illustrates evaluation of
-image editing (I2I): instruction relevance, preservation, and defects. The full
-image is preserved without cropping or translation; its labels are in Russian.
-The article uses human assessors as well as automated reward models / VLM judges;
-this illustration presents evaluation criteria rather than an Arena-style ranking.
-Historical source of the replaced Beamer illustration:
-<a href="https://ya.ru/ai/art">YandexART 2.5</a>.
+Merged the learned-metric and human-evaluation recaps at the author's request.
+The full Alice AI ART 2.0 illustration remains in the preceding lecture's body;
+this recap retains its three image-editing criteria without repeating the examples.
 -->
 
 ---
@@ -494,7 +463,7 @@ $$
 <div class="source"><a href="https://yann.lecun.org/exdb/publis/pdf/lecun-06.pdf">LeCun Y. et al. A Tutorial on Energy-Based Learning, 2006</a></div>
 
 ---
-clicks: 1
+clicks: 2
 id: langevin-dynamics
 class: theorems
 ---
@@ -525,6 +494,12 @@ $$
 </div>
 
 
+<div class="takeaway" v-click="2">
+
+**Knowing $\pt(\bx)$ up to a normalizing constant lets us use Langevin dynamics to obtain approximate samples $\bx_l\sim\pt$ for large $l$.**
+
+</div>
+
 <div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The principles of diffusion models, 2025.</a></div>
 
 ---
@@ -547,7 +522,7 @@ $$
 
 <div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The Principles of Diffusion Models, 2025</a></div>
 
-<!-- Exact score of an equally weighted two-component isotropic Gaussian mixture; no learned network. Step uses x <- x + eta/2 * score(x) + sqrt(eta) * epsilon with independent standard normal noise in both coordinates, matching the preceding formula. Start with Noise off and run: particles approach the two density modes. Turn Noise on (same initial particles and seed), run, and compare the x_1 histogram against its exact marginal. This finite unadjusted Langevin simulation is approximate; fixed nonzero eta generally biases the invariant distribution, and finite time/particles create further error. Contours are exact density level sets; arrow lengths are compressed for readability but directions are those of the score. Particles are never clipped or reflected; counts outside the visible field/histogram are disclosed. PDF compares deterministic runs after 300 steps. Each run is capped at 600 steps. Run pauses when leaving the slide, while coordinates and RNG state persist. -->
+<!-- Exact score of an equally weighted two-component isotropic Gaussian mixture; no learned network. Step uses x <- x + eta/2 * score(x) + sqrt(eta) * epsilon with independent standard normal noise in both coordinates, matching the preceding formula. Start with Noise off and run: particles approach the two density modes. Turn Noise on (same initial particles and seed), run, and compare the x_1 histogram against its exact marginal. This finite unadjusted Langevin simulation is approximate; fixed nonzero eta generally biases the invariant distribution, and finite time/particles create further error. Contours are exact density level sets; arrow lengths are compressed for readability but directions are those of the score. Particles are never clipped or reflected; counts outside the visible field/histogram are disclosed. PDF compares deterministic runs after 300 steps. Each run is capped at 300 steps. Run pauses when leaving the slide, while coordinates and RNG state persist. -->
 
 ---
 clicks: 0
@@ -597,7 +572,7 @@ $$
 $$
 \begin{aligned}
 \bx_{l+1}&=\bx_l+\frac\eta2\cdot\nabla_{\bx_l}\log\pd(\bx_l)+\sqrt\eta\cdot\bepsilon_l\\
-&=\bx_l+\frac\eta2\cdot{\color{#8854c0}\nabla_{\bx_l}\log\pt(\bx_l)}+\sqrt\eta\cdot\bepsilon_l\\
+&\approx\bx_l+\frac\eta2\cdot{\color{#8854c0}\nabla_{\bx_l}\log\pt(\bx_l)}+\sqrt\eta\cdot\bepsilon_l\\
 &=\bx_l+\frac\eta2\cdot{\color{#8854c0}\bs_{\btheta}(\bx_l)}+\sqrt\eta\cdot\bepsilon_l.
 \end{aligned}
 $$
@@ -663,13 +638,13 @@ The score function bypasses the intractable constant $Z$ entirely!
 
 ## A Complete Representation
 
-The score function fully characterizes the underlying distribution (up to a constant):
+The score $\bs(\bx)=\nabla_{\bx}\log p(\bx)$ determines $\log p(\bx)$ up to the additive constant $\log p(\bx_0)$:
 
 $$
 \log p(\bx)=\log p(\bx_0)+\int_0^1\bs(\bx_0+t(\bx-\bx_0))^\top(\bx-\bx_0)dt
 $$
 
-Modeling the score is as expressive as modeling $p(\bx)$ itself, while often more tractable for generative modeling.
+Modeling $\bs(\bx)$ is as expressive as modeling $p(\bx)$ itself, while often more tractable for generative modeling.
 
 </div>
 
@@ -688,7 +663,7 @@ class:
 <div class="course-outline">
 <div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub"><b>Denoising Score Matching</b><br>Noise-Conditioned Score Network (NCSN)</div></div></div>
 <div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
@@ -729,7 +704,7 @@ satisfies $\bs_{\btheta,\sigma}(\bx_{\sigma})\approx\bs_{\btheta,0}(\bx_0)=\bs_{
 </div>
 <div v-click="3">
 
-- The score function of the noised data nearly matches the score function of the original data.
+- For small $\sigma$, the noisy-data score $\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})$ nearly matches the original-data score $\nabla_{\bx}\log\pd(\bx)$.
 - The score function $\bs_{\btheta,\sigma}(\bx_{\sigma})$ is parameterized by $\sigma$.
 - **Note:** We don't know $q(\bx_{\sigma})$, just as we don't know $\pd(\bx)$.
 
@@ -746,6 +721,8 @@ class: theorems
 
 # Denoising Score Matching
 
+We cannot evaluate the marginal score $\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})$. The theorem lets us replace it in the training objective with the conditional score $\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)$.
+
 <div class="block">
 
 ## Theorem
@@ -755,7 +732,7 @@ Under mild regularity conditions, the last term is independent of $\btheta$:
 $$
 \begin{aligned}
 &\bbE_{q(\bx_{\sigma})}\big\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\big\|_2^2\\
-&=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\big\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\big\|_2^2+\text{const}
+&={\color{#8854c0}\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}}\big\|\bs_{\btheta,\sigma}(\bx_{\sigma})-{\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\big\|_2^2+\text{const}
 \end{aligned}
 $$
 
@@ -776,10 +753,9 @@ $$
 
 </div>
 </div>
-<div v-click="3">
+<div class="takeaway" v-click="3">
 
-- The right-hand side doesn't require computing $\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})$ or even $\nabla_{\bx_{\sigma}}\log\pd(\bx_{\sigma})$.
-- $\bs_{\btheta,\sigma}(\bx_{\sigma})$ is trained to **denoise** the noised samples $\bx_{\sigma}$.
+**Same minimizers, computable target:** train $\bs_{\btheta,\sigma}(\bx_{\sigma})$ against $-\bepsilon/\sigma$, which we know because we added the noise ourselves.
 
 </div>
 
@@ -787,47 +763,54 @@ $$
 <div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
 
 ---
-clicks: 3
+clicks: 4
 id: denoising-score-matching-3
 class: theorems
 ---
 
-# Denoising Score Matching
+# Denoising Score Matching: Before the Proof
 
-Initial objective:
+<div class="block" style="margin: 10px 0;">
 
-$$
-\bbE_{\pd(\bx)}\left\|\bs_{\btheta}(\bx)-\nabla_\bx\log\pd(\bx)\right\|_2^2\rightarrow\min_{\btheta}
-$$
-
-<div v-click="1">
-
-Noised objective:
+## 1. Start: Learn the Data Score
 
 $$
-\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_\sigma)-\nabla_\bx\log q(\bx_{\sigma})\right\|_2^2\rightarrow\min_{\btheta}
+\bbE_{\pd(\bx)}\left\|\bs_{\btheta}(\bx)-{\color{#8854c0}\nabla_\bx\log\pd(\bx)}\right\|_2^2\rightarrow\min_{\btheta}
 $$
 
 </div>
-<div v-click="2">
+<div class="block" v-click="1" style="margin: 10px 0;">
 
-This is equivalent to a denoising task:
+## 2. Perturb the Data: Learn the Smoothed Score
+
+Target: the unknown score of the noisy-data marginal $q(\bx_{\sigma})$.
 
 $$
-\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2\rightarrow\min_{\btheta}
+\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_\sigma)-{\color{#8854c0}\nabla_{\bx_\sigma}\log q(\bx_{\sigma})}\right\|_2^2\rightarrow\min_{\btheta}
 $$
 
 </div>
+<div class="block" v-click="2" style="margin: 10px 0;">
+
+## 3. Apply the Theorem: Same Minimizers, Known Target
+
+$$
+\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-{\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right\|_2^2\rightarrow\min_{\btheta}
+$$
+
 <div v-click="3">
 
+Sample $\bx_{\sigma}\sim q(\bx_{\sigma}|\bx)$ via $\bx_{\sigma}=\bx+\sigma\bepsilon$, $\bepsilon\sim\cN(0,\bI)$:
+
 $$
-\bbE_{\pd(\bx)}\bbE_{\cN(0,\bI)}\left\|\bs_{\btheta,\sigma}(\bx+\sigma\cdot\bepsilon)+\frac\bepsilon\sigma\right\|_2^2\rightarrow\min_{\btheta}
+\bbE_{\pd(\bx)}\bbE_{\bepsilon\sim\cN(0,\bI)}\left\|\bs_{\btheta,\sigma}(\bx+\sigma\cdot\bepsilon)-{\color{teal}\left(-\frac\bepsilon\sigma\right)}\right\|_2^2\rightarrow\min_{\btheta}
 $$
 
 </div>
-<div class="block" v-click="3">
+</div>
+<div class="takeaway" v-click="4">
 
-## Langevin Dynamics
+## After Training: Sample with the Learned Score
 
 $$
 \bx_{l+1}=\bx_l+\frac\eta2\cdot\bs_{\btheta,\sigma}(\bx_l)+\sqrt\eta\cdot\bepsilon_l,\qquad\bepsilon_l\sim\cN(0,\bI).
@@ -835,11 +818,10 @@ $$
 
 </div>
 
-
 <div class="source"><a href="https://yang-song.github.io/blog/2021/score/">Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021</a></div>
 
 ---
-clicks: 3
+clicks: 4
 id: denoising-score-matching-4
 class: theorems
 ---
@@ -891,6 +873,12 @@ The score-norm term $C_1$ is independent of $\btheta$.
 </div>
 </div>
 
+<div class="takeaway" v-click="4">
+
+**Next:** rewrite the last cross term $-2\bbE_{q(\bx_{\sigma})}\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right]$ using the conditional score.
+
+</div>
+
 <div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
 
 <!-- Compact proof, part 1. Assume the displayed expectations are finite and differentiation/integration may be interchanged. Marginalization applies to any integrable h, including the model squared norm. -->
@@ -919,15 +907,15 @@ $$
 
 ## Proof (Continued)
 
-Rewrite the mixed term:
+Use marginalization and $\nabla q=q\,\nabla\log q$ to rewrite the cross term:
 
 $$ {1|1-2|all} {at:2}
 \begin{gathered}
-{\color{teal}\bbE_{q(\bx_{\sigma})}\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right]}
-=\int\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}q(\bx_{\sigma})d\bx_{\sigma}\\
+{\color{#8854c0}\bbE_{q(\bx_{\sigma})}}\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})}\right]
+=\int\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}q(\bx_{\sigma})}d\bx_{\sigma}\\
 =\int\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\left({\color{#8854c0}\int q(\bx_{\sigma}|\bx)\pd(\bx)d\bx}\right)d\bx_{\sigma}
-=\int\int\pd(\bx)\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{olive}\nabla_{\bx_{\sigma}}q(\bx_{\sigma}|\bx)}\,d\bx\,d\bx_{\sigma}\\
-={\color{olive}\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}}\left[{\color{teal}\bs_{\btheta,\sigma}^\top(\bx_{\sigma})\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right].
+=\int\int\pd(\bx)\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}q(\bx_{\sigma}|\bx)}\,d\bx\,d\bx_{\sigma}\\
+={\color{#8854c0}\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}}\left[\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right].
 \end{gathered}
 $$
 
@@ -938,8 +926,8 @@ Substitute and complete the square:
 $$ {1|all} {at:5}
 \begin{gathered}
 \bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma})\right\|_2^2
-=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left[\|\bs_{\btheta,\sigma}(\bx_{\sigma})\|_2^2-2\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right]+C_1\\
-=\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2+\text{const}.
+={\color{#8854c0}\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}}\left[\|\bs_{\btheta,\sigma}(\bx_{\sigma})\|_2^2-2\bs_{\btheta,\sigma}^\top(\bx_{\sigma}){\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right]+{\color{olive}C_1}\\
+={\color{#8854c0}\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-{\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right\|_2^2+{\color{olive}\text{const}}.
 \end{gathered}
 $$
 
@@ -956,11 +944,11 @@ id: denoising-score-matching-6
 class: theorems
 ---
 
-# Denoising Score Matching
+# What Does Denoising Score Matching Learn?
+
+**Why the theorem works:** MSE learns the average conditional target.
 
 <div class="block">
-
-## Denoising Score Matching Objective
 
 $$
 \bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2\rightarrow\min_{\btheta}
@@ -969,34 +957,45 @@ $$
 </div>
 <div v-click="1">
 
-The optimal MSE predictor is the posterior mean of the regression target:
+The model sees only $\bx_\sigma$; the target also depends on $\bx$.<br>For each $\bx_\sigma$, the MSE-optimal prediction $\bs^*_\sigma(\bx_\sigma)$ is the average target:
 
 $$
-\bs_{\btheta^*,\sigma}(\bx_\sigma)=\bbE_{q(\bx|\bx_\sigma)}\left[\nabla_{\bx_\sigma}\log q(\bx_\sigma|\bx)\right]
+\bs^*_\sigma(\bx_\sigma)=\bbE_{q(\bx|\bx_\sigma)}\left[\nabla_{\bx_\sigma}\log q(\bx_\sigma|\bx)\right]
 $$
 
 </div>
 <div class="block" v-click="2">
 
-## Marginal Score via Conditional Scores
+## From the Optimal Prediction to the Marginal Score
 
 $$ {1|1-2|all} {at:3}
 \begin{aligned}
-\nabla_{\bx_\sigma}\log q(\bx_\sigma)&=\frac{\nabla_{\bx_\sigma}{\color{#8854c0}\int q(\bx_\sigma|\bx)\pd(\bx)d\bx}}{q(\bx_\sigma)}\\
-&=\int\nabla_{\bx_\sigma}\log q(\bx_\sigma|\bx)\cdot{\color{olive}\frac{q(\bx_\sigma|\bx)\pd(\bx)}{q(\bx_\sigma)}}d\bx\\
-&=\bbE_{{\color{olive}q(\bx|\bx_\sigma)}}\left[\nabla_{\bx_\sigma}\log q(\bx_\sigma|\bx)\right]
+\bs^*_\sigma(\bx_\sigma)&=\int\nabla_{\bx_\sigma}\log q(\bx_\sigma|\bx)\cdot{\color{#8854c0}\frac{q(\bx_\sigma|\bx)\pd(\bx)}{q(\bx_\sigma)}}d\bx\\
+&=\frac{1}{q(\bx_\sigma)}\int\nabla_{\bx_\sigma}q(\bx_\sigma|\bx)\pd(\bx)d\bx\\
+&=\frac{\nabla_{\bx_\sigma}{\color{#8854c0}\int q(\bx_\sigma|\bx)\pd(\bx)d\bx}}{q(\bx_\sigma)}=\nabla_{\bx_\sigma}\log q(\bx_\sigma).
 \end{aligned}
 $$
 
 </div>
-<div v-click="5">
+<div class="takeaway" v-click="5">
 
-**Therefore:** $\bs_{\btheta^*,\sigma}(\bx_\sigma)=\nabla_{\bx_\sigma}\log q(\bx_\sigma)$ - the optimal model learns the true **marginal** score!
+**Different conditional targets, one marginal score:** $\bs^*_\sigma(\bx_\sigma)=\nabla_{\bx_\sigma}\log q(\bx_\sigma)$.<br>
+Variation around this average adds only a model-independent constant to the loss.
 
 </div>
 
 
 <div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a></div>
+
+<!--
+Here s*_sigma denotes the MSE-optimal prediction over unrestricted functions, not an assertion that a finite neural network attains it. The trained network approximates this function. Read the derivation forward: expand the posterior average using Bayes, use q grad log q = grad q, then differentiate the marginal density under the integral.
+
+Connection to the theorem: this identity becomes an alternative proof when combined with the MSE decomposition. Let T = grad_{x_sigma} log q(x_sigma | x), m(x_sigma) = E[T | x_sigma] = s*_sigma(x_sigma), and s = s_{theta,sigma}(x_sigma). Expectations below are over the joint p_data(x) q(x_sigma | x):
+
+E ||s - T||^2 = E ||s - m||^2 + E ||T - m||^2.
+
+The cross term vanishes because E[T - m | x_sigma] = 0. The left-hand side is DSM, the first term on the right is marginal score matching, and the remaining term is independent of theta. Thus L_SM = L_DSM + const with const = -E ||T - m||^2, exactly as in the theorem. This holds for any network, whether or not it can represent m exactly, under the same integrability and differentiation conditions.
+-->
 
 ---
 clicks: 3
@@ -1004,38 +1003,46 @@ id: tweedie-s-formula
 class: theorems
 ---
 
-# Tweedie's Formula
+# Tweedie's Formula: From Score to Predictions
 
-Let $\bx\sim\pd$, $\bepsilon\sim\cN(0,\bI)$ be independent, with $\bx_\sigma=\bx+\sigma\bepsilon$ and $\sigma>0$.
+For $\bx_\sigma=\bx+\sigma\bepsilon$, with independent $\bx\sim\pd$, $\bepsilon\sim\cN(0,\bI)$ and $\sigma>0$, the posterior-average identity gives:
 
-Using the posterior-mean identity from the previous slide:
-
-$$ {1|all} {at:1}
-\begin{aligned}
+$$
 \nabla_{\bx_\sigma}\log q(\bx_\sigma)
-&=\bbE_{q(\bx|\bx_\sigma)}\left[\frac{\bx-\bx_\sigma}{\sigma^2}\right]\\
-&=\frac{\bbE_{q(\bx|\bx_\sigma)}[\bx]-\bx_\sigma}{\sigma^2}.
-\end{aligned}
+=\bbE_{q(\bx|\bx_\sigma)}\left[\frac{\bx-\bx_\sigma}{\sigma^2}\right]
+=\frac{\bbE_{q(\bx|\bx_\sigma)}[\bx]-\bx_\sigma}{\sigma^2}.
 $$
 
-<div class="block" v-click="2">
+<div class="block" v-click="1">
 
-## Tweedie's Formula
+## Tweedie's Formula: Predict Clean Data
 
 $$
 \bbE_{q(\bx|\bx_\sigma)}[\bx]=\bx_\sigma+\sigma^2\nabla_{\bx_\sigma}\log q(\bx_\sigma).
 $$
 
 </div>
-<div v-click="3">
+<div class="block" v-click="2">
 
-## Noise Prediction
+## Predict the Added Noise
 
 $$
 \bbE[\bepsilon\mid\bx_\sigma]=-\sigma\nabla_{\bx_\sigma}\log q(\bx_\sigma).
 $$
 
-Both conditional means are MSE-optimal predictions given the noisy observation.
+These are MSE-optimal conditional means, not necessarily the original $\bx$ and $\bepsilon$.
+
+</div>
+<div class="takeaway" v-click="3">
+
+## Use the Trained Score Network
+
+$$
+\hat{\bx}=\bx_\sigma+\sigma^2\bs_{\btheta,\sigma}(\bx_\sigma),\qquad
+\hat{\bepsilon}=-\sigma\bs_{\btheta,\sigma}(\bx_\sigma).
+$$
+
+**One score model predicts both clean data and noise**, approximating their conditional means.
 
 </div>
 
@@ -1061,7 +1068,7 @@ Toy data: three equally likely clean points $\bx_i$, with $\bx_\sigma=\bx+\sigma
 
 <div class="source"><a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent P. A Connection Between Score Matching and Denoising Autoencoders, 2010</a><br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3325056/">Efron B. Tweedie's Formula and Selection Bias, 2011</a></div>
 
-<!-- Original analytic toy example. The clean prior is uniform on three atoms; the Gaussian-corrupted marginal is smooth. At sigma = 1 the displayed conditional-score vectors end at the clean points, and the marginal-score vector ends at the posterior mean. Clicks: conditional scores → posterior weights → marginal score → Tweedie. The arrows are exact, not estimates from a trained model. -->
+<!-- Original analytic toy example. The clean prior is uniform on three atoms; the Gaussian-corrupted marginal is smooth. At sigma = 1 the displayed conditional-score vectors end at the clean points, and the marginal-score vector ends at the posterior mean. Clicks: conditional scores → posterior weights → marginal score → Tweedie. The arrows are exact, not estimates from a trained model. Posterior weights follow Bayes: the equal prior masses 1/3 and Gaussian normalization constants cancel. The denoised estimate is the posterior-weighted mean of the clean points; its location between modes is a consequence of averaging. -->
 
 ---
 clicks: 4
@@ -1069,49 +1076,55 @@ id: denoising-score-matching-7
 class: theorems
 ---
 
-# Denoising Score Matching
+# Denoising Score Matching: Method Overview
 
-Original objective:
+<div class="block" style="margin: 10px 0;">
 
-$$
-\bbE_{\pd(\bx)}\left\|\bs_{\btheta}(\bx)-\nabla_\bx\log\pd(\bx)\right\|_2^2\rightarrow\min_{\btheta}
-$$
-
-<div v-click="1">
-
-Noisy objective:
+## 1. Start: Learn the Data Score
 
 $$
-\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_\sigma)-\nabla_\bx\log q(\bx_{\sigma})\right\|_2^2\rightarrow\min_{\btheta}
+\bbE_{\pd(\bx)}\left\|\bs_{\btheta}(\bx)-{\color{#8854c0}\nabla_\bx\log\pd(\bx)}\right\|_2^2\rightarrow\min_{\btheta}
 $$
 
 </div>
-<div v-click="2">
+<div class="block" v-click="1" style="margin: 10px 0;">
 
-This is equivalent to a denoising task:
+## 2. Perturb the Data: Learn the Smoothed Score
+
+Target: the unknown score of the noisy-data marginal $q(\bx_{\sigma})$.
 
 $$
-\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)\right\|_2^2\rightarrow\min_{\btheta}
+\bbE_{q(\bx_{\sigma})}\left\|\bs_{\btheta,\sigma}(\bx_\sigma)-{\color{#8854c0}\nabla_{\bx_\sigma}\log q(\bx_{\sigma})}\right\|_2^2\rightarrow\min_{\btheta}
 $$
 
 </div>
+<div class="block" v-click="2" style="margin: 10px 0;">
+
+## 3. Apply the Theorem: Same Minimizers, Known Target
+
+$$
+\bbE_{\pd(\bx)}\bbE_{q(\bx_{\sigma}|\bx)}\left\|\bs_{\btheta,\sigma}(\bx_{\sigma})-{\color{teal}\nabla_{\bx_{\sigma}}\log q(\bx_{\sigma}|\bx)}\right\|_2^2\rightarrow\min_{\btheta}
+$$
+
 <div v-click="3">
 
-$$
-\bbE_{\pd(\bx)}\bbE_{\cN(0,\bI)}\left\|\bs_{\btheta,\sigma}(\bx+\sigma\bepsilon)+\frac\bepsilon\sigma\right\|_2^2\rightarrow\min_{\btheta}
-$$
-
-</div>
-<div class="block" v-click="4">
-
-## Langevin Dynamics
+Sample $\bx_{\sigma}\sim q(\bx_{\sigma}|\bx)$ via $\bx_{\sigma}=\bx+\sigma\bepsilon$, $\bepsilon\sim\cN(0,\bI)$:
 
 $$
-\bx_{l+1}=\bx_l+\frac\eta2\cdot\bs_{\btheta,\sigma}(\bx_l)+\sqrt\eta\cdot\bepsilon_l,\qquad\bepsilon_l\sim\cN(0,\bI)
+\bbE_{\pd(\bx)}\bbE_{\bepsilon\sim\cN(0,\bI)}\left\|\bs_{\btheta,\sigma}(\bx+\sigma\cdot\bepsilon)-{\color{teal}\left(-\frac\bepsilon\sigma\right)}\right\|_2^2\rightarrow\min_{\btheta}
 $$
 
 </div>
+</div>
+<div class="takeaway" v-click="4">
 
+## After Training: Sample with the Learned Score
+
+$$
+\bx_{l+1}=\bx_l+\frac\eta2\cdot\bs_{\btheta,\sigma}(\bx_l)+\sqrt\eta\cdot\bepsilon_l,\qquad\bepsilon_l\sim\cN(0,\bI).
+$$
+
+</div>
 
 <div class="source"><a href="https://yang-song.github.io/blog/2021/score/">Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021</a></div>
 
@@ -1127,7 +1140,7 @@ class:
 <div class="course-outline">
 <div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
-<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
+<div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br><b>Noise-Conditioned Score Network (NCSN)</b></div></div></div>
 <div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
@@ -1148,10 +1161,7 @@ $$
 <div>
 
 $$
-\begin{aligned}
-\bx_{l+1}&=\bx_l+\frac\eta2\cdot\bs_{\btheta,\sigma}(\bx_l)\\
-&\quad+\sqrt\eta\cdot\bepsilon_l
-\end{aligned}
+\bx_{l+1}=\bx_l+\frac\eta2\cdot\bs_{\btheta,\sigma}(\bx_l)+\sqrt\eta\cdot\bepsilon_l
 $$
 
 - For **small** $\sigma$, $\bs_{\btheta,\sigma}(\bx)$ becomes inaccurate and Langevin dynamics fails to traverse modes.
@@ -1235,14 +1245,17 @@ How do we sample from such a model?
 <div class="source"><a href="https://arxiv.org/abs/1907.05600">Song Y. et al. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a></div>
 
 ---
-clicks: 1
+clicks: 2
 id: noise-conditioned-score-network-ncsn-3
 class: theorems
 ---
 
 # Noise-Conditioned Score Network (NCSN)
 
-<div class="block">
+**Inner loop ($l$):** run Langevin dynamics at fixed $\sigma_t$, targeting $q(\bx_t)$.<br>
+**Outer loop ($t=T,\dots,1$):** lower the noise and reuse samples at the next level.
+
+<div class="block" v-click="1">
 
 ## Sampling (Annealed Langevin Dynamics)
 
@@ -1253,11 +1266,20 @@ class: theorems
    \bx_t^l=\bx_t^{l-1}+\frac{\eta_t}2\bs_{\btheta,\sigma_t}(\bx_t^{l-1})+\sqrt{\eta_t}\bepsilon_t^l.
    $$
 
-3. Update $\bx_{t-1}^0:=\bx_t^L$ and proceed to the next noise level $\sigma_{t-1}$.
+3. Update $\bx_{t-1}^0:=\bx_t^L$ and proceed to $\sigma_{t-1}$ if $t>1$.
 
 </div>
-<div v-click="1">
-<img src="/figs/ald.png" alt="Annealed Langevin dynamics across decreasing noise levels" style="height: 225px; width: 100%; object-fit: contain;" />
+<div class="columns balanced" v-click="2">
+<div>
+
+## Why Gradually?
+
+High noise helps explore different modes; lower noise restores detail. Nearby noise levels let us reuse samples instead of restarting.
+
+</div>
+<div>
+<img src="/figs/ald.png" alt="Annealed Langevin dynamics across decreasing noise levels" style="height: 180px; width: 100%; object-fit: contain;" />
+</div>
 </div>
 
 
@@ -1330,51 +1352,48 @@ $$
 $$
 
 </div>
-<div v-click="4">
+<div class="takeaway" v-click="4">
 
-- ${\color{#8854c0}\beta_t=\eta}$
-- ${\color{teal}\nabla_{\bx_{t-1}}\log\pt(\bx_{t-1})=-\bx_{t-1}=\nabla_{\bx_{t-1}}\log\cN(0,\bI)}$
+**From a Markov chain to Langevin dynamics:** for small $\beta_t$, this Gaussian chain approximates LD targeting $\cN(0,\bI)$, with step size ${\color{#8854c0}\eta=\beta_t}$ and Gaussian score ${\color{teal}-\bx_{t-1}}$.
 
 </div>
 
 <div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
 
 ---
-clicks: 6
+clicks: 5
 id: forward-gaussian-diffusion-process-2
 class: theorems
 ---
 
-# Forward Gaussian Diffusion Process
+# Forward Diffusion: Sample at Any Timestep
+
+Fix a schedule $0<\beta_t<1$. The noises $\bepsilon_t\sim\cN(0,\bI)$ are independent across $t$ and of $\bx_0$.
 
 $$
-\begin{aligned}
-\bx_t&=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t,\quad\bepsilon_t\sim\cN(0,\bI)\\
-q(\bx_t|\bx_{t-1})&=\cN(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI)
-\end{aligned}
+\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t.
 $$
 
 <div class="block" v-click="1">
 
-## Statement 1
+## Exact Conditional Distribution
 
-Let $\alpha_t=1-\beta_t$ and $\bar{\alpha}_t=\prod_{s=1}^t\alpha_s=\prod_{s=1}^t(1-\beta_s)$. Then
+Let $\alpha_t=1-\beta_t$ and $\bar{\alpha}_t=\prod_{s=1}^t\alpha_s$. Then
 
 $$
-q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\,\bx_0,(1-\bar{\alpha}_t)\bI)
+q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\,\bx_0,(1-\bar{\alpha}_t)\bI).
 $$
 
 <div v-click="2">
 
-Thus, samples at any timestep $t$ can be generated directly from $\bx_0$
+Sample $\bx_t$ directly from $\bx_0$, without simulating the intermediate steps:
 
-$$ {1|1-2|1-3|1-4|all} {at:3}
+$$ {1|1-2|1-3|all} {at:3}
 \begin{aligned}
-\bx_t&=\sqrt{\alpha_t}{\color{teal}\bx_{t-1}}+\sqrt{1-\alpha_t}\bepsilon_t\\
-&=\sqrt{\alpha_t}({\color{teal}\sqrt{\alpha_{t-1}}\bx_{t-2}+\sqrt{1-\alpha_{t-1}}\bepsilon_{t-1}})+\sqrt{1-\alpha_t}\bepsilon_t\\
+\bx_t&=\sqrt{\alpha_t}\bx_{t-1}+\sqrt{1-\alpha_t}\bepsilon_t\\
 &=\sqrt{\alpha_t\alpha_{t-1}}\bx_{t-2}+({\color{#8854c0}\sqrt{\alpha_t(1-\alpha_{t-1})}\bepsilon_{t-1}+\sqrt{1-\alpha_t}\bepsilon_t})\\
 &=\sqrt{\alpha_t\alpha_{t-1}}\bx_{t-2}+{\color{#8854c0}\sqrt{1-\alpha_t\alpha_{t-1}}\bepsilon'_t}\\
-&=\ldots=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\bepsilon,\quad\bepsilon\sim\cN(0,\bI)
+&=\ldots={\color{teal}\sqrt{\bar{\alpha}_t}\,\bx_0}+{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}\bepsilon},\quad\bepsilon\sim\cN(0,\bI).
 \end{aligned}
 $$
 
@@ -1383,7 +1402,59 @@ $$
 
 <div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
 
-<!-- The statement and its derivation share a slide. Click 2 replaces the former slide boundary; four further clicks reveal the cumulative derivation rows. -->
+<!-- This finite-time identity is exact for any fixed schedule 0 < beta_t < 1; neither monotonicity nor beta_t << 1 is needed. Small beta was used only for the previous Langevin approximation. The first expansion is for t >= 2; t = 1 is the defining step. Independent Gaussian increments combine with variance alpha_t(1-alpha_{t-1}) + (1-alpha_t) = 1-alpha_t alpha_{t-1}. The aggregate epsilon is independent of x_0 for each fixed t; the direct representation does not prescribe a joint coupling across timesteps. -->
+
+---
+clicks: 3
+id: forward-gaussian-diffusion-process-4
+class: theorems
+---
+
+# When Does Only Gaussian Noise Remain?
+
+The closed-form conditional already tells us how the signal disappears:
+
+$$
+\bx_t={\color{teal}\sqrt{\bar{\alpha}_t}\,\bx_0}+{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}\bepsilon},\qquad\bepsilon\sim\cN(0,\bI),\quad\bepsilon\perp\bx_0.
+$$
+
+<div class="block" v-click="1">
+
+## The Schedule Must Remove the Signal
+
+For $0<\beta_t<1$, the required condition is
+
+$$
+\bar{\alpha}_t=\prod_{s=1}^t(1-\beta_s)\longrightarrow0
+\quad\Longleftrightarrow\quad
+\sum_{t=1}^{\infty}\beta_t=\infty.
+$$
+
+Many steps alone are not enough: $\beta_t=2^{-t}$ leaves $\bar{\alpha}_\infty>0$.
+
+</div>
+<div v-click="2">
+
+$$
+{\color{teal}\sqrt{\bar{\alpha}_t}\to0},\qquad
+{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}\to1}
+\quad\Longrightarrow\quad
+\bx_t\xrightarrow{d}\cN(0,\bI).
+$$
+
+The limit no longer depends on the initial data distribution $\pd$.
+
+</div>
+<div class="takeaway" v-click="3">
+
+**For finite $T$:** choose $\bar{\alpha}_T\ll1$ with negligible residual signal $\sqrt{\bar{\alpha}_T}\bx_0$.<br>
+Then $q(\bx_T)\approx\cN(0,\bI)$: the terminal distribution is approximately standard Gaussian.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a></div>
+
+<!-- This is a direct consequence of the previous exact conditional, not a separate stationarity theorem. For a fixed schedule 0 < beta_t < 1, alpha_bar_t -> 0 iff sum beta_t diverges. If sum beta_t converges, beta_t -> 0 and the tail sum of -log(1-beta_t) converges; finitely many initial factors are positive. If the sum diverges, log(1-beta_t) <= -beta_t forces the product to zero. Under alpha_bar_t -> 0, the marginal converges in distribution for any probability law on finite-dimensional x_0, without a moment assumption. Couple the one-time representations using an independent Gaussian epsilon to see the limit. For finite T, closeness depends on the data scale as well as alpha_bar_T. -->
 
 ---
 clicks: 0
@@ -1395,12 +1466,12 @@ class: theorems interactive-slide
 import ForwardDiffusionDemo from './components/ForwardDiffusionDemo.vue'
 </script>
 
-# Forward Gaussian Diffusion Process
+# Forward Diffusion: From Data to Noise
 
 $$
 \begin{aligned}
 q(\bx_t|\bx_{t-1})&=\cN\left(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI\right);\\
-q(\bx_t|\bx_0)&=\cN\left(\sqrt{\bar{\alpha}_t}\bx_0,(1-\bar{\alpha}_t)\bI\right)
+q(\bx_t|\bx_0)&=\cN\left({\color{teal}\sqrt{\bar{\alpha}_t}\bx_0},{\color{#8854c0}(1-\bar{\alpha}_t)\bI}\right)
 \end{aligned}
 $$
 
@@ -1409,42 +1480,6 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a></div>
 
 <!-- Original analytic 1D illustration replacing the source image. The plots show marginals, not conditional kernels or a sample trajectory. Each initial Gaussian component has mean scaled by sqrt(alpha_bar_t) and variance alpha_bar_t * 0.35^2 + 1 - alpha_bar_t. beta_t = 0.01; the PDF compares t = 0, 75, 250, 1000. -->
-
----
-clicks: 2
-id: forward-gaussian-diffusion-process-4
-class: theorems
----
-
-# Forward Gaussian Diffusion Process
-
-<div class="block">
-
-## Statement 2
-
-Applying the Markov chain to any distribution $\pd(\bx)$ yields $\bx_\infty\sim p_\infty(\bx)=\cN(0,\bI)$, the **stationary** (limiting) distribution:
-
-$$
-p_\infty(\bx)=\int q(\bx|\bx')p_\infty(\bx')d\bx'
-$$
-
-<div v-click="1">
-
-$$
-\begin{aligned}
-p_\infty(\bx)&=\int q(\bx_\infty|\bx_0)\pd(\bx_0)d\bx_0\\
-&\approx\cN(0,\bI)\int\pd(\bx_0)d\bx_0=\cN(0,\bI)
-\end{aligned}
-$$
-
-</div></div>
-<div v-click="2">
-
-**Note:** This holds iff $\bar{\alpha}_t\rightarrow0$, i.e., $\sum_{t=1}^{\infty}\beta_t=+\infty$.
-
-</div>
-
-<div class="source"><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a></div>
 
 ---
 clicks: 2
@@ -1462,13 +1497,13 @@ class: theorems
 
 1. $\bx_0=\bx\sim\pd(\bx)$
 2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$,<br>$\bepsilon_t\sim\cN(0,\bI)$, $t\geq1$
-3. After $T\gg1$ steps: $\bx_T\sim p_\infty(\bx)=\cN(0,\bI)$
+3. Choose $\bar{\alpha}_T\ll1$ to suppress $\sqrt{\bar{\alpha}_T}\bx_0$.<br>Then $q(\bx_T)\approx\cN(0,\bI)$.
 
 </div>
 </div>
 <div v-click="2">
 
-If this process can be reversed, we can sample from $\pd(\bx)$ by starting from noise $p_\infty(\bx)=\cN(0,\bI)$.<br>
+If this process can be reversed, we can sample from $\pd(\bx)$ by starting from noise $\cN(0,\bI)\approx q(\bx_T)$.<br>
 Our goal now becomes inverting this diffusion.
 
 </div>

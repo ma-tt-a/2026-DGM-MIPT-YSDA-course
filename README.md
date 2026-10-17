@@ -44,8 +44,8 @@ The course is supported by seminars and hands-on assignments that help build int
 | 5 | October, 15 | <b>Lecture 5:</b><ul><li>Generative Adversarial Networks (GAN)</li><li>Wasserstein Distance</li><li>Wasserstein GAN (WGAN)</li><li>Evaluation of Likelihood-Free Models<ul><li>Frechet Inception Distance (FID)</li><li>Precision-Recall</li><li>CLIP Score</li><li>Human Eval</li></ul></li></ul> | [PDF](lectures/lecture5/Lecture5.pdf) |
 |  | October, 15 | <b>Seminar 4:</b> Vanilla GAN in 1D and 2D. Mode collapse and vanishing gradients. Non-saturating GAN. Wasserstein GAN (WGAN) and WGAN-GP. | [notebook](seminars/seminar4/seminar4_wgan.ipynb) |
 |  | October, 15 | <b>Seminar 5:</b> Progressive Growing GAN. StyleGAN: mapping network, noise injection, AdaIN, style mixing and interpolation. | [notebook](seminars/seminar5/seminar5_stylegan.ipynb) |
-<!---
 | 6 | October, 22 | <b>Lecture 6:</b><ul><li>Langevin Dynamics</li><li>Score Matching<ul><li>Denoising Score Matching</li><li>Noise-Conditioned Score Network (NCSN)</li></ul></li><li>Forward Gaussian Diffusion Process</li></ul> | [PDF](lectures/lecture6/Lecture6.pdf) |
+<!---
 | 7 | October, 29 | <b>Lecture 7:</b><ul><li>Reverse Gaussian Diffusion Process</li><li>Gaussian Diffusion Model as VAE</li><li>Diffusion ELBO Derivation</li><li>Gaussian Diffusion Reparametrization</li><li>Denoising Diffusion Probabilistic Model (DDPM)</li></ul> | [PDF](lectures/lecture7/Lecture7.pdf) |
 |  |  | <b>Seminar 7:</b> Noise Conditioned Score Network (NCSN). Heuristic diffusion model. | [slides](seminars/seminar7/) |
 | 8 | November, 5 | <b>Lecture 8:</b><ul><li>DDPM as a Score-Based Generative Model</li><li>Model Guidance<ul><li>Classifier Guidance</li><li>Classifier-Free Guidance</li></ul></li></ul> | [PDF](lectures/lecture8/Lecture8.pdf) |

@@ -105,7 +105,7 @@ try {
     await demo().getByRole('button', { name: noise ? 'Noise on' : 'Noise off', exact: true }).click()
     await demo().getByRole('button', { name: 'Reset', exact: true }).click()
     await demo().getByRole('button', { name: 'Run', exact: true }).click()
-    await page.waitForFunction(() => Number(document.querySelector('[data-demo="langevin"]')?.getAttribute('data-step')) >= 300)
+    await page.waitForFunction(() => Number(document.querySelector('[data-demo="langevin"]')?.getAttribute('data-step')) >= 150)
     await demo().getByRole('button', { name: 'Pause', exact: true }).click()
     const paused = await data()
     assert.equal(paused.running, 'false'); assert.equal(paused.noise, String(noise))
@@ -126,11 +126,11 @@ try {
   assert.equal((await data()).running, 'false')
   assert.equal(await demo().getByRole('button', { name: 'Run', exact: true }).isDisabled(), true)
   assert.equal(await demo().getByRole('button', { name: 'Step', exact: true }).isDisabled(), true)
-  await snapshot('langevin-finished-600')
+  await snapshot('langevin-finished-300')
   await demo().getByRole('button', { name: 'Reset', exact: true }).click()
   assert.equal(+(await data()).step, 0)
   assert.equal(await demo().getByRole('button', { name: 'Run', exact: true }).isEnabled(), true)
-  checks.push('Langevin stops at 600 steps; Run/Step disable and Reset restores controls')
+  checks.push('Langevin stops at 300 steps; Run/Step disable and Reset restores controls')
 
   for (const [slide, button] of [[support, 'Match'], [langevin, 'Noise on']]) {
     await go(slide, true)

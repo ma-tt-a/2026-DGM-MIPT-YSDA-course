@@ -486,9 +486,9 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2302.00482">Tong A., et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023</a></div>
 
 ---
-clicks: 1
+clicks: 2
 id: conditional-vector-field
-class: theorems
+class: theorems interactive-slide
 ---
 
 # Conditional Vector Field
@@ -508,6 +508,10 @@ The following vector field generates the probability path $p_t(\bx)$:
 $$
 \bv(\bx,t)=\bbE_{p_t(\bz|\bx)}\bv(\bx,\bz,t)={\color{teal}\int\bv(\bx,\bz,t)}\frac{{\color{teal}p_t(\bx|\bz)p(\bz)}}{p_t(\bx)}{\color{teal}d\bz}
 $$
+
+<PosteriorVelocityDemo v-click="2" />
+
+<!-- Two equally likely isotropic Gaussian clouds translate with constant velocities v1=(.8,.75), v2=(-.8,.75), without changing shape. At t=.5 their means are (-1,0) and (1,0), with sigma=.9. Dragging x changes the exact Bayes posterior and hence the marginal velocity. Colored arrows show the clouds' uniform conditional velocities; the teal arrow is evaluated at x. No time evolution or endpoint construction is shown. -->
 
 </div>
 
@@ -701,10 +705,10 @@ $$
 
 </div>
 
-Optimal predictor:
+Optimal predictor over all functions:
 
 $$
-\bs_{\btheta^*,\sigma}(\bx_\sigma)=\bbE_{q(\bx|\bx_\sigma)}\left[\nabla_{\bx_\sigma}\log q(\bx_\sigma|\bx)\right]=\nabla_{\bx_\sigma}\log q(\bx_\sigma)
+\bs^*_\sigma(\bx_\sigma)=\bbE_{q(\bx|\bx_\sigma)}\left[\nabla_{\bx_\sigma}\log q(\bx_\sigma|\bx)\right]=\nabla_{\bx_\sigma}\log q(\bx_\sigma)
 $$
 
 <div v-click="1">
@@ -718,7 +722,7 @@ $$
 
 </div>
 
-Optimal predictor: $\bv_{\btheta^*}(\bx,t)=\bbE_{p_t(\bz|\bx)}\bv(\bx,\bz,t)=\bv(\bx,t)$.
+Optimal predictor over all functions: $\bv^*(\bx,t)=\bbE_{p_t(\bz|\bx)}\bv(\bx,\bz,t)=\bv(\bx,t)$.
 
 </div>
 <div v-click="2">
@@ -831,16 +835,16 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The principles of diffusion models, 2025.</a></div>
 
 ---
-clicks: 1
+clicks: 3
 id: from-marginal-to-conditional-paths
 class: theorems
 ---
 
 # From Marginal to Conditional Paths
 
-<img src="/figs/cfm_uncond_to_cond.png" alt="From marginal paths to conditional paths" style="width:100%;height:275px;object-fit:contain" />
+<ConditionalPathDiagram :stage="$clicks" />
 
-<div class="block" v-click="1">
+<div class="block" v-click="3">
 
 ## Open Questions
 
@@ -853,7 +857,7 @@ $$
 
 </div>
 
-<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">image credit: A Visual Dive into Conditional Flow Matching</a></div>
+<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">Diagram adapted from A Visual Dive into Conditional Flow Matching</a></div>
 
 ---
 clicks: 2
@@ -1009,7 +1013,7 @@ $\displaystyle\begin{cases}\bbE_{p(\bz)}p_0(\bx|\bz)=\cN(0,\bI)\\\bbE_{p(\bz)}p_
 ---
 clicks: 3
 id: one-sided-conditioning
-class: theorems
+class: theorems interactive-slide
 ---
 
 # One-Sided Conditioning
@@ -1030,10 +1034,14 @@ p_t(\bx|\bx_1)&=\cN\left(\bmu_t(\bx_1),\bsigma_t^2(\bx_1)\right);\\
 $$
 
 </div>
-<img v-click="1" src="/figs/conical_paths.png" alt="Gaussian endpoint-conditioned paths" style="width:100%;height:135px;object-fit:contain" />
-<div v-click="2">
+<div v-click="1">
 
 Let's consider straight conditional paths:
+
+<EndpointPathDemo />
+
+</div>
+<div v-click="2">
 
 <div class="math-chain">
 
@@ -1044,7 +1052,7 @@ $\displaystyle\begin{cases}\bmu_t(\bx_1)=t\bx_1\\\bsigma_t(\bx_1)=1-t\end{cases}
 
 </div>
 
-<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">image credit: A Visual Dive into Conditional Flow Matching</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
 
 ---
 clicks: 4
