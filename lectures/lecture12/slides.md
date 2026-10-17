@@ -487,6 +487,62 @@ Time $t=0$ is noise and $t=1$ is data. This choice does not prescribe the ODE gr
 
 ---
 clicks: 0
+id: recap-classifier-free-guidance-velocity
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+## Classifier-Free Guidance for Velocity Fields
+
+Here $\by$ is a label or text prompt, distinct from the CFM latent $\bz$.
+
+<div class="block">
+
+$$
+\bv_{\btheta}^{\gamma}(\bx,t,\by)
+=\bv_{\btheta}(\bx,t,\varnothing)
++\gamma\left[\bv_{\btheta}(\bx,t,\by)-\bv_{\btheta}(\bx,t,\varnothing)\right].
+$$
+
+$\gamma=0$: unconditional; $\gamma=1$: conditional; $\gamma>1$: extrapolation.
+
+</div>
+<div class="columns">
+<div>
+
+## Training
+
+1. Sample paired data $(\bx_1,\by)\sim\pd$ and form the rectified-flow sample $\bx_t$ as before.
+2. Set $\tilde\by=\varnothing$ with fixed probability; otherwise set $\tilde\by=\by$.
+3. Minimize the same velocity loss:
+
+$$
+\cL=\left\|\bv_{\btheta}(\bx_t,t,\tilde\by)-(\bx_1-\bx_0)\right\|^2.
+$$
+
+</div>
+<div>
+
+## Sampling
+
+1. Sample $\bx_0\sim\cN(0,\bI)$ and choose $\by,\gamma$.
+2. Evaluate both predictions to form $\bv_{\btheta}^{\gamma}$ at each solver evaluation.
+3. Solve the guided ODE from $t=0$ to $t=1$:
+
+$$
+\frac{d\bx_t}{dt}=\bv_{\btheta}^{\gamma}(\bx_t,t,\by).
+$$
+
+</div>
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2207.12598">Ho J., Salimans T. Classifier-Free Diffusion Guidance, 2022</a><br><a href="https://arxiv.org/abs/2403.03206">Esser P., et al. Scaling Rectified Flow Transformers for High-Resolution Image Synthesis, 2024</a></div>
+
+<!-- Coverage: the new CFG result follows the RF recap. Existing RF Training/Sampling and time-distribution slides are full and teach different choices; this separate static recap preserves the guidance convention and complete Training/Sampling blocks. The class/text condition y remains distinct from the CFM auxiliary latent z. -->
+
+---
+clicks: 0
 id: outline
 ---
 

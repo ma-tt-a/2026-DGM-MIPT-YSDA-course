@@ -1219,7 +1219,67 @@ The probability path and the target $\bx_1-\bx_0$ stay fixed.
 
 <div class="source"><a href="https://arxiv.org/abs/2403.03206">Esser P., et al. Scaling Rectified Flow Transformers for High-Resolution Image Synthesis, 2024</a></div>
 
-<!-- Narrative: the preceding Training/Sampling slide uses uniform time. Here vary only the training-time distribution, reuse the weighted-loss identity, and show logit-normal as a concrete example. The following conditional/marginal-path slide returns to transport geometry and motivates two-sided conditioning. In this lecture t=0 is noise and t=1 is data, opposite to SD3 paper time. Thus positive mu favors data here; the symmetric mu=0,s=1 example needs no sign conversion. The Gaussian draws u and endpoint samples are independent. For the unshifted straight Gaussian path log-SNR=2u exactly. Resolution-dependent timestep shifting is a separate topic; the Gaussian log-SNR statement does not silently include it. Positive time-only weighting preserves the unrestricted pointwise conditional-mean optimum when expectations are finite; finite shared networks and finite optimization can behave differently. Restoring the uniform-time objective would require multiplying the sampled loss by 1/r(t). This concerns training times, not the ODE integration grid. -->
+<!-- Narrative: the preceding Training/Sampling slide uses uniform time. Here vary only the training-time distribution, reuse the weighted-loss identity, and show logit-normal as a concrete example. The following CFG slide adds label/text conditioning at generation; the subsequent conditional/marginal-path slide returns to transport geometry. In this lecture t=0 is noise and t=1 is data, opposite to SD3 paper time. Thus positive mu favors data here; the symmetric mu=0,s=1 example needs no sign conversion. The Gaussian draws u and endpoint samples are independent. For the unshifted straight Gaussian path log-SNR=2u exactly. Resolution-dependent timestep shifting is a separate topic; the Gaussian log-SNR statement does not silently include it. Positive time-only weighting preserves the unrestricted pointwise conditional-mean optimum when expectations are finite; finite shared networks and finite optimization can behave differently. Restoring the uniform-time objective would require multiplying the sampled loss by 1/r(t). This concerns training times, not the ODE integration grid. -->
+
+---
+clicks: 3
+id: classifier-free-guidance-velocity
+class: theorems
+---
+
+# Classifier-Free Guidance for Velocity Fields
+
+**Recall diffusion CFG** for a label/prompt $\by$ (distinct from the CFM latent $\bz$):
+
+$$
+\bs^{\gamma}_{\btheta,t}(\bx_t,\by)
+=\bs_{\btheta,t}(\bx_t,\varnothing)
++\gamma\left[\bs_{\btheta,t}(\bx_t,\by)-\bs_{\btheta,t}(\bx_t,\varnothing)\right].
+$$
+
+<div class="block" v-click="1">
+
+$$
+\bv_{\btheta}^{\gamma}(\bx,t,\by)
+=\bv_{\btheta}(\bx,t,\varnothing)
++\gamma\left[\bv_{\btheta}(\bx,t,\by)-\bv_{\btheta}(\bx,t,\varnothing)\right].
+$$
+
+$\gamma=0$: unconditional; $\gamma=1$: conditional; $\gamma>1$: extrapolation.
+
+</div>
+<div class="columns">
+<div v-click="2">
+
+## Training
+
+1. Sample paired data $(\bx_1,\by)\sim\pd$ and form the rectified-flow sample $\bx_t$ as before.
+2. Set $\tilde\by=\varnothing$ with fixed probability; otherwise set $\tilde\by=\by$.
+3. Minimize the same velocity loss:
+
+$$
+\cL=\left\|\bv_{\btheta}(\bx_t,t,\tilde\by)-(\bx_1-\bx_0)\right\|^2.
+$$
+
+</div>
+<div v-click="3">
+
+## Sampling
+
+1. Sample $\bx_0\sim\cN(0,\bI)$ and choose $\by,\gamma$.
+2. Evaluate both predictions to form $\bv_{\btheta}^{\gamma}$ at each solver evaluation.
+3. Solve the guided ODE from $t=0$ to $t=1$:
+
+$$
+\frac{d\bx_t}{dt}=\bv_{\btheta}^{\gamma}(\bx_t,t,\by).
+$$
+
+</div>
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2207.12598">Ho J., Salimans T. Classifier-Free Diffusion Guidance, 2022</a><br><a href="https://arxiv.org/abs/2403.03206">Esser P., et al. Scaling Rectified Flow Transformers for High-Resolution Image Synthesis, 2024</a></div>
+
+<!-- Narrative: first show the score-space CFG formula from the earlier diffusion lecture; the first click reveals the same combination for velocities. After varying rectified-flow training times, recall CFG to make generation conditional on a label or prompt. The following conditional/marginal-path slide moves from one-sided generation to two-sided transport. Here y is an observed condition, distinct from the auxiliary CFM latent z=x1; conditional and unconditional model velocities both average over training endpoints. Use the same noise law and interpolation for both branches; independently drop the condition, not the endpoint or regression target. x0 is independent Gaussian noise and t follows the previously chosen training distribution. The convention gamma=0 unconditional, gamma=1 conditional matches the score CFG slides. For shared Gaussian paths, the score-to-velocity map is affine with condition-independent coefficients, so an affine CFG combination transfers to velocities. This does not assert that gamma>1 exactly samples a tempered endpoint density. Standard CFG uses two predictions per field evaluation (which may be batched); gamma=0 or 1 can skip the unused branch. Guidance distillation is a separate construction. SD3 is the concrete example; no claim that every FLUX variant uses two-pass CFG. -->
 
 ---
 clicks: 1
@@ -1247,9 +1307,9 @@ class: summary
 
 # Summary
 
-- Conditional flow matching introduces the latent variable $\bz$, reformulating the initial task in terms of conditional dynamics.
+- CFM makes FM training tractable through a latent variable $\bz$, preserving the minimizers.
 - The marginal vector field can be expressed as the posterior mean of conditional vector fields: $\bv(\bx,t)=\bbE_{p_t(\bz|\bx)}\bv(\bx,\bz,t)$.
-- The FM and CFM objectives have the same optimal solution, making CFM a tractable alternative to FM.
-- For Gaussian conditional paths $p_t(\bx|\bz)=\cN(\bmu_t(\bz),\bsigma_t^2(\bz))$, the conditional vector field has a closed form for $\bv(\bx_t,\bz,t)$.
+- Gaussian conditional paths admit a closed-form conditional velocity field.
 - Changing the training-time distribution without importance correction reweights the loss; logit-normal time gives Gaussian log-SNR on the straight noise-to-data path.
 - One-sided conditioning $\bz=\bx_1$ with straight conditional paths yields the **rectified flow objective**, using the target $\bv(\bx_t,\bx_1,t)=\bx_1-\bx_0$.
+- Classifier-free guidance combines conditional and unconditional velocity predictions; condition dropout trains both branches in one model.
