@@ -752,6 +752,8 @@ class: theorems
 
 # Conditional Flow Matching: Continuity Equations
 
+CFM gives us a training objective. We still need to choose conditional paths and their target velocities.
+
 <div class="block">
 
 ## Continuity Equations
@@ -765,8 +767,6 @@ $$
 
 </div>
 
-What is the relationship between $p_t(\bx)$ and $\bv(\bx,t)$?
-
 <ul>
 <li v-click="1">
 
@@ -775,17 +775,19 @@ $\bv(\bx,t)$ (under regularity conditions) and initial condition $p_0(\bx)$ uniq
 </li>
 <li v-click="2">
 
-But the reverse is not true: any divergence-free vector field $\diver(\tilde{\bv}(\bx,t)p_t(\bx))=0$ can generate a valid probability path.
+Given a field $\bv$ generating $p_t$, adding $\bw$ with $\diver(p_t\bw)=0$ preserves the same continuity equation.
 
 </li>
 <li v-click="3">
 
-Moreover, not every given path $p_t(\bx)$ can actually arise from particles moving under some velocity field $\bv(\bx,t)$.
+We need a velocity field that satisfies the continuity equation and defines a well-posed flow.
 
 </li>
 </ul>
 
 <div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The principles of diffusion models, 2025.</a></div>
+
+<!-- The perturbation w has zero weighted divergence, div(p_t w)=0; w itself need not be divergence-free. Thus v and v+w satisfy the same continuity equation for the given p_t. Identifying these equations with a common ODE-induced density path additionally requires well-posed flows and the usual boundary/integrability conditions. This is a choice of compatible velocity, not an existence theorem for arbitrary density paths. -->
 
 ---
 clicks: 3
@@ -821,8 +823,8 @@ $$
 </div>
 <div v-click="3">
 
-- $\bv(\bx,\bz,t)$ and $p_t(\bx|\bz)$ uniquely determine $\bv(\bx,t)$.
-- But marginal velocity does not determine conditional velocities (many decompositions exist).
+- $p(\bz)$, $p_t(\bx|\bz)$ and $\bv(\bx,\bz,t)$ uniquely determine $\bv(\bx,t)$.
+- Choosing conditional paths and compatible velocities constructs both marginal quantities.
 
 </div>
 
@@ -843,7 +845,7 @@ class: theorems
 ## Open Questions
 
 - **Q1** How should we choose the convenient conditioning latent variable $\bz$?
-- **Q2** How can we parametrize $p_t(\bx)$ (or $p_t(\bx|\bz)$) to enforce the following constraints?
+- **Q2** How should we choose $p_t(\bx|\bz)$ so that its marginal satisfies the endpoint constraints?
 
 $$
 \bbE_{p(\bz)}p_0(\bx|\bz)=\cN(0,\bI);\quad\bbE_{p(\bz)}p_1(\bx|\bz)=\pd(\bx).
@@ -861,7 +863,7 @@ class: theorems
 
 # Gaussian Conditional Probability Paths [Q2]
 
-Let's consider the following parametrization:
+On the interval considered, assume $\bmu_t(\bz)$ and $\bsigma_t(\bz)$ are differentiable in $t$, with $\bsigma_t(\bz)>0$ componentwise.
 
 $$
 p_t(\bx|\bz)=\cN\left(\bmu_t(\bz),\bsigma_t^2(\bz)\right)
@@ -875,12 +877,12 @@ The concrete $\bmu_t(\bz)$, $\bsigma_t(\bz)$ (which satisfy the boundary constra
 
 ## Gaussian flow
 
-- Let's derive the vector field for **any** Gaussian path $p_t(\bx|\bz)$.
-- There are infinitely many flows $\bpsi_t(\bx_0,\bz)$ (or, equivalently, vector fields $\bv(\bx_t,\bz,t)$) that generate a particular probability path $p_t(\bx|\bz)$.
+- We need a tractable velocity target for this Gaussian path.
+- Choose the affine flow: keep the same Gaussian noise along each trajectory and vary its mean and scale.
 
 <div v-click="2">
 
-- Let's consider the following flow:
+- Use this fixed-noise construction:
 
 $$
 \bx_t=\bpsi_t(\bx_0,\bz)=\bmu_t(\bz)+\bsigma_t(\bz)\odot\bepsilon,
@@ -891,6 +893,8 @@ where $\bepsilon$ is fixed by the condition: $\bx_0=\bmu_0(\bz)+\bsigma_0(\bz)\o
 </div></div></div>
 
 <div class="source"><a href="https://arxiv.org/abs/2302.00482">Tong A., et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023</a></div>
+
+<!-- The selected affine flow keeps epsilon fixed along each trajectory. Differentiability in time and componentwise positive sigma are assumed on the interval where the inverse map and velocity formula are used, including positive sigma_0 for the initial parametrization. A zero-variance endpoint requires separate limiting analysis; the later one-sided construction treats t=1 separately. We choose one compatible field rather than claim uniqueness from the density path alone. -->
 
 ---
 clicks: 4
@@ -914,7 +918,7 @@ $$
 </div>
 <div v-click="1">
 
-How to derive the expression for $\bv(\bx_t,\bz,t)$ for this particular flow $\bpsi_t(\bx_0,\bz)$?
+Differentiate the chosen affine flow in $t$, keeping $\bepsilon$ fixed. Assume differentiable $\bmu_t,\bsigma_t$ and componentwise $\bsigma_t>0$.
 
 </div>
 <div v-click="2">

@@ -197,7 +197,7 @@ class: theorems
 ## Open Questions
 
 - **Q1** How should we choose the convenient conditioning latent variable $\bz$?
-- **Q2** How can we parametrize $p_t(\bx)$ (or $p_t(\bx|\bz)$) to enforce the following constraints?
+- **Q2** How should we choose $p_t(\bx|\bz)$ so that its marginal satisfies the endpoint constraints?
 
 $$
 \bbE_{p(\bz)}p_0(\bx|\bz)=\cN(0,\bI);\quad\bbE_{p(\bz)}p_1(\bx|\bz)=\pd(\bx).
@@ -218,6 +218,8 @@ class: theorems
 <div class="block">
 
 ## Gaussian Conditional Probability Path
+
+On the interval considered, assume $\bmu_t(\bz)$ and $\bsigma_t(\bz)$ are differentiable in $t$, with $\bsigma_t(\bz)>0$ componentwise.
 
 $$
 \begin{aligned}
@@ -241,6 +243,8 @@ class: theorems
 <div class="block">
 
 ## Gaussian Conditional Probability Path
+
+On the interval considered, assume $\bmu_t(\bz)$ and $\bsigma_t(\bz)$ are differentiable in $t$, with $\bsigma_t(\bz)>0$ componentwise.
 
 $$
 \begin{aligned}
