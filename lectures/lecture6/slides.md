@@ -424,6 +424,43 @@ class:
 
 ---
 clicks: 2
+id: energy-landscape
+class: theorems
+---
+
+# Learning an Energy Landscape
+
+- **Autoregressive models and flows:** model a normalized density.
+- **VAEs and GANs:** generate data points through latent variables.
+
+<div class="columns balanced" style="grid-template-columns: 1fr 1.1fr;">
+<div>
+
+- **An EBM assigns an energy** $E_{\btheta}(\bx)$ to each data point $\bx$.
+
+<div v-click="1">
+
+- **Plausible data points have lower energy.** Several wells can represent different modes.
+- Learn **relative energies**: lowering energy on training data alone is not enough.
+
+</div>
+</div>
+<img src="/figs/energy-landscape.svg" alt="One-dimensional energy landscape with two wells; plausible data points have low energy and arrows point downhill" style="height: 310px; width: 100%; object-fit: contain;" />
+</div>
+
+<div class="takeaway" v-click="2">
+
+Minimizing energy searches for a low-energy data point.<br>
+**How can we sample from the whole distribution?**
+
+</div>
+
+<div class="source"><a href="https://yann.lecun.org/exdb/publis/pdf/lecun-06.pdf">LeCun Y. et al. A Tutorial on Energy-Based Learning, 2006</a><br><a href="https://www.linkedin.com/pulse/energy-based-models-stan-fedotov-phd-udyne/">Fedotov S. Energy-based models and why we might want to use them, 2026</a></div>
+
+<!-- Narrative: recall normalized-density models and latent-variable generators, then introduce the energy assigned to a data point. Reveal multiple modes and relative energy learning, then distinguish searching for one point from sampling a distribution. The next slide parameterizes the energy with a neural network and defines its density. Original one-dimensional illustration: E(x) = -log p(x) + const, with its minimum set to zero, for an equally weighted Gaussian mixture with means +/-1.5 and sigma=0.7. This is also the first-coordinate marginal of the later two-dimensional demo; the slide needs no extra coordinate or slice notation. -->
+
+---
+clicks: 2
 id: energy-based-models
 class: theorems
 ---
@@ -432,31 +469,33 @@ class: theorems
 
 <div class="block">
 
-## Unnormalized Density
+## A Neural Network Defines the Energy
+
+Use a scalar network $E_{\btheta}(\bx)=\NN_{\btheta}(\bx)\in\bbR$, with weights $\btheta$ learned from data.
 
 $$
-\pt(\bx)=\frac{\hat p_{\btheta}(\bx)}{Z_{\btheta}},\qquad\text{where }Z_{\btheta}=\int\hat p_{\btheta}(\bx)d\bx
+\hat p_{\btheta}(\bx)=e^{-E_{\btheta}(\bx)}>0,\qquad\pt(\bx)=\frac{\hat p_{\btheta}(\bx)}{Z_{\btheta}},\qquad Z_{\btheta}=\int\hat p_{\btheta}(\bx)d\bx
 $$
 
-- $\hat p_{\btheta}(\bx)$ can be any non-negative function.
-- If we reparameterize as $\hat p_{\btheta}(\bx)=\exp(-f_{\btheta}(\bx))$, we eliminate the non-negativity constraint.
+- Lower energy means higher density; energy minima are density modes.
+- We require $0<Z_{\btheta}<\infty$, but computing it is usually intractable.
 
 </div>
 <div class="block" v-click="1">
 
 ## Log-Density Gradient
 
-The gradient of the normalized log-density equals that of the unnormalized log-density:
+The normalizing constant disappears when we differentiate with respect to $\bx$:
 
 $$
-\nabla_{\bx}\log\pt(\bx)=\nabla_{\bx}\log\hat p_{\btheta}(\bx)-\nabla_{\bx}\log Z_{\btheta}=\nabla_{\bx}\log\hat p_{\btheta}(\bx)
+\nabla_{\bx}\log\pt(\bx)=-\nabla_{\bx}E_{\btheta}(\bx)-\underbrace{\nabla_{\bx}\log Z_{\btheta}}_{=0}=-\nabla_{\bx}E_{\btheta}(\bx)
 $$
 
 </div>
 <div v-click="2">
 
-- Suppose we already have this density (normalized or not) $\pt(\bx)$.
-- How can we sample from the model?
+With a fixed energy model, gradient descent in $\bx$ searches for a mode.<br>
+**Sampling must also reproduce the spread and probability mass of each mode.**
 
 </div>
 
@@ -474,33 +513,37 @@ class: theorems
 
 ## Theorem (Informal)
 
-Let $\bx_0$ be a random vector. Under mild regularity conditions, samples from the following dynamics will eventually follow $\pt(\bx)$ (for sufficiently small $\eta$ and large $l$):
+Starting from $\bx_0$, the following dynamics approximately samples $\pt$ under suitable regularity conditions, for small $\eta$ and sufficiently many steps:
 
 $$
-\bx_{l+1}=\bx_l+\frac\eta2\cdot\nabla_{\bx_l}\log\pt(\bx_l)+\sqrt\eta\cdot\bepsilon_l,\qquad\bepsilon_l\sim\cN(0,\bI).
+\begin{aligned}
+\bx_{l+1}&=\bx_l+\frac\eta2\nabla_{\bx_l}\log\pt(\bx_l)+\sqrt\eta\,\bepsilon_l\\
+&=\bx_l-\frac\eta2\nabla_{\bx_l}E_{\btheta}(\bx_l)+\sqrt\eta\,\bepsilon_l,\qquad\bepsilon_l\sim\cN(0,\bI).
+\end{aligned}
 $$
 
 </div>
 <div class="columns balanced" v-click="1" style="grid-template-columns: 1.2fr 1fr;">
 <div>
 
-- What if $\bepsilon_l=\bzero$?
-- The density $\pt(\bx)$ is the **stationary** distribution of the Markov chain.
-- The gradient is taken with respect to $\bx$, not $\btheta$.
-- $\nabla_{\bx}\log\pt(\bx)$ defines a vector field.
+- **Without noise:** descend toward an energy minimum.
+- **With noise:** explore the energy landscape.
+- Update $\bx$; keep the model parameters $\btheta$ fixed.
 
 </div>
-<img src="/figs/langevin_dynamic.png" alt="Langevin trajectories move along the score vector field" style="height: 240px; width: 100%; object-fit: contain;" />
+<img src="/figs/langevin_dynamic.png" alt="Langevin trajectories follow the negative energy gradient with added Gaussian noise" style="height: 180px; width: 100%; object-fit: contain;" />
 </div>
 
 
 <div class="takeaway" v-click="2">
 
-**Knowing $\pt(\bx)$ up to a normalizing constant lets us use Langevin dynamics to obtain approximate samples $\bx_l\sim\pt$ for large $l$.**
+**Energy gradients suffice for approximate sampling; $Z_{\btheta}$ is never evaluated.**
 
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The principles of diffusion models, 2025.</a></div>
+
+<!-- The continuous Langevin diffusion has stationary density p_theta under suitable conditions. This unadjusted discretization at fixed nonzero eta generally has a biased invariant distribution; finite simulation time also limits mixing. The same eta/2 and sqrt(eta) convention is used in the demo and subsequent score-based sampler. -->
 
 ---
 clicks: 0
@@ -515,7 +558,7 @@ import LangevinDemo from '../lecture5/components/LangevinDemo.vue'
 # Langevin Dynamics: Why Add Noise?
 
 $$
-\pt(\bx)=\tfrac12\cN(\bmu_-,0.7^2\bI)+\tfrac12\cN(\bmu_+,0.7^2\bI),\qquad\bmu_\pm=(\pm1.5,0),\quad\eta=0.04.
+p(\bx)=\tfrac12\cN(\bmu_-,0.7^2\bI)+\tfrac12\cN(\bmu_+,0.7^2\bI),\qquad\bmu_\pm=(\pm1.5,0),\quad E(\bx)=-\log p(\bx).
 $$
 
 <LangevinDemo />
@@ -559,28 +602,38 @@ class: theorems
 
 # Score Function
 
+<div class="block">
+
+## What Did We Use from the EBM?
+
 $$
-\bs_{\btheta}(\bx)=\nabla_{\bx}\log\pt(\bx)
+\bs_{\btheta}(\bx)=\nabla_{\bx}\log\pt(\bx)=-\nabla_{\bx}E_{\btheta}(\bx)
 $$
 
-<img src="/figs/score_function.png" alt="Density and corresponding score vector field" style="height: 245px; width: 100%; object-fit: contain;" />
+Langevin dynamics uses only this vector field: the **score function**.
+
+</div>
 
 <div class="block" v-click="1">
 
-## Langevin Dynamics
+## Learn the Vector Field Directly
+
+Fit a vector network $\bs_{\btheta}(\bx)\approx\nabla_{\bx}\log\pd(\bx)$, then sample:
 
 $$
-\begin{aligned}
-\bx_{l+1}&=\bx_l+\frac\eta2\cdot\nabla_{\bx_l}\log\pd(\bx_l)+\sqrt\eta\cdot\bepsilon_l\\
-&\approx\bx_l+\frac\eta2\cdot{\color{#8854c0}\nabla_{\bx_l}\log\pt(\bx_l)}+\sqrt\eta\cdot\bepsilon_l\\
-&=\bx_l+\frac\eta2\cdot{\color{#8854c0}\bs_{\btheta}(\bx_l)}+\sqrt\eta\cdot\bepsilon_l.
-\end{aligned}
+\bx_{l+1}=\bx_l+\frac\eta2\bs_{\btheta}(\bx_l)+\sqrt\eta\,\bepsilon_l,\qquad\bepsilon_l\sim\cN(0,\bI).
 $$
+
+A general vector network need not be the exact gradient of a scalar energy.
+
+**How can we learn the score from data?**
 
 </div>
 
 
-<div class="source"><a href="https://arxiv.org/abs/2510.21890">Lai C. H. et al. The principles of diffusion models, 2025.</a></div>
+<div class="source"><a href="https://yang-song.github.io/blog/2021/score/">Song Y. Generative Modeling by Estimating Gradients of the Data Distribution, blog post, 2021</a></div>
+
+<!-- The first block is the exact score induced by a scalar EBM. In the second block, the parameterization changes to a free vector network approximating the data score; it is not asserted to equal the gradient of any model log-density. This closes the energy → Langevin argument and prepares the score-matching objective on the next slide. -->
 
 ---
 clicks: 2
@@ -1573,9 +1626,9 @@ class: summary
 
 # Summary
 
-- Langevin dynamics combines log-density gradients and Gaussian noise to sample approximately from an unnormalized model.
+- EBM energy gradients and Gaussian noise give approximate Langevin samples; minimizing energy alone finds modes.
 
-- Score matching minimizes Fisher divergence to estimate the score function.
+- Score matching learns the score vector field directly by minimizing Fisher divergence.
 - Denoising score matching makes the score objective estimable using corrupted samples and the known corruption kernel.
 - Tweedie's formula converts the score into MSE-optimal clean-data and noise predictions.
 - Noise-Conditioned Score Networks balance score losses with weights $\sigma_t^2$ and sample with annealed Langevin dynamics.

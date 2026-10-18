@@ -39,12 +39,12 @@ onBeforeUnmount(pause)
     </div>
     <div class="cases">
       <div v-for="example in cases" :key="String(example.noise)" class="case">
-        <div v-if="isPrintMode" class="case-title"><b>{{ example.noise ? 'Noise on: explore the density' : 'Noise off: approach the modes' }}</b><span>Step {{ example.simulation.step }}</span></div>
+        <div v-if="isPrintMode" class="case-title"><b>{{ example.noise ? 'Noise on: sample around the wells' : 'Noise off: descend to the minima' }}</b><span>Step {{ example.simulation.step }}</span></div>
         <LangevinPlot :simulation="example.simulation" :compact="isPrintMode" :plot-id="`langevin-${isPrintMode ? 'print' : 'live'}-${example.noise}`" />
       </div>
     </div>
-    <div v-if="!isPrintMode" class="demo-takeaway">{{ isPrintMode ? 'Without noise, particles approach the modes. With noise, they keep exploring the density.' : state.noise ? 'Noise keeps particles moving and spread around the modes.' : 'Following the score alone finds modes; it does not sample the density.' }}</div>
-    <div class="demo-note bottom-note">{{ !isPrintMode ? 'Switching noise restarts the same particles. ' : '' }}Finite step size and finite simulation time give approximate sampling.</div>
+    <div v-if="!isPrintMode" class="demo-takeaway">{{ state.noise ? 'Noise spreads particles around the energy wells to approximate the target density.' : 'Energy descent finds minima (density modes); it does not sample the density.' }}</div>
+    <div class="demo-note bottom-note">{{ !isPrintMode ? 'Switching noise restarts the same particles. ' : '' }}Step size η = 0.04; finite steps and simulation time give approximate sampling.</div>
   </DemoPanel>
 </template>
 

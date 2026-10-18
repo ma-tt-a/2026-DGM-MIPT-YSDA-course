@@ -43,7 +43,8 @@ class: theorems
 
 # Recap of Previous Lecture
 
-Define **score function** $\bs_{\btheta}(\bx)=\nabla_{\bx}\log\pt(\bx)$.
+For an EBM $\pt(\bx)\propto e^{-E_{\btheta}(\bx)}$, its **score** is $\nabla_{\bx}\log\pt(\bx)=-\nabla_{\bx}E_{\btheta}(\bx)$.<br>
+We learn a vector network $\bs_{\btheta}(\bx)\approx\nabla_{\bx}\log\pd(\bx)$ directly, then sample with noise.
 
 <div class="block">
 

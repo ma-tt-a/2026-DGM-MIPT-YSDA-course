@@ -40,7 +40,7 @@ const outside = computed(() => props.simulation.points.filter(p => Math.abs(p.x)
 <template>
   <div class="langevin-plot" :class="{ compact }">
     <div class="cloud">
-      <svg viewBox="0 0 580 322" role="img" aria-label="Particles move in the exact score vector field of a two-Gaussian mixture">
+      <svg viewBox="0 0 580 322" role="img" aria-label="Energy contours of a two-Gaussian mixture; arrows show the negative energy gradient and particles follow Langevin dynamics">
         <defs>
           <clipPath :id="`${plotId}-clip`"><rect x="42.5" y="17.5" width="495" height="275" /></clipPath>
           <marker :id="`${plotId}-arrow`" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="4" markerHeight="4" orient="auto"><path d="M 0 0 L 7 4 L 0 8" fill="none" stroke="#9aaeb9" stroke-width="1.4" /></marker>
@@ -56,7 +56,7 @@ const outside = computed(() => props.simulation.points.filter(p => Math.abs(p.x)
         <text x="550" y="315">x₁</text><text x="11" y="29">x₂</text>
         <text v-for="y in [-2, 0, 2]" :key="y" x="33" :y="py(y)+6" text-anchor="end">{{ y }}</text>
       </svg>
-      <div class="plot-note">{{ outside ? `${outside} / ${simulation.points.length} particles outside this view.` : `${simulation.points.length} particles · trails of four particles` }}</div>
+      <div class="plot-note">{{ outside ? `${outside} / ${simulation.points.length} particles outside this view.` : 'Energy contours · arrows point downhill' }}</div>
     </div>
     <div class="histogram">
       <div class="hist-title">Distribution of the first coordinate</div>
