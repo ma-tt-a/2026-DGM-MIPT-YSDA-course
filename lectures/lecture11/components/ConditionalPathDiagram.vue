@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useId } from 'vue'
+import L11Math from './L11Math.vue'
 import { useNav } from '@slidev/client'
 const props=withDefaults(defineProps<{stage?:number}>(),{stage:0})
 const {isPrintMode}=useNav(),id=`cfm-path-${useId().replace(/[^a-z0-9-]/gi,'')}`

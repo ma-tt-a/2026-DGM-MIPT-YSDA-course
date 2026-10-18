@@ -190,7 +190,7 @@ class: theorems
 
 # Recap of Previous Lecture
 
-<img src="/figs/cfm_uncond_to_cond.png" alt="From an unconditional flow to conditional flows" style="width:100%;height:205px;object-fit:contain" />
+<CfmRecapDiagram kind="construction" />
 
 <div class="block">
 
@@ -205,7 +205,7 @@ $$
 
 </div>
 
-<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">image credit: A Visual Dive into Conditional Flow Matching</a></div>
+<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">Diagram adapted from A Visual Dive into Conditional Flow Matching</a></div>
 
 ---
 clicks: 0
@@ -349,9 +349,9 @@ class: figure-slide
 
 # Recap of Previous Lecture
 
-<img src="/figs/conical_paths.png" alt="Gaussian conditional paths contract toward the data endpoint" class="hero" />
+<CfmRecapDiagram kind="cones" />
 
-<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">image credit: A Visual Dive into Conditional Flow Matching</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
 
 ---
 clicks: 0
@@ -393,12 +393,9 @@ class: theorems
 - $\bv(\bx_t,\bx_1,t)$ defines straight lines between $\pd(\bx)$ and $\cN(0,\bI)$.
 - **Straight training paths do not imply straight sampling trajectories.**
 
-<div class="columns">
-<img src="/figs/g2g-vector-field-samples-cond.png" alt="Straight conditional paths between Gaussian endpoints" style="width:100%;height:340px;object-fit:contain" />
-<img src="/figs/g2g-forward_samples.png" alt="Curved marginal paths between Gaussian distributions" style="width:100%;height:340px;object-fit:contain" />
-</div>
+<CfmRecapDiagram kind="comparison" />
 
-<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
 ---
 clicks: 0

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import L11Math from './L11Math.vue'
 import { useNav } from '@slidev/client'
 import { trainingPairs, defaultPair, conditionalPosition, odePosition, odePaths, integrationSteps } from '../lib/path-comparison.mjs'
 import { flowPathsState as state } from '../lib/demo-state'
-const props=withDefaults(defineProps<{compare?:boolean}>(),{compare:false})
+const props=withDefaults(defineProps<{compare?:boolean,staticView?:boolean}>(),{compare:false,staticView:false})
 const {isPrintMode}=useNav()
-const t=computed(()=>isPrintMode.value?.5:state.t)
-const selected=computed(()=>isPrintMode.value?defaultPair:state.pair)
+const frozen=computed(()=>isPrintMode.value||props.staticView)
+const t=computed(()=>frozen.value?.5:state.t)
+const selected=computed(()=>frozen.value?defaultPair:state.pair)
 const pair=computed(()=>trainingPairs[selected.value])
 const velocity=computed(()=>pair.value.x1-pair.value.x0)
 const px=(s:number)=>48+(props.compare?260:460)*s,py=(x:number)=>(props.compare?75:80)-(props.compare?17:19)*x
@@ -34,7 +36,7 @@ function reset(){state.t=.5;state.pair=defaultPair}
    <div class="target"><L11Math :formula="`v=x_1-x_0=${velocity.toFixed(2)}`"/></div>
    <div class="demo-note">Move along the path: the velocity stays constant.</div>
   </div>
- <div v-if="!isPrintMode" class="demo-controls">
+ <div v-if="!frozen" class="demo-controls">
   <label>Time <input type="range" min="0" max="1" step=".01" v-model.number="state.t" aria-label="Path time"/><output>{{t.toFixed(2)}}</output></label>
   <button v-if="!compare" @click="state.pair=(state.pair+1)%trainingPairs.length">Another pair</button>
   <span v-else class="demo-note">Same initial particles; endpoint pairings can differ.</span>

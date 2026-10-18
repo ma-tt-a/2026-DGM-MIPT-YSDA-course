@@ -3,7 +3,8 @@ import { computed } from 'vue'
 import { useNav } from '@slidev/client'
 import { endpoint, coneEndpoints, particles, interpolate } from '../lib/cfm-demos.mjs'
 import { endpointState as state } from '../lib/demo-state'
-const { isPrintMode }=useNav(), t=computed(()=>isPrintMode.value?.5:state.t)
+const props=withDefaults(defineProps<{staticView?:boolean}>(),{staticView:false})
+const { isPrintMode }=useNav(), frozen=computed(()=>isPrintMode.value||props.staticView), t=computed(()=>frozen.value?.5:state.t)
 const px=(time:number)=>55+300*time, py=(x:number)=>90-25*x
 const coneX=(i:number,time:number)=>455+215*i+165*time
 const coneY=(x:number)=>90-24*x
@@ -11,7 +12,7 @@ const band=(i:number,a:number,sigma:number)=>`${coneX(i,0)},${coneY(-sigma)} ${c
 </script>
 <template>
 <DemoPanel class="endpoint-demo" data-demo="endpoint-path" :data-t="t">
- <div class="demo-controls" v-if="!isPrintMode"><label>Time <input aria-label="Conditional path time" type="range" min="0" max="1" step=".01" v-model.number="state.t"/><output>{{t.toFixed(2)}}</output></label><button v-for="v in [0,.5,1]" :key="v" @click="state.t=v">{{v}}</button><span class="demo-note">Bands: mean ± σ / ± 2σ.</span><button class="demo-reset" @click="state.t=.5">Reset</button></div>
+ <div class="demo-controls" v-if="!frozen"><label>Time <input aria-label="Conditional path time" type="range" min="0" max="1" step=".01" v-model.number="state.t"/><output>{{t.toFixed(2)}}</output></label><button v-for="v in [0,.5,1]" :key="v" @click="state.t=v">{{v}}</button><span class="demo-note">Bands: mean ± σ / ± 2σ.</span><button class="demo-reset" @click="state.t=.5">Reset</button></div>
  <div v-else class="print-context">t = 0.5 · fixed particles; shaded bands: mean ± σ / ± 2σ.</div>
  <svg viewBox="0 0 1120 180" role="img" aria-label="Fixed particles move to endpoint 2. Three Gaussian cones contract to endpoints minus 2, zero, and 2; shaded bands show one and two standard deviations">
   <text x="18" y="96">x</text><text x="205" y="19" text-anchor="middle">Particles · x₁ = 2</text>

@@ -420,3 +420,10 @@ PDF фиксирует равные posterior weights на слайде 18, по
 
 Численные проверки: `node --test tools/test-cfm-demos.mjs` (также включены в
 `test:demos` и `finalize`). Браузер: `node tools/inspect-cfm-demos.mjs` и `node tools/inspect-flow-paths.mjs`.
+
+## Схемы CFM в рекапе Lecture 12
+
+Слайды 8, 13 и 15 используют те же Vue-компоненты, что и Lecture 11:
+conditional → marginal, три Gaussian cones и сравнение conditional/ODE paths.
+`CfmRecapDiagram` задаёт полное раскрытие и статический режим при t=0.5;
+управления и кликов в рекапе нет. Исходники схем остаются общими с Lecture 11.
