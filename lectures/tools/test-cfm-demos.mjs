@@ -50,3 +50,24 @@ test('translating clouds and their posterior velocity satisfy continuity',()=>{
   averageVelocity(posteriorWeight(x)).forEach((v,k)=>close(v*mixture(x,.5),flux(x,.5,k)))
  }
 })
+
+test('straight training paths have the fixed endpoint-difference velocity',async()=>{
+ const {trainingPairs,conditionalPosition}=await import('../lecture11/lib/path-comparison.mjs')
+ trainingPairs.forEach((p,i)=>{
+  close(conditionalPosition(i,0),p.x0);close(conditionalPosition(i,1),p.x1)
+  for(const t of [.1,.5,.9])close((conditionalPosition(i,t+1e-5)-conditionalPosition(i,t-1e-5))/2e-5,p.x1-p.x0)
+ })
+})
+test('integrated marginal ODE preserves quantiles and particle order',async()=>{
+ const {pathCDF,odePaths,integrationSteps,trainingPairs}=await import('../lecture11/lib/path-comparison.mjs')
+ for(let k=0;k<=integrationSteps;k+=8){
+  const t=k/integrationSteps
+  odePaths.forEach((p,i)=>{
+   close(pathCDF(p[k],t),(i+.5)/odePaths.length,2e-6)
+   if(i)assert.ok(p[k]>odePaths[i-1][k])
+  })
+ }
+ const final=odePaths.map(p=>p.at(-1)),target=trainingPairs.map(p=>p.x1).sort((a,b)=>a-b)
+ final.forEach((x,i)=>close(x,target[i],2e-6))
+ assert.ok(odePaths.some(p=>Math.abs(p[integrationSteps/2]-(p[0]+p.at(-1))/2)>.2),'sampling trajectories should visibly curve')
+})

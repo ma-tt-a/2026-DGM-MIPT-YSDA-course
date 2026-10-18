@@ -1057,7 +1057,7 @@ $\displaystyle\begin{cases}\bmu_t(\bx_1)=t\bx_1\\\bsigma_t(\bx_1)=1-t\end{cases}
 ---
 clicks: 4
 id: one-sided-conditioning-conditional-vector-field
-class: theorems
+class: theorems interactive-slide
 ---
 
 # One-Sided Conditioning: Conditional Vector Field
@@ -1092,15 +1092,9 @@ At $t=1$, the quotient is undefined. Use the simplified training target $\bx_1-\
 
 </div>
 
-<div class="columns balanced" v-click="4">
-<img src="/figs/g2g-vector-field-samples-cond.png" alt="Straight conditional vector field trajectories" style="width:100%;height:160px;object-fit:contain" />
-<div>
+<FlowPathsDemo v-click="4" />
 
-The conditional vector field $\bv(\bx_t,\bx_1,t)$ defines straight lines between $\pd(\bx)$ and $\cN(0,\bI)$.
-
-</div></div>
-
-<div class="source"><a href="https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html">image credit: https://mlg.eng.cam.ac.uk/blog/2024/01/20/flow-matching.html</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
 
 <!--
 For 0 <= t < 1, the conditional Gaussian variance (1-t)^2 is strictly positive, so the marginal density p_t(x) is positive everywhere. At t=1 the conditional law collapses to a point mass; the data distribution need not have full support. Thus the positivity assumption in the FM/CFM theorem is imposed for t<1. The single endpoint has zero probability under continuous time sampling and does not change the expected loss (assuming finite expectations). The quotient is undefined at the endpoint; training uses x1-x0 directly. Its finite pathwise limit does not imply that the conditional field is bounded away from the path or that the marginal field has a unique endpoint extension.
@@ -1109,7 +1103,7 @@ For 0 <= t < 1, the conditional Gaussian variance (1-t)^2 is strictly positive, 
 ---
 clicks: 3
 id: one-sided-conditioning-cfm-objective
-class: derivation
+class: derivation interactive-slide
 ---
 
 # One-Sided Conditioning: CFM Objective
@@ -1128,27 +1122,16 @@ $$
 
 Regressing on $\bx_1-\bx_0$ along $\bx_t=(1-t)\bx_0+t\bx_1$ gives the **rectified flow objective**.
 
-**Straight training paths do not imply straight sampling trajectories.** The optimal field averages conditional velocities:
+**Straight training paths do not imply straight sampling trajectories.**
 
 $$
 \bv_{\btheta^*}(\bx,t)=\bbE\left[\bx_1-\bx_0\mid\bx_t=\bx\right].
 $$
 
 </div>
-<div class="columns" v-click="3">
-<div>
+<FlowPathsDemo compare v-click="3" />
 
-**Conditional paths: straight**
-
-<img src="/figs/g2g-vector-field-samples-cond.png" alt="Conditional straight paths" style="width:100%;height:115px;object-fit:contain" />
-</div>
-<div>
-
-**ODE trajectories: not necessarily straight**
-
-<img src="/figs/g2g-forward_samples.png" alt="Marginal nonlinear paths" style="width:100%;height:115px;object-fit:contain" />
-</div>
-</div>
+<!-- Shared 1D illustration: X0 is standard normal, independently paired with X1 from an equal Gaussian mixture with means ±1.8 and std .4. Fixed shuffled stratified samples illustrate conditional paths; the right panel integrates the exact population marginal velocity with RK4. Colors identify the same initial particles. Endpoint pairs are not preserved by the marginal ODE. Horizontal axis is time, not a second spatial coordinate. -->
 
 <div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X., Gong C., Liu Q. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
 
