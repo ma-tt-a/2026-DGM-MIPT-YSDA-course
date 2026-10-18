@@ -603,7 +603,7 @@ $$
 
 ## Conditioning Latent Variable [Q1]
 
-Let us choose $\bz=(\bx_0,\bx_1)$. Then $p(\bz)=p(\bx_0,\bx_1)=p_0(\bx_0)p_1(\bx_1)$.
+Let us choose $\bz=(\bx_0,\bx_1)$. Start with independent endpoints: $p(\bz)=p_0(\bx_0)p_1(\bx_1)$.
 
 $$
 p_t(\bx)=\int p_t(\bx|\bx_0,\bx_1)p_0(\bx_0)p_1(\bx_1)d\bx_0d\bx_1
@@ -631,9 +631,16 @@ $\displaystyle\begin{cases}p_0(\bx)=\bbE_{p(\bz)}p_0(\bx|\bz);\\p_1(\bx)=\bbE_{p
 </span>
 <span v-click="1">
 
-$\displaystyle\Rightarrow\quad\begin{cases}p_0(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_0)\\p_1(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_1)\end{cases}$
+$\displaystyle\Leftarrow\quad\begin{cases}p_0(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_0)\\p_1(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_1)\end{cases}$
 
 </span>
+</div>
+
+<div v-click="1">
+
+Choosing these Dirac endpoints is sufficient to satisfy the boundary constraints.
+Gaussian smoothing recovers them in the zero-variance limit.
+
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
@@ -645,6 +652,8 @@ class: theorems
 ---
 
 # Two-Sided Conditioning
+
+Desired conditional endpoints:
 
 $$
 p_0(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_0);\quad p_1(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_1)
@@ -663,6 +672,9 @@ $$
 
 </div>
 
+Here $\bepsilon\sim\cN(\bzero,\bI)$. Positive Gaussian scales give smooth densities;
+the desired Dirac endpoints require the endpoint scales to vanish.
+
 <div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">image credit: A Visual Dive into Conditional Flow Matching</a></div>
 
 ---
@@ -673,24 +685,26 @@ class: theorems
 
 # Two-Sided Conditioning
 
-Let's consider straight conditional paths:
+Straight conditional paths with constant Gaussian smoothing $\sigma>0$:
 
-<div class="math-chain" style="display:flex;align-items:center;justify-content:center;gap:12px">
-<span>
+$$
+\bmu_t=t\bx_1+(1-t)\bx_0,\qquad p_t^\sigma(\bx|\bx_0,\bx_1)=\cN(\bmu_t,\sigma^2\bI).
+$$
 
-$\displaystyle\begin{cases}\bmu_t(\bx_0,\bx_1)=t\bx_1+(1-t)\bx_0\\\bsigma_t(\bx_0,\bx_1)=\epsilon\end{cases}$
+<div v-click="1">
 
-</span>
-<span v-click="1">
+$$
+p_i^\sigma(\bx|\bx_0,\bx_1)=\cN(\bx_i,\sigma^2\bI)
+\xrightarrow[\sigma\to0]{\text{weakly}}\delta(\bx-\bx_i),\qquad i\in\{0,1\}.
+$$
 
-$\displaystyle\Rightarrow\quad\begin{cases}p_0(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_0)\\p_1(\bx|\bx_0,\bx_1)=\delta(\bx-\bx_1)\end{cases}$
+For $\sigma>0$, the marginal endpoints are Gaussian-smoothed versions of $p_0$ and $p_1$.
 
-</span>
 </div>
 
 <img v-click="2" src="/figs/linear_paths.png" alt="Straight conditional paths for pair conditioning" style="width:100%;height:285px;object-fit:contain" />
 
-<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">image credit: A Visual Dive into Conditional Flow Matching</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2302.00482">Tong A. et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023.</a><br><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">Image: A Visual Dive into Conditional Flow Matching.</a></div>
 
 ---
 clicks: 1
@@ -716,13 +730,15 @@ $$
 $$
 \begin{aligned}
 \bz&=(\bx_0,\bx_1)\\
-p_t(\bx|\bx_0,\bx_1)&=\cN\left(t\bx_1+(1-t)\bx_0,\epsilon^2\bI\right)\\
-\bx_t&=t\bx_1+(1-t)\bx_0
+p_t^\sigma(\bx|\bx_0,\bx_1)&=\cN\left(t\bx_1+(1-t)\bx_0,\sigma^2\bI\right)\\
+\bx_t&=t\bx_1+(1-t)\bx_0+\sigma\bepsilon
 \end{aligned}
 $$
 
 </div>
 </div>
+
+$\sigma>0$ is the smoothing scale; $\bepsilon\sim\cN(\bzero,\bI)$ is independent Gaussian noise.
 
 <img v-click="1" src="/figs/compare_conditionings.png" alt="Comparing one-sided and two-sided conditional probability paths" style="width:100%;height:290px;object-fit:contain" />
 
@@ -738,14 +754,16 @@ class: theorems
 
 $$
 \begin{aligned}
-p_t(\bx|\bx_0,\bx_1)&=\cN\left(t\bx_1+(1-t)\bx_0,\epsilon^2\bI\right);\\
-{\color{teal}\bx_t}&={\color{teal}t\bx_1+(1-t)\bx_0}
+p_t^\sigma(\bx|\bx_0,\bx_1)&=\cN\left(t\bx_1+(1-t)\bx_0,\sigma^2\bI\right),\qquad\sigma>0;\\
+{\color{teal}\bx_t}&={\color{teal}t\bx_1+(1-t)\bx_0+\sigma\bepsilon}
 \end{aligned}
 $$
 
 <div class="block">
 
 ## Conditional Vector Field
+
+Hold the sampled $\bepsilon\sim\cN(\bzero,\bI)$ fixed along the path.
 
 $$
 \begin{aligned}
@@ -760,10 +778,13 @@ $$
 \bv(\bx_t,\bx_0,\bx_1,t)=\bx_1-\bx_0
 $$
 
+For $\sigma>0$, the scale is constant in time: $\bsigma_t'=\bzero$.
+The resulting target also applies in the deterministic limit.
+
 </div>
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y. et al. Flow Matching for Generative Modeling, 2022.</a><br><a href="https://arxiv.org/abs/2302.00482">Tong A. et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023.</a></div>
 
 ---
 clicks: 1
@@ -773,6 +794,12 @@ class: theorems
 
 # Two-Sided Conditioning: Vector Field and Objective
 
+From now on, use the deterministic limit $\sigma=0$:
+
+$$
+\bx_t=t\bx_1+(1-t)\bx_0,\qquad p_t(\bx|\bx_0,\bx_1)=\delta\bigl(\bx-\bx_t\bigr).
+$$
+
 <div class="block">
 
 ## Conditional Flow Matching
@@ -780,19 +807,19 @@ class: theorems
 $$
 \begin{aligned}
 &\bbE_{t\sim U[0,1]}\bbE_{\bz\sim p(\bz)}\bbE_{\bx\sim p_t(\bx|\bz)}\left\|\bv(\bx,\bz,t)-\bv_{\btheta}(\bx,t)\right\|^2\\
-&=\bbE_{t\sim U[0,1]}\bbE_{(\bx_0,\bx_1)\sim p(\bx_0,\bx_1)}\bbE_{\bx\sim p_t(\bx|\bx_0,\bx_1)}\left\|(\bx_1-\bx_0)-\bv_{\btheta}(\bx,t)\right\|^2
+&=\bbE_{t\sim U[0,1]}\bbE_{(\bx_0,\bx_1)\sim p(\bx_0,\bx_1)}\left\|(\bx_1-\bx_0)-\bv_{\btheta}(\bx_t,t)\right\|^2
 \end{aligned}
 $$
 
 </div>
 <div v-click="1">
 
-- This yields the same procedure as for one-sided conditioning!
+- With independent $\bx_0\sim\cN(\bzero,\bI)$, this recovers the one-sided training procedure.
 - Now, we do not require that $p_0(\bx)$ is necessarily $\cN(0,\bI)$.
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y. et al. Flow Matching for Generative Modeling, 2022.</a><br><a href="https://arxiv.org/abs/2302.00482">Tong A. et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023.</a></div>
 
 ---
 clicks: 1
@@ -841,16 +868,57 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y., et al. Flow Matching for Generative Modeling, 2022</a></div>
 
 ---
-clicks: 0
+clicks: 3
+id: choosing-endpoint-pairs
+class: theorems
+---
+
+# Choosing Endpoint Pairs
+
+A **coupling** $p(\bx_0,\bx_1)$ specifies how to pair endpoints while keeping marginals $p_0$ and $p_1$.
+
+<div v-click="1">
+
+- **Independent:** sample $\bx_0\sim p_0$, $\bx_1\sim p_1$ independently; $p(\bx_0,\bx_1)=p_0(\bx_0)p_1(\bx_1)$.
+
+</div>
+<div v-click="2">
+
+- **Paired data:** sample observed source–target pairs, e.g., aligned images from two domains.
+
+</div>
+<div v-click="3">
+
+- **Minibatch OT:** sample two equally weighted batches of size $B$ and match them by minimum squared distance:
+
+$$
+\tau^*=\argmin_{\tau\in S_B}\sum_{i=1}^B\left\|\bx_0^{(i)}-\bx_1^{(\tau(i))}\right\|_2^2.
+$$
+
+Here $S_B$ is the set of permutations. Matching preserves both empirical marginals;
+optimality is within each batch, not over the full distributions.
+
+**Same training rule:** $\bx_t=(1-t)\bx_0+t\bx_1$, with velocity target $\bx_1-\bx_0$.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2302.00482">Tong A. et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023.</a></div>
+
+---
+clicks: 3
 id: stable-diffusion-3-scalable-flow-matching
 class: figure-slide
 ---
 
 # Stable Diffusion 3: Scalable Flow Matching
 
-<img src="/figs/sd3.png" alt="Stable Diffusion 3: scalable rectified flow transformers" style="width:100%;height:340px;object-fit:contain" />
+<img src="/figs/sd3.png" alt="Stable Diffusion 3: scalable rectified flow transformers" class="figure-bottom" style="height:320px" />
 
-**Training connection:** SD3 combines rectified flow with nonuniform training times, including logit-normal sampling.
+<ul>
+<li v-click="1"><strong>Objective:</strong> rectified flow with straight conditional paths and a velocity target.</li>
+<li v-click="2"><strong>Training times:</strong> nonuniform sampling, including the logit-normal distribution.</li>
+<li v-click="3"><strong>Architecture:</strong> MMDiT uses separate weights for text and image tokens, with joint attention between the two modalities.</li>
+</ul>
 
 <div class="source"><a href="https://arxiv.org/abs/2403.03206">Esser P., et al. Scaling Rectified Flow Transformers for High-Resolution Image Synthesis, 2024</a></div>
 
@@ -1150,14 +1218,25 @@ class: theorems
 <div class="source"><a href="https://arxiv.org/abs/2502.09992">Nie S. et al. Large language diffusion models, 2025.</a> <a href="https://arxiv.org/abs/2505.22618">Wu C. et al. Fast-dLLM, 2025.</a><br><a href="https://arxiv.org/abs/2412.10193">Schiff Y. et al. Simple guidance mechanisms for discrete diffusion models, 2025.</a> <a href="https://arxiv.org/abs/2503.00307">Wang G. et al. Remasking discrete diffusion models with inference-time scaling, 2025.</a></div>
 
 ---
-clicks: 0
+clicks: 3
 id: 2025-big-bang-of-discrete-diffusion-models
 class: figure-slide
 ---
 
-# 2025 – Big Bang of Discrete Diffusion Models
+# Diffusion Language Models: Mercury
 
-<img src="/figs/mercury.png" alt="Mercury: fast diffusion language models" class="hero" />
+<img src="/figs/mercury.png" alt="Mercury: fast diffusion language models" class="figure-bottom figure-tall" />
+
+<ul>
+<li v-click="1"><strong>Parallel prediction:</strong> predict multiple tokens at each denoising step.</li>
+<li v-click="2"><strong>Application:</strong> Mercury Coder applies diffusion language modeling to code generation.</li>
+</ul>
+
+<div class="takeaway" v-click="3">
+
+How do we define corruption and denoising for discrete tokens?
+
+</div>
 
 <div class="source"><a href="https://arxiv.org/abs/2506.17298">Khanna S. et al. Mercury: Ultra-fast language models based on diffusion, 2025.</a></div>
 
@@ -1395,9 +1474,11 @@ class: theorems
 |---|---|---|
 | $\bQ_t$ | $(1-\beta_t)\bI+\beta_t\bU$ | $(1-\beta_t)\bI+\beta_t\be_m\bone^\top$ |
 | $\bQ_{1:t}$ | $\bar\alpha_t\bI+(1-\bar\alpha_t)\bU$ | $\bar\alpha_t\bI+(1-\bar\alpha_t)\be_m\bone^\top$ |
-| $\bQ_{1:\infty}$ | $\bU$ | $\Cat(\be_m)$ |
+| $\bQ_{1:\infty}$, $\bar\alpha_t\to0$ | $\bU$ | $\be_m\bone^\top$ |
 | Interpretation | Random replacement | Gradual masking of tokens |
 | Application | Image diffusion | Text diffusion $\approx$ Masked LM |
+
+For absorbing diffusion, the limiting token distribution is $\Cat(\be_m)$.
 
 <div class="block" v-click="1">
 
@@ -1684,7 +1765,7 @@ $$
 
 - The output factorizes (parallel prediction across positions).
 - Each factor conditions on the entire noisy sequence ${\color{#8854c0}\bX_t}$.
-- This is exactly the **masked language modeling** pattern.
+- This predicts tokens from a corrupted sequence; masking corruption connects it to **masked language modeling**.
 
 <div class="block" v-click="1">
 
@@ -1702,7 +1783,7 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2107.03006">Austin J. et al. Structured denoising diffusion models in discrete state-spaces, 2021.</a></div>
 
 ---
-clicks: 0
+clicks: 2
 id: reverse-model-for-sequence-2
 class: theorems
 ---
@@ -1711,7 +1792,9 @@ class: theorems
 
 <div class="block">
 
-## Final objective: masked LM
+## Simplified denoising objective
+
+Predict clean tokens from the corrupted sequence (time conditioning is implicit):
 
 $$
 \cL=\sum_{t=1}^T\sum_{i=1}^m\bbE_{q(\bX_t|\bX_0)}\Big[-\log\pt(\bx_0^i|\bX_t)\Big].
@@ -1719,7 +1802,22 @@ $$
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2107.03006">Austin J. et al. Structured denoising diffusion models in discrete state-spaces, 2021.</a></div>
+<div v-click="1">
+
+This unweighted clean-token cross-entropy is a simplified training objective;
+it is not the general discrete ELBO.
+
+</div>
+<div class="block" v-click="2">
+
+## Connection to absorbing diffusion
+
+With a reverse model that preserves visible tokens and uses the forward-posterior unmasking probability,
+the ELBO yields a time-weighted loss over masked positions. We derive this next.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2107.03006">Austin et al. Structured denoising diffusion models, 2021.</a> <a href="https://arxiv.org/abs/2406.07524">Sahoo et al. Simple and effective masked diffusion language models, 2024.</a></div>
 
 ---
 clicks: 0
@@ -1733,7 +1831,7 @@ class: summary
 
 <li>
 
-Two-sided conditioning uses pair conditioning $\bz=(\bx_0,\bx_1)$ and yields the same procedure, but is more general (suitable for paired tasks).
+Two-sided conditioning supports independent pairs, paired data and minibatch OT couplings. The coupling changes pair sampling while preserving the interpolation and velocity target.
 
 </li>
 
@@ -1757,13 +1855,13 @@ Forward discrete diffusion process defines a Markov chain with discrete states; 
 
 <li>
 
-Reverse discrete diffusion process uses the variational approach to invert forward process; the discrete-state ELBO is a cross-entropy loss.
+The discrete ELBO contains categorical KL terms; their parameter-dependent parts are cross-entropies against the forward posterior.
 
 </li>
 
 <li>
 
-For sequences, the forward process factorizes over tokens, while the learned reverse model predicts all positions in parallel conditioning on the whole noisy sequence (masked LM pattern).
+For sequences, the forward process factorizes over tokens. Denoisers predict all positions from the whole corrupted sequence; clean-token cross-entropy is a simplified objective.
 
 </li>
 

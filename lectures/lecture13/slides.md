@@ -43,7 +43,11 @@ class: theorems
 
 # Recap of Previous Lecture
 
-Let us choose $\bz=(\bx_0,\bx_1)$. Then $p(\bz)=p(\bx_0,\bx_1)=p_0(\bx_0)p_1(\bx_1)$.
+Pair conditioning uses $\bz=(\bx_0,\bx_1)$ with a coupling $p(\bx_0,\bx_1)$ whose marginals are $p_0$ and $p_1$.
+
+Choices: independent pairs ($p=p_0p_1$), paired data, or minibatch OT matching.
+
+Desired conditional endpoints:
 
 $$
 \begin{aligned}
@@ -65,7 +69,10 @@ $$
 
 </div>
 
-<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">image credit: A Visual Dive into Conditional Flow Matching</a></div>
+Here $\bepsilon\sim\cN(\bzero,\bI)$. Positive Gaussian scales give smooth densities;
+the desired Dirac endpoints require the endpoint scales to vanish.
+
+<div class="source"><a href="https://arxiv.org/abs/2302.00482">Tong A. et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023.</a><br><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">A Visual Dive into Conditional Flow Matching.</a></div>
 
 ---
 clicks: 0
@@ -75,15 +82,23 @@ class: theorems
 
 # Recap of Previous Lecture
 
-Let's consider straight conditional paths:
+Straight conditional paths with constant Gaussian smoothing $\sigma>0$:
 
 $$
-\bmu_t(\bx_0,\bx_1)=t\bx_1+(1-t)\bx_0,\qquad\bsigma_t(\bx_0,\bx_1)=\epsilon.
+\bmu_t=t\bx_1+(1-t)\bx_0,\qquad p_t^\sigma(\bx|\bx_0,\bx_1)=\cN(\bmu_t,\sigma^2\bI).
 $$
 
-<img src="/figs/linear_paths.png" alt="Straight conditional paths between paired endpoints" style="width:100%;height:360px;object-fit:contain" />
+$$
+\bx_t=\bmu_t+\sigma\bepsilon,\qquad\bepsilon\sim\cN(\bzero,\bI),\qquad\frac{d\bx_t}{dt}=\bx_1-\bx_0.
+$$
 
-<div class="source"><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">image credit: A Visual Dive into Conditional Flow Matching</a></div>
+Hold $\bepsilon$ fixed along the path. For $i\in\{0,1\}$, $\cN(\bx_i,\sigma^2\bI)$ converges weakly to $\delta(\bx-\bx_i)$ as $\sigma\to0$.
+
+The deterministic training rule uses $\sigma=0$: $\bx_t=\bmu_t$, with the same target $\bx_1-\bx_0$.
+
+<img src="/figs/linear_paths.png" alt="Straight conditional paths between paired endpoints" style="width:100%;height:230px;object-fit:contain" />
+
+<div class="source"><a href="https://arxiv.org/abs/2302.00482">Tong A. et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023.</a><br><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">Image: A Visual Dive into Conditional Flow Matching.</a></div>
 
 ---
 clicks: 0
@@ -246,9 +261,11 @@ class: theorems
 |---|---|---|
 | $\bQ_t$ | $(1-\beta_t)\bI+\beta_t\bU$ | $(1-\beta_t)\bI+\beta_t\be_m\bone^\top$ |
 | $\bQ_{1:t}$ | $\bar\alpha_t\bI+(1-\bar\alpha_t)\bU$ | $\bar\alpha_t\bI+(1-\bar\alpha_t)\be_m\bone^\top$ |
-| $\bQ_{1:\infty}$ | $\bU$ | $\Cat(\be_m)$ |
+| $\bQ_{1:\infty}$, $\bar\alpha_t\to0$ | $\bU$ | $\be_m\bone^\top$ |
 | Interpretation | Random replacement | Gradual masking of tokens |
 | Application | Image diffusion | Text diffusion $\approx$ Masked LM |
+
+For absorbing diffusion, the limiting token distribution is $\Cat(\be_m)$.
 
 </div>
 <div class="block">
@@ -319,20 +336,23 @@ $$
 \pt(\bX_{t-1}|\bX_t)=\prod_{i=1}^m\pt(\bx_{t-1}^i|{\color{#8854c0}\bX_t}).
 $$
 
-- All distributions defined by the forward process are factorized.
-- Each factor conditions on the entire noisy sequence ${\color{#8854c0}\bX_t}$ — this is exactly the **masked language modeling** pattern.
+- The forward process factorizes over positions.
+- Each reverse factor predicts a token using the whole corrupted sequence ${\color{#8854c0}\bX_t}$.
 
 <div class="block">
 
-## Final objective: masked LM
+## Simplified denoising objective
 
 $$
 \cL=\sum_{t=1}^T\sum_{i=1}^m\bbE_{q(\bX_t|\bX_0)}\Big[-\log\pt(\bx_0^i|\bX_t)\Big].
 $$
 
+Unweighted clean-token prediction (time conditioning is implicit), not the general discrete ELBO.
+The absorbing case uses a time-weighted loss over masked positions with a suitable reverse model.
+
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2107.03006">Austin J. et al. Structured denoising diffusion models in discrete state-spaces, 2021.</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2107.03006">Austin et al. Structured denoising diffusion models, 2021.</a> <a href="https://arxiv.org/abs/2406.07524">Sahoo et al. Simple and effective masked diffusion language models, 2024.</a></div>
 
 ---
 clicks: 0
@@ -513,8 +533,8 @@ $$
 ## Interpretation
 
 - The forward process produces **random partial observations** of the clean sequence.
-- If a token is visible at time $t$, the reverse distribution is deterministic.
-- Unmasked tokens yield a deterministic posterior and therefore contribute only a constant to the ELBO. Therefore, only masked tokens contribute to the training loss.
+- If a token is visible at time $t$, the forward posterior is deterministic.
+- If the reverse model copies visible tokens, their KL terms are zero. Only masked positions contribute to the training loss.
 
 </div>
 
@@ -535,6 +555,9 @@ class: theorems
 $$
 \pt(\bX_{t-1}|\bX_t)=\prod_{i=1}^m\pt(\bx_{t-1}^i|\bX_t).
 $$
+
+Copy visible tokens. At masked positions, unmask with probability $\rho_t$ using
+a clean-token predictor with zero mask probability; otherwise keep the mask.
 
 </div>
 <div class="block" v-click="2">
@@ -674,6 +697,47 @@ Return the final sequence $\bX_0$ (fully unmasked).
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2406.07524">Sahoo S. et al. Simple and effective masked diffusion language models, 2024</a></div>
+
+---
+clicks: 3
+id: why-unmask-in-several-steps
+class: theorems
+---
+
+# Why Unmask in Several Steps?
+
+Suppose the data contain only two sequences: $\pd(AA)=\pd(BB)=\tfrac12$.
+
+<div v-click="1">
+
+From <code>[MASK, MASK]</code>, even a perfect predictor assigns probability $\tfrac12$ to $A$ and $B$ at each position.
+
+</div>
+<div v-click="2">
+
+## Unmask both positions independently
+
+| Sequence | $AA$ | $AB$ | $BA$ | $BB$ |
+|---|---|---|---|---|
+| Data | $1/2$ | $0$ | $0$ | $1/2$ |
+| One-step sampling | $1/4$ | $1/4$ | $1/4$ | $1/4$ |
+
+**Half the samples are invalid:** correct token marginals do not specify their joint distribution.
+
+</div>
+<div class="block" v-click="3">
+
+## Reveal a token, then predict again
+
+<code>[MASK, MASK]</code> → <code>[A, MASK]</code> → <code>[A, A]</code>.
+Given the first $A$, the perfect predictor assigns probability $1$ to the second $A$.
+
+Later steps condition on revealed tokens, allowing dependent choices.
+The absorbing sampler keeps revealed tokens fixed.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2406.07524">Factorized reverse process and sampling: Sahoo S. et al. Simple and Effective Masked Diffusion Language Models, 2024.</a></div>
 
 ---
 clicks: 0
@@ -1228,7 +1292,7 @@ class: summary
 
 # Summary
 
-- In the absorbing case only masked tokens contribute to the ELBO, which reduces to a continuous mixture of MLM losses over the mask rate $\lambda\in[0,1]$.
-- MDLM sampling performs iterative parallel refinement from fully masked to fully unmasked sequences.
+- With a reverse model that copies visible tokens and matches the unmasking probability, the absorbing ELBO yields time-weighted losses over masked positions.
+- MDLM reveals tokens in stages so later predictions can use revealed context. Independent one-step sampling can miss token dependencies, even with correct marginals.
 - No generative model dominates all axes of the trilemma — each family trades off likelihood, sample quality, mode coverage and sampling speed.
 - Modern frontier (flow matching, discrete diffusion, distilled diffusion) tries to push the Pareto frontier of this trilemma.
