@@ -27,7 +27,7 @@ site/
 #Generated merged build
 lectures/merged/merged.pdf
 
-# Local historical presentation prototypes; active slides live in lectures-slidev/
+# Local historical presentation prototypes; active slides live in lectures/
 /presentation-experiments/
 
 # Private course planning materials, kept only on this machine

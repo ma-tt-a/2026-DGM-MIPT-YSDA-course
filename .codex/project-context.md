@@ -21,4 +21,4 @@ Migrated 2026-09-05 from the project’s saved memory. Current sources and the a
 
 - 2026-10-11: Slidev is the sole lecture source format. Keep one fully revealed `LectureN.pdf`, formerly the handout. Migration journals and maps are removed. Shared style and editorial rules live in `CLAUDE.md`; commands live in the Slidev README.
 - 2026-09-11: Keep Lecture 1’s histogram on its original single frame; replace only the image with an interactive histogram whose sample count is 10 / 100 / 1000 / 10000.
-- The two-Gaussian KL demo is now used in Lecture 5; reuse notes remain in `lectures-slidev/deferred-demos.md`.
+- The two-Gaussian KL demo is now used in Lecture 5; reuse notes remain in `lectures/deferred-demos.md`.

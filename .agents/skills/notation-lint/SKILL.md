@@ -6,7 +6,7 @@ description: Check course notation, citations, figures, reveal conventions, and 
 # Notation lint
 
 Read [shared context](../lecture-audit/references/formats.md)
-first. Use CLAUDE.md for course conventions. Read `lectures-slidev/theme/setup/macros.json` at runtime; do not hardcode the
+first. Use CLAUDE.md for course conventions. Read `lectures/theme/setup/macros.json` at runtime; do not hardcode the
 macro inventory. Shared definitions themselves are not raw-notation violations.
 
 ## Common checks
@@ -31,7 +31,7 @@ macro inventory. Shared definitions themselves are not raw-notation violations.
 
 ## Slidev
 
-Check `lectures-slidev/lectureN/slides.md` and relevant included sources/components:
+Check `lectures/lectureN/slides.md` and relevant included sources/components:
 
 - Reuse the shared theme and KaTeX macros. Check unique IDs and explicit click counts, meaningful Markdown/HTML boundaries, references in visible source blocks,
   local `/figs/...` and imported theme assets. Use `npm run check -- N` if the
