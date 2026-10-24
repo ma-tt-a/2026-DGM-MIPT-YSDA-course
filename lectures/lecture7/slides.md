@@ -245,65 +245,6 @@ $$
 
 ---
 clicks: 0
-id: recap-of-previous-lecture-7
-class: theorems
----
-
-# Recap of Previous Lecture
-
-Fix a schedule $0<\beta_t<1$. The noises $\bepsilon_t\sim\cN(0,\bI)$ are independent across $t$ and of $\bx_0$.
-
-$$
-\begin{aligned}
-\bx_t&=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t,\quad\bepsilon_t\sim\cN(0,\bI)\\
-q(\bx_t|\bx_{t-1})&=\cN(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI)
-\end{aligned}
-$$
-
-<div class="block">
-
-## Exact Conditional Distribution
-
-Let $\alpha_t=1-\beta_t$ and $\bar{\alpha}_t=\prod_{s=1}^t\alpha_s=\prod_{s=1}^t(1-\beta_s)$. Then
-
-$$
-q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\,\bx_0,(1-\bar{\alpha}_t)\bI)
-$$
-
-</div>
-
-<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
-
----
-clicks: 0
-id: recap-of-previous-lecture-8
-class: theorems
----
-
-# Recap of Previous Lecture
-
-**Diffusion** describes the migration of particles from regions of high density to those of low density.
-
-<img src="/figs/diffusion_over_time.png" alt="Diffusion over time" style="width:100%;height:260px;object-fit:contain" />
-
-<div>
-
-1. $\bx_0=\bx\sim\pd(\bx)$
-2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$, $\bepsilon_t\sim\cN(0,\bI)$, $t\geq1$
-3. Choose $\bar{\alpha}_T\ll1$ to suppress $\sqrt{\bar{\alpha}_T}\bx_0$; then $q(\bx_T)\approx\cN(0,\bI)$.
-
-</div>
-<div>
-
-If this process can be reversed, we can sample from $\pd(\bx)$ by starting from noise $\cN(0,\bI)\approx q(\bx_T)$.<br>
-Our goal now becomes inverting this diffusion.
-
-</div>
-
-<div class="source"><a href="https://ayandas.me/blog-tut/2021/12/04/diffusion-prob-models.html">Das A. An Introduction to Diffusion Probabilistic Models, blog post, 2021</a></div>
-
----
-clicks: 0
 id: outline
 ---
 
@@ -311,13 +252,339 @@ id: outline
 
 <div class="course-outline">
 
-<div class="outline-item"><span>01</span><div>Reverse Gaussian Diffusion Process</div></div>
-<div class="outline-item"><span>02</span><div>Gaussian Diffusion Model as VAE</div></div>
-<div class="outline-item"><span>03</span><div>Diffusion ELBO Derivation</div></div>
-<div class="outline-item"><span>04</span><div>Gaussian Diffusion Reparametrization</div></div>
-<div class="outline-item"><span>05</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>01</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>02</span><div>Reverse Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>03</span><div>Gaussian Diffusion Model as VAE</div></div>
+<div class="outline-item"><span>04</span><div>Diffusion ELBO Derivation</div></div>
+<div class="outline-item"><span>05</span><div>Gaussian Diffusion Reparametrization</div></div>
+<div class="outline-item"><span>06</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
 
 </div>
+
+---
+clicks: 0
+id: outline-forward-diffusion
+section: "Forward Gaussian Diffusion Process"
+---
+
+# Outline
+
+<div class="course-outline">
+
+<div class="outline-item current"><span>01</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>02</span><div>Reverse Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>03</span><div>Gaussian Diffusion Model as VAE</div></div>
+<div class="outline-item"><span>04</span><div>Diffusion ELBO Derivation</div></div>
+<div class="outline-item"><span>05</span><div>Gaussian Diffusion Reparametrization</div></div>
+<div class="outline-item"><span>06</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+
+</div>
+
+---
+clicks: 0
+id: generative-models-taxonomy-2
+---
+
+# Generative Models Taxonomy
+
+<TaxonomyDiagram class="taxonomy" denoising-diffusion alt="Generative models taxonomy with DDPM highlighted" />
+
+---
+clicks: 6
+id: forward-gaussian-diffusion-process
+class: theorems
+---
+
+# Forward Gaussian Diffusion Process
+
+Let $\bx_0=\bx\sim\pd(\bx)$, $\beta_t\ll1$. Define a Markov chain:
+
+$$
+\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t,\quad\bepsilon_t\sim\cN(0,\bI)
+$$
+
+<div v-click="1">
+
+$$
+q(\bx_t|\bx_{t-1})=\cN(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI)
+$$
+
+</div>
+<div class="block" v-click="2">
+
+## Langevin Dynamics
+
+$$
+\bx_{l+1}=\bx_l+\frac{\color{#8854c0}\eta}{2}\cdot{\color{teal}\nabla_{\bx_l}\log\pt(\bx_l)}+\sqrt{\color{#8854c0}\eta}\bepsilon_l,\quad\bepsilon_l\sim\cN(0,\bI)
+$$
+
+</div>
+
+<div v-click="3">
+
+$$ {1|1-2|all} {at: 4}
+\begin{aligned}
+\bx_t&=\sqrt{1-\beta_t}\,\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t\\
+&\approx\left(1-\frac{\beta_t}{2}\right)\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t\\
+&=\bx_{t-1}+\frac{\color{#8854c0}\beta_t}{2}{\color{teal}(-\bx_{t-1})}+\sqrt{\color{#8854c0}\beta_t}\bepsilon_t
+\end{aligned}
+$$
+
+</div>
+<div class="takeaway" v-click="6">
+
+**From a Markov chain to Langevin dynamics:** for small $\beta_t$, this Gaussian chain approximates LD targeting $\cN(0,\bI)$, with step size ${\color{#8854c0}\eta=\beta_t}$ and Gaussian score ${\color{teal}-\bx_{t-1}}$.
+
+</div>
+
+<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
+
+---
+clicks: 6
+id: forward-gaussian-diffusion-process-2
+class: theorems
+---
+
+# Forward Diffusion: Sample at Any Timestep
+
+Fix a schedule $0<\beta_t<1$. The noises $\bepsilon_t\sim\cN(0,\bI)$ are independent across $t$ and of $\bx_0$.
+
+$$
+\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t,
+\qquad q(\bx_t|\bx_{t-1})=\cN(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI).
+$$
+
+<div class="block" v-click="1">
+
+## Exact Conditional Distribution
+
+Let $\alpha_t=1-\beta_t$ and $\bar{\alpha}_t=\prod_{s=1}^t\alpha_s$. Then
+
+$$
+q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\,\bx_0,(1-\bar{\alpha}_t)\bI).
+$$
+
+<div v-click="2">
+
+Sample $\bx_t$ directly from $\bx_0$, without simulating the intermediate steps:
+
+<div class="columns" style="grid-template-columns: 7fr 4fr; gap: 24px; align-items: center"><div>
+
+$$ {1|1-2|1-3|1-4|all} {at:3}
+\begin{aligned}
+\bx_t&=\sqrt{\alpha_t}\bx_{t-1}+\sqrt{1-\alpha_t}\bepsilon_t\\
+&=\sqrt{\alpha_t}\left(\sqrt{\alpha_{t-1}}\bx_{t-2}+\sqrt{1-\alpha_{t-1}}\bepsilon_{t-1}\right)+\sqrt{1-\alpha_t}\bepsilon_t\\
+&=\sqrt{\alpha_t\alpha_{t-1}}\bx_{t-2}+({\color{#8854c0}\sqrt{\alpha_t(1-\alpha_{t-1})}\bepsilon_{t-1}+\sqrt{1-\alpha_t}\bepsilon_t})\\
+&=\sqrt{\alpha_t\alpha_{t-1}}\bx_{t-2}+{\color{#8854c0}\sqrt{1-\alpha_t\alpha_{t-1}}\bepsilon'_t}\\
+&=\ldots={\color{teal}\sqrt{\bar{\alpha}_t}\,\bx_0}+{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}\bepsilon},\quad\bepsilon\sim\cN(0,\bI).
+\end{aligned}
+$$
+
+</div><div v-click="5">
+
+## Noise Variance
+
+Independent noises: variances add per coordinate.
+
+$$
+{\color{#8854c0}\begin{aligned}
+&\alpha_t(1-\alpha_{t-1})+(1-\alpha_t)\\
+&\qquad=1-\alpha_t\alpha_{t-1}.
+\end{aligned}}
+$$
+
+$$
+\bepsilon'_t\sim\cN(0,\bI).
+$$
+
+</div></div>
+
+</div>
+</div>
+
+<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
+
+<!-- This finite-time identity is exact for any fixed schedule 0 < beta_t < 1; neither monotonicity nor beta_t << 1 is needed. Small beta was used only for the previous Langevin approximation. The first expansion is for t >= 2; t = 1 is the defining step. Independent Gaussian increments combine with variance alpha_t(1-alpha_{t-1}) + (1-alpha_t) = 1-alpha_t alpha_{t-1}. The aggregate epsilon is independent of x_0 for each fixed t; the direct representation does not prescribe a joint coupling across timesteps. -->
+
+---
+clicks: 3
+id: forward-gaussian-diffusion-process-4
+class: theorems
+---
+
+# When Does Only Gaussian Noise Remain?
+
+The closed-form conditional already tells us how the signal disappears:
+
+$$
+\bx_t={\color{teal}\sqrt{\bar{\alpha}_t}\,\bx_0}+{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}\bepsilon},\qquad\bepsilon\sim\cN(0,\bI),\quad\bepsilon\perp\bx_0.
+$$
+
+<div class="block" v-click="1">
+
+## The Schedule Must Remove the Signal
+
+For $0<\beta_t<1$, the required condition is
+
+$$
+\bar{\alpha}_t=\prod_{s=1}^t(1-\beta_s)\longrightarrow0
+\quad\Longleftrightarrow\quad
+\sum_{t=1}^{\infty}\beta_t=\infty.
+$$
+
+Many steps alone are not enough: $\beta_t=2^{-t}$ leaves $\bar{\alpha}_\infty>0$.
+
+</div>
+<div v-click="2">
+
+$$
+{\color{teal}\sqrt{\bar{\alpha}_t}\to0},\qquad
+{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}\to1}
+\quad\Longrightarrow\quad
+\bx_t\xrightarrow{d}\cN(0,\bI).
+$$
+
+The limit no longer depends on the initial data distribution $\pd$.
+
+</div>
+<div class="takeaway" v-click="3">
+
+**For finite $T$:** choose $\bar{\alpha}_T\ll1$ with negligible residual signal $\sqrt{\bar{\alpha}_T}\bx_0$.<br>
+Then $q(\bx_T)\approx\cN(0,\bI)$: the terminal distribution is approximately standard Gaussian.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a></div>
+
+<!-- This is a direct consequence of the previous exact conditional, not a separate stationarity theorem. For a fixed schedule 0 < beta_t < 1, alpha_bar_t -> 0 iff sum beta_t diverges. If sum beta_t converges, beta_t -> 0 and the tail sum of -log(1-beta_t) converges; finitely many initial factors are positive. If the sum diverges, log(1-beta_t) <= -beta_t forces the product to zero. Under alpha_bar_t -> 0, the marginal converges in distribution for any probability law on finite-dimensional x_0, without a moment assumption. Couple the one-time representations using an independent Gaussian epsilon to see the limit. For finite T, closeness depends on the data scale as well as alpha_bar_T. -->
+
+---
+clicks: 0
+id: forward-gaussian-diffusion-process-3
+class: theorems interactive-slide
+---
+
+<script setup>
+import ForwardDiffusionDemo from '../lecture6/components/ForwardDiffusionDemo.vue'
+</script>
+
+# Forward Diffusion: From Data to Noise
+
+$$
+\begin{aligned}
+q(\bx_t|\bx_{t-1})&=\cN\left(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI\right);\\
+q(\bx_t|\bx_0)&=\cN\left({\color{teal}\sqrt{\bar{\alpha}_t}\bx_0},{\color{#8854c0}(1-\bar{\alpha}_t)\bI}\right)
+\end{aligned}
+$$
+
+<ForwardDiffusionDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a></div>
+
+<!-- Original analytic 1D illustration replacing the source image. The plots show marginals, not conditional kernels or a sample trajectory. Each initial Gaussian component has mean scaled by sqrt(alpha_bar_t) and variance alpha_bar_t * 0.35^2 + 1 - alpha_bar_t. beta_t = 0.01; the PDF compares t = 0, 75, 250, 1000. -->
+
+---
+clicks: 3
+id: denoising-score-matching-9
+class: theorems
+---
+
+# Denoising Score Matching
+
+Let $\bx_0\sim\pd$, $\bepsilon\sim\cN(0,\bI)$, with $\bepsilon$ independent of $\bx_0$.
+
+<div class="columns"><div>
+
+## NCSN
+
+$$
+\bx_t=\bx_0+\sigma_t\bepsilon
+$$
+
+$$
+q(\bx_t|\bx_0)=\cN(\bx_0,\sigma_t^2\bI)
+$$
+
+$$
+\nabla_{\bx_t}\log q(\bx_t|\bx_0)=-\frac{\bx_t-\bx_0}{\sigma_t^2}
+$$
+
+$$
+q(\bx_1)\approx\pd,\quad q(\bx_T)\approx\cN(0,\sigma_T^2\bI)
+$$
+
+</div><div v-click="1">
+
+## Gaussian Diffusion
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\bx_0+\sqrt{1-\bar{\alpha}_t}\bepsilon
+$$
+
+$$
+q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\bx_0,(1-\bar{\alpha}_t)\bI)
+$$
+
+$$
+\nabla_{\bx_t}\log q(\bx_t|\bx_0)=-\frac{\bx_t-\sqrt{\bar{\alpha}_t}\bx_0}{1-\bar{\alpha}_t}
+$$
+
+$$
+q(\bx_1)\approx\pd,\quad q(\bx_T)\approx\cN(0,\bI)
+$$
+
+</div></div>
+
+<div class="block" v-click="2">
+
+## Theorem (Denoising Score Matching)
+
+$$
+\begin{aligned}
+&\bbE_{q(\bx_t)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t)\right\|_2^2\\
+&\quad=\bbE_{\pd(\bx_0)}\bbE_{q(\bx_t|\bx_0)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx_0)\right\|_2^2+\text{const}
+\end{aligned}
+$$
+
+</div>
+<div v-click="3">
+
+**Note:** Annealed Langevin dynamics applies to diffusion, too.
+
+NCSN with annealed Langevin dynamics is an early score-based generative framework (2019–2020).
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/1907.05600">Song Y. et al. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a><br><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
+
+---
+clicks: 2
+id: forward-gaussian-diffusion-process-5
+class: theorems
+---
+
+# Forward Gaussian Diffusion Process
+
+**Diffusion** describes the migration of particles from regions of high density to those of low density.
+
+<div class="columns balanced">
+<img src="/figs/diffusion_over_time.png" alt="Diffusion over time" style="width:100%;height:340px;object-fit:contain" />
+<div v-click="1">
+
+1. $\bx_0=\bx\sim\pd(\bx)$
+2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$,<br>$\bepsilon_t\sim\cN(0,\bI)$, $t\geq1$
+3. Choose $\bar{\alpha}_T\ll1$ to suppress $\sqrt{\bar{\alpha}_T}\bx_0$.<br>Then $q(\bx_T)\approx\cN(0,\bI)$.
+
+</div>
+</div>
+<div v-click="2">
+
+If this process can be reversed, we can sample from $\pd(\bx)$ by starting from noise $\cN(0,\bI)\approx q(\bx_T)$.<br>
+Our goal now becomes inverting this diffusion.
+
+</div>
+
+<div class="source"><a href="https://ayandas.me/blog-tut/2021/12/04/diffusion-prob-models.html">Das A. An Introduction to Diffusion Probabilistic Models, blog post, 2021</a></div>
 
 ---
 clicks: 0
@@ -329,11 +596,12 @@ section: "Reverse Gaussian Diffusion Process"
 
 <div class="course-outline">
 
-<div class="outline-item current"><span>01</span><div>Reverse Gaussian Diffusion Process</div></div>
-<div class="outline-item"><span>02</span><div>Gaussian Diffusion Model as VAE</div></div>
-<div class="outline-item"><span>03</span><div>Diffusion ELBO Derivation</div></div>
-<div class="outline-item"><span>04</span><div>Gaussian Diffusion Reparametrization</div></div>
-<div class="outline-item"><span>05</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>01</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item current"><span>02</span><div>Reverse Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>03</span><div>Gaussian Diffusion Model as VAE</div></div>
+<div class="outline-item"><span>04</span><div>Diffusion ELBO Derivation</div></div>
+<div class="outline-item"><span>05</span><div>Gaussian Diffusion Reparametrization</div></div>
+<div class="outline-item"><span>06</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
 
 </div>
 
@@ -347,8 +615,7 @@ class: theorems
 
 <img src="/figs/DDPM.png" alt="Forward and reverse diffusion processes" style="width:100%;height:245px;object-fit:contain" />
 
-<div class="columns" style="grid-template-columns:0.9fr 1.4fr">
-<div class="block" v-click="1">
+<div class="columns balanced derivation" style="grid-template-columns: 230px 1fr" v-click="1">
 
 ## Forward Process
 
@@ -357,7 +624,7 @@ q(\bx_t|\bx_{t-1})=\cN\left(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI\right)
 $$
 
 </div>
-<div class="block" v-click="2">
+<div class="columns balanced derivation" style="grid-template-columns: 230px 1fr" v-click="2">
 
 ## Reverse Process
 
@@ -365,6 +632,7 @@ $$
 q(\bx_{t-1}|\bx_t)=\frac{q(\bx_t|\bx_{t-1}){\color{#8854c0}q(\bx_{t-1})}}{{\color{#8854c0}q(\bx_t)}}\approx\pt(\bx_{t-1}|\bx_t)
 $$
 
+</div>
 <div v-click="3">
 
 ${\color{#8854c0}q(\bx_{t-1})}$ and ${\color{#8854c0}q(\bx_t)}$ are intractable:
@@ -373,7 +641,6 @@ $$
 q(\bx_t)=\int q(\bx_t|\bx_0)\pd(\bx_0)d\bx_0
 $$
 
-</div></div>
 </div>
 
 <div class="source"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">Weng L. What are Diffusion Models?, blog post, 2021</a></div>
@@ -386,21 +653,40 @@ class: theorems
 
 # Reverse Gaussian Diffusion Process
 
-$$
-q(\bx_{t-1}|\bx_t)=\frac{q(\bx_t|\bx_{t-1}){\color{#8854c0}q(\bx_{t-1})}}{{\color{#8854c0}q(\bx_t)}}
-$$
-
 <div class="block">
 
 ## Theorem (Feller, 1949)
 
-If $\beta_t$ is sufficiently small, $q(\bx_{t-1}|\bx_t)$ is approximately Gaussian.
+If $\beta_t$ is sufficiently small, the reverse conditional is approximately Gaussian:
 
-</div>
+$$
+q(\bx_{t-1}|\bx_t)=\frac{q(\bx_t|\bx_{t-1}){\color{#8854c0}q(\bx_{t-1})}}{{\color{#8854c0}q(\bx_t)}}.
+$$
 
 The original DDPM used $T=1000$ steps. Faster sampling methods will be discussed later.
 
-<img v-click="1" src="/figs/inverse_distr_1d.png" alt="Reverse distributions for different diffusion step sizes" style="width:100%;height:270px;object-fit:contain" />
+</div>
+
+<div class="columns balanced" style="grid-template-columns: 1.2fr 1fr" v-click="1">
+
+<img src="/figs/inverse_distr_1d.png" alt="Reverse distributions for different diffusion step sizes" style="width:100%;height:300px;object-fit:contain" />
+
+<div>
+
+## Same Noisy Endpoint
+
+**Top:** marginals $q(x_s)$.<br>
+**Bottom:** posteriors for fixed $x_5=X$.
+
+$$
+q(x_s|x_5=X)\propto q(x_5=X|x_s)q(x_s).
+$$
+
+- **Short reverse step:** nearly Gaussian.
+- **Long reverse jump:** can be multimodal.
+
+</div>
+</div>
 
 <div class="source">Feller W. On the theory of stochastic processes, with particular reference to applications, 1949<br><a href="https://arxiv.org/abs/2006.11239">Ho J. et al. Denoising Diffusion Probabilistic Models, 2020</a><br><a href="https://arxiv.org/abs/2112.07804">Xiao Z., Kreis K., Vahdat A. Tackling the generative learning trilemma with denoising diffusion GANs, 2021</a></div>
 
@@ -414,13 +700,26 @@ class: theorems
 
 <img src="/figs/DDPM.png" alt="Forward and reverse diffusion processes" style="width:100%;height:245px;object-fit:contain" />
 
-Define the reverse process as:
+<div class="columns balanced derivation" style="grid-template-columns: 230px 1fr">
+
+## Forward Process
+
+$$
+q(\bx_t|\bx_{t-1})=\cN\left(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI\right)
+$$
+
+</div>
+<div class="columns balanced derivation" style="grid-template-columns: 230px 1fr">
+
+## Reverse Process
 
 $$
 q(\bx_{t-1}|\bx_t)\approx\pt(\bx_{t-1}|\bx_t)=\cN\bigl(\bmu_{\btheta,t}(\bx_t),\bsigma^2_{\btheta,t}(\bx_t)\bigr)
 $$
 
-<span style="color:gray">If $\beta_t$ is sufficiently small, $q(\bx_{t-1}|\bx_t)$ is approximately Gaussian.</span>
+</div>
+
+If $\beta_t$ is sufficiently small, $q(\bx_{t-1}|\bx_t)$ is approximately Gaussian.
 
 <div class="source"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">Weng L. What are Diffusion Models?, blog post, 2021</a></div>
 
@@ -432,31 +731,39 @@ class: theorems
 
 # Reverse Gaussian Diffusion Process (Ancestral Sampling)
 
-<img src="/figs/DDPM.png" alt="Forward and reverse diffusion processes" style="width:100%;height:245px;object-fit:contain" />
+<img src="/figs/DDPM.png" alt="Forward and reverse diffusion processes" style="width:100%;height:190px;object-fit:contain" />
 
-<div class="columns" style="grid-template-columns:0.85fr 1.15fr">
-<div class="block">
+<div class="columns">
+<div>
 
 ## Forward Process
 
-1. $\bx_0=\bx\sim\pd(\bx)$
+$$
+q(\bx_t|\bx_{t-1})=\cN\bigl(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI\bigr)
+$$
+
+1. $\bx_0\sim\pd(\bx_0)$
 2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$
 3. $q(\bx_T)\approx\cN(0,\bI)$
 
 </div>
-<div class="block" v-click="1">
+<div v-click="1">
 
 ## Reverse Process
 
+$$
+\pt(\bx_{t-1}|\bx_t)=\cN\bigl(\bmu_{\btheta,t}(\bx_t),\bsigma^2_{\btheta,t}(\bx_t)\bigr)
+$$
+
 1. $\bx_T\sim\cN(0,\bI)$
-2. $\bx_{t-1}=\bsigma_{\btheta,t}(\bx_t)\bepsilon+\bmu_{\btheta,t}(\bx_t)$
-3. $\bx_0=\bx\sim\pd(\bx)$
+2. $\bx_{t-1}=\bmu_{\btheta,t}(\bx_t)+\bsigma_{\btheta,t}(\bx_t)\bepsilon_t$
+3. $\bx_0\sim\pt(\bx_0)\approx\pd(\bx_0)$
 
 </div>
 </div>
 <div class="takeaway" v-click="2">
 
-**Note:** The forward process is non-learnable, i.e., it does not involve trainable parameters
+**Note:** $\bepsilon_t\sim\cN(0,\bI)$. The forward process has no trainable parameters.
 
 </div>
 
@@ -475,7 +782,7 @@ class: theorems
 ## Reverse Kernel (**Intractable**)
 
 $$
-q(\bx_{t-1}|\bx_t)=\frac{q(\bx_t|\bx_{t-1}){\color{#8854c0}q(\bx_{t-1})}}{{\color{#8854c0}q(\bx_t)}}
+q(\bx_{t-1}|\bx_t)=\frac{q(\bx_t|\bx_{t-1}){\color{#8854c0}q(\bx_{t-1})}}{{\color{#8854c0}q(\bx_t)}}\approx\cN\bigl(\bmu_{\btheta,t}(\bx_t),\bsigma^2_{\btheta,t}(\bx_t)\bigr),\quad\beta_t\ll1.
 $$
 
 </div>
@@ -483,27 +790,18 @@ $$
 
 ## Conditioned Reverse Kernel (**Tractable**)
 
-$$
-q(\bx_{t-1}|\bx_t,{\color{olive}\bx_0})=\frac{q(\bx_t|\bx_{t-1},{\color{olive}\bx_0})q(\bx_{t-1}|{\color{olive}\bx_0})}{q(\bx_t|{\color{olive}\bx_0})}
-$$
+During training, ${\color{olive}\bx_0}$ is known: substitute Gaussians and complete the square in $\bx_{t-1}$.
 
-</div>
-
-
-<div v-click="2">
-
-<div class="block">
-
-$$
-q(\bx_{t-1}|\bx_t,\bx_0)=\frac{\cN(\sqrt{1-\beta_t}\cdot\bx_{t-1},\beta_t\bI)\cdot\cN(\sqrt{\bar{\alpha}_{t-1}}\cdot\bx_0,(1-\bar{\alpha}_{t-1})\cdot\bI)}{\cN(\sqrt{\bar{\alpha}_t}\cdot\bx_0,(1-\bar{\alpha}_t)\cdot\bI)}
+$$ {1|1-2|all} {at:2}
+\begin{aligned}
+q(\bx_{t-1}|\bx_t,{\color{olive}\bx_0})
+&=\frac{q(\bx_t|\bx_{t-1})q(\bx_{t-1}|{\color{olive}\bx_0})}{q(\bx_t|{\color{olive}\bx_0})}\\
+&=\frac{\cN(\bx_t;\sqrt{\alpha_t}\bx_{t-1},\beta_t\bI)\,\cN(\bx_{t-1};\sqrt{\bar{\alpha}_{t-1}}\bx_0,(1-\bar{\alpha}_{t-1})\bI)}{\cN(\bx_t;\sqrt{\bar{\alpha}_t}\bx_0,(1-\bar{\alpha}_t)\bI)}\\
+&=\cN\bigl(\bx_{t-1};{\color{teal}\tilde{\bmu}_t}(\bx_t,\bx_0),{\color{#8854c0}\tilde{\beta}_t}\bI\bigr).
+\end{aligned}
 $$
 
 <div v-click="3">
-
-$$
-=\cN({\color{teal}\tilde{\bmu}_t}(\bx_t,\bx_0),{\color{#8854c0}\tilde{\beta}_t}\cdot\bI)
-$$
-
 
 $$
 \boxed{\color{teal}\tilde{\bmu}_t(\bx_t,\bx_0)=\frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}\cdot\bx_t+\frac{\sqrt{\bar{\alpha}_{t-1}}(1-\alpha_t)}{1-\bar{\alpha}_t}\cdot\bx_0}
@@ -514,8 +812,6 @@ $$
 $$
 
 </div></div>
-
-</div>
 
 <div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
@@ -644,11 +940,12 @@ section: "Gaussian Diffusion Model as VAE"
 
 <div class="course-outline">
 
-<div class="outline-item"><span>01</span><div>Reverse Gaussian Diffusion Process</div></div>
-<div class="outline-item current"><span>02</span><div>Gaussian Diffusion Model as VAE</div></div>
-<div class="outline-item"><span>03</span><div>Diffusion ELBO Derivation</div></div>
-<div class="outline-item"><span>04</span><div>Gaussian Diffusion Reparametrization</div></div>
-<div class="outline-item"><span>05</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>01</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>02</span><div>Reverse Gaussian Diffusion Process</div></div>
+<div class="outline-item current"><span>03</span><div>Gaussian Diffusion Model as VAE</div></div>
+<div class="outline-item"><span>04</span><div>Diffusion ELBO Derivation</div></div>
+<div class="outline-item"><span>05</span><div>Gaussian Diffusion Reparametrization</div></div>
+<div class="outline-item"><span>06</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
 
 </div>
 
@@ -738,11 +1035,12 @@ section: "Diffusion ELBO Derivation"
 
 <div class="course-outline">
 
-<div class="outline-item"><span>01</span><div>Reverse Gaussian Diffusion Process</div></div>
-<div class="outline-item"><span>02</span><div>Gaussian Diffusion Model as VAE</div></div>
-<div class="outline-item current"><span>03</span><div>Diffusion ELBO Derivation</div></div>
-<div class="outline-item"><span>04</span><div>Gaussian Diffusion Reparametrization</div></div>
-<div class="outline-item"><span>05</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>01</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>02</span><div>Reverse Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>03</span><div>Gaussian Diffusion Model as VAE</div></div>
+<div class="outline-item current"><span>04</span><div>Diffusion ELBO Derivation</div></div>
+<div class="outline-item"><span>05</span><div>Gaussian Diffusion Reparametrization</div></div>
+<div class="outline-item"><span>06</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
 
 </div>
 
@@ -1094,11 +1392,12 @@ section: "Gaussian Diffusion Reparametrization"
 
 <div class="course-outline">
 
-<div class="outline-item"><span>01</span><div>Reverse Gaussian Diffusion Process</div></div>
-<div class="outline-item"><span>02</span><div>Gaussian Diffusion Model as VAE</div></div>
-<div class="outline-item"><span>03</span><div>Diffusion ELBO Derivation</div></div>
-<div class="outline-item current"><span>04</span><div>Gaussian Diffusion Reparametrization</div></div>
-<div class="outline-item"><span>05</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>01</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>02</span><div>Reverse Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>03</span><div>Gaussian Diffusion Model as VAE</div></div>
+<div class="outline-item"><span>04</span><div>Diffusion ELBO Derivation</div></div>
+<div class="outline-item current"><span>05</span><div>Gaussian Diffusion Reparametrization</div></div>
+<div class="outline-item"><span>06</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
 
 </div>
 
@@ -1315,11 +1614,12 @@ section: "Denoising Diffusion Probabilistic Model (DDPM)"
 
 <div class="course-outline">
 
-<div class="outline-item"><span>01</span><div>Reverse Gaussian Diffusion Process</div></div>
-<div class="outline-item"><span>02</span><div>Gaussian Diffusion Model as VAE</div></div>
-<div class="outline-item"><span>03</span><div>Diffusion ELBO Derivation</div></div>
-<div class="outline-item"><span>04</span><div>Gaussian Diffusion Reparametrization</div></div>
-<div class="outline-item current"><span>05</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>01</span><div>Forward Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>02</span><div>Reverse Gaussian Diffusion Process</div></div>
+<div class="outline-item"><span>03</span><div>Gaussian Diffusion Model as VAE</div></div>
+<div class="outline-item"><span>04</span><div>Diffusion ELBO Derivation</div></div>
+<div class="outline-item"><span>05</span><div>Gaussian Diffusion Reparametrization</div></div>
+<div class="outline-item current"><span>06</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
 
 </div>
 
@@ -1356,7 +1656,7 @@ class: theorems
 
 ## Forward Process
 
-1. $\bx_0=\bx\sim\pd(\bx)$;
+1. $\bx_0\sim\pd(\bx_0)$;
 2. $\bx_t=\sqrt{1-\beta_t}\cdot\bx_{t-1}+\sqrt{\beta_t}\cdot\bepsilon_t$;
 3. $q(\bx_T)\approx\cN(0,\bI)$.
 
@@ -1366,8 +1666,8 @@ class: theorems
 ## Reverse Process
 
 1. $\bx_T\sim\cN(0,\bI)$;
-2. $\bx_{t-1}=\bsigma_{\btheta,t}(\bx_t)\cdot\bepsilon+\bmu_{\btheta,t}(\bx_t)$;
-3. $\bx_0=\bx\sim\pd(\bx)$.
+2. $\bx_{t-1}=\bmu_{\btheta,t}(\bx_t)+\bsigma_{\btheta,t}(\bx_t)\bepsilon_t$;
+3. $\bx_0\sim\pt(\bx_0)\approx\pd(\bx_0)$.
 
 </div>
 </div>
@@ -1416,8 +1716,8 @@ class: summary
 
 # Summary
 
-- The noise schedule sets the signal-to-noise ratio at each diffusion step.
-- The reverse diffusion process reconstructs data from noise; we approximate its intractable transitions with Gaussian distributions.
+- Forward diffusion has exact Gaussian conditionals; a suitable schedule removes the signal and controls SNR.
+- For small steps, Gaussian reverse transitions approximate the path from noise to data.
 - Conditioning on the clean image gives a tractable Gaussian reverse distribution.
 - Gaussian diffusion is a VAE with a hierarchy of latent variables and a fixed encoder.
 - Its ELBO decomposes into reconstruction, prior matching, and denoising terms; Gaussian denoising terms reduce to squared error.

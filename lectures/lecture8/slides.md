@@ -37,6 +37,46 @@ Roman Isachenko
 
 ---
 clicks: 0
+id: recap-forward-gaussian-diffusion
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+Fix a schedule $0<\beta_t<1$. The noises $\bepsilon_t\sim\cN(0,\bI)$ are independent across $t$ and of $\bx_0$.
+
+$$
+\begin{aligned}
+\bx_t&=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t,\quad\bepsilon_t\sim\cN(0,\bI)\\
+q(\bx_t|\bx_{t-1})&=\cN(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI)
+\end{aligned}
+$$
+
+<div class="block">
+
+## Exact Conditional Distribution
+
+Let $\alpha_t=1-\beta_t$ and $\bar{\alpha}_t=\prod_{s=1}^t\alpha_s=\prod_{s=1}^t(1-\beta_s)$. Then
+
+$$
+q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\,\bx_0,(1-\bar{\alpha}_t)\bI)
+$$
+
+</div>
+
+For finite $T$, choose $\bar{\alpha}_T\ll1$ so the residual signal $\sqrt{\bar{\alpha}_T}\bx_0$ is negligible; then $q(\bx_T)\approx\cN(0,\bI)$.
+
+<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a><br><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a></div>
+
+<!-- Recap coverage: moved from the former Lecture 7 recap after forward diffusion
+became new Lecture 7 material. Recall alpha/alpha_bar and independent Gaussian
+increments before the reverse kernel and SNR slides. The existing distribution
+summary is already dense with forward, reverse and conditioned kernels, so keep
+this self-contained prerequisite on its own static slide. The former pictorial
+forward-process recap is covered by the following forward/reverse overview. -->
+
+---
+clicks: 0
 id: recap-of-previous-lecture
 class: theorems
 ---
@@ -75,7 +115,7 @@ class: theorems
 
 ## Forward Process
 
-1. $\bx_0=\bx\sim\pd(\bx)$
+1. $\bx_0\sim\pd(\bx_0)$
 2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$
 3. $q(\bx_T)\approx\cN(0,\bI)$
 
@@ -85,8 +125,8 @@ class: theorems
 ## Reverse Process
 
 1. $\bx_T\sim\cN(0,\bI)$
-2. $\bx_{t-1}=\bsigma_{\btheta,t}(\bx_t)\bepsilon+\bmu_{\btheta,t}(\bx_t)$
-3. $\bx_0=\bx\sim\pd(\bx)$
+2. $\bx_{t-1}=\bmu_{\btheta,t}(\bx_t)+\bsigma_{\btheta,t}(\bx_t)\bepsilon_t$
+3. $\bx_0\sim\pt(\bx_0)\approx\pd(\bx_0)$
 
 </div>
 </div>

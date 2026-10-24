@@ -8,6 +8,11 @@ description: Audit course lectures in Slidev, including notation, both recap dir
 Read [shared context](references/formats.md) first. This is
 the report-only umbrella check for Slidev. Explicit fix requests authorize their specified corrections.
 
+For an audit involving a topic move, resolve affected pairs with the
+[topic-transfer procedure](../recap-sync/references/topic-transfer.md) before
+assigning checks. Include dependent recaps absent from the file diff; report their
+coverage and the disposition of removed recap items. Keep the audit report-only.
+
 ## Source checks
 
 Resolve lecture(s), diff/full scope, and approved source baseline before
