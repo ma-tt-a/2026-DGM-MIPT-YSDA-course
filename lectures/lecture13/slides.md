@@ -806,30 +806,54 @@ class: theorems
 
 # Discrete ELBO Revisited
 
-Recall the per-step ELBO term for absorbing diffusion:
+With $\lambda_t=1-\bar\alpha_t$, let $\Delta\lambda_t=\lambda_t-\lambda_{t-1}$. The per-step weight is
 
 $$
-\cL_t=\bbE_{q(\bX_t|\bX_0)}\sum_{i=1}^m{\color{#8854c0}\rho_t}[\bx_t^i=\be_m]\left[-\log\pt(\bx_0^i|\bX_t)\right]+\text{const}.
+\rho_t=\frac{\beta_t\bar\alpha_{t-1}}{1-\bar\alpha_t}
+=\frac{\bar\alpha_{t-1}-\bar\alpha_t}{1-\bar\alpha_t}
+={\color{#8854c0}\frac{\Delta\lambda_t}{\lambda_t}}.
 $$
 
 <div v-click="1">
 
-Replacing the discrete index $t$ with the continuous mask rate $\lambda$, the training objective becomes
+Sum the per-step losses and refine the mask-rate grid: $\Delta\lambda_t$ becomes $d\lambda$.
 
 $$
-\cL=\int_0^1{\color{#8854c0}w(\lambda)}\bbE_{q_\lambda(\bX_\lambda|\bX_0)}\sum_{i=1}^m[\bx_\lambda^i=\be_m]\left[-\log\pt(\bx_0^i|\bX_\lambda)\right]d\lambda.
+\cL=\int_0^1{\color{#8854c0}\frac{1}{\lambda}}\bbE_{q_\lambda(\bX_\lambda|\bX_0)}\sum_{i=1}^m[\bx_\lambda^i=\be_m]\left[-\log\pt(\bx_0^i|\bX_\lambda)\right]d\lambda.
 $$
 
 </div>
 <div class="block" v-click="2">
 
-## Interpretation
+## The ELBO fixes the weight
 
-Training corresponds to optimizing a **continuous mixture of masked language modeling objectives** with different mask rates.
+For $\lambda\sim U(0,1)$, multiply the **sum of masked-token cross-entropies** by $1/\lambda$.
 
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2406.07524">Sahoo S. et al. Simple and effective masked diffusion language models, 2024</a></div>
+
+<!--
+Keep this bridge brief (about one minute): the finite-step identity gives
+rho_t = Delta lambda_t / lambda_t; summing the weighted masked-CE terms gives
+a Riemann sum, hence the continuous weight 1/lambda. Do not introduce a new
+auxiliary loss symbol or a separate derivation slide.
+
+The displayed objective is the model-dependent negative-ELBO objective, averaged
+over clean data during training. It uses the existing reverse parameterization:
+copy visible tokens, match the posterior unmasking probability, and assign zero
+clean-token probability to the mask. Take lambda_0=0 and lambda_T=1; the first
+step contains reconstruction (rho_1=1), and the fully masked prior is fixed.
+The continuum limit refines the mask-rate grid, with the usual integrability
+conditions. At lambda=0 interpret the integral as a limit; sample lambda>0.
+For finite conditional CE, the probability lambda that a position is masked
+compensates the 1/lambda factor in the expectation, not in each sampled loss.
+The sum of masked-token CEs must not silently become an average over the random
+number of masked positions. Averaging over the fixed sequence length is only
+a constant rescaling. In discrete-time Training, uniform t estimates the sum
+up to the constant factor T, which is omitted there as a loss-scale convention.
+These details are speaker notes, not additional material to explain in class.
+-->
 
 ---
 clicks: 0
@@ -847,7 +871,7 @@ class: theorems
 
 <li>
 
-Sample $\bX_0\sim\pd(\bX)$, ${\color{#8854c0}\lambda\sim U[0,1]}$.
+Sample $\bX_0\sim\pd(\bX)$, ${\color{#8854c0}\lambda\sim U(0,1)}$.
 
 </li>
 
@@ -879,7 +903,7 @@ $$
 Compute masked-CE loss:
 
 $$
-\cL={\color{#8854c0}w(\lambda)}\sum_{i=1}^m[\bx_{{\color{#8854c0}\lambda}}^i=\be_m]\,\big[-\log\pt(\bx_0^i|\bX_{{\color{#8854c0}\lambda}})\big].
+\cL={\color{#8854c0}\frac{1}{\lambda}}\sum_{i=1}^m[\bx_{{\color{#8854c0}\lambda}}^i=\be_m]\,\big[-\log\pt(\bx_0^i|\bX_{{\color{#8854c0}\lambda}})\big].
 $$
 
 </li>
@@ -974,6 +998,64 @@ $$
 <div class="source"><a href="https://arxiv.org/abs/2406.07524">Sahoo S. et al. Simple and effective masked diffusion language models, 2024</a></div>
 
 ---
+clicks: 3
+id: masked-diffusion-and-any-order-autoregression
+class: theorems
+---
+
+# Masked Diffusion and Any-Order Autoregression
+
+Reveal one token at a time, conditioning on all visible tokens.
+
+<div v-click="1">
+
+<code>[M, M, M]</code> → <code>[M, A, M]</code> → <code>[M, A, B]</code> → <code>[C, A, B]</code>
+
+Here <code>M</code> denotes a mask. The generation order is **2 → 3 → 1**.
+
+This is **autoregressive generation in the chosen order**.
+
+</div>
+<div class="block" v-click="2">
+
+## A connection between training objectives
+
+With independent masking and a **time-independent predictor**, the continuous masked-diffusion objective equals the average autoregressive loss over **uniformly random token orders**.
+
+The predictor uses visible tokens and their positions, without a separate time input.
+
+</div>
+<div v-click="3">
+
+Unmasking several tokens independently in one step is a different sampling procedure.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2406.03736">Ou J. et al. Your Absorbing Discrete Diffusion Secretly Models the Conditional Distributions of Clean Data, 2024</a></div>
+
+<!--
+Narrative: the preceding MDLM Sampling fixes revealed tokens; this slide considers
+one-token updates, reconnects them to autoregressive generation, and states the
+objective equivalence. The following Course Overview now revisits these related
+model families. The letters illustrate a possible sample, not an assumed data
+distribution. Token positions stay fixed; only the order of revealing changes.
+
+No proof in the presentation. The equality uses the already introduced objective:
+independent, token-independent masking at rate lambda over the full interval
+(0,1), weight 1/lambda, and a sum of masked-token cross-entropies. Use the same
+clean-token predictor without explicit time conditioning in both objectives.
+The AR objective averages the sum of negative log conditionals over uniformly
+random permutations, each conditional evaluated on the previously revealed
+tokens and their original positions. It is an average of order-specific NLLs,
+not the negative log of the average order-specific probability. Learned
+conditionals need not define the same joint distribution for every order.
+Time independence describes the clean-token predictor, not the schedule-dependent
+unmasking probability or a general discrete score. The result does not identify
+arbitrary parallel, confidence-based, or remasking samplers with serial AR.
+MaskGIT and practical samplers are reserved for the separately agreed discussion.
+-->
+
+---
 clicks: 0
 id: outline-5
 section: "Course Overview"
@@ -1040,7 +1122,7 @@ class: theorems
 ## Autoregressive (L1)
 
 $$
-\pt(\bx)=\prod_{i=1}^m\pt(x_j|\bx_{1:j-1})\qquad\text{exact likelihood, sequential sampling}
+\pt(\bx)=\prod_{j=1}^m\pt(x_j|\bx_{1:j-1})\qquad\text{exact likelihood, sequential sampling}
 $$
 
 </div>
@@ -1182,32 +1264,54 @@ id: flow-matching-l10-l11
 class: theorems
 ---
 
-# Flow Matching (L10–L11)
+# Flow Matching
 
 <div class="block">
 
-## Flow Matching objective (L10)
-
-$$
-\cL_{\text{FM}}=\bbE_{t,p_t(\bx)}\,\bigl\|\bv_{\btheta}(\bx,t)-\bv(\bx,t)\bigr\|^2
-$$
-
-Target $\bv(\bx,t)$ is the marginal vector field — intractable in general.
-
-</div>
-<div class="block">
-
-## Conditional Flow Matching (L11)
+## Conditional Flow Matching
 
 $$
 \cL_{\text{CFM}}=\bbE_{t,p(\bz),p_t(\bx|\bz)}\,\bigl\|\bv_{\btheta}(\bx,t)-\bv(\bx,\bz,t)\bigr\|^2
 $$
 
-- $\nabla_{\btheta}\cL_{\text{FM}}=\nabla_{\btheta}\cL_{\text{CFM}}$ — regress against *conditional* field.
-- Conditioning on endpoint $\bz=\bx_1$ (one-sided) or pair $(\bx_0,\bx_1)$ (two-sided).
-- Straight Gaussian paths $\Rightarrow$ closed-form $\bv(\bx,\bz,t)=\bx_1-\bx_0$.
+- $\nabla_{\btheta}\cL_{\text{FM}}=\nabla_{\btheta}\cL_{\text{CFM}}$: learn the marginal field using tractable conditional targets.
+- Condition on an endpoint $\bz=\bx_1$ or an endpoint pair $\bz=(\bx_0,\bx_1)$.
 
 </div>
+<div class="block">
+
+## Linear interpolation
+
+$$
+\bx_t=(1-t)\bx_0+t\bx_1
+\qquad\Rightarrow\qquad
+\text{training target: }\bx_1-\bx_0.
+$$
+
+Straight training paths do not imply straight sampling trajectories.
+
+</div>
+<div class="block">
+
+## Connection to score-based diffusion
+
+VE / VP diffusion paths are Gaussian-path choices; their probability-flow ODE velocities can be expressed through the score.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2210.02747">Lipman Y. et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://arxiv.org/abs/2209.03003">Liu X. et al. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow, 2022</a></div>
+
+<!--
+Overview bridge: the preceding slide recalls probability-flow ODEs; this slide
+recalls how CFM learns a marginal velocity via conditional targets and relates
+Gaussian paths back to VE/VP diffusion; the next slide changes to discrete states.
+The linear-interpolation target is a sampled path derivative. Under endpoint
+conditioning with an independent Gaussian source, it evaluates the conditional
+field along the sampled path; under pair conditioning it is the pairwise target.
+The learned marginal field averages these targets at the current state, so its
+sampling trajectories need not be straight. Comparing FM and diffusion uses the
+same probability path and consistent time orientation, not arbitrary objectives.
+-->
 
 ---
 clicks: 0
@@ -1215,29 +1319,39 @@ id: discrete-diffusion-l12-l13
 class: theorems
 ---
 
-# Discrete Diffusion (L12–L13)
+# Discrete Diffusion
 
 <div class="block">
 
-## Forward discrete process (L12)
+## General discrete diffusion
 
-Categorical $\bx_t$ with transition matrices $\bQ_t$:
-
-- **Uniform**: $\bQ_t=(1-\beta_t)\bI+\beta_t\bU$
-- **Absorbing**: $\bQ_t=(1-\beta_t)\bI+\beta_t\be_m\bone^\top$ (mask token)
+- Transition matrices $\bQ_t$ define corruption: **uniform** replacement or **absorbing** masking.
+- The forward posterior $q(\bx_{t-1}|\bx_t,\bx_0)$ is known analytically; the ELBO trains the reverse model via categorical KL terms.
 
 </div>
 <div class="block">
 
-## Reverse process & Discrete ELBO (L12)
+## Absorbing diffusion / MDLM
 
-$$
-q(\bx_{t-1}|\bx_t,\bx_0)=\Cat\!\left(\frac{\bQ_t^\top\bx_t\odot\bQ_{1:t-1}\bx_0}{\bx_t^\top\bQ_{1:t}\bx_0}\right),
-$$
-
-each $\cL_t$ reduces to a **cross-entropy** loss against $\pt(\bx_{t-1}|\bx_t)$.
+- Copy visible tokens and match the posterior unmasking probability: the ELBO becomes a weighted **masked-token cross-entropy**.
+- **Training:** sample $\lambda\sim U(0,1)$, independently mask tokens with probability $\lambda$, and multiply their summed cross-entropies by $1/\lambda$.
+- **Sampling:** start fully masked and reveal tokens in stages. Later predictions use revealed context; visible tokens stay fixed.
 
 </div>
+
+<div class="source"><a href="https://arxiv.org/abs/2107.03006">Austin J. et al. Structured Denoising Diffusion Models in Discrete State-Spaces, 2021</a><br><a href="https://arxiv.org/abs/2406.07524">Sahoo S. et al. Simple and Effective Masked Diffusion Language Models, 2024</a></div>
+
+<!--
+Overview bridge: after continuous dynamics, recall discrete transitions and their
+categorical ELBO, then specialize to absorbing diffusion and MDLM. This completes
+the family overview before the existing trilemma comparison.
+The masked-CE reduction also assumes the clean-token predictor assigns zero
+probability to the mask, as in the earlier absorbing reverse-model derivation.
+The weight 1/lambda applies to the sum over masked positions, not an average over
+their random count. Staged unmasking uses revealed context; it does not guarantee
+the correct joint distribution for arbitrary parallel updates. This summary
+describes the absorbing ancestral sampler, not remasking or corrective samplers.
+-->
 
 ---
 clicks: 0
@@ -1249,7 +1363,18 @@ class: figure-slide
 
 <img class="hero" src="/figs/trilemma.png" alt="The generative learning trilemma between fast sampling, high-quality samples and mode coverage" />
 
+A historical view of typical trade-offs, not a fundamental impossibility.
+
 <div class="source"><a href="https://arxiv.org/abs/2112.07804">Xiao Z., Kreis K., Vahdat A. Tackling the generative learning trilemma with denoising diffusion GANs, 2021</a></div>
+
+<!--
+After the family overview, use this historical figure to introduce the three
+evaluation axes: sample quality, mode coverage, and sampling cost. Its family
+placements illustrate typical trade-offs at the time of the cited work; they
+are not an impossibility theorem or an immutable classification. The next slide
+explains how to interpret and improve those trade-offs without promising that
+distillation resolves them universally. Preserve the original attributed figure.
+-->
 
 ---
 clicks: 0
@@ -1261,28 +1386,38 @@ class: theorems
 
 <div class="block">
 
-## Rule of thumb
+## Quality and coverage are different
 
-<div class="columns">
-<div>
-
-- **Likelihood + Coverage** $\Rightarrow$ **AR / NF**<br>exact density, *slow sampling*.
-- **Likelihood + Fast Sampling** $\Rightarrow$ **VAE**<br>tractable bound, *blurry samples*.
-- **Quality + Fast Sampling** $\Rightarrow$ **GAN**<br>sharp, *mode collapse, no likelihood*.
+Realistic samples do not guarantee that a model captures the full diversity of the data.
 
 </div>
-<div>
+<div class="block">
 
-- **Quality + Coverage** $\Rightarrow$ **Diffusion**<br>stable training, *slow sampling*.
-- **Quality + Faster Sampling** $\Rightarrow$ **FM / ODE**<br>fewer steps, *approx. likelihood*.
-- **Discrete + Coverage** $\Rightarrow$ **Discrete diffusion**<br>parallel denoising, *iterative decoding*.
+## Sampling cost depends on the model and sampler
 
-</div>
-</div>
+Both the number of sequential steps and the cost per step matter. A model family's name alone does not determine sampling speed.
 
 </div>
+<div class="block">
 
-<div class="source"><a href="https://arxiv.org/abs/2112.07804">Xiao Z., Kreis K., Vahdat A. Tackling the generative learning trilemma with denoising diffusion GANs, 2021</a></div>
+## The trade-off can improve
+
+Better probability paths, sampling algorithms, and distillation can reduce sampling cost. Quality and coverage still need to be evaluated.
+
+</div>
+
+**Can we retain sample quality and diversity with only a few generation steps?**
+
+<div class="source"><a href="https://arxiv.org/abs/2112.07804">Xiao Z. et al. Tackling the Generative Learning Trilemma with Denoising Diffusion GANs, 2021</a><br><a href="https://arxiv.org/abs/2210.02747">Lipman Y. et al. Flow Matching for Generative Modeling, 2022</a><br><a href="https://arxiv.org/abs/2303.01469">Song Y. et al. Consistency Models, 2023</a></div>
+
+<!--
+Read the preceding historical triangle through its three original axes rather
+than assigning fixed strengths or weaknesses to every model family. Likelihood
+tractability and discrete state spaces are separate properties, not additional
+vertices of this triangle. The closing question motivates few-step generation
+without introducing a new lecture block or claiming that the trade-off is solved.
+The Summary retains this distinction and does not assert universal dominance.
+-->
 
 ---
 clicks: 0
@@ -1294,5 +1429,6 @@ class: summary
 
 - With a reverse model that copies visible tokens and matches the unmasking probability, the absorbing ELBO yields time-weighted losses over masked positions.
 - MDLM reveals tokens in stages so later predictions can use revealed context. Independent one-step sampling can miss token dependencies, even with correct marginals.
-- No generative model dominates all axes of the trilemma — each family trades off likelihood, sample quality, mode coverage and sampling speed.
-- Modern frontier (flow matching, discrete diffusion, distilled diffusion) tries to push the Pareto frontier of this trilemma.
+- With independent masking and a time-independent predictor, the continuous masked-diffusion objective equals the average AR loss over uniformly random token orders.
+- Evaluate generative models along three axes: sample quality, mode coverage, and sampling cost.
+- Better paths, samplers, and distillation can improve this trade-off; the trilemma is not a fundamental impossibility.
