@@ -1209,13 +1209,13 @@ id: 2025-big-bang-of-discrete-diffusion-models
 class: figure-slide
 ---
 
-# Diffusion Language Models: Mercury
+# Diffusion Language Models: DiffusionGemma
 
-<img src="/figs/mercury.png" alt="Mercury: fast diffusion language models" class="figure-bottom figure-tall" />
+<img src="/figs/diffusiongemma-speed-quality.webp" alt="DiffusionGemma and Gemma 4: benchmark quality versus output speed on one H100, FP8, batch size 1" class="figure-bottom figure-tall" />
 
 <ul>
-<li v-click="1"><strong>Parallel prediction:</strong> predict multiple tokens at each denoising step.</li>
-<li v-click="2"><strong>Application:</strong> Mercury Coder applies diffusion language modeling to code generation.</li>
+<li v-click="1"><strong>Parallel generation:</strong> generate multiple tokens at each denoising step.</li>
+<li v-click="2"><strong>Practical speed:</strong> over 1,000 output tokens per second on a single H100.</li>
 </ul>
 
 <div class="takeaway" v-click="3">
@@ -1224,7 +1224,7 @@ How do we define corruption and denoising for discrete tokens?
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2506.17298">Khanna S. et al. Mercury: Ultra-fast language models based on diffusion, 2025.</a></div>
+<div class="source">1× H100 · FP8 · batch size 1.<br><a href="https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/">O'Donoghue B., Flennerhag S. DiffusionGemma: 4x faster text generation, 2026.</a></div>
 
 ---
 clicks: 0
