@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { bridge, gaussian, conditionalMean, reverseAt, schedules, scheduleAt, noisyImage, predictionInput, predictionFrom, predictionBounds } from '../lecture7/lib/diffusion-demos.mjs'
+import { bridge, gaussian, conditionalMean, reverseAt, schedules, scheduleAt, noisyImage } from '../lecture7/lib/diffusion-demos.mjs'
+import { predictionInput, predictionFrom, predictionBounds } from '../lecture8/lib/prediction-demos.mjs'
 const near=(a,b,tol=1e-10)=>assert.ok(Math.abs(a-b)<tol,`${a} != ${b}`)
 const integral=fn=>{let sum=0;const dx=.002;for(let x=-10+dx/2;x<10;x+=dx)sum+=fn(x)*dx;return sum}
 

@@ -2,7 +2,8 @@
 import { computed, useId } from 'vue'
 import { useNav } from '@slidev/client'
 import { predictionState as state } from '../lib/demo-state'
-import { predictionBounds, predictionFrom } from '../lib/diffusion-demos.mjs'
+import { predictionBounds, predictionFrom } from '../lib/prediction-demos.mjs'
+import L8Math from './L8Math.vue'
 
 type Output = 'clean' | 'noise' | 'mean'
 const { isPrintMode } = useNav()
@@ -26,7 +27,7 @@ function reset() { state.noise = .5; state.output = 'noise' }
   <DemoPanel data-demo="noise-prediction" :data-output="output" :data-noise="current.noise" :data-clean="current.clean" :data-mean="current.mean">
     <div class="fixed-input">
       <span>One coordinate. Keep the input and timestep fixed:</span>
-      <L7Math formula="x_t=1,\quad\alpha_t=0.6,\quad\bar\alpha_t=0.39" />
+      <L8Math formula="x_t=1,\quad\alpha_t=0.6,\quad\bar\alpha_t=0.39" />
     </div>
     <div v-if="!isPrintMode" class="demo-controls">
       <span>Network output</span>
@@ -39,7 +40,7 @@ function reset() { state.noise = .5; state.output = 'noise' }
       <template v-for="(q,i) in quantities" :key="q.key">
         <div class="quantity" :class="{selected:output===q.key}" :style="{'--quantity-color':q.color,'--quantity-tint':q.tint}" :data-quantity="q.key">
           <div class="quantity-name">{{ q.name }}</div>
-          <div class="quantity-value"><L7Math :formula="q.formula" /><span>=</span><output :for="id+'-'+q.key">{{ fmt(current[q.key]) }}</output></div>
+          <div class="quantity-value"><L8Math :formula="q.formula" /><span>=</span><output :for="id+'-'+q.key">{{ fmt(current[q.key]) }}</output></div>
           <div v-if="!isPrintMode" class="slider-control"><input :id="id+'-'+q.key" type="range" :min="predictionBounds[q.key][0]" :max="predictionBounds[q.key][1]" step="any" :value="current[q.key]" :aria-label="q.name+' prediction'" :aria-valuetext="fmt(current[q.key])" @input="change(q.key,$event)" /></div>
           <div v-else class="print-scale"><div class="print-track" /><div class="print-thumb" :style="{left:100*(current[q.key]-predictionBounds[q.key][0])/(predictionBounds[q.key][1]-predictionBounds[q.key][0])+'%'}" /></div>
           <div class="quantity-role">{{ output===q.key ? 'Network output' : 'Computed' }}</div>
@@ -52,8 +53,8 @@ function reset() { state.noise = .5; state.output = 'noise' }
     </div>
 
     <div class="conversion-formulas">
-      <div><L7Math formula="\displaystyle x_t=\sqrt{\bar\alpha_t}{\color{#007f82}\hat x_0}+\sqrt{1-\bar\alpha_t}{\color{#8854c0}\hat\epsilon}" /></div>
-      <div><L7Math formula="\displaystyle {\color{#e17838}\mu_{\btheta,t}}=\frac{x_t}{\sqrt{\alpha_t}}-\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar\alpha_t)}}{\color{#8854c0}\hat\epsilon}" /></div>
+      <div><L8Math formula="\displaystyle x_t=\sqrt{\bar\alpha_t}{\color{#007f82}\hat x_0}+\sqrt{1-\bar\alpha_t}{\color{#8854c0}\hat\epsilon}" /></div>
+      <div><L8Math formula="\displaystyle {\color{#e17838}\mu_{\btheta,t}}=\frac{x_t}{\sqrt{\alpha_t}}-\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar\alpha_t)}}{\color{#8854c0}\hat\epsilon}" /></div>
     </div>
     <div class="demo-takeaway">Switch the network output: the values stay the same; only the parameterization changes.</div>
     <div class="demo-note">{{ isPrintMode ? 'All three are predicted quantities, linked by known conversions.' : 'Drag any value to use it as the network output; the other two follow.' }}</div>

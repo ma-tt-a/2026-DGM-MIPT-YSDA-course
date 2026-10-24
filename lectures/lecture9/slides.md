@@ -43,6 +43,8 @@ class: theorems
 
 # Recap of Previous Lecture
 
+$\alpha_t=1-\beta_t$, $\bar\alpha_t=\prod_{s=1}^t\alpha_s$, $\bar\alpha_0=1$; $\tilde\beta_t=\beta_t(1-\bar\alpha_{t-1})/(1-\bar\alpha_t)$.
+
 <div class="block">
 
 ## ELBO for Gaussian Diffusion Model
@@ -58,12 +60,12 @@ $$
 
 $$
 \begin{aligned}
-q(\bx_{t-1}|\bx_t,\bx_0)&=\cN(\bx_{t-1}|\tilde{\bmu}_t(\bx_t,\bx_0),\tilde{\beta}_t\bI),\\
-\pt(\bx_{t-1}|\bx_t)&=\cN\bigl(\bx_{t-1}|\bmu_{\btheta,t}(\bx_t),{\color{#8854c0}\bsigma_{\btheta,t}^2(\bx_t)}\bigr)
+q(\bx_{t-1}|\bx_t,\bx_0)&=\cN(\tilde{\bmu}_t(\bx_t,\bx_0),\tilde{\beta}_t\bI),\\
+\pt(\bx_{t-1}|\bx_t)&=\cN\bigl(\bmu_{\btheta,t}(\bx_t),{\color{#8854c0}\bsigma_{\btheta,t}^2(\bx_t)}\bigr)
 \end{aligned}
 $$
 
-It is assumed that ${\color{#8854c0}\bsigma_{\btheta,t}^2(\bx_t)=\tilde{\beta}_t\bI}$.
+For $t\ge2$, fix ${\color{#8854c0}\bsigma_{\btheta,t}^2(\bx_t)=\tilde{\beta}_t\bI}$.
 
 $$
 \cL_t=\bbE_{q(\bx_t|\bx_0)}\left[\frac{1}{2\tilde{\beta}_t}\bigl\|\tilde{\bmu}_t(\bx_t,\bx_0)-\bmu_{\btheta,t}(\bx_t)\bigr\|^2\right]
@@ -78,6 +80,8 @@ class: theorems
 ---
 
 # Recap of Previous Lecture
+
+For intermediate steps $t\ge2$:
 
 $$
 \cL_t=\bbE_{{\color{#8854c0}q(\bx_t|\bx_0)}}\left[{\color{olive}\frac{1}{2\tilde{\beta}_t}}\bigl\|\tilde{\bmu}_t(\bx_t,\bx_0)-\bmu_{\btheta,t}(\bx_t)\bigr\|^2\right]
@@ -100,24 +104,65 @@ $$
 
 ---
 clicks: 0
+id: recap-diffusion-parameterizations
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+## Diffusion Parameterizations
+
+At fixed $\bx_t,t$, with $0<\bar\alpha_t<1$:
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon.
+$$
+
+<div>
+
+| Network output at $\bx_t$ | Regression target | Clean-data estimate |
+| --- | --- | --- |
+| Noise $\bepsilon_{\btheta,t}$ | $\bepsilon$ | $\dfrac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bepsilon_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
+| Clean data $\hat{\bx}_{\btheta,t}$ | $\bx_0$ | $\hat{\bx}_{\btheta,t}$ |
+| Score $\bs_{\btheta,t}$ | $-\dfrac{\bepsilon}{\sqrt{1-\bar{\alpha}_t}}$ | $\dfrac{\bx_t+(1-\bar{\alpha}_t)\,\bs_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
+| $v$-prediction $\bv_{\btheta,t}$ | $\sqrt{\bar{\alpha}_t}\,\bepsilon-\sqrt{1-\bar{\alpha}_t}\,\bx_0$ | $\sqrt{\bar{\alpha}_t}\,\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bv_{\btheta,t}$ |
+
+</div>
+<div class="block">
+
+**Convertible predictions; different losses.** Plain MSE assigns different weights to different noise levels.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2202.00512">Salimans T., Ho J. Progressive Distillation for Fast Sampling of Diffusion Models, 2022</a></div>
+
+<!-- Moved from the former Lecture 8 recap after parameterizations became
+Lecture 8 body material. Complements the mean/noise identities: all four targets,
+inverse maps and weighting caveat are retained. A separate static slide keeps
+the existing objective and algorithm recaps readable. -->
+
+---
+clicks: 0
 id: recap-of-previous-lecture-3
 class: theorems
 ---
 
 # Recap of Previous Lecture
 
+For intermediate steps $t\ge2$:
+
 $$
 \cL_t=\bbE_{{\color{#8854c0}\bepsilon\sim\cN(0,\bI)}}\left[\frac{(1-\alpha_t)^2}{2\tilde{\beta}_t\alpha_t(1-\bar{\alpha}_t)}\Bigl\|\bepsilon-\bepsilon_{\btheta,t}\bigl({\color{teal}\sqrt{\bar{\alpha}_t}\bx_0+\sqrt{1-\bar{\alpha}_t}\bepsilon}\bigr)\Bigr\|^2\right]
 $$
 
-Predict the added noise. Dropping the time-dependent ELBO coefficient changes the relative weights of the training levels.
+Predict the added noise. Dropping the time-dependent ELBO coefficient changes the relative weights of the training levels. The simple loss also includes reconstruction at $t=1$.
 
 <div class="block">
 
 ## Simplified Objective
 
 $$
-\cL_{\text{simple}}=\bbE_{t\sim U\{1,T\}}\bbE_{\bepsilon\sim\cN(0,\bI)}\Bigl\|\bepsilon-\bepsilon_{\btheta,t}\bigl(\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon\bigr)\Bigr\|^2
+\cL_{\text{simple}}=\bbE_{t\sim\Uniform\{1,\ldots,T\}}\bbE_{\bepsilon\sim\cN(0,\bI)}\Bigl\|\bepsilon-\bepsilon_{\btheta,t}\bigl(\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon\bigr)\Bigr\|^2
 $$
 
 </div>
@@ -136,9 +181,9 @@ class: theorems
 
 ## Training
 
-1. Sample $\bx_0\sim\pd(\bx)$, $t\sim U\{1,T\}$, $\bepsilon\sim\cN(0,\bI)$.
+1. Sample $\bx_0\sim\pd(\bx)$, $t\sim\Uniform\{1,\ldots,T\}$, $\bepsilon\sim\cN(0,\bI)$.
 2. Compute noisy image $\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon$.
-3. Compute loss $\cL_{\text{simple}}=\|\bepsilon-\bepsilon_{\btheta,t}(\bx_t)\|^2$.
+3. Minimize $\cL_{\text{simple}}=\|\bepsilon-\bepsilon_{\btheta,t}(\bx_t)\|^2$ by SGD.
 
 </div>
 <div class="block">
@@ -146,13 +191,20 @@ class: theorems
 ## Sampling (Ancestral)
 
 1. Sample $\bx_T\sim\cN(0,\bI)$.
-2. Compute the mean of $\pt(\bx_{t-1}|\bx_t)=\cN(\bmu_{\btheta,t}(\bx_t),\tilde{\beta}_t\cdot\bI)$:
+2. For $t=T,\ldots,2$, compute the mean and sample the reverse step:
 
 $$
-\bmu_{\btheta,t}(\bx_t)=\frac{1}{\sqrt{\alpha_t}}\cdot\bx_t-\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar{\alpha}_t)}}\cdot\bepsilon_{\btheta,t}(\bx_t).
+\begin{aligned}
+\bmu_{\btheta,t}(\bx_t)&=\frac{\bx_t}{\sqrt{\alpha_t}}-\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar\alpha_t)}}\bepsilon_{\btheta,t}(\bx_t),\\
+\bx_{t-1}&=\bmu_{\btheta,t}(\bx_t)+\sqrt{\tilde\beta_t}\bepsilon_t,\qquad\bepsilon_t\sim\cN(0,\bI).
+\end{aligned}
 $$
 
-3. Denoise $\bx_{t-1}=\bmu_{\btheta,t}(\bx_t)+\sqrt{\tilde{\beta}_t}\cdot\bepsilon$, $\bepsilon\sim\cN(0,\bI)$.
+<ol start="3"><li>
+
+Return the decoder mean $\hat{\bx}_0=\bmu_{\btheta,1}(\bx_1)$.
+
+</li></ol>
 
 </div>
 
