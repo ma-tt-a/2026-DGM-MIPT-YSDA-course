@@ -77,3 +77,17 @@ test('All three slider ranges cover the same predictions without clipping',()=>{
     }
   }
 })
+
+test('Weighted clean-data and posterior-mean errors equal the noise error',()=>{
+  const {xt,alpha,alphaBar}=predictionInput
+  for(const clean of [-3,-.5,0,1,4]) {
+    const targetNoise=(xt-Math.sqrt(alphaBar)*clean)/Math.sqrt(1-alphaBar)
+    const targetMean=conditionalMean(xt,clean)
+    for(const noise of [-2,-.25,.5,2]) {
+      const p=predictionFrom('noise',noise)
+      const noiseError=(p.noise-targetNoise)**2
+      near(noiseError,alphaBar/(1-alphaBar)*(p.clean-clean)**2)
+      near(noiseError,alpha*(1-alphaBar)/(1-alpha)**2*(p.mean-targetMean)**2)
+    }
+  }
+})

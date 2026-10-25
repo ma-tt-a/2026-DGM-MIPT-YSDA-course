@@ -277,15 +277,6 @@ section: "Forward Gaussian Diffusion Process"
 </div>
 
 ---
-clicks: 0
-id: generative-models-taxonomy-2
----
-
-# Generative Models Taxonomy
-
-<TaxonomyDiagram class="taxonomy" denoising-diffusion alt="Generative models taxonomy with DDPM highlighted" />
-
----
 clicks: 6
 id: forward-gaussian-diffusion-process
 class: theorems

@@ -26,41 +26,83 @@ function reset() { state.noise = .5; state.output = 'noise' }
 <template>
   <DemoPanel data-demo="noise-prediction" :data-output="output" :data-noise="current.noise" :data-clean="current.clean" :data-mean="current.mean">
     <div class="fixed-input">
-      <span>One coordinate. Keep the input and timestep fixed:</span>
+      <span>Linked predictions, one coordinate:</span>
       <L8Math formula="x_t=1,\quad\alpha_t=0.6,\quad\bar\alpha_t=0.39" />
+      <div v-if="!isPrintMode" class="demo-controls reset-control"><button class="demo-reset" @click="reset">Reset</button></div>
     </div>
-    <div v-if="!isPrintMode" class="demo-controls">
-      <span>Network output</span>
-      <button v-for="q in quantities" :key="q.key" :aria-pressed="output===q.key" @click="state.output=q.key">{{ q.name }}</button>
-      <button class="demo-reset" @click="reset">Reset</button>
-    </div>
-    <div v-else class="print-choice">Choose one network output; compute the other two. Example: predict noise.</div>
 
     <div class="quantities">
       <template v-for="(q,i) in quantities" :key="q.key">
-        <div class="quantity" :class="{selected:output===q.key}" :style="{'--quantity-color':q.color,'--quantity-tint':q.tint}" :data-quantity="q.key">
-          <div class="quantity-name">{{ q.name }}</div>
-          <div class="quantity-value"><L8Math :formula="q.formula" /><span>=</span><output :for="id+'-'+q.key">{{ fmt(current[q.key]) }}</output></div>
-          <div v-if="!isPrintMode" class="slider-control"><input :id="id+'-'+q.key" type="range" :min="predictionBounds[q.key][0]" :max="predictionBounds[q.key][1]" step="any" :value="current[q.key]" :aria-label="q.name+' prediction'" :aria-valuetext="fmt(current[q.key])" @input="change(q.key,$event)" /></div>
-          <div v-else class="print-scale"><div class="print-track" /><div class="print-thumb" :style="{left:100*(current[q.key]-predictionBounds[q.key][0])/(predictionBounds[q.key][1]-predictionBounds[q.key][0])+'%'}" /></div>
-          <div class="quantity-role">{{ output===q.key ? 'Network output' : 'Computed' }}</div>
+        <div class="quantity" :class="{selected:output===q.key}" :style="{'--quantity-color':q.color,'--quantity-tint':q.tint}" :data-quantity="q.key" @click="state.output=q.key" @focusin="state.output=q.key">
+          <div class="quantity-heading">
+            <span class="quantity-name">{{ q.name }}</span>
+            <span class="quantity-role">{{ output===q.key ? 'Network output' : 'Computed' }}</span>
+          </div>
+          <div class="quantity-control">
+            <div class="quantity-value"><L8Math :formula="q.formula" /><span>=</span><output :for="id+'-'+q.key">{{ fmt(current[q.key]) }}</output></div>
+            <div v-if="!isPrintMode" class="slider-control"><input :id="id+'-'+q.key" type="range" :min="predictionBounds[q.key][0]" :max="predictionBounds[q.key][1]" step="any" :value="current[q.key]" :aria-label="q.name+' prediction'" :aria-valuetext="fmt(current[q.key])" @input="change(q.key,$event)" /></div>
+            <div v-else class="print-scale"><div class="print-track" /><div class="print-thumb" :style="{left:100*(current[q.key]-predictionBounds[q.key][0])/(predictionBounds[q.key][1]-predictionBounds[q.key][0])+'%'}" /></div>
+          </div>
         </div>
-        <svg v-if="i<2" class="conversion-arrow" viewBox="0 0 52 186" role="img" :aria-label="i===0 ? (output==='clean'?'Convert clean data to noise':'Convert noise to clean data') : (output==='mean'?'Convert reverse mean to noise':'Convert noise to reverse mean')">
+        <svg v-if="i<2" class="conversion-arrow" viewBox="0 0 52 96" role="img" :aria-label="i===0 ? (output==='clean'?'Convert clean data to noise':'Convert noise to clean data') : (output==='mean'?'Convert reverse mean to noise':'Convert noise to reverse mean')">
           <defs><marker :id="id+'-arrow-'+i" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#587083" /></marker></defs>
-          <line :x1="(i===0 ? output==='clean' : output!=='mean')?8:44" y1="93" :x2="(i===0 ? output==='clean' : output!=='mean')?44:8" y2="93" stroke="#587083" stroke-width="2" :marker-end="'url(#'+id+'-arrow-'+i+')'" />
+          <line :x1="(i===0 ? output==='clean' : output!=='mean')?8:44" y1="48" :x2="(i===0 ? output==='clean' : output!=='mean')?44:8" y2="48" stroke="#587083" stroke-width="2" :marker-end="'url(#'+id+'-arrow-'+i+')'" />
         </svg>
       </template>
     </div>
 
-    <div class="conversion-formulas">
-      <div><L8Math formula="\displaystyle x_t=\sqrt{\bar\alpha_t}{\color{#007f82}\hat x_0}+\sqrt{1-\bar\alpha_t}{\color{#8854c0}\hat\epsilon}" /></div>
-      <div><L8Math formula="\displaystyle {\color{#e17838}\mu_{\btheta,t}}=\frac{x_t}{\sqrt{\alpha_t}}-\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar\alpha_t)}}{\color{#8854c0}\hat\epsilon}" /></div>
+    <table class="loss-table">
+      <thead><tr><th>Network output at <L8Math formula="\bx_t" /></th><th>Training target</th><th>Squared error</th></tr></thead>
+      <tbody>
+        <tr :class="{active:output==='clean'}" style="--row-tint:#eaf4f3">
+          <td><span>Clean data</span> <L8Math formula="\hat{\bx}_{\btheta,t}" /></td>
+          <td><L8Math formula="\bx_0" /></td>
+          <td><L8Math formula="\ell_{x_0}=\|\hat{\bx}_{\btheta,t}-\bx_0\|^2" /></td>
+        </tr>
+        <tr :class="{active:output==='noise'}" style="--row-tint:#f4eef9">
+          <td><span>Noise</span> <L8Math formula="\bepsilon_{\btheta,t}" /></td>
+          <td><L8Math formula="\bepsilon" /></td>
+          <td><L8Math formula="\ell_\epsilon=\|\bepsilon_{\btheta,t}-\bepsilon\|^2" /></td>
+        </tr>
+        <tr :class="{active:output==='mean'}" style="--row-tint:#fff3e9">
+          <td><span>Reverse mean</span> <L8Math formula="\bmu_{\btheta,t}" /></td>
+          <td><L8Math formula="\tilde{\bmu}_t(\bx_t,\bx_0)" /></td>
+          <td><L8Math formula="\ell_\mu=\|\bmu_{\btheta,t}-\tilde{\bmu}_t\|^2" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="loss-caption">For linked predictions, the same noise MSE, with <L8Math formula="q=q(\bx_t|\bx_0)" />:</div>
+    <div class="loss-identity">
+      <L8Math formula="\displaystyle \cL_t^{(\epsilon)}=\bbE_q[\ell_\epsilon]=\bbE_q\!\left[{\color{#007f82}\frac{\bar\alpha_t}{1-\bar\alpha_t}}\ell_{x_0}\right]=\bbE_q\!\left[{\color{#e17838}\frac{\alpha_t(1-\bar\alpha_t)}{(1-\alpha_t)^2}}\ell_\mu\right]" />
     </div>
-    <div class="demo-takeaway">Switch the network output: the values stay the same; only the parameterization changes.</div>
-    <div class="demo-note">{{ isPrintMode ? 'All three are predicted quantities, linked by known conversions.' : 'Drag any value to use it as the network output; the other two follow.' }}</div>
+    <div class="demo-takeaway"><strong>Equivalent with these weights.</strong> Plain MSE in each parameterization weights timesteps differently.</div>
   </DemoPanel>
 </template>
 
 <style scoped>
-.fixed-input{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}.demo-controls{margin-bottom:26px}.demo-controls>span{margin-right:12px}.print-choice{height:44px;display:flex;align-items:center;margin-bottom:26px}.quantities{display:grid;grid-template-columns:1fr 52px 1fr 52px 1fr;align-items:center}.quantity{padding:17px 20px 15px;border:2px solid #dbe4eb;border-radius:8px;min-width:0;background:white}.quantity.selected{border-color:var(--quantity-color);background:var(--quantity-tint)}.quantity-name{text-align:center;font-weight:600}.quantity-value{display:flex;justify-content:center;align-items:baseline;gap:13px;margin-top:16px;font-size:28px;color:var(--quantity-color)}.quantity-value output{font-variant-numeric:tabular-nums;min-width:85px;text-align:right}.slider-control{position:relative;z-index:1;height:44px;margin-top:8px}input{width:100%;height:44px;accent-color:var(--quantity-color);margin:0}.quantity-role{font-size:18px;text-align:center;color:#587083;margin-top:3px}.selected .quantity-role{color:var(--quantity-color);font-weight:600}.conversion-arrow{width:52px;height:186px}.conversion-formulas{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:28px 0 24px;align-items:center;font-size:24px}.conversion-formulas>div{text-align:center}.demo-takeaway{margin-top:0}.demo-note{text-align:center;margin-top:14px}.print-scale{position:relative;height:44px;margin-top:8px}.print-track{position:absolute;left:0;right:0;top:20px;height:4px;background:#dbe4eb;border-radius:2px}.print-thumb{position:absolute;top:14px;width:16px;height:16px;border-radius:50%;background:var(--quantity-color);transform:translateX(-50%)}
+.fixed-input{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:44px;margin-bottom:8px}
+.demo-controls.reset-control{margin:0}
+.quantities{display:grid;grid-template-columns:1fr 52px 1fr 52px 1fr;align-items:center}
+.quantity{padding:10px 12px;border:2px solid #dbe4eb;border-radius:8px;min-width:0;background:white;cursor:pointer}
+.quantity.selected{border-color:var(--quantity-color);background:var(--quantity-tint)}
+.quantity-heading{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.quantity-name{font-weight:600}
+.quantity-role{font-size:18px;color:#587083}
+.selected .quantity-role{color:var(--quantity-color);font-weight:600}
+.quantity-control{display:flex;align-items:center;gap:12px;margin-top:4px}
+.quantity-value{display:flex;align-items:baseline;gap:8px;font-size:28px;color:var(--quantity-color)}
+.quantity-value output{font-variant-numeric:tabular-nums;min-width:85px;text-align:right}
+.slider-control,.print-scale{position:relative;flex:1;min-width:0;height:44px}
+.slider-control{z-index:1}
+input{width:100%;height:44px;accent-color:var(--quantity-color);margin:0}
+.conversion-arrow{width:52px;height:96px}
+.print-track{position:absolute;left:0;right:0;top:20px;height:4px;background:#dbe4eb;border-radius:2px}
+.print-thumb{position:absolute;top:14px;width:16px;height:16px;border-radius:50%;background:var(--quantity-color);transform:translateX(-50%)}
+.loss-table{margin:10px 0 0}
+.loss-table th,.loss-table td{padding:6px 12px}
+.loss-table td:first-child>span:first-child{display:inline-block;min-width:160px}
+.loss-table tr.active td{background:var(--row-tint)}
+.loss-caption{margin-top:10px}
+.loss-identity{text-align:center;font-size:24px;margin:10px 0 12px}
+.demo-takeaway{margin-top:0}
 </style>

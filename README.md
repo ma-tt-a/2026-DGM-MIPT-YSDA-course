@@ -48,7 +48,7 @@ The course is supported by seminars and hands-on assignments that help build int
 <!---
 | 7 | October, 29 | <b>Lecture 7:</b><ul><li>Forward Gaussian Diffusion Process</li><li>Reverse Gaussian Diffusion Process</li><li>Gaussian Diffusion Model as VAE</li><li>Diffusion ELBO Derivation</li></ul> | [PDF](lectures/lecture7/Lecture7.pdf) |
 |  |  | <b>Seminar 7:</b> Noise Conditioned Score Network (NCSN). Heuristic diffusion model. | [slides](seminars/seminar7/) |
-| 8 | November, 5 | <b>Lecture 8:</b><ul><li>Gaussian Diffusion Reparametrization</li><li>Denoising Diffusion Probabilistic Model (DDPM)</li><li>DDPM as a Score-Based Generative Model</li><li>Model Guidance<ul><li>Classifier Guidance</li><li>Classifier-Free Guidance</li></ul></li></ul> | [PDF](lectures/lecture8/Lecture8.pdf) |
+| 8 | November, 5 | <b>Lecture 8:</b><ul><li>Diffusion Parameterizations</li><li>Denoising Diffusion Probabilistic Model (DDPM)</li><li>From DDPM to DDIM</li><li>Model Guidance<ul><li>Classifier Guidance</li><li>Classifier-Free Guidance</li></ul></li></ul> | [PDF](lectures/lecture8/Lecture8.pdf) |
 |  |  | <b>Seminar 8:</b> Guidance. CLIP, GLIDE, DALL-E 2, Imagen. | [slides](seminars/seminar8/) |
 | 9 | November, 12 | <b>Lecture 9:</b><ul><li>Continuous-Time Normalizing Flows (CNF)</li><li>Continuity Equation for CNF Log-Likelihood</li><li>SDE Basics</li></ul> | [PDF](lectures/lecture9/Lecture9.pdf) |
 |  |  | <b>Seminar 9:</b> Latent Diffusion Model. Stable Diffusion. | [slides](seminars/seminar9/) <a href="https://colab.research.google.com/github/r-isachenko/2026-DGM-AIMasters-course/blob/main/seminars/seminar9/seminar9_SD.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a> |

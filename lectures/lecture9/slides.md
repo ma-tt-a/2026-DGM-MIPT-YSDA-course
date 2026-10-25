@@ -110,36 +110,38 @@ class: theorems
 
 # Recap of Previous Lecture
 
-## Diffusion Parameterizations
+## Same Predictions, Different Losses
 
-At fixed $\bx_t,t$, with $0<\bar\alpha_t<1$:
+At fixed $\bx_t,t$, with $0<\bar{\alpha}_t<1$, a noise prediction defines a clean-data estimate:
 
 $$
-\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon.
+\hat{\bx}_{\btheta,t}(\bx_t)=\frac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bepsilon_{\btheta,t}(\bx_t)}{\sqrt{\bar{\alpha}_t}}.
 $$
 
-<div>
-
-| Network output at $\bx_t$ | Regression target | Clean-data estimate |
-| --- | --- | --- |
-| Noise $\bepsilon_{\btheta,t}$ | $\bepsilon$ | $\dfrac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bepsilon_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
-| Clean data $\hat{\bx}_{\btheta,t}$ | $\bx_0$ | $\hat{\bx}_{\btheta,t}$ |
-| Score $\bs_{\btheta,t}$ | $-\dfrac{\bepsilon}{\sqrt{1-\bar{\alpha}_t}}$ | $\dfrac{\bx_t+(1-\bar{\alpha}_t)\,\bs_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
-| $v$-prediction $\bv_{\btheta,t}$ | $\sqrt{\bar{\alpha}_t}\,\bepsilon-\sqrt{1-\bar{\alpha}_t}\,\bx_0$ | $\sqrt{\bar{\alpha}_t}\,\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bv_{\btheta,t}$ |
-
-</div>
 <div class="block">
 
-**Convertible predictions; different losses.** Plain MSE assigns different weights to different noise levels.
+## Noise MSE vs Clean-Data MSE
+
+For these linked predictions:
+
+$$
+\bigl\|\bepsilon-\bepsilon_{\btheta,t}(\bx_t)\bigr\|^2
+={\color{teal}\frac{\bar{\alpha}_t}{1-\bar{\alpha}_t}}\,
+\bigl\|\bx_0-\hat{\bx}_{\btheta,t}(\bx_t)\bigr\|^2.
+$$
+
+</div>
+<div class="takeaway">
+
+**Same predictions, different loss weights.** The factor depends on $t$, so unweighted MSEs define different training objectives.
 
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2202.00512">Salimans T., Ho J. Progressive Distillation for Fast Sampling of Diffusion Models, 2022</a></div>
 
-<!-- Moved from the former Lecture 8 recap after parameterizations became
-Lecture 8 body material. Complements the mean/noise identities: all four targets,
-inverse maps and weighting caveat are retained. A separate static slide keeps
-the existing objective and algorithm recaps readable. -->
+<!-- Recalls the clean/noise conversion and loss-weighting identity from the
+previous lecture. Reverse-mean conversion is on the preceding recap slide;
+score matching is recalled separately. Keep this slide fully visible. -->
 
 ---
 clicks: 0

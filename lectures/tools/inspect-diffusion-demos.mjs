@@ -62,7 +62,7 @@ try{
     const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-8)
     for(const [key,name] of [['clean','Clean data'],['noise','Noise'],['mean','Reverse mean']]) {
       const before=values(await data(demo))
-      await demo.getByRole('button',{name,exact:true}).click()
+      await demo.locator(`[data-quantity="${key}"] .quantity-name`).click()
       assert.deepEqual(values(await data(demo)),before,'Switching output must preserve all predictions')
       assert.equal((await data(demo)).output,key)
       await snapshot('parameterization-'+key)
@@ -70,7 +70,7 @@ try{
       const min=+(await slider.getAttribute('min')),max=+(await slider.getAttribute('max'))
       for(const fraction of [0,.5,1]) {
         // First select a different output, then drag this formerly computed control.
-        await demo.getByRole('button',{name:key==='noise'?'Clean data':'Noise',exact:true}).click()
+        await demo.locator(`[data-quantity="${key==='noise'?'clean':'noise'}"] .quantity-name`).click()
         if(fraction===0){await slider.press('End');await slider.press('Home')}
         else if(fraction===1){await slider.press('Home');await slider.press('End')}
         else await slider.fill(String(+(min+(max-min)*fraction).toFixed(8)))
