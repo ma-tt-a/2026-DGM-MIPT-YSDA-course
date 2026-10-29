@@ -14,7 +14,11 @@ Locate rows by `<b>Lecture N:</b>`. Compare ordered section/subsection trees wit
 agendas are not sections. Preserve math and distinguish harmless HTML entities
 from renamed topics. Check catalog links to `slides.md` and fully revealed
 `LectureN.pdf`, and commands against current scripts. Report missing/stale PDFs;
-do not maintain duplicate page-count tables.
+do not maintain duplicate page-count tables. For topic moves, check both schedule
+rows and every affected artifact entry. If slide order changes, resolve existing
+demo/slide-number references from current semantic IDs and the Slidev parser;
+do not apply a numeric offset to references that may already be stale. Check
+changed demo ownership, imports and inspector URLs with the transfer procedure.
 
 Audits are report-only. Authorized sync changes only relevant bullets/catalog
 entries, preserving dates, unrelated links, publication comment wrappers, Homeworks

@@ -44,6 +44,14 @@ in `public/figs/sources.json`. Resources and fonts must work without network acc
 - Terms: Sampling (initially Sampling (generation)), Density evaluation for a ready
   model, Density estimation for learning, Model quality evaluation for assessment.
 
+## Moving topics between lectures
+
+A requested topic move includes the necessary dependent Recap, Summary, Outline,
+README and artifact updates, unless the user limits the scope. Apply the
+[topic-transfer procedure](.agents/skills/recap-sync/references/topic-transfer.md)
+before declaring completion, not only before a commit or push. Track the disposition
+of removed recap material; repeated formulas alone do not establish coverage.
+
 ## Shared visual style and reveals
 
 - All lectures strictly share approved Slidev Lecture 1: 16:9, 1280 x 720, fonts,

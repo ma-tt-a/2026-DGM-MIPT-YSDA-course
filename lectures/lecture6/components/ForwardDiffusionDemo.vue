@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DiffusionDensity from './DiffusionDensity.vue'
+import L6Math from './L6Math.vue'
 import { useNav } from '@slidev/client'
 import { diffusionAt, diffusionTimes } from '../lib/score-demos.mjs'
 import { diffusionState as state } from '../lib/demo-state'

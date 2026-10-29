@@ -401,7 +401,6 @@ class:
 <div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
 <div class="outline-item"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
@@ -418,7 +417,6 @@ class:
 <div class="outline-item current"><span>01</span><div>Langevin Dynamics</div></div>
 
 <div class="outline-item"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
@@ -580,7 +578,6 @@ class:
 <div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
 <div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
@@ -717,7 +714,6 @@ class:
 <div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
 <div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub"><b>Denoising Score Matching</b><br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
@@ -1194,7 +1190,6 @@ class:
 <div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
 
 <div class="outline-item current"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br><b>Noise-Conditioned Score Network (NCSN)</b></div></div></div>
-<div class="outline-item"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
 
 </div>
 
@@ -1340,286 +1335,6 @@ High noise helps explore different modes; lower noise restores detail. Nearby no
 
 ---
 clicks: 0
-id: outline-6
-section: "Forward Gaussian Diffusion Process"
----
-
-# Outline
-
-<div class="course-outline">
-<div class="outline-item"><span>01</span><div>Langevin Dynamics</div></div>
-
-<div class="outline-item"><span>02</span><div>Score Matching<div class="outline-sub">Denoising Score Matching<br>Noise-Conditioned Score Network (NCSN)</div></div></div>
-<div class="outline-item current"><span>03</span><div>Forward Gaussian Diffusion Process</div></div>
-
-</div>
-
----
-clicks: 0
-id: generative-models-taxonomy-2
----
-
-# Generative Models Taxonomy
-
-<TaxonomyDiagram class="taxonomy" denoising-diffusion alt="Generative models taxonomy with DDPM highlighted" />
-
----
-clicks: 4
-id: forward-gaussian-diffusion-process
-class: theorems
----
-
-# Forward Gaussian Diffusion Process
-
-Let $\bx_0=\bx\sim\pd(\bx)$, $\beta_t\ll1$. Define a Markov chain:
-
-$$
-\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t,\quad\bepsilon_t\sim\cN(0,\bI)
-$$
-
-<div v-click="1">
-
-$$
-q(\bx_t|\bx_{t-1})=\cN(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI)
-$$
-
-</div>
-<div class="block" v-click="2">
-
-## Langevin Dynamics
-
-$$
-\bx_{l+1}=\bx_l+\frac{\color{#8854c0}\eta}{2}\cdot{\color{teal}\nabla_{\bx_l}\log\pt(\bx_l)}+\sqrt{\color{#8854c0}\eta}\bepsilon_l,\quad\bepsilon_l\sim\cN(0,\bI)
-$$
-
-</div>
-
-<div v-click="3">
-
-$$
-\begin{aligned}
-\bx_t&=\sqrt{1-\beta_t}\,\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t\\
-&\approx\left(1-\frac{\beta_t}{2}\right)\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t\\
-&=\bx_{t-1}+\frac{\color{#8854c0}\beta_t}{2}{\color{teal}(-\bx_{t-1})}+\sqrt{\color{#8854c0}\beta_t}\bepsilon_t
-\end{aligned}
-$$
-
-</div>
-<div class="takeaway" v-click="4">
-
-**From a Markov chain to Langevin dynamics:** for small $\beta_t$, this Gaussian chain approximates LD targeting $\cN(0,\bI)$, with step size ${\color{#8854c0}\eta=\beta_t}$ and Gaussian score ${\color{teal}-\bx_{t-1}}$.
-
-</div>
-
-<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
-
----
-clicks: 5
-id: forward-gaussian-diffusion-process-2
-class: theorems
----
-
-# Forward Diffusion: Sample at Any Timestep
-
-Fix a schedule $0<\beta_t<1$. The noises $\bepsilon_t\sim\cN(0,\bI)$ are independent across $t$ and of $\bx_0$.
-
-$$
-\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t.
-$$
-
-<div class="block" v-click="1">
-
-## Exact Conditional Distribution
-
-Let $\alpha_t=1-\beta_t$ and $\bar{\alpha}_t=\prod_{s=1}^t\alpha_s$. Then
-
-$$
-q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\,\bx_0,(1-\bar{\alpha}_t)\bI).
-$$
-
-<div v-click="2">
-
-Sample $\bx_t$ directly from $\bx_0$, without simulating the intermediate steps:
-
-$$ {1|1-2|1-3|all} {at:3}
-\begin{aligned}
-\bx_t&=\sqrt{\alpha_t}\bx_{t-1}+\sqrt{1-\alpha_t}\bepsilon_t\\
-&=\sqrt{\alpha_t\alpha_{t-1}}\bx_{t-2}+({\color{#8854c0}\sqrt{\alpha_t(1-\alpha_{t-1})}\bepsilon_{t-1}+\sqrt{1-\alpha_t}\bepsilon_t})\\
-&=\sqrt{\alpha_t\alpha_{t-1}}\bx_{t-2}+{\color{#8854c0}\sqrt{1-\alpha_t\alpha_{t-1}}\bepsilon'_t}\\
-&=\ldots={\color{teal}\sqrt{\bar{\alpha}_t}\,\bx_0}+{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}\bepsilon},\quad\bepsilon\sim\cN(0,\bI).
-\end{aligned}
-$$
-
-</div>
-</div>
-
-<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a></div>
-
-<!-- This finite-time identity is exact for any fixed schedule 0 < beta_t < 1; neither monotonicity nor beta_t << 1 is needed. Small beta was used only for the previous Langevin approximation. The first expansion is for t >= 2; t = 1 is the defining step. Independent Gaussian increments combine with variance alpha_t(1-alpha_{t-1}) + (1-alpha_t) = 1-alpha_t alpha_{t-1}. The aggregate epsilon is independent of x_0 for each fixed t; the direct representation does not prescribe a joint coupling across timesteps. -->
-
----
-clicks: 3
-id: forward-gaussian-diffusion-process-4
-class: theorems
----
-
-# When Does Only Gaussian Noise Remain?
-
-The closed-form conditional already tells us how the signal disappears:
-
-$$
-\bx_t={\color{teal}\sqrt{\bar{\alpha}_t}\,\bx_0}+{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}\bepsilon},\qquad\bepsilon\sim\cN(0,\bI),\quad\bepsilon\perp\bx_0.
-$$
-
-<div class="block" v-click="1">
-
-## The Schedule Must Remove the Signal
-
-For $0<\beta_t<1$, the required condition is
-
-$$
-\bar{\alpha}_t=\prod_{s=1}^t(1-\beta_s)\longrightarrow0
-\quad\Longleftrightarrow\quad
-\sum_{t=1}^{\infty}\beta_t=\infty.
-$$
-
-Many steps alone are not enough: $\beta_t=2^{-t}$ leaves $\bar{\alpha}_\infty>0$.
-
-</div>
-<div v-click="2">
-
-$$
-{\color{teal}\sqrt{\bar{\alpha}_t}\to0},\qquad
-{\color{#8854c0}\sqrt{1-\bar{\alpha}_t}\to1}
-\quad\Longrightarrow\quad
-\bx_t\xrightarrow{d}\cN(0,\bI).
-$$
-
-The limit no longer depends on the initial data distribution $\pd$.
-
-</div>
-<div class="takeaway" v-click="3">
-
-**For finite $T$:** choose $\bar{\alpha}_T\ll1$ with negligible residual signal $\sqrt{\bar{\alpha}_T}\bx_0$.<br>
-Then $q(\bx_T)\approx\cN(0,\bI)$: the terminal distribution is approximately standard Gaussian.
-
-</div>
-
-<div class="source"><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a></div>
-
-<!-- This is a direct consequence of the previous exact conditional, not a separate stationarity theorem. For a fixed schedule 0 < beta_t < 1, alpha_bar_t -> 0 iff sum beta_t diverges. If sum beta_t converges, beta_t -> 0 and the tail sum of -log(1-beta_t) converges; finitely many initial factors are positive. If the sum diverges, log(1-beta_t) <= -beta_t forces the product to zero. Under alpha_bar_t -> 0, the marginal converges in distribution for any probability law on finite-dimensional x_0, without a moment assumption. Couple the one-time representations using an independent Gaussian epsilon to see the limit. For finite T, closeness depends on the data scale as well as alpha_bar_T. -->
-
----
-clicks: 0
-id: forward-gaussian-diffusion-process-3
-class: theorems interactive-slide
----
-
-<script setup>
-import ForwardDiffusionDemo from './components/ForwardDiffusionDemo.vue'
-</script>
-
-# Forward Diffusion: From Data to Noise
-
-$$
-\begin{aligned}
-q(\bx_t|\bx_{t-1})&=\cN\left(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI\right);\\
-q(\bx_t|\bx_0)&=\cN\left({\color{teal}\sqrt{\bar{\alpha}_t}\bx_0},{\color{#8854c0}(1-\bar{\alpha}_t)\bI}\right)
-\end{aligned}
-$$
-
-<ForwardDiffusionDemo />
-
-<div class="source"><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a></div>
-
-<!-- Original analytic 1D illustration replacing the source image. The plots show marginals, not conditional kernels or a sample trajectory. Each initial Gaussian component has mean scaled by sqrt(alpha_bar_t) and variance alpha_bar_t * 0.35^2 + 1 - alpha_bar_t. beta_t = 0.01; the PDF compares t = 0, 75, 250, 1000. -->
-
----
-clicks: 2
-id: forward-gaussian-diffusion-process-5
-class: theorems
----
-
-# Forward Gaussian Diffusion Process
-
-**Diffusion** describes the migration of particles from regions of high density to those of low density.
-
-<div class="columns balanced">
-<img src="/figs/diffusion_over_time.png" alt="Diffusion over time" style="width:100%;height:340px;object-fit:contain" />
-<div v-click="1">
-
-1. $\bx_0=\bx\sim\pd(\bx)$
-2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$,<br>$\bepsilon_t\sim\cN(0,\bI)$, $t\geq1$
-3. Choose $\bar{\alpha}_T\ll1$ to suppress $\sqrt{\bar{\alpha}_T}\bx_0$.<br>Then $q(\bx_T)\approx\cN(0,\bI)$.
-
-</div>
-</div>
-<div v-click="2">
-
-If this process can be reversed, we can sample from $\pd(\bx)$ by starting from noise $\cN(0,\bI)\approx q(\bx_T)$.<br>
-Our goal now becomes inverting this diffusion.
-
-</div>
-
-<div class="source"><a href="https://ayandas.me/blog-tut/2021/12/04/diffusion-prob-models.html">Das A. An Introduction to Diffusion Probabilistic Models, blog post, 2021</a></div>
-
----
-clicks: 3
-id: denoising-score-matching-9
-class: theorems
----
-
-# Denoising Score Matching
-
-<div class="block">
-
-## NCSN
-
-$$
-\begin{aligned}
-q(\bx_t|\bx_0)&=\cN(\bx_0,\sigma_t^2\bI),\quad q(\bx_1)\approx\pd(\bx),\quad q(\bx_T)\approx\cN(0,\sigma_T^2\bI)\\
-\nabla_{\bx_t}\log q(\bx_t|\bx)&=-\frac{\bx_t-\bx}{\sigma_t^2}
-\end{aligned}
-$$
-
-</div>
-<div class="block" v-click="1">
-
-## Gaussian Diffusion
-
-$$
-\begin{aligned}
-q(\bx_t|\bx_0)&=\cN(\sqrt{\bar{\alpha}_t}\bx_0,(1-\bar{\alpha}_t)\bI),\quad q(\bx_1)\approx\pd(\bx),\quad q(\bx_T)\approx\cN(0,\bI)\\
-\nabla_{\bx_t}\log q(\bx_t|\bx_0)&=-\frac{\bx_t-\sqrt{\bar{\alpha}_t}\bx_0}{1-\bar{\alpha}_t}
-\end{aligned}
-$$
-
-</div>
-
-<div class="block" v-click="2">
-
-## Theorem (Denoising Score Matching)
-
-$$
-\begin{aligned}
-&\bbE_{q(\bx_t)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t)\right\|_2^2\\
-&\quad=\bbE_{\pd(\bx)}\bbE_{q(\bx_t|\bx)}\left\|\bs_{\btheta,t}(\bx_t)-\nabla_{\bx_t}\log q(\bx_t|\bx)\right\|_2^2+\text{const}
-\end{aligned}
-$$
-
-</div>
-<div v-click="3">
-
-**Note:** Annealed Langevin dynamics applies to diffusion, too.
-
-NCSN with annealed Langevin dynamics is an early score-based generative framework (2019–2020).
-
-</div>
-
-<div class="source"><a href="https://arxiv.org/abs/1907.05600">Song Y. et al. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a></div>
-
----
-clicks: 0
 id: summary
 class: summary
 ---
@@ -1632,5 +1347,3 @@ class: summary
 - Denoising score matching makes the score objective estimable using corrupted samples and the known corruption kernel.
 - Tweedie's formula converts the score into MSE-optimal clean-data and noise predictions.
 - Noise-Conditioned Score Networks balance score losses with weights $\sigma_t^2$ and sample with annealed Langevin dynamics.
-- The forward Gaussian diffusion process admits a closed-form conditional distribution for any timestep.
-- With a suitable noise schedule, the forward process converges to standard Gaussian noise; denoising score matching also applies to these diffusion marginals.

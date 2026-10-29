@@ -18,7 +18,9 @@ Use the smallest requested scope. Named lectures get full source checks; diff
 checks cover changed lines and affected slides/interfaces. Include staged,
 unstaged and untracked changes, plus outgoing commits for push. Shared changes
 require checking consumers. Documentation-only changes do not require rebuilds.
-A PDF-only question does not request a complete semantic audit.
+A PDF-only question does not request a complete semantic audit. For topic moves,
+use the [transfer procedure](../../recap-sync/references/topic-transfer.md) to
+resolve affected interfaces, including unchanged successor recaps.
 
 Recap slides are titled `Recap of Previous Lecture`; Summary normally ends the
 lecture. Use section transitions and Outline hierarchy for the schedule, not every

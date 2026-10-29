@@ -1,6 +1,6 @@
 ---
 name: recap-sync
-description: Check both coverage of new lecture material in the next Recap and fidelity of existing recap content in Slidev. Use after substantive edits or for recap review/synchronization; preserve approved differences and apply an explicitly requested fix direction.
+description: Check both coverage of new lecture material in the next Recap and fidelity of existing recap content in Slidev. Use for topic moves, substantive edits, or recap review/synchronization; preserve approved differences and apply an explicitly requested fix direction.
 ---
 
 # Recap sync
@@ -17,6 +17,11 @@ For a diff, inspect the body changes and any changed recap; identify the corresp
 neighbor. Use the current approved Slidev pair and state both source paths. Do not skip the incoming recap on a full named-lecture audit
 just because there is no diff. Skip nonexistent neighbors and respect draft status.
 
+For a topic moved, split, or deferred between lectures, first use the
+[topic-transfer procedure](references/topic-transfer.md). A single N to N+1 pair
+is insufficient: resolve the source and destination dependencies, and account for
+the old recap items before removing or replacing them.
+
 ## Check coverage from body to recap
 
 Before matching existing recap blocks, inventory the previous lecture's substantive
@@ -27,7 +32,9 @@ examined; an empty working diff does not mean there is no new material to review
 
 For each changed teaching unit, record its body location and one disposition:
 
-- **Covered:** name the recap slide/block that recalls its key result accurately.
+- **Covered:** name the recap slide/block that recalls its key result accurately,
+  including the definitions, assumptions and notation needed to use it. A matching
+  equation with undefined symbols or missing conditions is only partial coverage.
 - **Missing:** a new core result or prerequisite has no recap representation.
 - **Intentionally omitted:** give the pedagogical reason and any explicit author
   decision; distinguish a documented decision from the reviewer's recommendation.

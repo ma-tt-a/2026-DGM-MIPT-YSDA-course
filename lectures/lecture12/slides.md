@@ -677,7 +677,7 @@ the desired Dirac endpoints require the endpoint scales to vanish.
 ---
 clicks: 2
 id: two-sided-conditioning-2
-class: theorems
+class: theorems interactive-slide
 ---
 
 # Two-Sided Conditioning
@@ -699,14 +699,14 @@ For $\sigma>0$, the marginal endpoints are Gaussian-smoothed versions of $p_0$ a
 
 </div>
 
-<img v-click="2" src="/figs/linear_paths.png" alt="Straight conditional paths for pair conditioning" style="width:100%;height:285px;object-fit:contain" />
+<ConditioningDemo v-click="2" />
 
-<div class="source"><a href="https://arxiv.org/abs/2302.00482">Tong A. et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023.</a><br><a href="https://dl.heeere.com/conditional-flow-matching/blog/conditional-flow-matching">Image: A Visual Dive into Conditional Flow Matching.</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2302.00482">Tong A. et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023.</a></div>
 
 ---
 clicks: 1
 id: flow-matching-one-sided-vs-two-sided-conditioning
-class: theorems
+class: theorems interactive-slide
 ---
 
 # Flow Matching: One-Sided vs. Two-Sided Conditioning
@@ -737,7 +737,7 @@ $$
 
 $\sigma>0$ is the smoothing scale; $\bepsilon\sim\cN(\bzero,\bI)$ is independent Gaussian noise.
 
-<img v-click="1" src="/figs/compare_conditionings.png" alt="Comparing one-sided and two-sided conditional probability paths" style="width:100%;height:290px;object-fit:contain" />
+<ConditioningDemo v-click="1" compare />
 
 <div class="source"><a href="https://arxiv.org/abs/2302.00482">Tong A., et al. Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport, 2023</a></div>
 
@@ -867,33 +867,22 @@ $$
 ---
 clicks: 3
 id: choosing-endpoint-pairs
-class: theorems
+class: theorems interactive-slide
 ---
 
 # Choosing Endpoint Pairs
 
-A **coupling** $p(\bx_0,\bx_1)$ specifies how to pair endpoints while keeping marginals $p_0$ and $p_1$.
+A **coupling** $p(\bx_0,\bx_1)$ pairs endpoints while keeping marginals $p_0$ and $p_1$.
 
-<div v-click="1">
+<CouplingDemo :stage="$clicks" />
 
-- **Independent:** sample $\bx_0\sim p_0$, $\bx_1\sim p_1$ independently; $p(\bx_0,\bx_1)=p_0(\bx_0)p_1(\bx_1)$.
-
-</div>
-<div v-click="2">
-
-- **Paired data:** sample observed source–target pairs, e.g., aligned images from two domains.
-
-</div>
 <div v-click="3">
-
-- **Minibatch OT:** sample two equally weighted batches of size $B$ and match them by minimum squared distance:
 
 $$
 \tau^*=\argmin_{\tau\in S_B}\sum_{i=1}^B\left\|\bx_0^{(i)}-\bx_1^{(\tau(i))}\right\|_2^2.
 $$
 
-Here $S_B$ is the set of permutations. Matching preserves both empirical marginals;
-optimality is within each batch, not over the full distributions.
+$S_B$: permutations of a batch of size $B$. Optimality is within each batch, not over the full distributions.
 
 **Same training rule:** $\bx_t=(1-t)\bx_0+t\bx_1$, with velocity target $\bx_1-\bx_0$.
 
@@ -1220,13 +1209,13 @@ id: 2025-big-bang-of-discrete-diffusion-models
 class: figure-slide
 ---
 
-# Diffusion Language Models: Mercury
+# Diffusion Language Models: DiffusionGemma
 
-<img src="/figs/mercury.png" alt="Mercury: fast diffusion language models" class="figure-bottom figure-tall" />
+<img src="/figs/diffusiongemma-speed-quality.webp" alt="DiffusionGemma and Gemma 4: benchmark quality versus output speed on one H100, FP8, batch size 1" class="figure-bottom figure-tall" />
 
 <ul>
-<li v-click="1"><strong>Parallel prediction:</strong> predict multiple tokens at each denoising step.</li>
-<li v-click="2"><strong>Application:</strong> Mercury Coder applies diffusion language modeling to code generation.</li>
+<li v-click="1"><strong>Parallel generation:</strong> generate multiple tokens at each denoising step.</li>
+<li v-click="2"><strong>Practical speed:</strong> over 1,000 output tokens per second on a single H100.</li>
 </ul>
 
 <div class="takeaway" v-click="3">
@@ -1235,7 +1224,7 @@ How do we define corruption and denoising for discrete tokens?
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2506.17298">Khanna S. et al. Mercury: Ultra-fast language models based on diffusion, 2025.</a></div>
+<div class="source">1× H100 · FP8 · batch size 1.<br><a href="https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/">O'Donoghue B., Flennerhag S. DiffusionGemma: 4x faster text generation, 2026.</a></div>
 
 ---
 clicks: 0
@@ -1395,66 +1384,52 @@ Tokens are gradually replaced by a special mask $m$; the stationary distribution
 ---
 clicks: 2
 id: transition-matrix-2
-class: theorems
+class: theorems interactive-slide
 ---
 
 # Transition Matrix
 
 $$
-q(\bx_t|\bx_0)=\Cat(\bQ_{1:t}\bx_0),\qquad\bQ_{1:t}=\bQ_t\bQ_{t-1}\cdots\bQ_1.
+q(\bx_t|\bx_0)=\Cat(\bQ_{1:t}\bx_0).
 $$
 
-<div class="block" v-click="1">
+<div v-click="1">
 
 ## Uniform Diffusion
 
 $$
-\bQ_t=(1-\beta_t)\bI+\beta_t\bU,\qquad\bU_{ij}=\tfrac{1}{K}.
-$$
-
-$$
+\bQ_t=(1-\beta_t)\bI+\beta_t\bU,\quad\bU_{ij}=\tfrac1K;\qquad
 \bQ_{1:t}=\bar\alpha_t\bI+(1-\bar\alpha_t)\bU,\quad\bar\alpha_t=\prod_{s=1}^t(1-\beta_s).
 $$
 
-<div v-click="2">
-
-- Each token retains its original value with prob. $\bar\alpha_t$.
-- It becomes uniformly random with prob. $(1-\bar\alpha_t)$.
-- As $t\to T$, the process converges to the stationary uniform distribution.
-
 </div>
-</div>
+
+<DiscreteTransitionDemo v-click="2" mode="uniform" />
 
 <div class="source"><a href="https://arxiv.org/abs/2107.03006">Austin J. et al. Structured denoising diffusion models in discrete state-spaces, 2021.</a></div>
 
 ---
 clicks: 1
 id: transition-matrix-3
-class: theorems
+class: theorems interactive-slide
 ---
 
 # Transition Matrix
 
-<div class="block">
-
 ## Absorbing Diffusion
 
 $$
-\bQ_t=(1-\beta_t)\bI+\beta_t\,\be_m\bone^\top,
+\bQ_t=(1-\beta_t)\bI+\beta_t\,\be_m\bone^\top,\qquad
+\bQ_{1:t}=\bar\alpha_t\bI+(1-\bar\alpha_t)\be_m\bone^\top,\quad\bar\alpha_t=\prod_{s=1}^t(1-\beta_s).
 $$
 
-$$
-\bQ_{1:t}=\bar\alpha_t\,\bI+(1-\bar\alpha_t)\,\be_m\bone^\top,\qquad\bar\alpha_t=\prod_{s=1}^t(1-\beta_s).
-$$
+<DiscreteTransitionDemo v-click="1" mode="absorbing" />
 
 <div v-click="1">
 
-- Each token retains its original value with prob. $\bar\alpha_t$.
-- It becomes $\be_m$ with prob. $(1-\bar\alpha_t)$.
-- As $t\to T$, all tokens converge to the mask state: $q(\bx_T)\approx\Cat(\be_m)$.
-- This makes the process analogous to **masked language modeling**.
+As $\bar\alpha_t\to0$, all probability moves to the mask: $q(\bx_T)\approx\Cat(\be_m)$.
+This connects diffusion to **masked language modeling**.
 
-</div>
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2107.03006">Austin J. et al. Structured denoising diffusion models in discrete state-spaces, 2021.</a></div>

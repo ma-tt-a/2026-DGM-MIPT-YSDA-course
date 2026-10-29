@@ -1,10 +1,12 @@
 import { chromium } from 'playwright-chromium'
 import { resolve } from 'node:path'
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, writeFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
 import { root, lecturePaths, readSlides } from './course.mjs'
-const lecture=lecturePaths('7'), base=process.env.SLIDEV_QA_URL||`http://localhost:${lecture.port}`
-const map=readSlides(lecture), qa=resolve(root,'output/qa/lecture7/visual-demos')
+const lecture=lecturePaths(process.argv[2] || '7')
+assert.ok([7, 8].includes(lecture.number), 'Choose Lecture 7 or 8')
+const base=process.env.SLIDEV_QA_URL||`http://localhost:${lecture.port}`
+const map=readSlides(lecture), qa=resolve(root,`output/qa/${lecture.name}/visual-demos`)
 mkdirSync(qa,{recursive:true})
 const browser=await chromium.launch({executablePath:process.env.SLIDEV_BROWSER_PATH||'/Applications/Yandex.app/Contents/MacOS/Yandex',headless:true})
 const context=await browser.newContext({viewport:{width:1280,height:720}}), page=await context.newPage()
@@ -35,54 +37,62 @@ async function reentry(demo,s){
 }
 try{
   const reverse=slide('what-does-knowing-the-clean-data-change'),schedule=slide('noise-schedule-through-signal-to-noise-ratio'),prediction=slide('one-prediction-three-parameterizations')
-  let demo=await go(reverse);await snapshot('reverse-unknown')
-  await demo.getByRole('button',{name:'Known x₀',exact:true}).click()
-  for(const x of [-2,2]){await demo.getByRole('button',{name:`Use x₀ = ${x}`,exact:true}).click();await snapshot(`reverse-known-${x}`)}
-  const observation=demo.getByRole('slider',{name:'Noisy observation'})
-  for(const x of ['-2','2']){await observation.fill(x);await snapshot(`reverse-observation-${x}`)}
-  await observation.focus();const url=page.url();await page.keyboard.press('ArrowLeft');assert.equal(page.url(),url);assert.equal(+(await data(demo)).xt,1.95)
-  await reentry(demo,reverse);await demo.getByRole('button',{name:'Reset',exact:true}).click();assert.equal((await data(demo)).known,'false');assert.equal(+(await data(demo)).xt,0)
+  const activeDemos = lecture.number === 7 ? [reverse, schedule] : [prediction]
+  assert.ok(activeDemos.every(Boolean), 'Expected diffusion demo IDs are missing')
+  let demo
+  if (lecture.number === 7) {
+    demo=await go(reverse);await snapshot('reverse-comparison')
+    const twoDensities=async()=>assert.equal(await demo.locator('svg path[data-density]').count(),2)
+    await twoDensities()
+    for(const x of [-2,2]){await demo.getByRole('button',{name:`Use x₀ = ${x}`,exact:true}).click();await twoDensities();await snapshot(`reverse-known-${x}`)}
+    const observation=demo.getByRole('slider',{name:'Noisy observation'})
+    for(const x of ['-2','2']){await observation.fill(x);await twoDensities();await snapshot(`reverse-observation-${x}`)}
+    await observation.focus();const url=page.url();await page.keyboard.press('ArrowLeft');assert.equal(page.url(),url);assert.equal(+(await data(demo)).xt,1.95)
+    await reentry(demo,reverse);await demo.getByRole('button',{name:'Reset',exact:true}).click();assert.equal(+(await data(demo)).selected,0);assert.equal(+(await data(demo)).xt,0);await twoDensities()
 
-  demo=await go(schedule);const timestep=demo.getByRole('slider',{name:'Schedule timestep'})
-  for(const t of ['1','250','500','750','1000']){await timestep.fill(t);assert.equal(+(await data(demo)).t,+t);await snapshot(`schedule-${t}`)}
-  await timestep.focus();const scheduleURL=page.url();await page.keyboard.press('ArrowLeft');assert.equal(page.url(),scheduleURL);assert.equal(+(await data(demo)).t,999)
-  await reentry(demo,schedule);await demo.getByRole('button',{name:'Reset',exact:true}).click();assert.equal(+(await data(demo)).t,500)
+    demo=await go(schedule);const timestep=demo.getByRole('slider',{name:'Schedule timestep'})
+    for(const t of ['1','250','500','750','1000']){await timestep.fill(t);assert.equal(+(await data(demo)).t,+t);await snapshot(`schedule-${t}`)}
+    await timestep.focus();const scheduleURL=page.url();await page.keyboard.press('ArrowLeft');assert.equal(page.url(),scheduleURL);assert.equal(+(await data(demo)).t,999)
+    await reentry(demo,schedule);await demo.getByRole('button',{name:'Reset',exact:true}).click();assert.equal(+(await data(demo)).t,500)
 
-  demo=await go(prediction)
-  const values=d=>({noise:+d.noise,clean:+d.clean,mean:+d.mean})
-  const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-8)
-  for(const [key,name] of [['clean','Clean data'],['noise','Noise'],['mean','Reverse mean']]) {
-    const before=values(await data(demo))
-    await demo.getByRole('button',{name,exact:true}).click()
-    assert.deepEqual(values(await data(demo)),before,'Switching output must preserve all predictions')
-    assert.equal((await data(demo)).output,key)
-    await snapshot('parameterization-'+key)
-    const slider=demo.getByRole('slider',{name:name+' prediction',exact:true})
-    const min=+(await slider.getAttribute('min')),max=+(await slider.getAttribute('max'))
-    for(const fraction of [0,.5,1]) {
-      // First select a different output, then drag this formerly computed control.
-      await demo.getByRole('button',{name:key==='noise'?'Clean data':'Noise',exact:true}).click()
-      if(fraction===0){await slider.press('End');await slider.press('Home')}
-      else if(fraction===1){await slider.press('Home');await slider.press('End')}
-      else await slider.fill(String(+(min+(max-min)*fraction).toFixed(8)))
-      const d=await data(demo),v=values(d)
-      assert.equal(d.output,key)
-      near(Math.sqrt(.39)*v.clean+Math.sqrt(.61)*v.noise,1)
-      near(v.mean,Math.sqrt(.6)*.35/.61 + Math.sqrt(.65)*.4/.61*v.clean)
-      near(+await slider.inputValue(),v[key])
-      await snapshot('parameterization-'+key+'-'+fraction)
-    }
   }
-  await demo.getByRole('button',{name:'Reset',exact:true}).click()
-  const noise=demo.getByRole('slider',{name:'Noise prediction',exact:true})
-  await noise.focus();const predictionURL=page.url();await page.keyboard.press('ArrowRight')
-  assert.equal(page.url(),predictionURL);assert.ok(+(await data(demo)).noise>.5 && +(await data(demo)).noise<.6)
-  await reentry(demo,prediction)
-  await demo.getByRole('button',{name:'Reset',exact:true}).click()
-  assert.equal((await data(demo)).output,'noise');near(+(await data(demo)).noise,.5)
+  if (lecture.number === 8) {
+    demo=await go(prediction)
+    const values=d=>({noise:+d.noise,clean:+d.clean,mean:+d.mean})
+    const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-8)
+    for(const [key,name] of [['clean','Clean data'],['noise','Noise'],['mean','Reverse mean']]) {
+      const before=values(await data(demo))
+      await demo.locator(`[data-quantity="${key}"] .quantity-name`).click()
+      assert.deepEqual(values(await data(demo)),before,'Switching output must preserve all predictions')
+      assert.equal((await data(demo)).output,key)
+      await snapshot('parameterization-'+key)
+      const slider=demo.getByRole('slider',{name:name+' prediction',exact:true})
+      const min=+(await slider.getAttribute('min')),max=+(await slider.getAttribute('max'))
+      for(const fraction of [0,.5,1]) {
+        // First select a different output, then drag this formerly computed control.
+        await demo.locator(`[data-quantity="${key==='noise'?'clean':'noise'}"] .quantity-name`).click()
+        if(fraction===0){await slider.press('End');await slider.press('Home')}
+        else if(fraction===1){await slider.press('Home');await slider.press('End')}
+        else await slider.fill(String(+(min+(max-min)*fraction).toFixed(8)))
+        const d=await data(demo),v=values(d)
+        assert.equal(d.output,key)
+        near(Math.sqrt(.39)*v.clean+Math.sqrt(.61)*v.noise,1)
+        near(v.mean,Math.sqrt(.6)*.35/.61 + Math.sqrt(.65)*.4/.61*v.clean)
+        near(+await slider.inputValue(),v[key])
+        await snapshot('parameterization-'+key+'-'+fraction)
+      }
+    }
+    await demo.getByRole('button',{name:'Reset',exact:true}).click()
+    const noise=demo.getByRole('slider',{name:'Noise prediction',exact:true})
+    await noise.focus();const predictionURL=page.url();await page.keyboard.press('ArrowRight')
+    assert.equal(page.url(),predictionURL);assert.ok(+(await data(demo)).noise>.5 && +(await data(demo)).noise<.6)
+    await reentry(demo,prediction)
+    await demo.getByRole('button',{name:'Reset',exact:true}).click()
+    assert.equal((await data(demo)).output,'noise');near(+(await data(demo)).noise,.5)
 
-  for(const frame of ['gaussian-diffusion-model-as-vae','gaussian-diffusion-model-as-vae-2','elbo-for-gaussian-diffusion-model-4']){const s=slide(frame);await go(s);await snapshot(`chain-${frame}`)}
-  for(const s of [reverse,schedule,prediction]){
+  }
+  if (lecture.number === 7) for(const frame of ['gaussian-diffusion-model-as-vae','gaussian-diffusion-model-as-vae-2','elbo-for-gaussian-diffusion-model-4','elbo-intermediate-denoising-term']){const s=slide(frame);await go(s);await snapshot(`chain-${frame}`)}
+  for(const s of activeDemos){
     demo=await go(s,true)
     const pen=page.getByRole('navigation',{name:'Lecture annotation tools'}).getByRole('button',{name:'Pen',exact:true})
     if(await pen.getAttribute('aria-pressed')!=='true')await pen.click()
@@ -93,5 +103,5 @@ try{
     await snapshot(`pen-${s.slide}`);await pen.click()
   }
   assert.deepEqual(errors,[]);assert.deepEqual(http,[]);assert.deepEqual(external,[])
-  console.log(`Lecture 7 demos: ${states.length} visual states; controls, boundaries, keyboard, reentry, Reset, parameterization invariance, offline and synthetic pen checks passed.`)
+  console.log(`Lecture ${lecture.number} diffusion demos: ${states.length} visual states; controls, boundaries, keyboard, reentry, Reset${lecture.number === 8 ? ', parameterization invariance' : ''}, offline and synthetic pen checks passed.`)
 }finally{writeFileSync(resolve(qa,'report.json'),JSON.stringify({states,errors,http,external},null,2));await browser.close()}

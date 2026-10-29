@@ -1,0 +1,8 @@
+{
+  "diffusiongemma-speed-quality.webp": {
+    "source": "https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/",
+    "asset_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/updated-Intelligence_vs_Latency_.width-1200.format-webp.webp",
+    "description": "Original Intelligence vs. Latency graph from Google DiffusionGemma launch post (June 10, 2026); 1x H100, FP8, batch size 1. Unmodified image.",
+    "sha256": "df1547c18b5745310a9a2f543ef11b1384f22108138f07e218818aece361da17"
+  }
+}

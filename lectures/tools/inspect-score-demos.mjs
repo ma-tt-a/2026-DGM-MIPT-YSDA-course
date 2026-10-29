@@ -10,7 +10,10 @@ const lecture = lecturePaths('6')
 const base = process.env.SLIDEV_QA_URL || `http://localhost:${lecture.port}`
 const map = readSlides(lecture)
 const tweedie = map.find(s => s.title === 'From Conditional Scores to Denoising')
-const diffusion = map.find(s => s.id === 'forward-gaussian-diffusion-process-3')
+const diffusionLecture = lecturePaths('7')
+const diffusionBase = process.env.SLIDEV_QA_DIFFUSION_URL || `http://localhost:${diffusionLecture.port}`
+const diffusionMap = readSlides(diffusionLecture)
+const diffusion = diffusionMap.find(s => s.id === 'forward-gaussian-diffusion-process-3')
 const qa = resolve(root, 'output/qa/lecture6/score-demos')
 mkdirSync(qa, { recursive: true })
 const browser = await chromium.launch({ executablePath: process.env.SLIDEV_BROWSER_PATH || '/Applications/Yandex.app/Contents/MacOS/Yandex', headless: true })
@@ -21,15 +24,17 @@ page.on('pageerror', e => errors.push(String(e)))
 page.on('response', r => { if (r.status() >= 400) failures.push([r.status(), r.url()]) })
 await context.route('**/*', route => {
   const url = new URL(route.request().url())
-  if (['http:', 'https:'].includes(url.protocol) && url.origin !== new URL(base).origin) { external.push(url.href); return route.abort() }
+  if (['http:', 'https:'].includes(url.protocol) && ![base, diffusionBase].some(origin => url.origin === new URL(origin).origin)) { external.push(url.href); return route.abort() }
   return route.continue()
 })
 const close = (a, b) => assert.ok(Math.abs(a-b) < 1e-9, `${a} != ${b}`)
 const dataset = demo => demo.evaluate(el => ({...el.dataset}))
 async function go(s, clicks = s.clicks, penTools = false) {
-  await page.goto(`${base}/${s.slide}?clicks=${clicks}${penTools ? '&tools' : ''}`, { waitUntil: 'networkidle' })
+  const currentBase = s === diffusion ? diffusionBase : base
+  const currentMap = s === diffusion ? diffusionMap : map
+  await page.goto(`${currentBase}/${s.slide}?clicks=${clicks}${penTools ? '&tools' : ''}`, { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
-  assert.match(await page.locator('.course-folio:visible').last().innerText(), new RegExp(`/ ${map.length}$`))
+  assert.match(await page.locator('.course-folio:visible').last().innerText(), new RegExp(`/ ${currentMap.length}$`))
   const demo = page.locator('[data-demo]:visible'); await demo.waitFor({state:'visible'}); return demo
 }
 async function snapshot(name) {
@@ -132,6 +137,6 @@ try {
   console.log(`Score demos: ${states.length} visual states; reveals, exact readouts, drag bounds, keyboard, returns, reset, offline and pen hit-testing passed.`)
 } finally {
   await page.screenshot({path:resolve(qa,'last-state.png')})
-  writeFileSync(resolve(qa,'report.json'),JSON.stringify({states,errors,failures,external,sourceSha256:createHash('sha256').update(readFileSync(lecture.entry)).digest('hex')},null,2))
+  writeFileSync(resolve(qa,'report.json'),JSON.stringify({states,errors,failures,external,sourceSha256:Object.fromEntries([lecture,diffusionLecture].map(l=>[l.name,createHash('sha256').update(readFileSync(l.entry)).digest('hex')]))},null,2))
   await browser.close()
 }

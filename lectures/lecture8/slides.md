@@ -37,6 +37,48 @@ Roman Isachenko
 
 ---
 clicks: 0
+id: recap-forward-gaussian-diffusion
+class: theorems
+---
+
+# Recap of Previous Lecture
+
+Fix a schedule $0<\beta_t<1$. The noises $\bepsilon_t\sim\cN(0,\bI)$ are independent across $t$ and of $\bx_0$.
+
+$$
+\begin{aligned}
+\bx_t&=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t,\quad\bepsilon_t\sim\cN(0,\bI)\\
+q(\bx_t|\bx_{t-1})&=\cN(\sqrt{1-\beta_t}\bx_{t-1},\beta_t\bI)
+\end{aligned}
+$$
+
+<div class="block">
+
+## Exact Conditional Distribution
+
+Let $\alpha_t=1-\beta_t$ and $\bar{\alpha}_t=\prod_{s=1}^t\alpha_s=\prod_{s=1}^t(1-\beta_s)$. Then
+
+$$
+q(\bx_t|\bx_0)=\cN(\sqrt{\bar{\alpha}_t}\,\bx_0,(1-\bar{\alpha}_t)\bI)
+$$
+
+**Connection to NCSN:** $\bx_t=\bx_0+\sigma_t\bepsilon$ adds Gaussian noise; DDPM also scales the signal by $\sqrt{\bar{\alpha}_t}$.
+
+</div>
+
+For finite $T$, choose $\bar{\alpha}_T\ll1$ so the residual signal $\sqrt{\bar{\alpha}_T}\bx_0$ is negligible; then $q(\bx_T)\approx\cN(0,\bI)$.
+
+<div class="source"><a href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Sohl-Dickstein J. Deep Unsupervised Learning using Nonequilibrium Thermodynamics, 2015</a><br><a href="https://arxiv.org/abs/2403.18103">Chan S. Tutorial on Diffusion Models for Imaging and Vision, 2024</a><br><a href="https://arxiv.org/abs/1907.05600">Song Y. et al. Generative Modeling by Estimating Gradients of the Data Distribution, 2019</a></div>
+
+<!-- Recap coverage: moved from the former Lecture 7 recap after forward diffusion
+became new Lecture 7 material. Recall alpha/alpha_bar and independent Gaussian
+increments before the reverse kernel and SNR slides. The existing distribution
+summary is already dense with forward, reverse and conditioned kernels, so keep
+this self-contained prerequisite on its own static slide. The former pictorial
+forward-process recap is covered by the following forward/reverse overview. -->
+
+---
+clicks: 0
 id: recap-of-previous-lecture
 class: theorems
 ---
@@ -75,7 +117,7 @@ class: theorems
 
 ## Forward Process
 
-1. $\bx_0=\bx\sim\pd(\bx)$
+1. $\bx_0\sim\pd(\bx_0)$
 2. $\bx_t=\sqrt{1-\beta_t}\bx_{t-1}+\sqrt{\beta_t}\bepsilon_t$
 3. $q(\bx_T)\approx\cN(0,\bI)$
 
@@ -85,8 +127,8 @@ class: theorems
 ## Reverse Process
 
 1. $\bx_T\sim\cN(0,\bI)$
-2. $\bx_{t-1}=\bsigma_{\btheta,t}(\bx_t)\bepsilon+\bmu_{\btheta,t}(\bx_t)$
-3. $\bx_0=\bx\sim\pd(\bx)$
+2. $\bx_{t-1}=\bmu_{\btheta,t}(\bx_t)+\bsigma_{\btheta,t}(\bx_t)\bepsilon_t$
+3. $\bx_0\sim\pt(\bx_0)\approx\pd(\bx_0)$
 
 </div>
 </div>
@@ -164,17 +206,23 @@ class: theorems
 # Recap of Previous Lecture
 
 - $\bz=(\bx_1,\dots,\bx_T)$ represents the latent variables.
-- Variational posterior distribution:
+- **Fixed encoder:** the noise schedule determines the variational posterior:
 
 $$
 q(\bz|\bx)=q(\bx_1,\dots,\bx_T|\bx_0)=\prod_{t=1}^Tq(\bx_t|\bx_{t-1}).
 $$
 
-- Generative model and prior:
+- **One-step decoder and learned Markov-chain prior:**
 
 $$
 \pt(\bx|\bz)=\pt(\bx_0|\bx_1);\quad\pt(\bz)=\prod_{t=2}^T\pt(\bx_{t-1}|\bx_t)\cdot p(\bx_T)
 $$
+
+<div class="takeaway">
+
+**The encoder has no trainable parameters; only $\btheta$ is optimized.**
+
+</div>
 
 <div class="source"><a href="https://ayandas.me/blog-tut/2021/12/04/diffusion-prob-models.html">Das A. An Introduction to Diffusion Probabilistic Models, blog post, 2021</a><br><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
@@ -188,10 +236,10 @@ class: theorems
 
 <div class="block">
 
-## Standard ELBO
+## Diffusion ELBO (Fixed Encoder)
 
 $$
-\log\pt(\bx)\geq\bbE_{q({\color{teal}\bz}|\bx)}\log\frac{\pt(\bx,{\color{teal}\bz})}{q({\color{teal}\bz}|\bx)}=\cL_{\bphi,\btheta}(\bx)\rightarrow\max_{\bphi,\btheta}
+\log\pt(\bx)\geq\bbE_{q({\color{teal}\bz}|\bx)}\log\frac{\pt(\bx,{\color{teal}\bz})}{q({\color{teal}\bz}|\bx)}=\cL_{\bphi,\btheta}(\bx)\rightarrow\max_{\btheta}
 $$
 
 $$
@@ -204,89 +252,144 @@ $$
 
 </div>
 
+**<span style="color:olive">Reconstruction:</span>** the decoder recovers $\bx_0$ from $\bx_1$.<br>
+For a continuous Gaussian decoder with fixed covariance $\sigma_1^2\bI$, $\sigma_1^2>0$:
+
+$$
+-\bbE_{q(\bx_1|\bx_0)}\log\pt(\bx_0|\bx_1)=\frac{1}{2\sigma_1^2}\bbE_{q(\bx_1|\bx_0)}\bigl\|\bx_0-\bmu_{\btheta,1}(\bx_1)\bigr\|^2+\text{const}.
+$$
+
+**<span style="color:#8854c0">Prior matching:</span>** constant in $\btheta$, since $q$ and $p(\bx_T)=\cN(0,\bI)$ are fixed.
+
+**<span style="color:teal">Intermediate denoising:</span>** match each learned reverse step to its known conditioned target, $t\ge2$.
+
 <div class="source"><a href="https://ayandas.me/blog-tut/2021/12/04/diffusion-prob-models.html">Das A. An Introduction to Diffusion Probabilistic Models, blog post, 2021</a><br><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
 ---
 clicks: 0
-id: recap-of-previous-lecture-6
+id: recap-gaussian-mean-regression
 class: theorems
 ---
 
 # Recap of Previous Lecture
 
-## Diffusion Parameterizations
+## Gaussian Reverse Steps
 
 $$
-\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon.
+q(\bx_{t-1}|\bx_t,\bx_0)=\cN\bigl(\tilde{\bmu}_t(\bx_t,\bx_0),\tilde\beta_t\bI\bigr),\qquad
+\pt(\bx_{t-1}|\bx_t)=\cN\bigl(\bmu_{\btheta,t}(\bx_t),\tilde\beta_t\bI\bigr).
 $$
 
-<div>
+For $t\ge2$, fixing the model covariance to the target covariance gives
 
-| Network output at $\bx_t$ | Regression target | Clean-data estimate |
-| --- | --- | --- |
-| Noise $\bepsilon_{\btheta,t}$ | $\bepsilon$ | $\dfrac{\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bepsilon_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
-| Clean data $\hat{\bx}_{\btheta,t}$ | $\bx_0$ | $\hat{\bx}_{\btheta,t}$ |
-| Score $\bs_{\btheta,t}$ | $-\dfrac{\bepsilon}{\sqrt{1-\bar{\alpha}_t}}$ | $\dfrac{\bx_t+(1-\bar{\alpha}_t)\,\bs_{\btheta,t}}{\sqrt{\bar{\alpha}_t}}$ |
-| $v$-prediction $\bv_{\btheta,t}$ | $\sqrt{\bar{\alpha}_t}\,\bepsilon-\sqrt{1-\bar{\alpha}_t}\,\bx_0$ | $\sqrt{\bar{\alpha}_t}\,\bx_t-\sqrt{1-\bar{\alpha}_t}\,\bv_{\btheta,t}$ |
+$$
+\cL_t=\bbE_{q(\bx_t|\bx_0)}\left[\frac{1}{2\tilde\beta_t}\bigl\|\tilde{\bmu}_t(\bx_t,\bx_0)-\bmu_{\btheta,t}(\bx_t)\bigr\|^2\right].
+$$
 
-</div>
 <div class="block">
 
-**Convertible predictions; different losses.** Plain MSE assigns different weights to different noise levels.
+## Known Regression Target
+
+$$
+\begin{aligned}
+\tilde{\bmu}_t(\bx_t,\bx_0)&=\frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}\bx_t+\frac{\sqrt{\bar\alpha_{t-1}}(1-\alpha_t)}{1-\bar\alpha_t}\bx_0,\\
+\tilde\beta_t&=\frac{(1-\alpha_t)(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}.
+\end{aligned}
+$$
+
+</div>
+<div class="takeaway">
+
+**Learn the reverse mean by weighted regression onto the conditioned forward-process mean.**
 
 </div>
 
-<div class="source"><a href="https://arxiv.org/abs/2202.00512">Salimans T., Ho J. Progressive Distillation for Fast Sampling of Diffusion Models, 2022</a></div>
+<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
-<!--
-Recap coverage: after the ELBO decomposition, recall the available network targets
-before the existing DDPM Training/Sampling slide fixes noise prediction. The table
-and plain-MSE caveat exactly mirror the previous lecture. The existing ELBO page
-already contains the bound and full three-term decomposition; the algorithm page
-already contains complete Training and Sampling. Adding this four-row table to
-either would mix a separate parameterization decision with dense formulas. Keep a
-separate static recap at the approved type size, preserving every target and inverse.
-Assume 0 < alpha_bar_t < 1 for conversion. The score row's regression target is the
-conditional Gaussian score; population MSE predicts the marginal score. Convertible
-predictions do not make unweighted training losses equal: their factors depend on
-noise level. The v target is a diffusion parameterization, not a general ODE velocity.
--->
+<!-- Recalls the retained Gaussian-KL reduction and known target. The preceding
+recap preserves the full ELBO; this separate static slide provides the bridge
+needed by the new first body section without crowding the full decomposition.
+Schedule notation is defined in the forward-process recap. Only t>=2 uses this
+nondegenerate Gaussian KL. -->
 
 ---
 clicks: 0
-id: recap-of-previous-lecture-7
+id: recap-diffusion-training-sampling
 class: theorems
 ---
 
 # Recap of Previous Lecture
+
+$$
+-\cL_{\bphi,\btheta}(\bx_0)={\color{olive}-\bbE_{q(\bx_1|\bx_0)}\log\pt(\bx_0|\bx_1)}+{\color{#8854c0}\KL\bigl(q(\bx_T|\bx_0)\|p(\bx_T)\bigr)}+{\color{teal}\sum\nolimits_{t=2}^T\cL_t}.
+$$
 
 <div class="block">
 
 ## Training
 
-The simple loss changes the ELBO's relative weights across noise levels.
+<div class="columns">
+<div>
 
-1. Sample $\bx_0\sim\pd(\bx)$, $t\sim U\{1,T\}$, $\bepsilon\sim\cN(0,\bI)$.
-2. Compute noisy image $\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon$.
-3. Compute loss $\cL_{\text{simple}}=\|\bepsilon-\bepsilon_{\btheta,t}(\bx_t)\|^2$.
+1. Sample $\bx_0\sim\pd$, $t\sim\Uniform\{2,\ldots,T\}$.
+2. Sample $\bepsilon\sim\cN(0,\bI)$; construct $\bx_1$, $\bx_t$.
+3. Minimize $\widehat{\cL}$ by SGD: the omitted <span style="color:#8854c0">prior KL</span> is independent of $\btheta$.
 
 </div>
-<div class="block">
+<div>
 
-## Sampling (Ancestral)
+$$
+\bx_s=\sqrt{\bar{\alpha}_s}\bx_0+\sqrt{1-\bar{\alpha}_s}\bepsilon,\quad s\in\{1,t\}.
+$$
+
+$$
+\begin{aligned}
+\widehat{\cL}&={\color{olive}-\log\pt(\bx_0|\bx_1)}\\
+&\quad+{\color{teal}\frac{T-1}{2\tilde{\beta}_t}\bigl\|\tilde{\bmu}_t(\bx_t,\bx_0)-\bmu_{\btheta,t}(\bx_t)\bigr\|^2}.
+\end{aligned}
+$$
+
+$T-1$: uniform timestep average → sum.
+
+</div>
+</div>
+
+</div>
+<div class="block" style="margin-top: 8px">
+
+## Sampling
+
+<div class="columns">
+<div>
 
 1. Sample $\bx_T\sim\cN(0,\bI)$.
-2. Compute the mean of $\pt(\bx_{t-1}|\bx_t)=\cN(\bmu_{\btheta,t}(\bx_t),\tilde{\beta}_t\cdot\bI)$:
+2. Denoise $\bx_{t-1}=\bmu_{\btheta,t}(\bx_t)+\sqrt{\tilde{\beta}_t}\bepsilon_t$.
+3. Return the mean $\hat{\bx}_0=\bmu_{\btheta,1}(\bx_1)$.
+
+</div>
+<div>
+
+For $t=T,\ldots,2$, sample the **reverse kernel**:
 
 $$
-\bmu_{\btheta,t}(\bx_t)=\frac{1}{\sqrt{\alpha_t}}\cdot\bx_t-\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar{\alpha}_t)}}\cdot\bepsilon_{\btheta,t}(\bx_t).
+\pt(\bx_{t-1}|\bx_t)=\cN\bigl(\bmu_{\btheta,t}(\bx_t),\tilde{\beta}_t\bI\bigr).
 $$
 
-3. Denoise $\bx_{t-1}=\bmu_{\btheta,t}(\bx_t)+\sqrt{\tilde{\beta}_t}\cdot\bepsilon$, $\bepsilon\sim\cN(0,\bI)$.
+Use fresh $\bepsilon_t\sim\cN(0,\bI)$ at each step.
 
+</div>
+</div>
 </div>
 
 <div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
+
+<!-- Recalls the approved Training/Sampling algorithm before the new mean
+reparameterization section. Keep this separate from the preceding Gaussian-KL
+result: adding two complete algorithms there would overcrowd its target formulas.
+The loss includes reconstruction; the prior KL alone is omitted for optimization.
+Uniform t in {2,...,T} explains T-1. Sharing epsilon preserves both marginals.
+Sampling returns the final decoder mean rather than sampling its positive variance.
+All content is static on entry, as required for Recap. -->
 
 ---
 clicks: 0
@@ -297,25 +400,340 @@ id: outline
 
 <div class="course-outline">
 
-<div class="outline-item"><span>01</span><div>DDPM as a Score-Based Generative Model</div></div>
-<div class="outline-item"><span>02</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br>Classifier-Free Guidance</div></div></div>
+<div class="outline-item"><span>01</span><div>Diffusion Parameterizations</div></div>
+<div class="outline-item"><span>02</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>03</span><div>From DDPM to DDIM</div></div>
+<div class="outline-item"><span>04</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br>Classifier-Free Guidance</div></div></div>
 
 </div>
 
 ---
 clicks: 0
-id: outline-2
-section: "DDPM as a Score-Based Generative Model"
+id: outline-diffusion-reparametrization
+section: "Diffusion Parameterizations"
 ---
 
 # Outline
 
 <div class="course-outline">
 
-<div class="outline-item current"><span>01</span><div>DDPM as a Score-Based Generative Model</div></div>
-<div class="outline-item"><span>02</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br>Classifier-Free Guidance</div></div></div>
+<div class="outline-item current"><span>01</span><div>Diffusion Parameterizations</div></div>
+<div class="outline-item"><span>02</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>03</span><div>From DDPM to DDIM</div></div>
+<div class="outline-item"><span>04</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br>Classifier-Free Guidance</div></div></div>
 
 </div>
+
+---
+clicks: 5
+id: reparametrization-of-ddpm
+class: theorems
+---
+
+# Reparametrization of DDPM
+
+$$
+\cL_t=\bbE_{q(\bx_t|\bx_0)}\left[\frac{1}{2\tilde{\beta}_t}\bigl\|\tilde{\bmu}_t(\bx_t,\bx_0)-\bmu_{\btheta,t}(\bx_t)\bigr\|^2\right]
+$$
+
+$$
+\tilde{\bmu}_t(\bx_t,\bx_0)=\frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}\cdot\bx_t+\frac{\sqrt{\bar{\alpha}_{t-1}}(1-\alpha_t)}{1-\bar{\alpha}_t}\cdot{\color{olive}\bx_0}
+$$
+
+<div class="columns">
+<div v-click="1">
+
+## Forward Noising
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon
+$$
+
+</div>
+<div v-click="2">
+
+## Recover Clean Data
+
+$$
+{\color{olive}\bx_0}=\frac{\bx_t-\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon}{\sqrt{\bar{\alpha}_t}}
+$$
+
+</div>
+</div>
+
+<div v-click="3">
+
+**Why reparametrize?** Predict the Gaussian noise we add ourselves during training; compute the reverse mean analytically from this prediction.
+
+</div>
+
+<div v-click="4">
+
+$$
+\tilde{\bmu}_t(\bx_t,\bepsilon)=\frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}\cdot\bx_t+\frac{\sqrt{\bar{\alpha}_{t-1}}(1-\alpha_t)}{1-\bar{\alpha}_t}\cdot{\color{olive}\left(\frac{\bx_t-\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon}{\sqrt{\bar{\alpha}_t}}\right)}
+$$
+
+</div>
+<div class="takeaway" v-click="5">
+
+$$
+\tilde{\bmu}_t(\bx_t,\bepsilon)=\frac{1}{\sqrt{\alpha_t}}\cdot\bx_t-\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar{\alpha}_t)}}\cdot\bepsilon
+$$
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
+
+---
+clicks: 4
+id: reparametrization-of-ddpm-2
+class: theorems
+---
+
+# Reparametrization of DDPM
+
+$$
+\cL_t=\bbE_{{\color{#8854c0}q(\bx_t|\bx_0)}}\left[{\color{olive}\frac{1}{2\tilde{\beta}_t}}\bigl\|\tilde{\bmu}_t(\bx_t,\bx_0)-\bmu_{\btheta,t}(\bx_t)\bigr\|^2\right]
+$$
+
+<div class="columns">
+<div>
+
+## Target Mean
+
+$$
+\tilde{\bmu}_t(\bx_t,\bx_0)=\frac{1}{\sqrt{\alpha_t}}\cdot\bx_t-{\color{teal}\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar{\alpha}_t)}}}\cdot\bepsilon
+$$
+
+</div>
+<div v-click="1">
+
+## Model Mean
+
+$$
+\bmu_{\btheta,t}(\bx_t)=\frac{1}{\sqrt{\alpha_t}}\cdot\bx_t-{\color{teal}\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar{\alpha}_t)}}}\cdot\bepsilon_{\btheta,t}(\bx_t)
+$$
+
+</div>
+</div>
+
+
+<div class="block" v-click="2">
+
+## Noise-Prediction Loss
+
+$$ {1|all} {at:3}
+\begin{aligned}
+\cL_t&=\bbE_{{\color{#8854c0}q(\bx_t|\bx_0)}}\left[\frac{{\color{teal}(1-\alpha_t)^2}}{{\color{olive}2\tilde{\beta}_t}{\color{teal}\alpha_t(1-\bar{\alpha}_t)}}\bigl\|\bepsilon-\bepsilon_{\btheta,t}({\color{#8854c0}\bx_t})\bigr\|^2\right]\\
+&=\bbE_{{\color{#8854c0}\bepsilon\sim\cN(0,\bI)}}\left[\frac{(1-\alpha_t)^2}{2\tilde{\beta}_t\alpha_t(1-\bar{\alpha}_t)}\Bigl\|\bepsilon-\bepsilon_{\btheta,t}\bigl({\color{#8854c0}\sqrt{\bar{\alpha}_t}\bx_0+\sqrt{1-\bar{\alpha}_t}\bepsilon}\bigr)\Bigr\|^2\right]
+\end{aligned}
+$$
+
+</div>
+<div class="takeaway" v-click="4">
+
+Train the network to predict the Gaussian noise $\bepsilon$ used to construct $\bx_t$.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
+
+---
+clicks: 0
+id: one-prediction-three-parameterizations
+class: interactive-slide
+---
+
+# Prediction Targets and Loss Functions
+
+<NoisePredictionDemo />
+
+<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. et al. Denoising Diffusion Probabilistic Models, 2020</a><br><a href="https://arxiv.org/abs/2202.00512">Salimans T., Ho J. Progressive Distillation for Fast Sampling of Diffusion Models, 2022</a></div>
+
+<!-- The compact cards show linked scalar estimates at fixed x_t=1,
+alpha_t=0.6, alpha_bar_t=0.39; selecting an output preserves the prediction.
+The table below uses vector notation and defines the clean-data, noise and
+reverse-mean regression targets and squared errors. Network outputs are evaluated
+at x_t and t; the posterior-mean target also depends on the clean training sample.
+For linked predictions, ell_epsilon = SNR(t) ell_x0
+= alpha_t (1-alpha_bar_t)/(1-alpha_t)^2 ell_mu, pointwise and in expectation.
+L_t^(epsilon) denotes the noise MSE, not the weighted DDPM ELBO term L_t.
+Multiplying all three forms by a common timestep weight preserves equivalence;
+using unit weights for each raw error changes the weighting across timesteps.
+The previous slides derive the mean/noise conversion; the following slide
+chooses DDPM's simple loss. The next recap retains the clean/noise identity,
+with the reverse-mean relation and ELBO weights on its neighboring recap slides.
+PDF fixes noise_hat=0.5 and highlights the noise row. -->
+
+---
+clicks: 2
+id: reparametrization-of-ddpm-3
+class: theorems
+---
+
+# Reparametrization of DDPM
+
+$$
+\begin{aligned}
+\cL_{\bphi,\btheta}(\bx)&={\color{olive}\bbE_{q(\bx_1|\bx_0)}\log\pt(\bx_0|\bx_1)}-{\color{#8854c0}\KL\bigl(q(\bx_T|\bx_0)\|p(\bx_T)\bigr)}\\
+&\quad-\sum_{t=2}^T\underbrace{\bbE_{q(\bx_t|\bx_0)}\KL\bigl(q(\bx_{t-1}|\bx_t,\bx_0)\|\pt(\bx_{t-1}|\bx_t)\bigr)}_{\cL_t}
+\end{aligned}
+$$
+
+<div v-click="1">
+
+$$
+\cL_t=\bbE_{\bepsilon\sim\cN(0,\bI)}\left[\frac{(1-\alpha_t)^2}{2\tilde{\beta}_t\alpha_t(1-\bar{\alpha}_t)}\Bigl\|\bepsilon-\bepsilon_{\btheta,t}\bigl(\sqrt{\bar{\alpha}_t}\bx_0+\sqrt{1-\bar{\alpha}_t}\bepsilon\bigr)\Bigr\|^2\right]
+$$
+
+</div>
+
+
+<div v-click="2">
+
+- Dropping the time-dependent coefficient **changes the relative weights of noise levels**.
+- The reconstruction term ($t=1$) also uses noise prediction.
+
+<div class="block">
+
+## Simplified Objective
+
+$$
+\cL_{\text{simple}}=\bbE_{t\sim\Uniform\{1,\ldots,T\}}\bbE_{\bepsilon\sim\cN(0,\bI)}\Bigl\|\bepsilon-\bepsilon_{\btheta,t}\bigl(\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon\bigr)\Bigr\|^2
+$$
+
+</div>
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
+
+---
+clicks: 0
+id: outline-ddpm
+section: "Denoising Diffusion Probabilistic Model (DDPM)"
+---
+
+# Outline
+
+<div class="course-outline">
+
+<div class="outline-item"><span>01</span><div>Diffusion Parameterizations</div></div>
+<div class="outline-item current"><span>02</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>03</span><div>From DDPM to DDIM</div></div>
+<div class="outline-item"><span>04</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br>Classifier-Free Guidance</div></div></div>
+
+</div>
+
+---
+clicks: 0
+id: generative-models-taxonomy
+class: figure-slide
+---
+
+# Generative Models Taxonomy
+
+<TaxonomyDiagram class="taxonomy" denoising-diffusion />
+
+---
+clicks: 2
+id: denoising-diffusion-probabilistic-model-ddpm
+class: theorems
+---
+
+# Denoising Diffusion Probabilistic Model (DDPM)
+
+## DDPM as a Hierarchical VAE
+
+- **Encoder:** a fixed Gaussian Markov chain $q(\bx_1,\ldots,\bx_T|\bx_0)$.
+- **Latents:** $\bz=(\bx_1,\ldots,\bx_T)$; each $\bx_t$ has the same dimension as $\bx_0$.
+- **Decoder:** one Gaussian step $\pt(\bx_0|\bx_1)$.
+- **Prior:** a learned Gaussian reverse chain from $p(\bx_T)=\cN(0,\bI)$ down to $\bx_1$.
+
+<div class="columns">
+<div>
+
+## Fixed
+
+Sample any $\bx_t$ directly from $\bx_0$:
+
+$$
+\bx_t=\sqrt{\bar{\alpha}_t}\,\bx_0+\sqrt{1-\bar{\alpha}_t}\,\bepsilon.
+$$
+
+</div>
+<div v-click="1">
+
+## Learned
+
+Predict noise to obtain the reverse mean:
+
+$$
+\bepsilon_{\btheta,t}(\bx_t)\quad\longrightarrow\quad\bmu_{\btheta,t}(\bx_t).
+$$
+
+</div>
+</div>
+
+<div class="takeaway" v-click="2">
+
+**Training:** one randomly chosen noise level per example.<br>
+**Sampling:** sequential reverse steps from noise to data.
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
+
+<!-- Conceptual bridge from taxonomy to the next Training/Sampling algorithms.
+The preceding reparameterization makes the learned reverse mean a known function
+of the noise predictor. Fixed forward marginals permit random-timestep training
+without a simulated trajectory; ancestral sampling still requires successive
+reverse steps. The explicit VAE assumptions are retained: the latent prior is the reverse
+chain over x_1,...,x_T, with a standard Gaussian terminal prior; the separate
+x_1-to-x_0 step is the decoder. This matches the preceding lecture and this
+lecture's recap. The next
+lecture's static Training/Sampling recap retains these same distinctions. -->
+
+---
+clicks: 1
+id: denoising-diffusion-probabilistic-model-ddpm-2
+class: theorems
+---
+
+# Denoising Diffusion Probabilistic Model (DDPM)
+
+<div class="block">
+
+## Training
+
+1. Sample $\bx_0\sim\pd(\bx)$, $t\sim\Uniform\{1,\ldots,T\}$, $\bepsilon\sim\cN(0,\bI)$.
+2. Compute noisy image $\bx_t=\sqrt{\bar{\alpha}_t}\cdot\bx_0+\sqrt{1-\bar{\alpha}_t}\cdot\bepsilon$.
+3. Minimize $\cL_{\text{simple}}=\|\bepsilon-\bepsilon_{\btheta,t}(\bx_t)\|^2$ by SGD.
+
+</div>
+<div class="block" v-click="1">
+
+## Sampling (Ancestral)
+
+1. Sample $\bx_T\sim\cN(0,\bI)$.
+2. For $t=T,\ldots,2$, compute the mean and sample the reverse step:
+
+$$
+\begin{aligned}
+\bmu_{\btheta,t}(\bx_t)&=\frac{\bx_t}{\sqrt{\alpha_t}}-\frac{1-\alpha_t}{\sqrt{\alpha_t(1-\bar\alpha_t)}}\bepsilon_{\btheta,t}(\bx_t),\\
+\bx_{t-1}&=\bmu_{\btheta,t}(\bx_t)+\sqrt{\tilde\beta_t}\bepsilon_t,\qquad\bepsilon_t\sim\cN(0,\bI).
+\end{aligned}
+$$
+
+<ol start="3"><li>
+
+Return the decoder mean $\hat{\bx}_0=\bmu_{\btheta,1}(\bx_1)$.
+
+</li></ol>
+
+</div>
+
+<div class="source"><a href="https://arxiv.org/abs/2006.11239">Ho J. Denoising Diffusion Probabilistic Models, 2020</a></div>
 
 ---
 clicks: 3
@@ -512,6 +930,23 @@ The comparison is between Gaussian conditional marginals at matched noise levels
 -->
 
 ---
+clicks: 0
+id: outline-2
+section: "From DDPM to DDIM"
+---
+
+# Outline
+
+<div class="course-outline">
+
+<div class="outline-item"><span>01</span><div>Diffusion Parameterizations</div></div>
+<div class="outline-item"><span>02</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item current"><span>03</span><div>From DDPM to DDIM</div></div>
+<div class="outline-item"><span>04</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br>Classifier-Free Guidance</div></div></div>
+
+</div>
+
+---
 clicks: 2
 id: ddpm-vs-ncsn-sampling
 class: derivation
@@ -657,7 +1092,7 @@ Start with the familiar forward marginal. Replacing the unknown noise by the
 network prediction and rearranging gives a clean-data estimate. The network is
 called once: it predicts noise, and the clean estimate follows algebraically.
 The hat denotes an estimate, not the true clean sample. This is the same identity
-as the previously introduced parameterization table, using full coefficients.
+as the preceding clean/noise conversion, using full coefficients.
 The course keeps alpha_t = 1 - beta_t; the DDIM paper's alpha_t is our alpha_bar_t.
 
 Substituting the clean estimate back exactly reconstructs x_t, even with an
@@ -853,8 +1288,10 @@ section: "Model Guidance"
 
 <div class="course-outline">
 
-<div class="outline-item"><span>01</span><div>DDPM as a Score-Based Generative Model</div></div>
-<div class="outline-item current"><span>02</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br>Classifier-Free Guidance</div></div></div>
+<div class="outline-item"><span>01</span><div>Diffusion Parameterizations</div></div>
+<div class="outline-item"><span>02</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>03</span><div>From DDPM to DDIM</div></div>
+<div class="outline-item current"><span>04</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br>Classifier-Free Guidance</div></div></div>
 
 </div>
 
@@ -1018,8 +1455,10 @@ section: "Classifier Guidance"
 
 <div class="course-outline">
 
-<div class="outline-item"><span>01</span><div>DDPM as a Score-Based Generative Model</div></div>
-<div class="outline-item current"><span>02</span><div>Model Guidance<div class="outline-sub"><b>Classifier Guidance</b><br>Classifier-Free Guidance</div></div></div>
+<div class="outline-item"><span>01</span><div>Diffusion Parameterizations</div></div>
+<div class="outline-item"><span>02</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>03</span><div>From DDPM to DDIM</div></div>
+<div class="outline-item current"><span>04</span><div>Model Guidance<div class="outline-sub"><b>Classifier Guidance</b><br>Classifier-Free Guidance</div></div></div>
 
 </div>
 
@@ -1267,8 +1706,10 @@ section: "Classifier-Free Guidance"
 
 <div class="course-outline">
 
-<div class="outline-item"><span>01</span><div>DDPM as a Score-Based Generative Model</div></div>
-<div class="outline-item current"><span>02</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br><b>Classifier-Free Guidance</b></div></div></div>
+<div class="outline-item"><span>01</span><div>Diffusion Parameterizations</div></div>
+<div class="outline-item"><span>02</span><div>Denoising Diffusion Probabilistic Model (DDPM)</div></div>
+<div class="outline-item"><span>03</span><div>From DDPM to DDIM</div></div>
+<div class="outline-item current"><span>04</span><div>Model Guidance<div class="outline-sub">Classifier Guidance<br><b>Classifier-Free Guidance</b></div></div></div>
 
 </div>
 
@@ -1579,9 +2020,10 @@ class: summary
 
 # Summary
 
-- DDPM and NCSN use weighted denoising score matching; their Gaussian perturbations are connected by rescaling.
-- Loss weights define the objective; corrected time sampling changes its Monte Carlo estimator.
+- Reverse-mean, clean-data and noise predictions are convertible; unweighted losses assign different weights to noise levels.
+- DDPM replaces ELBO weights with a simple noise-prediction loss and generates through Gaussian reverse steps.
+- DDPM and NCSN are weighted denoising score matching in rescaled noise coordinates; corrected time sampling preserves a chosen objective.
 - DDPM and NCSN use different samplers; DDIM reuses the DDPM network on a shorter sampling grid.
 - Guidance makes generation controllable through labels or text prompts.
-- Classifier guidance turns an unconditional model into a conditional one by training an auxiliary classifier on noisy data.
-- Classifier-free guidance needs no auxiliary classifier; guidance intervals can improve its quality-diversity trade-off, and distillation reduces evaluations per step.
+- Classifier guidance uses an auxiliary noisy-data classifier; classifier-free guidance does not.
+- Guidance intervals can improve the quality-diversity trade-off; guidance distillation reduces evaluations per step.

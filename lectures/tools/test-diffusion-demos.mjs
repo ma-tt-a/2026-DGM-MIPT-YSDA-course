@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { bridge, gaussian, conditionalMean, reverseAt, schedules, scheduleAt, noisyImage, predictionInput, predictionFrom, predictionBounds } from '../lecture7/lib/diffusion-demos.mjs'
+import { bridge, gaussian, conditionalMean, reverseAt, schedules, scheduleAt, noisyImage } from '../lecture7/lib/diffusion-demos.mjs'
+import { predictionInput, predictionFrom, predictionBounds } from '../lecture8/lib/prediction-demos.mjs'
 const near=(a,b,tol=1e-10)=>assert.ok(Math.abs(a-b)<tol,`${a} != ${b}`)
 const integral=fn=>{let sum=0;const dx=.002;for(let x=-10+dx/2;x<10;x+=dx)sum+=fn(x)*dx;return sum}
 
@@ -73,6 +74,20 @@ test('All three slider ranges cover the same predictions without clipping',()=>{
         const [a,b]=predictionBounds[other]
         assert.ok(p[other]>=a-1e-12 && p[other]<=b+1e-12)
       }
+    }
+  }
+})
+
+test('Weighted clean-data and posterior-mean errors equal the noise error',()=>{
+  const {xt,alpha,alphaBar}=predictionInput
+  for(const clean of [-3,-.5,0,1,4]) {
+    const targetNoise=(xt-Math.sqrt(alphaBar)*clean)/Math.sqrt(1-alphaBar)
+    const targetMean=conditionalMean(xt,clean)
+    for(const noise of [-2,-.25,.5,2]) {
+      const p=predictionFrom('noise',noise)
+      const noiseError=(p.noise-targetNoise)**2
+      near(noiseError,alphaBar/(1-alphaBar)*(p.clean-clean)**2)
+      near(noiseError,alpha*(1-alphaBar)/(1-alpha)**2*(p.mean-targetMean)**2)
     }
   }
 })
