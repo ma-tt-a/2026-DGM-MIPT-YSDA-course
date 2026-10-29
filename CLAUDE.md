@@ -2,11 +2,11 @@
 
 Shared conventions for Codex and Claude. Slidev is the course's editable format.
 Read `.codex/project-context.md` for later author decisions and
-`lectures-slidev/README.md` for commands. Current user instructions take precedence.
+`lectures/README.md` for commands. Current user instructions take precedence.
 
 ## Sources and artifacts
 
-- Each lecture has `lectures-slidev/lectureN/slides.md`, local `public/figs/`,
+- Each lecture has `lectures/lectureN/slides.md`, local `public/figs/`,
   optional demo components/lib, and one fully revealed `LectureN.pdf`.
 - Each slide declares a unique semantic `id` and integer `clicks >= 0`.
   Outline transition slides also declare `section`. Keep IDs stable for browser QA.
@@ -43,6 +43,14 @@ in `public/figs/sources.json`. Resources and fonts must work without network acc
   comment wrappers. The Slidev README is the source/PDF catalog.
 - Terms: Sampling (initially Sampling (generation)), Density evaluation for a ready
   model, Density estimation for learning, Model quality evaluation for assessment.
+
+## Moving topics between lectures
+
+A requested topic move includes the necessary dependent Recap, Summary, Outline,
+README and artifact updates, unless the user limits the scope. Apply the
+[topic-transfer procedure](.agents/skills/recap-sync/references/topic-transfer.md)
+before declaring completion, not only before a commit or push. Track the disposition
+of removed recap material; repeated formulas alone do not establish coverage.
 
 ## Shared visual style and reveals
 

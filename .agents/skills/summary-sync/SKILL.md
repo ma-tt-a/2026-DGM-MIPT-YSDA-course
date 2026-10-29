@@ -31,6 +31,10 @@ section titles. Use the current source and approved author decisions.
    relevant PDF/browser. Count alone does not prove readability. Preserve the
    existing reveal behavior; do not add animation to an originally static Summary.
 
+For a topic move, check both source and destination Summaries against their new
+bodies. A lecture changed only in its Recap does not need a Summary rewrite.
+Track the moved takeaway in the recap-sync transfer mapping.
+
 For minor wording/whitespace changes, state that no content update is needed when
 coverage is unaffected. Still perform an explicitly requested full Summary check.
 

@@ -2,9 +2,9 @@
 
 Read [course conventions](../../../../CLAUDE.md),
 [author decisions](../../../../.codex/project-context.md), and
-[commands/catalog](../../../../lectures-slidev/README.md).
+[commands/catalog](../../../../lectures/README.md).
 
-Slidev sources are authoritative: `lectures-slidev/lectureN/slides.md`, adjacent
+Slidev sources are authoritative: `lectures/lectureN/slides.md`, adjacent
 fully revealed `LectureN.pdf`, shared `theme/setup/macros.json`, local `public/figs/`.
 Slide metadata has a stable `id`, explicit `clicks`, and `section` on Outline
 transitions. Use the installed Slidev parser to respect YAML, code fences, notes
@@ -18,7 +18,9 @@ Use the smallest requested scope. Named lectures get full source checks; diff
 checks cover changed lines and affected slides/interfaces. Include staged,
 unstaged and untracked changes, plus outgoing commits for push. Shared changes
 require checking consumers. Documentation-only changes do not require rebuilds.
-A PDF-only question does not request a complete semantic audit.
+A PDF-only question does not request a complete semantic audit. For topic moves,
+use the [transfer procedure](../../recap-sync/references/topic-transfer.md) to
+resolve affected interfaces, including unchanged successor recaps.
 
 Recap slides are titled `Recap of Previous Lecture`; Summary normally ends the
 lecture. Use section transitions and Outline hierarchy for the schedule, not every
